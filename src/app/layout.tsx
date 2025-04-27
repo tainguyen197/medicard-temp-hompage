@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
-import { Cormorant } from "next/font/google";
+import { Cormorant_SC, Manrope } from "next/font/google";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -9,10 +8,11 @@ const manrope = Manrope({
   display: "swap",
 });
 
-const cormorant = Cormorant({
+const cormorant = Cormorant_SC({
   subsets: ["latin", "vietnamese"],
   variable: "--font-cormorant",
   display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {

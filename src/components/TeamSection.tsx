@@ -177,7 +177,7 @@ const TeamSection: React.FC = () => {
             <div className="absolute -bottom-8 -left-32 w-[2px] h-[20px] bg-gray-300 translate-y-[2px]"></div>
             <div className="absolute -bottom-8 -right-32 w-[2px] h-[20px] bg-gray-300 translate-y-[2px]"></div>
 
-            <h2 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 uppercase px-8 py-2">
+            <h2 className="text-4xl md:text-5xl font-cormorant font-bold text-gray-900 uppercase px-8 py-2">
               ĐỘI NGŨ CHUYÊN GIA
             </h2>
           </div>

@@ -57,7 +57,7 @@ const ServicesGallerySection: React.FC = () => {
     <section className="py-20 bg-[#182134] text-white">
       <div className="container mx-auto px-4">
         <div className="flex justify-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-white uppercase relative">
+          <h2 className="text-4xl md:text-6xl font-cormorant font-bold text-white uppercase relative">
             DỊCH VỤ
             <span className="block h-[3px] w-20 bg-amber-500 mx-auto mt-4"></span>
           </h2>
@@ -79,10 +79,10 @@ const ServicesGallerySection: React.FC = () => {
 
           {/* Service description */}
           <div className="w-full lg:w-1/2 flex flex-col justify-center">
-            <h3 className="text-3xl font-bold mb-5 text-white">
+            <h3 className="font-cormorant text-3xl font-bold mb-5 text-white">
               {activeService.title}
             </h3>
-            <p className="text-gray-300 mb-8 text-lg leading-relaxed">
+            <p className="text-gray-300 mb-16 text-lg leading-relaxed">
               {activeService.description}
             </p>
 

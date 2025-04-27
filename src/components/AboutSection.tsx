@@ -44,13 +44,13 @@ const AboutSection = () => {
                     />
                   </svg>
                 </span>
-                <h3 className="uppercase font-serif font-bold text-blue-700 tracking-wider text-sm">
+                <h3 className="uppercase font-cormorant font-bold text-blue-700 tracking-wider text-sm">
                   VỀ HEALTHCARE THERAPY CENTER
                 </h3>
               </div>
             </div>
 
-            <h2 className="font-serif font-bold text-4xl md:text-5xl text-navy-800 mb-10 leading-tight text-[#002447]">
+            <h2 className="font-cormorant font-bold text-4xl md:text-5xl text-navy-800 mb-10 leading-tight text-[#002447]">
               GIẢI PHÁP CHĂM SÓC SỨC KHOẺ TOÀN DIỆN
             </h2>
 

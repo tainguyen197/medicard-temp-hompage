@@ -195,7 +195,7 @@ const EquipmentSection: React.FC = () => {
     <section className="py-20 bg-white overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 uppercase mb-4">
+          <h2 className="text-4xl md:text-5xl font-cormorant font-bold text-gray-900 uppercase mb-4">
             CÔNG NGHỆ
           </h2>
           <p className="text-xl text-gray-700">

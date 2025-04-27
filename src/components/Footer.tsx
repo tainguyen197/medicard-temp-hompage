@@ -17,9 +17,10 @@ export default function Footer() {
                 className="h-auto"
               />
             </div>
-            <div className="text-gray-300 mb-4">
-              <p className="mb-2">327 đường Nguyễn Trọng Tuyển, Phường 10,</p>
-              <p className="mb-2">Quận Phú Nhuận, TP.HCM</p>
+            <div className="text-gray-300 mb-4 font-bold">
+              <p className="mb-2">
+                327 đường Nguyễn Trọng Tuyển, Phường 10, Quận Phú Nhuận, TP.HCM
+              </p>
               <p>Giờ mở cửa: 9:00 - 20:00</p>
             </div>
           </div>

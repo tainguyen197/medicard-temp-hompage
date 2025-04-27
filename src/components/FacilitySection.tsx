@@ -100,7 +100,7 @@ const FacilitySection: React.FC = () => {
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center">
           <div className="w-full md:w-1/3 pr-0 md:pr-12">
-            <h2 className="text-3xl md:text-5xl font-serif font-bold text-gray-900 mb-6 uppercase">
+            <h2 className="text-3xl md:text-5xl font-cormorant font-bold text-gray-900 mb-6 uppercase">
               KHÔNG GIAN
             </h2>
             <p className="text-[20px] text-[#797979] mb-10">

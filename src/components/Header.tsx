@@ -26,7 +26,7 @@ const Header = () => {
               <Link
                 key={item.name}
                 href={item.href}
-                className="font-serif font-bold uppercase text-amber-50 hover:text-white transition-colors"
+                className="font-cormorant font-bold uppercase text-amber-50 hover:text-white transition-colors"
               >
                 {item.name}
               </Link>
@@ -51,7 +51,7 @@ const Header = () => {
           </div>
 
           <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-amber-50">
-            <span className="font-serif font-bold text-sm text-amber-50">
+            <span className="font-cormorant font-bold text-sm text-amber-50">
               VIE
             </span>
           </div>

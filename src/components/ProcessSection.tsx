@@ -21,7 +21,7 @@ const ProcessStep = ({
     >
       <StarburstIcon size={24} className="text-white" />
     </div>
-    <div className="text-center mb-2 uppercase font-serif text-md text-[#909090]">
+    <div className="text-center mb-2 uppercase font-cormorant text-md text-[#909090]">
       BƯỚC {number}
     </div>
     <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">
@@ -54,9 +54,9 @@ const ProcessSection = () => {
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row">
           <div className="w-full px-4">
-            <div className="flex flex-col gap-20 md:flex-row mb-16">
+            <div className="flex flex-col gap-20 md:flex-row mb-8">
               <div className="w-full md:w-1/2">
-                <h2 className="text-3xl md:text-5xl font-serif font-bold text-gray-900 mb-6 uppercase leading-tight">
+                <h2 className="text-3xl md:text-[40px] font-cormorant font-bold text-gray-900 mb-6 uppercase leading-tight">
                   QUY TRÌNH
                   <br />
                   CHĂM SÓC SỨC KHOẺ

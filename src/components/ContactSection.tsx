@@ -16,7 +16,7 @@ const ContactSection = () => {
 
         <div className="relative z-10 h-full container mx-auto px-4 flex flex-col justify-end pb-10">
           <div className="max-w-2xl">
-            <h2 className="text-3xl md:text-[40px] font-serif font-bold text-[#C99A4D] mb-4">
+            <h2 className="text-3xl md:text-[40px] font-cormorant font-bold text-[#C99A4D] mb-4">
               SẴN SÀNG TRẢI NGHIỆM
               <br />
               SỰ KHÁC BIỆT?
@@ -24,7 +24,7 @@ const ContactSection = () => {
 
             <Link
               href="#appointment"
-              className="inline-block bg-[#C99A4D] hover:bg-amber-800 text-white font-serif uppercase font-medium py-3 px-8 rounded-full"
+              className="inline-block bg-[#C99A4D] hover:bg-amber-800 text-white font-cormorant uppercase font-medium py-3 px-8 rounded-full"
             >
               ĐẶT LỊCH
             </Link>
