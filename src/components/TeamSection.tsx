@@ -10,6 +10,7 @@ interface TeamMemberProps {
   title: string;
   description: string;
   isActive: boolean;
+  index: number;
 }
 
 const TeamMember: React.FC<TeamMemberProps> = ({
@@ -19,32 +20,33 @@ const TeamMember: React.FC<TeamMemberProps> = ({
   title,
   description,
   isActive,
+  index,
 }) => {
   return (
     <div
-      className={`transition-all duration-700 ease-in-out ${
-        isActive ? "opacity-100 scale-100" : "opacity-40 scale-95"
-      } flex-shrink-0 w-full sm:w-[280px] overflow-hidden`}
+      className={`transition-all duration-700 ease-in-out ${"opacity-100 scale-100"} ${
+        index % 2 === 0 ? "mt-20" : ""
+      } flex-shrink-0 w-full sm:w-[280px] overflow-hidden h-fit py-16 bg-white`}
     >
-      <div className="overflow-hidden rounded-tl-2xl rounded-tr-2xl h-[400px] bg-[#F8F3EF]">
+      <div className=" rounded-tl-xl rounded-tr-xl h-[380px] bg-[#F8F3EF] overflow-hidden">
         <Image
           src={image}
           alt={name}
           width={400}
           height={500}
-          className="w-full h-full object-cover object-top transition-transform duration-700 hover:scale-105"
+          className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
         />
       </div>
-      <div className="bg-[#1C4F8E] p-5 py-4 pl-0 text-white  flex flex-col rounded-br-2xl rounded-bl-2xl">
-        <div className="text-sm text-[#A8C1E0] mb-1 text-right">
+      <div className="bg-[#1C4F8E] py-3 px-4 text-white flex flex-col rounded-br-xl rounded-bl-xl">
+        <div className="text-sm text-[#A8C1E0] mb-0.5 text-right pr-1">
           {qualification}
         </div>
-        <h3 className="text-xl font-bold uppercase text-right">{name}</h3>
+        <h3 className="text-xl font-bold uppercase text-right pr-1">{name}</h3>
       </div>
-      <p className="text-sm mt-4 text-center text-black">{title}</p>
-      <p className="text-sm leading-relaxed text-center text-black">
-        {description}
-      </p>
+      <div className="text-sm mt-4 text-black">
+        <p className="leading-tight text-center">{title}</p>
+        <p className="leading-tight mt-2 text-center">{description}</p>
+      </div>
     </div>
   );
 };
@@ -131,7 +133,7 @@ const TeamSection: React.FC = () => {
           (current + 1) % (teamMembers.length - visibleCount + 1);
         return nextIndex;
       });
-    }, 4000);
+    }, 5000);
     return () => clearInterval(interval);
   }, [teamMembers.length, visibleCount]);
 
@@ -163,61 +165,57 @@ const TeamSection: React.FC = () => {
   };
 
   return (
-    <section className="py-20 bg-white overflow-hidden">
-      <div className="container mx-auto px-4 relative">
-        <div className="text-center mb-20 max-w-5xl mx-auto relative">
-          <div className="relative inline-block">
-            <div className="absolute -top-8 -left-32 w-[180px] h-[2px] bg-gray-300"></div>
-            <div className="absolute -top-8 -right-32 w-[180px] h-[2px] bg-gray-300"></div>
-            <div className="absolute -bottom-8 -left-32 w-[180px] h-[2px] bg-gray-300"></div>
-            <div className="absolute -bottom-8 -right-32 w-[180px] h-[2px] bg-gray-300"></div>
+    <section className="py-20 bg-white ">
+      <div className="mx-auto px-4 relative container">
+        <div className="relative mx-auto">
+          {/* Title with horizontal lines on sides */}
+          <div className="border-[3px] border-[#002447] rounded-[40px] py-8 mx-auto max-w-[1400px]">
+            <div className="flex items-center justify-center relative top-[-54px] ">
+              <h2 className="font-cormorant text-3xl md:text-5xl font-bold text-[#002447] uppercase whitespace-nowrap bg-white px-8">
+                ĐỘI NGŨ CHUYÊN GIA
+              </h2>
+            </div>
 
-            <div className="absolute -top-8 -left-32 w-[2px] h-[20px] bg-gray-300"></div>
-            <div className="absolute -top-8 -right-32 w-[2px] h-[20px] bg-gray-300"></div>
-            <div className="absolute -bottom-8 -left-32 w-[2px] h-[20px] bg-gray-300 translate-y-[2px]"></div>
-            <div className="absolute -bottom-8 -right-32 w-[2px] h-[20px] bg-gray-300 translate-y-[2px]"></div>
+            {/* Team members slider */}
+            <div className="relative">
+              <div
+                ref={slideContainerRef}
+                className="flex gap-24 overflow-x-visible scrollbar-hide snap-x pb-8 px-4 md:px-8 justify-center"
+                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+              >
+                {teamMembers.map((member, index) => (
+                  <TeamMember
+                    key={index}
+                    index={index}
+                    image={member.image}
+                    name={member.name}
+                    qualification={member.qualification}
+                    title={member.title}
+                    description={member.description}
+                    isActive={
+                      index >= activeIndex && index < activeIndex + visibleCount
+                    }
+                  />
+                ))}
+              </div>
 
-            <h2 className="text-4xl md:text-5xl font-cormorant font-bold text-gray-900 uppercase px-8 py-2">
-              ĐỘI NGŨ CHUYÊN GIA
-            </h2>
-          </div>
-        </div>
-
-        <div className="relative px-4">
-          <div
-            ref={slideContainerRef}
-            className="flex gap-6 overflow-x-auto scrollbar-hide snap-x"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            {teamMembers.map((member, index) => (
-              <TeamMember
-                key={index}
-                image={member.image}
-                name={member.name}
-                qualification={member.qualification}
-                title={member.title}
-                description={member.description}
-                isActive={
-                  index >= activeIndex && index < activeIndex + visibleCount
-                }
-              />
-            ))}
-          </div>
-
-          <div className="flex justify-center mt-10 space-x-4">
-            <div className="flex space-x-2 items-center">
-              {Array.from({
-                length: teamMembers.length - visibleCount + 1,
-              }).map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveIndex(index)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    index === activeIndex ? "bg-gray-800 w-8" : "bg-gray-400"
-                  }`}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
+              {/* Indicators */}
+              <div className="flex justify-center mt-4 space-x-2">
+                {Array.from({
+                  length: teamMembers.length - visibleCount + 1,
+                }).map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setActiveIndex(index)}
+                    className={`h-2 rounded-full transition-all duration-300 ${
+                      index === activeIndex
+                        ? "bg-[#1C4F8E] w-[30px]"
+                        : "bg-gray-300 w-2"
+                    }`}
+                    aria-label={`Go to slide ${index + 1}`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </div>
