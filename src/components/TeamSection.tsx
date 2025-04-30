@@ -25,10 +25,10 @@ const TeamMember: React.FC<TeamMemberProps> = ({
   return (
     <div
       className={`transition-all duration-700 ease-in-out ${"opacity-100 scale-100"} ${
-        index % 2 === 0 ? "mt-20" : ""
-      } flex-shrink-0 w-full sm:w-[280px] overflow-hidden h-fit py-16 bg-white`}
+        index % 2 === 0 ? "lg:mt-20" : ""
+      } flex-shrink-0 w-full sm:w-[280px] overflow-hidden h-fit pt-16 bg-white`}
     >
-      <div className=" rounded-tl-xl rounded-tr-xl h-[380px] bg-[#F8F3EF] overflow-hidden">
+      <div className="rounded-tl-xl rounded-tr-xl h-[380px] bg-[#F8F3EF] overflow-hidden">
         <Image
           src={image}
           alt={name}
@@ -166,10 +166,11 @@ const TeamSection: React.FC = () => {
 
   return (
     <section className="py-20 bg-white ">
-      <div className="mx-auto px-4 relative container">
+      <div className="mx-auto px-4 relative">
         <div className="relative mx-auto">
           {/* Title with horizontal lines on sides */}
-          <div className="border-[3px] border-[#002447] rounded-[40px] py-8 mx-auto max-w-[1400px]">
+          <div className="hidden lg:block border-[3px] border-[#002447] rounded-[40px] py-8  max-w-[1400px] absolute inset-0 -top-8 mx-32 2xl:mx-auto bottom-[-52px]" />
+          <div>
             <div className="flex items-center justify-center relative top-[-54px] ">
               <h2 className="font-cormorant text-3xl md:text-5xl font-bold text-[#002447] uppercase whitespace-nowrap bg-white px-8">
                 ĐỘI NGŨ CHUYÊN GIA
@@ -177,10 +178,10 @@ const TeamSection: React.FC = () => {
             </div>
 
             {/* Team members slider */}
-            <div className="relative">
+            <div className="relative ">
               <div
                 ref={slideContainerRef}
-                className="flex gap-24 overflow-x-visible scrollbar-hide snap-x pb-8 px-4 md:px-8 justify-center"
+                className="flex gap-8 lg:gap-24 overflow-x-auto scrollbar-hide snap-x pb-8 px-4 md:px-8 justify-center bg-white"
                 style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
               >
                 {teamMembers.map((member, index) => (
@@ -200,22 +201,6 @@ const TeamSection: React.FC = () => {
               </div>
 
               {/* Indicators */}
-              <div className="flex justify-center mt-4 space-x-2">
-                {Array.from({
-                  length: teamMembers.length - visibleCount + 1,
-                }).map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveIndex(index)}
-                    className={`h-2 rounded-full transition-all duration-300 ${
-                      index === activeIndex
-                        ? "bg-[#1C4F8E] w-[30px]"
-                        : "bg-gray-300 w-2"
-                    }`}
-                    aria-label={`Go to slide ${index + 1}`}
-                  />
-                ))}
-              </div>
             </div>
           </div>
         </div>

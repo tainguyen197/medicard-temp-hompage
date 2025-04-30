@@ -46,7 +46,7 @@ const BlogSection = () => {
   ];
 
   return (
-    <section id="blog" className="py-20 bg-white">
+    <section id="blog" className="pb-20 bg-white">
       <div className="container mx-auto px-4">
         <h2 className="text-5xl font-cormorant font-bold text-center text-gray-900 mb-16">
           BLOG SỨC KHỎE
