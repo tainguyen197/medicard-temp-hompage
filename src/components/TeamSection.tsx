@@ -20,15 +20,15 @@ const TeamMember: React.FC<TeamMemberProps> = ({
     <div
       className={`transition-all duration-700 ease-in-out ${"opacity-100 scale-100"} ${
         index % 2 === 0 ? "lg:mt-20" : ""
-      } flex-shrink-0 w-2/3 md:w-[280px] overflow-hidden h-fit md:pt-8 bg-white`}
+      } flex-shrink-0 w-[230px] md:w-[283px] overflow-hidden h-fit md:pt-8 bg-white`}
     >
-      <div className="rounded-2xl h-[300px] md:h-[380px] aspect-230/300 bg-[#F8F3EF] overflow-hidden">
+      <div className="rounded-4xl h-[300px] md:h-[370px] aspect-283/370 bg-[#F8F3EF] overflow-hidden">
         <Image
           src={image}
           alt="doctor"
-          height={380}
-          width={230}
-          className="relative object-contain object-center transition-transform duration-500 hover:scale-105"
+          width={283}
+          height={370}
+          className="w-full h-full object-contain object-center transition-transform duration-500 hover:scale-105"
         />
       </div>
       <div className="text-sm mt-4 text-black">
@@ -82,7 +82,7 @@ const TeamSection: React.FC = () => {
 
             {/* Team members marquee slider */}
             <div className="overflow-hidden py-8 bg-white relative z-1">
-              <div className="flex gap-8 lg:gap-16 whitespace-nowrap marquee">
+              <div className="flex gap-8 md:gap-8 whitespace-nowrap marquee">
                 {slidingMembers.map((member, index) => (
                   <TeamMember
                     key={index}
