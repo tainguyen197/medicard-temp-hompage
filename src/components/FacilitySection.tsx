@@ -21,7 +21,7 @@ const FacilityItem: React.FC<FacilityItemProps> = ({
     <div
       className={`transition-all duration-700 ease-in-out ${
         isActive ? "opacity-100 scale-100" : "opacity-40 scale-95"
-      } flex-shrink-0 w-full sm:w-[340px] px-3`}
+      } flex-shrink-0 w-full sm:w-[340px]`}
     >
       <div className="mb-5 overflow-hidden">
         <Image
@@ -76,8 +76,10 @@ const FacilitySection: React.FC = () => {
     if (slideContainerRef.current) {
       const container = slideContainerRef.current;
       const itemWidth = container.querySelector("div")?.offsetWidth || 0;
-      const scrollPosition = activeIndex * (itemWidth + 24); // Add gap size
-
+      const gap = 24; // same as space-x-6
+      const maxScrollLeft = container.scrollWidth - container.clientWidth;
+      const desired = activeIndex * (itemWidth + gap);
+      const scrollPosition = Math.min(desired, maxScrollLeft);
       container.scrollTo({
         left: scrollPosition,
         behavior: "smooth",
@@ -96,7 +98,7 @@ const FacilitySection: React.FC = () => {
   };
 
   return (
-    <section className="py-20" style={{ background: "#FEF6EA" }}>
+    <section className="py-16" style={{ background: "#FEF6EA" }}>
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center">
           <div className="w-full md:w-1/3 pr-0 md:pr-12">
@@ -110,7 +112,7 @@ const FacilitySection: React.FC = () => {
             <div className="h-0.5 w-32 bg-gray-400 mb-10"></div>
           </div>
 
-          <div className="w-full md:w-2/3 relative overflow-hidden">
+          <div className="w-full md:w-2/3 relative overflow-x-visible overflow-y-hidden">
             <div
               ref={slideContainerRef}
               className="flex space-x-6 overflow-x-auto scrollbar-hide snap-x"
@@ -126,18 +128,32 @@ const FacilitySection: React.FC = () => {
                 />
               ))}
             </div>
-            <div className="flex justify-center">
-              <div className="flex mt-8 justify-center md:justify-start space-x-2">
-                {facilities.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveIndex(index)}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      index === activeIndex ? "bg-gray-800 w-8" : "bg-gray-400"
-                    }`}
-                    aria-label={`Go to slide ${index + 1}`}
-                  />
-                ))}
+            <div className="relative mt-8 flex justify-between gap-4">
+              {/* Progress indicator bar */}
+              <div className="h-[2px] bg-gray-400 relative w-11/12">
+                <div
+                  className="h-full bg-black absolute left-0 top-0"
+                  style={{
+                    width: `${((activeIndex + 1) / facilities.length) * 100}%`,
+                  }}
+                />
+              </div>
+              {/* Navigation arrows */}
+              <div className="transform -translate-y-1/2 flex space-x-2">
+                <button
+                  onClick={prevSlide}
+                  className=" text-black hover:bg-gray-100 transition"
+                  aria-label="Previous slide"
+                >
+                  <span className="text-2xl font-semibold">&lt;</span>
+                </button>
+                <button
+                  onClick={nextSlide}
+                  className=" text-black hover:bg-gray-100 transition"
+                  aria-label="Next slide"
+                >
+                  <span className="text-2xl font-semibold">&gt;</span>
+                </button>
               </div>
             </div>
           </div>

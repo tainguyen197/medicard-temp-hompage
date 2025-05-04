@@ -68,8 +68,8 @@ const TeamSection: React.FC = () => {
   const slidingMembers = [...teamMembers, ...teamMembers, ...teamMembers];
 
   return (
-    <section className="py-20 bg-white ">
-      <div className="mx-auto px-8 relative">
+    <section className="pt-20 pb-28 bg-white ">
+      <div className="mx-auto relative">
         <div className="relative mx-auto">
           {/* Title with horizontal lines on sides */}
           <div className="hidden lg:block border-[3px] border-[#002447] rounded-[40px] py-8  max-w-[1400px] absolute inset-0 -top-8 mx-32 2xl:mx-auto bottom-[-52px]" />

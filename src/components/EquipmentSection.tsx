@@ -42,34 +42,27 @@ const EquipmentItem: React.FC<EquipmentItemProps> = ({
   return (
     <div
       id={id}
-      className={`transition-all duration-700 ease-in-out ${
-        isActive ? "opacity-100 scale-100" : "opacity-40 scale-95"
-      } flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 px-3`}
+      className={`transition-all duration-700 ease-in-out flex-shrink-0 w-1/2 flex items-center justify-center`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="">
-        <div className="relative">
-          <Image
-            src={image}
-            alt={subtitle}
-            width={500}
-            height={600}
-            className={`object-contain transition-opacity duration-300 ${
-              isHovered ? "opacity-20" : "opacity-100"
-            }`}
-          />
+      <div className="relative h-[300px] lg:h-[400px] xl:h-[604px] aspect-537/604 overflow-hidden rounded-2xl">
+        <Image
+          src={image}
+          alt={subtitle}
+          fill
+          className={`rounded-2xl overflow-hidden object-over transition-opacity duration-300 ${
+            isHovered ? "opacity-20" : "opacity-100"
+          }`}
+        />
 
-          {isHovered && (
-            <div className="absolute inset-0 bg-black opacity-70 flex flex-col justify-center p-8 text-white transition-all duration-300">
-              <div className="text-[#A8C1E0] text-sm uppercase mb-1">
-                {title}
-              </div>
-              <h3 className="text-2xl font-bold uppercase mb-6">{subtitle}</h3>
-              <p className="text-md leading-relaxed">{description}</p>
-            </div>
-          )}
-        </div>
+        {isHovered && (
+          <div className="absolute inset-0 bg-black opacity-70 flex flex-col justify-center p-8 text-white transition-all duration-300">
+            <div className="text-[#A8C1E0] text-sm uppercase mb-1">{title}</div>
+            <h3 className="text-2xl font-bold uppercase mb-6">{subtitle}</h3>
+            <p className="text-md leading-relaxed">{description}</p>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -79,27 +72,35 @@ const EquipmentSection: React.FC = () => {
   const equipments: EquipmentItem[] = [
     {
       id: "equip1",
-      image: "/images/equipment.jpg",
+      image: "/images/equipment_1.png",
       title: "THIẾT BỊ",
       subtitle: "SHOCKWAVE THERAPY",
       description:
-        "Sử dụng sóng xung kích tạo áp lực cơ học và sức căng lên mô tổn thương, làm tăng tính thấm của màng tế bào, giúp tăng tuần hoàn tại chỗ và chuyển hoá tại phần mô được điều trị.",
+        "Sử dụng sóng xung kích tạo áp lực cơ học và sức căng lên mô tổn thương, làm tăng tính thấm của màng tế bào, giúp tăng tuần hoàn tại chỗ và chuyển hóa tại phần mô được điều trị.",
     },
     {
       id: "equip2",
-      image: "/images/shockwave.jpg",
+      image: "/images/equipment_2.png",
       title: "THIẾT BỊ",
-      subtitle: "SPINAL DECOMPRESSION",
+      subtitle: "Laser công suất cao thông minh",
       description:
-        "Giảm áp lực cho đĩa đệm cột sống, giải phóng chèn ép dây thần kinh, giúp đưa nước và chất dinh dưỡng trở lại đĩa đệm, tạo điều kiện cho quá trình tự phục hồi.",
+        "Dùng tia Laser tần số cao đi vào mô cơ, mô xương giúp giảm đau, tăng tốc chuyển hóa, giúp phục hồi tế bào nhanh hơn từ đó nâng cao khả năng điều trị và làm lành lại vết thương",
     },
     {
       id: "equip3",
-      image: "/images/machine.jpg",
+      image: "/images/equipment_3.png",
       title: "THIẾT BỊ",
-      subtitle: "LASER THERAPY",
+      subtitle: "Winback Thecar Therapy",
       description:
-        "Tăng cường tuần hoàn máu, giảm đau, giảm viêm, thúc đẩy tái tạo tế bào và mô. Laser trị liệu có thể thâm nhập sâu vào mô mà không gây tổn thương.",
+        "Sử dụng các dòng điện đặc trị tác động lên vùng cơ bị tắt nghẽn. Từ đó kích thích thần kinh cơ, chống teo cơ, kháng viêm, giảm đau",
+    },
+    {
+      id: "equip4",
+      image: "/images/equipment_4.png",
+      title: "THIẾT BỊ",
+      subtitle: "Điện xung kết hợp siêu âm",
+      description:
+        "Sử dụng sóng siêu âm tác động đến mô cơ giúp giảm sưng nề mô mềm, giảm đau, giảm co cứng, tăng cường tuần hoàn máu, làm đẩy nhanh quá trình làm lành và hồi phục chức năng.",
     },
   ];
 
@@ -117,9 +118,9 @@ const EquipmentSection: React.FC = () => {
       } else if (window.innerWidth < 1024) {
         setVisibleCount(2);
       } else if (window.innerWidth < 1280) {
-        setVisibleCount(3);
+        setVisibleCount(2);
       } else {
-        setVisibleCount(4);
+        setVisibleCount(2);
       }
     };
 
@@ -129,17 +130,25 @@ const EquipmentSection: React.FC = () => {
   }, []);
 
   const handleNext = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
     setActiveIndex((current) => {
       const max = equipments.length - visibleCount;
       return current < max ? current + 1 : 0;
     });
+    startAutoScroll();
   };
 
   const handlePrev = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
     setActiveIndex((current) => {
       const max = equipments.length - visibleCount;
       return current > 0 ? current - 1 : max;
     });
+    startAutoScroll();
   };
 
   // Handle mouse enter to pause the animation
@@ -167,17 +176,15 @@ const EquipmentSection: React.FC = () => {
     }, 3000);
   };
 
+  // Initialize auto-scroll and clear on unmount
   useEffect(() => {
-    // Initialize auto-scroll
     startAutoScroll();
-
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [equipments.length, visibleCount]);
 
   useEffect(() => {
     if (slideContainerRef.current) {
@@ -194,7 +201,7 @@ const EquipmentSection: React.FC = () => {
 
   return (
     <section className="py-20 bg-white overflow-hidden">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 xl:px-16 2xl:px-32">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-cormorant font-bold text-gray-900 uppercase mb-4">
             CÔNG NGHỆ
@@ -205,9 +212,10 @@ const EquipmentSection: React.FC = () => {
         </div>
 
         <div className="relative px-4">
+          {/* Slider with arrow controls */}
           <div
             ref={slideContainerRef}
-            className="flex gap-6 overflow-x-hidden scrollbar-hide snap-x -mx-3 justify-center"
+            className="flex gap-0 overflow-x-hidden scrollbar-hide snap-x justify-start"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {equipments.map((equip, index) => (
@@ -229,20 +237,21 @@ const EquipmentSection: React.FC = () => {
         </div>
 
         <div className="flex justify-center mt-10 space-x-4">
-          <div className="flex space-x-2 items-center">
-            {Array.from({
-              // Calculate how many indicator dots we need based on items and visible count
-              length: Math.max(1, equipments.length - visibleCount + 1),
-            }).map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveIndex(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index === activeIndex ? "bg-gray-800 w-8" : "bg-gray-400"
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
+          <div className="grid grid-cols-2 gap-2 items-center">
+            <button
+              onClick={handlePrev}
+              className="h-9 w-9 flex items-center justify-center border-[1.5px] text-[#002447] border-[#99D3ED] p-2 bg-white rounded-full shadow hover:bg-gray-100 transition"
+              aria-label="Previous equipment"
+            >
+              &lt;
+            </button>
+            <button
+              onClick={handleNext}
+              className="h-9 w-9 flex items-center justify-center border-[1.5px] text-[#002447] border-[#99D3ED] p-2 bg-white rounded-full shadow hover:bg-gray-100 transition"
+              aria-label="Next equipment"
+            >
+              &gt;
+            </button>
           </div>
         </div>
       </div>
