@@ -8,7 +8,7 @@ export default function Footer() {
         {/* Logo and company info */}
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10 mb-10">
           <div>
-            <div className="mb-6">
+            <div className="mb-2">
               <Image
                 src="/images/logo.svg"
                 alt="Healthcare Therapy Center"
@@ -17,11 +17,15 @@ export default function Footer() {
                 className="h-auto"
               />
             </div>
-            <div className="text-gray-300 mb-4 font-bold">
+            <div className="text-white mb-4 font-bold">
               <p className="mb-2">
                 327 đường Nguyễn Trọng Tuyển, Phường 10, Quận Phú Nhuận, TP.HCM
               </p>
-              <p>Giờ mở cửa: 9:00 - 20:00</p>
+              <p>
+                Giờ mở cửa: <br />
+                Thứ 2 - Thứ 7: 8h00 - 19h00 <br />
+                Chủ nhật: 8h00 - 18h00
+              </p>
             </div>
           </div>
 
@@ -89,8 +93,8 @@ export default function Footer() {
 
           {/* Hotline and social */}
           <div className="md:col-span-3 lg:col-span-1">
-            <h4 className="text-xl font-medium mb-6">HOTLINE</h4>
-            <div className="mb-6">
+            <h4 className="text-xl font-medium mb-4">HOTLINE</h4>
+            <div className="mb-5">
               <Link
                 href="tel:0901430077"
                 className="inline-flex items-center px-6 py-3 border border-[#B1873F] hover:bg-[#B1873F]/10 transition-colors rounded-full text-[#B1873F] font-bold"
@@ -111,35 +115,65 @@ export default function Footer() {
             <div className="flex space-x-4">
               <a
                 href="https://facebook.com"
-                className="bg-blue-700 hover:bg-blue-800 w-10 h-10 rounded-full flex items-center justify-center transition-colors"
+                className="rounded-full flex items-center justify-center transition-colors"
                 aria-label="Facebook"
               >
                 <svg
-                  className="w-5 h-5"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
+                  width="32"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path d="M9.19795 21.5H13.198V13.4901H16.8021L17.198 9.50977H13.198V7.5C13.198 6.94772 13.6457 6.5 14.198 6.5H17.198V2.5H14.198C11.4365 2.5 9.19795 4.73858 9.19795 7.5V9.50977H7.19795L6.80206 13.4901H9.19795V21.5Z" />
+                  <rect width="32" height="32" rx="16" fill="#2B3D96" />
+                  <path
+                    d="M19.5 10.168H17.75C16.9765 10.168 16.2346 10.4753 15.6876 11.0222C15.1407 11.5692 14.8334 12.3111 14.8334 13.0846V14.8346H13.0834V17.168H14.8334V21.8346H17.1667V17.168H18.9167L19.5 14.8346H17.1667V13.0846C17.1667 12.9299 17.2282 12.7816 17.3376 12.6722C17.447 12.5628 17.5953 12.5013 17.75 12.5013H19.5V10.168Z"
+                    fill="white"
+                  />
                 </svg>
               </a>
               <a
                 href="https://zalo.me"
-                className="font-bold bg-blue-500 hover:bg-blue-600 w-10 h-10 rounded-full flex items-center justify-center transition-colors"
+                className="font-bold rounded-full flex items-center justify-center transition-colors"
                 aria-label="Zalo"
               >
-                Zalo
+                <Image
+                  src="/images/icon_zalo.svg"
+                  alt="Zalo"
+                  width={32}
+                  height={32}
+                />
               </a>
               <a
                 href="https://instagram.com"
-                className="bg-gradient-to-tr from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 w-10 h-10 rounded-full flex items-center justify-center transition-colors"
+                className=" rounded-full flex items-center justify-center transition-colors"
                 aria-label="Instagram"
               >
                 <svg
-                  className="w-5 h-5"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
+                  width="32"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path d="M12 2C14.717 2 15.056 2.01 16.122 2.06C17.187 2.11 17.912 2.277 18.55 2.525C19.21 2.779 19.766 3.123 20.322 3.678C20.8305 4.1779 21.224 4.78259 21.475 5.45C21.722 6.087 21.89 6.813 21.94 7.878C21.987 8.944 22 9.283 22 12C22 14.717 21.99 15.056 21.94 16.122C21.89 17.187 21.722 17.912 21.475 18.55C21.2247 19.2178 20.8311 19.8226 20.322 20.322C19.822 20.8303 19.2173 21.2238 18.55 21.475C17.913 21.722 17.187 21.89 16.122 21.94C15.056 21.987 14.717 22 12 22C9.283 22 8.944 21.99 7.878 21.94C6.813 21.89 6.088 21.722 5.45 21.475C4.78233 21.2245 4.17753 20.8309 3.678 20.322C3.16941 19.8222 2.77593 19.2175 2.525 18.55C2.277 17.913 2.11 17.187 2.06 16.122C2.013 15.056 2 14.717 2 12C2 9.283 2.01 8.944 2.06 7.878C2.11 6.812 2.277 6.088 2.525 5.45C2.77524 4.78218 3.1688 4.17732 3.678 3.678C4.17767 3.16923 4.78243 2.77573 5.45 2.525C6.088 2.277 6.812 2.11 7.878 2.06C8.944 2.013 9.283 2 12 2ZM12 7C10.6739 7 9.40215 7.52678 8.46447 8.46447C7.52678 9.40215 7 10.6739 7 12C7 13.3261 7.52678 14.5979 8.46447 15.5355C9.40215 16.4732 10.6739 17 12 17C13.3261 17 14.5979 16.4732 15.5355 15.5355C16.4732 14.5979 17 13.3261 17 12C17 10.6739 16.4732 9.40215 15.5355 8.46447C14.5979 7.52678 13.3261 7 12 7ZM18.5 6.75C18.5 6.41848 18.3683 6.10054 18.1339 5.86612C17.8995 5.6317 17.5815 5.5 17.25 5.5C16.9185 5.5 16.6005 5.6317 16.3661 5.86612C16.1317 6.10054 16 6.41848 16 6.75C16 7.08152 16.1317 7.39946 16.3661 7.63388C16.6005 7.8683 16.9185 8 17.25 8C17.5815 8 17.8995 7.8683 18.1339 7.63388C18.3683 7.39946 18.5 7.08152 18.5 6.75ZM12 9C12.7956 9 13.5587 9.31607 14.1213 9.87868C14.6839 10.4413 15 11.2044 15 12C15 12.7956 14.6839 13.5587 14.1213 14.1213C13.5587 14.6839 12.7956 15 12 15C11.2044 15 10.4413 14.6839 9.87868 14.1213C9.31607 13.5587 9 12.7956 9 12C9 11.2044 9.31607 10.4413 9.87868 9.87868C10.4413 9.31607 11.2044 9 12 9Z" />
+                  <rect width="32" height="32" rx="16" fill="#2B3D96" />
+                  <path
+                    d="M18.9166 10.168H13.0833C11.4725 10.168 10.1666 11.4738 10.1666 13.0846V18.918C10.1666 20.5288 11.4725 21.8346 13.0833 21.8346H18.9166C20.5275 21.8346 21.8333 20.5288 21.8333 18.918V13.0846C21.8333 11.4738 20.5275 10.168 18.9166 10.168Z"
+                    fill="white"
+                  />
+                  <path
+                    d="M18.3333 15.6317C18.4053 16.1172 18.3224 16.613 18.0964 17.0486C17.8703 17.4843 17.5127 17.8375 17.0743 18.0582C16.6359 18.2788 16.1391 18.3556 15.6545 18.2777C15.17 18.1997 14.7224 17.9709 14.3753 17.6239C14.0283 17.2768 13.7995 16.8292 13.7215 16.3447C13.6436 15.8601 13.7204 15.3633 13.941 14.9249C14.1617 14.4865 14.5149 14.1289 14.9506 13.9028C15.3862 13.6768 15.882 13.5939 16.3675 13.6659C16.8627 13.7393 17.3212 13.9701 17.6751 14.324C18.0291 14.678 18.2599 15.1365 18.3333 15.6317Z"
+                    stroke="#2B3D96"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M19.2084 12.793H19.2142"
+                    stroke="#2B3D96"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
               </a>
             </div>
@@ -147,7 +181,7 @@ export default function Footer() {
         </div>
 
         {/* Divider */}
-        <div className="border-t border-gray-700 my-8"></div>
+        <div className="border-t border-[#B1873F] my-8"></div>
 
         {/* Copyright and links */}
         <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">

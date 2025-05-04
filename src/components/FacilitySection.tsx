@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import StarburstIcon from "./StarburstIcon";
 
 interface FacilityItemProps {
   image: string;

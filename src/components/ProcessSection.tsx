@@ -61,7 +61,7 @@ const ProcessSection = () => {
                   <br />
                   CHĂM SÓC SỨC KHOẺ
                 </h2>
-                <p className="text-[20px] text-gray-700">
+                <p className="text-[20px] text-gray-700 text-justify">
                   <strong>Healthcare Therapy Center</strong> tự hào mang đến
                   giải pháp liệu pháp điều trị - phục hồi cơ xương khớp tái tạo
                   từ cấp tế bào, không phẫu thuật và được cá nhân hoá cao phẫu
@@ -80,8 +80,8 @@ const ProcessSection = () => {
               </div>
             </div>
             <div className="bg-white p-8 rounded-xl">
-              <div className="grid grid-cols-1 md:grid-cols-7 gap-4 items-center">
-                <div className="md:col-span-1">
+              <div className="grid grid-cols-1 md:grid-cols-11 gap-4 items-center">
+                <div className="md:col-span-2">
                   <ProcessStep
                     number={1}
                     color="bg-[#BDD0E5]"
@@ -90,11 +90,11 @@ const ProcessSection = () => {
                   />
                 </div>
 
-                <div className="md:col-span-1">
+                <div className="md:col-span-1 self-center">
                   <Arrow />
                 </div>
 
-                <div className="md:col-span-1">
+                <div className="md:col-span-2">
                   <ProcessStep
                     number={2}
                     color="bg-[#6C98C5]"
@@ -103,11 +103,11 @@ const ProcessSection = () => {
                   />
                 </div>
 
-                <div className="md:col-span-1">
+                <div className="md:col-span-1 self-center">
                   <Arrow />
                 </div>
 
-                <div className="md:col-span-1">
+                <div className="md:col-span-2">
                   <ProcessStep
                     number={3}
                     color="bg-[#99D3ED]"
@@ -116,11 +116,11 @@ const ProcessSection = () => {
                   />
                 </div>
 
-                <div className="md:col-span-1">
+                <div className="md:col-span-1 self-center">
                   <Arrow />
                 </div>
 
-                <div className="md:col-span-1">
+                <div className="md:col-span-2">
                   <ProcessStep
                     number={4}
                     color="bg-[#235E93]"
