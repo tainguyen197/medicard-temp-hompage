@@ -57,13 +57,12 @@ const ServicesGallerySection: React.FC = () => {
     <section className="py-20 bg-[#182134] text-white">
       <div className="container mx-auto px-4">
         <div className="flex justify-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-cormorant font-bold text-white uppercase relative">
+          <h2 className="text-4xl md:text-6xl font-cormorant font-semibold text-[#FFF7EB] uppercase relative">
             DỊCH VỤ
-            <span className="block h-[3px] w-20 bg-amber-500 mx-auto mt-4"></span>
           </h2>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-10 mb-14">
+        <div className="flex flex-col lg:flex-row gap-10 mb-8">
           {/* Featured service image and content */}
           <div className="w-full lg:w-1/2">
             <div className="relative rounded-lg overflow-hidden h-[400px] md:h-[500px]">

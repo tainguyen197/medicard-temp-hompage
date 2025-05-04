@@ -10,14 +10,14 @@ const FeatureItem = ({
   description: string;
   icon?: React.ReactNode;
 }) => (
-  <div className="mb-10">
+  <div className="mb-10 ml-8">
     <div className="flex items-start mb-2">
       <span className="text-blue-700 mr-3 flex-shrink-0 mt-1">
         <StarburstIcon size={24} className="text-[#002447]" />
       </span>
       <h3 className="font-bold text-xl text-gray-800">{title}</h3>
     </div>
-    <p className="text-[#909090] ml-8">{description}</p>
+    <p className="text-[#909090] text-justify">{description}</p>
   </div>
 );
 
@@ -25,32 +25,21 @@ const AboutSection = () => {
   return (
     <section id="about" className="py-16 bg-white">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
           {/* Left column with title */}
-          <div>
+          <div className="col-span-3">
             <div className="mb-4">
               <div className="flex items-center mb-2">
-                <span className="text-blue-700 mr-3">
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M8 0L10.3245 5.08376L16 5.87336L11.96 9.79938L12.7725 15.1266L8 12.625L3.2275 15.1266L4.04 9.79938L0 5.87336L5.6755 5.08376L8 0Z"
-                      fill="#2B3D96"
-                    />
-                  </svg>
+                <span className="mr-3">
+                  <StarburstIcon size={24} className="text-[#002447]" />
                 </span>
-                <h3 className="uppercase font-cormorant font-bold text-blue-700 tracking-wider text-sm">
+                <h3 className="uppercase font-cormorant font-bold text-[#2B3D96] tracking-wider text-md">
                   VỀ HEALTHCARE THERAPY CENTER
                 </h3>
               </div>
             </div>
 
-            <h2 className="font-cormorant font-bold text-4xl md:text-5xl text-navy-800 mb-10 leading-tight text-[#002447]">
+            <h2 className="font-cormorant font-bold text-4xl md:text-[46px] text-navy-800 mb-20 leading-[140%] text-[#002447]">
               GIẢI PHÁP CHĂM SÓC SỨC KHOẺ TOÀN DIỆN
             </h2>
 
@@ -60,15 +49,16 @@ const AboutSection = () => {
                 alt="Healthcare Therapy Center Professional"
                 width={232}
                 height={270}
+                className="object-cover"
               />
-              <div className="bg-white p-6  ">
+              <div className="bg-white p-12 flex flex-col justify-between">
                 <blockquote className="mb-3 font-bold text-lg text-gray-800">
                   &ldquo;Mỗi khách hàng đều là &ldquo;người thân&rdquo; mà đội
                   ngũ Healthcare Therapy Center tận tâm phục vụ.&rdquo;
                 </blockquote>
                 <div>
                   <p className="font-bold text-gray-800">
-                    PGS. TS. BS. Phạm Xuân Đà
+                    BS CKI. Nguyễn Thị Hồng Hạnh.
                   </p>
                   <p className="text-gray-600 text-sm">
                     Chủ tịch Hội đồng chuyên môn, Healthcare Therapy Center.
@@ -79,9 +69,9 @@ const AboutSection = () => {
           </div>
 
           {/* Right column with features */}
-          <div>
-            <div className="bg-[#79C5E7C2] rounded-lg p-4 mb-10">
-              <h3 className="font-semibold text-xl text-[#222222]">
+          <div className="col-span-2">
+            <div className="bg-[#79C5E7C2] rounded-lg py-4 px-8 mb-10">
+              <h3 className="font-semibold text-2xl text-[#222222]">
                 Điểm đặc biệt của chúng tôi
               </h3>
             </div>
