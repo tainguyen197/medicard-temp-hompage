@@ -1,13 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import Image from "next/image";
 
 interface TeamMemberProps {
   image: string;
-  name: string;
-  qualification: string;
-  title: string;
   description: string;
   isActive: boolean;
   index: number;
@@ -15,9 +12,6 @@ interface TeamMemberProps {
 
 const TeamMember: React.FC<TeamMemberProps> = ({
   image,
-  name,
-  qualification,
-  title,
   description,
   isActive,
   index,
@@ -26,147 +20,56 @@ const TeamMember: React.FC<TeamMemberProps> = ({
     <div
       className={`transition-all duration-700 ease-in-out ${"opacity-100 scale-100"} ${
         index % 2 === 0 ? "lg:mt-20" : ""
-      } flex-shrink-0 w-full sm:w-[280px] overflow-hidden h-fit pt-16 bg-white`}
+      } flex-shrink-0 w-full sm:w-[280px] overflow-hidden h-fit pt-8 bg-white`}
     >
-      <div className="rounded-tl-xl rounded-tr-xl h-[380px] bg-[#F8F3EF] overflow-hidden">
+      <div className="rounded-2xl h-[380px] bg-[#F8F3EF] overflow-hidden">
         <Image
           src={image}
-          alt={name}
+          alt="doctor"
           width={400}
           height={500}
           className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
         />
       </div>
-      <div className="bg-[#1C4F8E] py-3 px-4 text-white flex flex-col rounded-br-xl rounded-bl-xl">
-        <div className="text-sm text-[#A8C1E0] mb-0.5 text-right pr-1">
-          {qualification}
-        </div>
-        <h3 className="text-xl font-bold uppercase text-right pr-1">{name}</h3>
-      </div>
       <div className="text-sm mt-4 text-black">
-        <p className="leading-tight text-center">{title}</p>
-        <p className="leading-tight mt-2 text-center">{description}</p>
+        <p className="leading-tight text-center whitespace-normal break-words">
+          {description}
+        </p>
       </div>
     </div>
   );
 };
 
 const TeamSection: React.FC = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(4);
-  const slideContainerRef = useRef<HTMLDivElement>(null);
-
   const teamMembers = [
     {
       image: "/images/doctor1.jpg",
-      name: "PHẠM XUÂN ĐA",
-      qualification: "PGS. TS. BS",
-      title: "Thành viên chính thức của hiệp hội Trị liệu",
       description:
-        "Bác sĩ làm sàng tại nhiều quốc gia tiên tiến trên thế giới như Úc, Singapore, Việt Nam.",
+        "Bác sĩ Đoàn Hải Yến có kinh nghiệm chuyên sâu trong lĩnh vực Cơ  Xương  Khớp - Phục hồi cơ thể.",
     },
     {
       image: "/images/doctor2.jpg",
-      name: "NGUYỄN THỊ MAI LINH",
-      qualification: "ThS. BS",
-      title: "Thành viên chính thức của hiệp hội Trị liệu",
       description:
-        "Bác sĩ làm sàng tại nhiều quốc gia tiên tiến trên thế giới như Úc, Singapore, Việt Nam.",
+        "Thành viên chính thức của hiệp hội Trị liệu Cột sống Thần Kinh Chiropractic tại Úc. Thạc sĩ - Bác sĩ Mai Linh đảm nhiệm vai trò Bác sĩ lâm sàng tại nhiều quốc gia tiên tiến trên thế giới như: Úc, Singapore, Việt Nam.",
     },
     {
       image: "/images/doctor3.jpg",
-      name: "NGUYỄN VĂN THỊNH",
-      qualification: "BS. CK",
-      title: "Thành viên chính thức của hiệp hội Trị liệu",
       description:
-        "Bác sĩ làm sàng tại nhiều quốc gia tiên tiến trên thế giới như Úc, Singapore, Việt Nam.",
+        "Hơn 15 năm trong lĩnh vực Phục Hồi Chức Năng và Nội Cơ Xương Khớp, Y Học Cổ Truyền, có kinh nghiệm điều trị những trường hợp khó và phức tạp",
     },
     {
       image: "/images/doctor4.jpg",
-      name: "NGUYỄN THỊ HỒNG HẠNH",
-      qualification: "BS. CKI",
-      title: "Thành viên chính thức của hiệp hội Trị liệu",
       description:
-        "Bác sĩ làm sàng tại nhiều quốc gia tiên tiến trên thế giới như Úc, Singapore, Việt Nam.",
-    },
-    {
-      image: "/images/doctor1.jpg",
-      name: "LÊ VĂN THÁI",
-      qualification: "ThS. BS",
-      title: "Thành viên chính thức của hiệp hội Trị liệu",
-      description:
-        "Bác sĩ làm sàng tại nhiều quốc gia tiên tiến trên thế giới như Úc, Singapore, Việt Nam.",
-    },
-    {
-      image: "/images/doctor2.jpg",
-      name: "TRẦN MINH ANH",
-      qualification: "BS. CKI",
-      title: "Thành viên chính thức của hiệp hội Trị liệu",
-      description:
-        "Bác sĩ làm sàng tại nhiều quốc gia tiên tiến trên thế giới như Úc, Singapore, Việt Nam.",
+        "Nhiều năm kinh nghiệm trong lĩnh vực Vật Lý Trị Liệu - Phục Hồi Chức Năng",
     },
   ];
 
-  useEffect(() => {
-    // Set visible count based on screen size
-    const handleResize = () => {
-      if (window.innerWidth < 640) {
-        setVisibleCount(1);
-      } else if (window.innerWidth < 768) {
-        setVisibleCount(2);
-      } else if (window.innerWidth < 1280) {
-        setVisibleCount(3);
-      } else {
-        setVisibleCount(4);
-      }
-    };
-
-    handleResize(); // Initial call
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveIndex((current) => {
-        const nextIndex =
-          (current + 1) % (teamMembers.length - visibleCount + 1);
-        return nextIndex;
-      });
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [teamMembers.length, visibleCount]);
-
-  useEffect(() => {
-    if (slideContainerRef.current) {
-      const container = slideContainerRef.current;
-      const itemWidth = container.querySelector("div")?.offsetWidth || 0;
-      const scrollPosition = activeIndex * itemWidth;
-
-      container.scrollTo({
-        left: scrollPosition,
-        behavior: "smooth",
-      });
-    }
-  }, [activeIndex]);
-
-  const nextSlide = () => {
-    setActiveIndex((current) => {
-      const max = teamMembers.length - visibleCount;
-      return current < max ? current + 1 : 0;
-    });
-  };
-
-  const prevSlide = () => {
-    setActiveIndex((current) => {
-      const max = teamMembers.length - visibleCount;
-      return current > 0 ? current - 1 : max;
-    });
-  };
+  // Duplicate members four times for seamless infinite loop marquee
+  const slidingMembers = [...teamMembers, ...teamMembers, ...teamMembers];
 
   return (
     <section className="py-20 bg-white ">
-      <div className="mx-auto px-4 relative">
+      <div className="mx-auto px-8 relative">
         <div className="relative mx-auto">
           {/* Title with horizontal lines on sides */}
           <div className="hidden lg:block border-[3px] border-[#002447] rounded-[40px] py-8  max-w-[1400px] absolute inset-0 -top-8 mx-32 2xl:mx-auto bottom-[-52px]" />
@@ -177,31 +80,36 @@ const TeamSection: React.FC = () => {
               </h2>
             </div>
 
-            {/* Team members slider */}
-            <div className="relative ">
-              <div
-                ref={slideContainerRef}
-                className="flex gap-8 lg:gap-24 overflow-x-auto scrollbar-hide snap-x pb-8 px-4 md:px-8 justify-center bg-white"
-                style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-              >
-                {teamMembers.map((member, index) => (
+            {/* Team members marquee slider */}
+            <div className="overflow-hidden py-8 bg-white relative z-1">
+              <div className="flex gap-8 lg:gap-16 whitespace-nowrap marquee">
+                {slidingMembers.map((member, index) => (
                   <TeamMember
                     key={index}
                     index={index}
                     image={member.image}
-                    name={member.name}
-                    qualification={member.qualification}
-                    title={member.title}
                     description={member.description}
-                    isActive={
-                      index >= activeIndex && index < activeIndex + visibleCount
-                    }
+                    isActive={true}
                   />
                 ))}
               </div>
-
-              {/* Indicators */}
             </div>
+            <style jsx>{`
+              .marquee {
+                display: flex;
+                gap: 2rem;
+                animation: marquee 30s linear infinite;
+                will-change: transform;
+              }
+              @keyframes marquee {
+                0% {
+                  transform: translate3d(0, 0, 0);
+                }
+                100% {
+                  transform: translate3d(-25%, 0, 0);
+                }
+              }
+            `}</style>
           </div>
         </div>
       </div>

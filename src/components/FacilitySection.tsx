@@ -21,7 +21,7 @@ const FacilityItem: React.FC<FacilityItemProps> = ({
     <div
       className={`transition-all duration-700 ease-in-out ${
         isActive ? "opacity-100 scale-100" : "opacity-40 scale-95"
-      } flex-shrink-0 w-full sm:w-[320px] px-3`}
+      } flex-shrink-0 w-full sm:w-[340px] px-3`}
     >
       <div className="mb-5 overflow-hidden">
         <Image
@@ -29,11 +29,11 @@ const FacilityItem: React.FC<FacilityItemProps> = ({
           alt={title}
           width={400}
           height={300}
-          className=" object-cover h-72 w-full transition-transform duration-700 hover:scale-110"
+          className="object-cover h-[420px] w-full transition-transform duration-700 hover:scale-110"
         />
       </div>
       <h3 className="text-black text-xl font-bold mb-1">{title}</h3>
-      <p className="text-black text-sm">{description}</p>
+      <p className="text-black text-md">{description}</p>
     </div>
   );
 };
@@ -103,7 +103,7 @@ const FacilitySection: React.FC = () => {
             <h2 className="text-3xl md:text-5xl font-cormorant font-bold text-gray-900 mb-6 uppercase">
               KHÔNG GIAN
             </h2>
-            <p className="text-[20px] text-[#797979] mb-10">
+            <p className="text-[20px] text-[#797979] mb-20">
               Tại Healthcare Therapy Center, từng chi tiết đều được chăm chút kỹ
               lưỡng để mang đến trải nghiệm hoàn hảo cho khách hàng.
             </p>

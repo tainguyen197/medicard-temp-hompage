@@ -15,16 +15,16 @@ const TreatmentMethod = ({
   iconColor,
 }: TreatmentMethodProps) => {
   return (
-    <div className="flex mb-8 last:mb-0">
+    <div className="flex last:mb-0">
       <div
         className={`flex items-center justify-center shrink-0 mr-5 w-18 h-18 rounded-full`}
         style={{ backgroundColor: iconColor }}
       >
         {icon}
       </div>
-      <div>
+      <div className="mt-4">
         <h3 className="font-bold text-xl mb-2 text-gray-900">{title}</h3>
-        <p className="text-[#909090] text-md">{description}</p>
+        <p className="text-[#909090] text-md lg:mr-16">{description}</p>
       </div>
     </div>
   );
@@ -34,9 +34,9 @@ const TreatmentMethodsSection = () => {
   return (
     <section className="py-16 bg-white border-t border-gray-100">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-7 gap-8">
           {/* Left column with methods */}
-          <div>
+          <div className="col-span-4">
             <h2 className="font-cormorant font-bold text-[40px] text-[#222222] leading-tight mb-12">
               PHƯƠNG THỨC ĐIỀU TRỊ TẠI HEALTHCARE THERAPY CENTER
             </h2>
@@ -65,7 +65,7 @@ const TreatmentMethodsSection = () => {
                 description="Liệu trình điều trị tối ưu và an toàn, không yêu cầu sử dụng thuốc hay phẫu thuật."
               />
 
-              <div className="w-[1px] h-12 bg-gray-200 ml-8"></div>
+              <div className="w-[1px] h-8 bg-gray-200 ml-8"></div>
 
               <TreatmentMethod
                 iconColor="#6C98C5"
@@ -86,11 +86,11 @@ const TreatmentMethodsSection = () => {
                     />
                   </svg>
                 }
-                title="Áp dụng công nghệ & thiết bị hiện đại"
-                description="(Mô tả mô tả)"
+                title="Áp dụng công nghệ cao"
+                description="Cập nhật liên tục những công nghệ hiện đại, tiên tiến để mang lại hiệu quả điều trị tốt nhất"
               />
 
-              <div className="w-[1px] h-12 bg-gray-200 ml-8"></div>
+              <div className="w-[1px] h-8 bg-gray-200 ml-8"></div>
 
               <TreatmentMethod
                 iconColor="#99D3E4"
@@ -115,7 +115,7 @@ const TreatmentMethodsSection = () => {
                 description="Phù hợp với từng cá nhân để giảm đau, giảm viêm, dùng các vị chất tái tạo, giúp sức khoẻ nhanh chóng phục hồi"
               />
 
-              <div className="w-[1px] h-12 bg-gray-200 ml-8"></div>
+              <div className="w-[1px] h-8 bg-gray-200 ml-8"></div>
 
               <TreatmentMethod
                 iconColor="#235E93"
@@ -143,7 +143,7 @@ const TreatmentMethodsSection = () => {
           </div>
 
           {/* Right column with image */}
-          <div className="flex items-center justify-center">
+          <div className="col-span-3">
             <Image
               src="/images/medicare-methods.png"
               alt="Healthcare Therapy Center Treatment Methods"
