@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
 interface ServiceItem {
@@ -51,7 +51,24 @@ const ServicesGallerySection: React.FC = () => {
     },
   ];
 
-  const [activeService, setActiveService] = useState<ServiceItem>(services[0]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [animate, setAnimate] = useState(true);
+  const activeService = services[currentIndex];
+
+  // Auto-advance service every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % services.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Trigger animation on active service change
+  useEffect(() => {
+    setAnimate(false);
+    const timeout = setTimeout(() => setAnimate(true), 50);
+    return () => clearTimeout(timeout);
+  }, [currentIndex]);
 
   return (
     <section className="py-20 bg-[#182134] text-white">
@@ -65,7 +82,11 @@ const ServicesGallerySection: React.FC = () => {
         <div className="flex flex-col lg:flex-row gap-10 mb-8">
           {/* Featured service image and content */}
           <div className="w-full lg:w-1/2">
-            <div className="relative rounded-lg overflow-hidden h-[400px] md:h-[500px]">
+            <div
+              className={`relative rounded-lg overflow-hidden h-[400px] md:h-[500px] transition-all duration-500 ease-in-out ${
+                animate ? "opacity-100 scale-100" : "opacity-0 scale-95"
+              }`}
+            >
               <Image
                 src={activeService.image}
                 alt={activeService.title}
@@ -143,7 +164,9 @@ const ServicesGallerySection: React.FC = () => {
                   ? "ring-2 ring-amber-500 scale-[1.02]"
                   : "opacity-75 hover:opacity-100"
               }`}
-              onClick={() => setActiveService(service)}
+              onClick={() =>
+                setCurrentIndex(services.findIndex((s) => s.id === service.id))
+              }
             >
               <div className="relative aspect-[4/3]">
                 <Image
