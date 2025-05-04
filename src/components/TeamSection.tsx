@@ -20,15 +20,15 @@ const TeamMember: React.FC<TeamMemberProps> = ({
     <div
       className={`transition-all duration-700 ease-in-out ${"opacity-100 scale-100"} ${
         index % 2 === 0 ? "lg:mt-20" : ""
-      } flex-shrink-0 w-full sm:w-[280px] overflow-hidden h-fit pt-8 bg-white`}
+      } flex-shrink-0 w-2/3 md:w-[280px] overflow-hidden h-fit md:pt-8 bg-white`}
     >
-      <div className="rounded-2xl h-[380px] bg-[#F8F3EF] overflow-hidden">
+      <div className="rounded-2xl h-[300px] md:h-[380px] aspect-230/300 bg-[#F8F3EF] overflow-hidden">
         <Image
           src={image}
           alt="doctor"
-          width={400}
-          height={500}
-          className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-105"
+          height={380}
+          width={230}
+          className="relative object-contain object-center transition-transform duration-500 hover:scale-105"
         />
       </div>
       <div className="text-sm mt-4 text-black">
@@ -68,14 +68,14 @@ const TeamSection: React.FC = () => {
   const slidingMembers = [...teamMembers, ...teamMembers, ...teamMembers];
 
   return (
-    <section className="pt-20 pb-28 bg-white ">
+    <section className="pt-10 md:pt-20 pb-0 md:pb-28 bg-white ">
       <div className="mx-auto relative">
         <div className="relative mx-auto">
           {/* Title with horizontal lines on sides */}
           <div className="hidden lg:block border-[3px] border-[#002447] rounded-[40px] py-8  max-w-[1400px] absolute inset-0 -top-8 mx-32 2xl:mx-auto bottom-[-52px]" />
           <div>
-            <div className="flex items-center justify-center relative top-[-54px] ">
-              <h2 className="font-cormorant text-3xl md:text-5xl font-bold text-[#002447] uppercase whitespace-nowrap bg-white px-8">
+            <div className="flex items-center justify-center relative md:top-[-54px] ">
+              <h2 className="font-cormorant text-xl md:text-5xl font-bold text-[#002447] uppercase whitespace-nowrap bg-white px-8">
                 ĐỘI NGŨ CHUYÊN GIA
               </h2>
             </div>

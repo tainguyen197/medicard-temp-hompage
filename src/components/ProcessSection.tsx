@@ -17,17 +17,19 @@ const ProcessStep = ({
 }: ProcessStepProps) => (
   <div className="flex flex-col items-center">
     <div
-      className={`w-16 h-16 ${color} rounded-full flex items-center justify-center mb-3`}
+      className={`w-10 h-10 md:w-16 md:h-16 ${color} rounded-full flex items-center justify-center mb-3`}
     >
-      <StarburstIcon size={24} className="text-white" />
+      <StarburstIcon size={24} className="text-white size-4 md:size-6" />
     </div>
-    <div className="text-center mb-2 uppercase font-cormorant text-md text-[#909090]">
+    <div className="text-center mb-2 uppercase font-cormorant text-sm md:text-md text-[#909090]">
       BƯỚC {number}
     </div>
-    <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">
+    <h3 className="text-sm md:text-xl font-bold text-gray-900 mb-3 text-center">
       {title}
     </h3>
-    <p className="text-gray-600 text-center text-md">{description}</p>
+    <p className="text-gray-600 text-center text-sm md:text-md">
+      {description}
+    </p>
   </div>
 );
 
@@ -50,18 +52,21 @@ const Arrow = () => (
 
 const ProcessSection = () => {
   return (
-    <section id="process" className="relative py-20 bg-white overflow-hidden">
+    <section
+      id="process"
+      className="relative py-10 md:py-20 bg-white overflow-hidden"
+    >
       <div className="container mx-auto">
-        <div className="flex flex-col md:flex-row">
+        <div className="flex ">
           <div className="w-full px-4">
-            <div className="flex flex-col gap-20 md:flex-row mb-8">
+            <div className="flex flex-col gap-4 md:gap-20 md:flex-row mb-8">
               <div className="w-full md:w-1/2">
-                <h2 className="text-3xl md:text-[40px] font-cormorant font-bold text-gray-900 mb-6 uppercase leading-tight">
+                <h2 className="text-xl md:text-[40px] font-cormorant font-bold text-gray-900 mb-6 uppercase leading-tight">
                   QUY TRÌNH
                   <br />
                   CHĂM SÓC SỨC KHOẺ
                 </h2>
-                <p className="text-[20px] text-gray-700 text-justify">
+                <p className="text-sm md:text-[20px] text-gray-700 text-justify">
                   <strong>Healthcare Therapy Center</strong> tự hào mang đến
                   giải pháp liệu pháp điều trị - phục hồi cơ xương khớp tái tạo
                   từ cấp tế bào, không phẫu thuật và được cá nhân hoá cao phẫu
@@ -79,8 +84,8 @@ const ProcessSection = () => {
                 />
               </div>
             </div>
-            <div className="bg-white p-8 rounded-xl">
-              <div className="grid grid-cols-1 md:grid-cols-11 gap-4 items-center">
+            <div className="bg-white md:p-8 rounded-xl">
+              <div className="grid grid-cols-2 md:grid-cols-11 gap-y-6 gap-x-4 md:gap-4 items-center">
                 <div className="md:col-span-2">
                   <ProcessStep
                     number={1}
@@ -90,7 +95,7 @@ const ProcessSection = () => {
                   />
                 </div>
 
-                <div className="md:col-span-1 self-center">
+                <div className="hidden md:block md:col-span-1 self-center">
                   <Arrow />
                 </div>
 
@@ -103,7 +108,7 @@ const ProcessSection = () => {
                   />
                 </div>
 
-                <div className="md:col-span-1 self-center">
+                <div className="hidden md:block md:col-span-1 self-center">
                   <Arrow />
                 </div>
 
@@ -116,7 +121,7 @@ const ProcessSection = () => {
                   />
                 </div>
 
-                <div className="md:col-span-1 self-center">
+                <div className="hidden md:block md:col-span-1 self-center">
                   <Arrow />
                 </div>
 

@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const HeroSection = () => {
   return (
-    <section className="relative">
+    <section className="relative mt-16 md:mt-20">
       <div className="bg-white ">
         <Image
           src="/images/hero-section.png"

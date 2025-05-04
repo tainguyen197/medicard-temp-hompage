@@ -42,7 +42,7 @@ const EquipmentItem: React.FC<EquipmentItemProps> = ({
   return (
     <div
       id={id}
-      className={`transition-all duration-700 ease-in-out flex-shrink-0 w-1/2 flex items-center justify-center`}
+      className={`transition-all duration-700 ease-in-out flex-shrink-0 w-full md:w-1/2 flex items-center justify-center`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -200,13 +200,13 @@ const EquipmentSection: React.FC = () => {
   }, [activeIndex]);
 
   return (
-    <section className="py-20 bg-white overflow-hidden">
+    <section className="py-10 md:py-20 bg-white overflow-hidden">
       <div className="container mx-auto px-4 xl:px-16 2xl:px-32">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-cormorant font-bold text-gray-900 uppercase mb-4">
+        <div className="text-center mb-8 md:mb-16">
+          <h2 className="text-xl md:text-5xl font-cormorant font-bold text-gray-900 uppercase mb-4">
             CÔNG NGHỆ
           </h2>
-          <p className="text-xl text-gray-700">
+          <p className="text-xs md:text-xl text-gray-700">
             Áp dụng công nghệ tiên tiến trong chẩn đoán và điều trị
           </p>
         </div>

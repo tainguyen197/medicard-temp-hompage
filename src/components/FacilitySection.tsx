@@ -28,11 +28,11 @@ const FacilityItem: React.FC<FacilityItemProps> = ({
           alt={title}
           width={400}
           height={300}
-          className="object-cover h-[420px] w-full transition-transform duration-700 hover:scale-110"
+          className="object-cover h-[250px] md:h-[420px] aspect-200/250 w-full transition-transform duration-700 hover:scale-110"
         />
       </div>
-      <h3 className="text-black text-xl font-bold mb-1">{title}</h3>
-      <p className="text-black text-md">{description}</p>
+      <h3 className="text-black text-sm md:text-xl font-bold mb-1">{title}</h3>
+      <p className="text-black text-sm md:text-md">{description}</p>
     </div>
   );
 };
@@ -97,18 +97,18 @@ const FacilitySection: React.FC = () => {
   };
 
   return (
-    <section className="py-16" style={{ background: "#FEF6EA" }}>
+    <section className="py-10 md:py-16" style={{ background: "#FEF6EA" }}>
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center">
           <div className="w-full md:w-1/3 pr-0 md:pr-12">
-            <h2 className="text-3xl md:text-5xl font-cormorant font-bold text-gray-900 mb-6 uppercase">
+            <h2 className="text-xl md:text-5xl font-cormorant font-bold text-gray-900 mb-6 uppercase">
               KHÔNG GIAN
             </h2>
-            <p className="text-[20px] text-[#797979] mb-20">
+            <p className="text-sm md:text-[20px] text-[#797979] mb-10 md:mb-20">
               Tại Healthcare Therapy Center, từng chi tiết đều được chăm chút kỹ
               lưỡng để mang đến trải nghiệm hoàn hảo cho khách hàng.
             </p>
-            <div className="h-0.5 w-32 bg-gray-400 mb-10"></div>
+            <div className="h-0.5 w-32 bg-gray-400 md:mb-10"></div>
           </div>
 
           <div className="w-full md:w-2/3 relative overflow-x-visible overflow-y-hidden">

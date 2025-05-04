@@ -71,19 +71,19 @@ const ServicesGallerySection: React.FC = () => {
   }, [currentIndex]);
 
   return (
-    <section className="py-20 bg-[#182134] text-white">
+    <section className="py-10 md:py-20 bg-[#182134] text-white">
       <div className="container mx-auto px-4">
-        <div className="flex justify-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-cormorant font-semibold text-[#FFF7EB] uppercase relative">
+        <div className="flex justify-center mb-8 md:mb-16">
+          <h2 className="text-xl md:text-4xl font-cormorant font-semibold text-[#FFF7EB] uppercase relative">
             DỊCH VỤ
           </h2>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-10 mb-8">
+        <div className="flex flex-col lg:flex-row gap-4 mb-8">
           {/* Featured service image and content */}
           <div className="w-full lg:w-1/2">
             <div
-              className={`relative rounded-lg overflow-hidden h-[400px] md:h-[500px] transition-all duration-500 ease-in-out ${
+              className={`relative rounded-lg overflow-hidden h-[253px] md:h-[500px] transition-all duration-500 ease-in-out ${
                 animate ? "opacity-100 scale-100" : "opacity-0 scale-95"
               }`}
             >
@@ -99,26 +99,30 @@ const ServicesGallerySection: React.FC = () => {
 
           {/* Service description */}
           <div className="w-full lg:w-1/2 flex flex-col justify-center">
-            <h3 className="font-cormorant text-3xl font-bold mb-5 text-white">
+            <h3 className="font-cormorant text-md md:text-3xl font-bold mb-2 md:mb-5 text-white">
               {activeService.title}
             </h3>
-            <p className="text-gray-300 mb-16 text-lg leading-relaxed">
+            <p className="text-gray-300 mb-4 md:mb-16 text-sm md:text-lg leading-relaxed">
               {activeService.description}
             </p>
 
             <div className="mb-10">
-              <h4 className="text-xl font-medium mb-3 ">Bao gồm</h4>
-              <p className="text-gray-300">{activeService.details}</p>
+              <h4 className="text-sm md:text-xl font-medium mb-1 md:mb-3 ">
+                Bao gồm:
+              </h4>
+              <p className="text-gray-300 text-sm md:text-md font-normal">
+                {activeService.details}
+              </p>
             </div>
 
             <div className="flex flex-wrap gap-4">
               <a
                 href="#"
-                className="inline-flex items-center px-7 py-3 bg-[#B1873F] hover:bg-amber-700 transition-colors rounded-full text-white font-medium"
+                className="inline-flex items-center px-4 py-2 md:px-7 md:py-3 bg-[#B1873F] hover:bg-amber-700 transition-colors rounded-xl md:rounded-full text-white font-semibold md:font-medium text-xs md:text-md h-10 md:h-12"
               >
                 Xem chi tiết
                 <svg
-                  className="ml-2 w-5 h-5"
+                  className="ml-2 w-4 h-4 md:w-5 md:h-5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -133,11 +137,11 @@ const ServicesGallerySection: React.FC = () => {
               </a>
               <a
                 href="#"
-                className="inline-flex items-center px-7 py-3 border border-[#B1873F] hover:bg-amber-600/10 transition-colors rounded-full text-white font-medium"
+                className="inline-flex items-center px-4 py-2 md:px-7 md:py-3 border border-[#B1873F] hover:bg-amber-600/10 transition-colors rounded-xl md:rounded-full text-white font-semibold md:font-medium text-xs md:text-md h-10 md:h-12"
               >
                 Đặt lịch
                 <svg
-                  className="ml-2 w-5 h-5"
+                  className="ml-2 w-4 h-4 md:w-5 md:h-5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -180,10 +184,10 @@ const ServicesGallerySection: React.FC = () => {
           ))}
         </div>
 
-        <div className="text-center mt-14">
+        <div className="text-center mt-10 md:mt-14">
           <a
             href="#"
-            className="inline-block border-b border-white/50 hover:border-white transition-colors pb-1 text-white text-lg"
+            className="inline-block border-b border-white/50 hover:border-white transition-colors pb-1 text-white text-sm md:text-lg"
           >
             Khám phá thêm
           </a>

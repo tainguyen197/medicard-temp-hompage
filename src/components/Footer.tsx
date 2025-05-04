@@ -6,22 +6,22 @@ export default function Footer() {
     <footer className="bg-[#182134] text-white">
       <div className="container mx-auto px-4 py-12">
         {/* Logo and company info */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10 mb-10">
-          <div>
+        <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-10 mb-10">
+          <div className="col-span-3 md:col-span-1">
             <div className="mb-2">
               <Image
                 src="/images/logo.svg"
                 alt="Healthcare Therapy Center"
                 width={220}
                 height={60}
-                className="h-auto"
+                className="h-auto "
               />
             </div>
             <div className="text-white mb-4 font-bold">
-              <p className="mb-2">
+              <p className="mb-2 text-sm md:text-md">
                 327 đường Nguyễn Trọng Tuyển, Phường 10, Quận Phú Nhuận, TP.HCM
               </p>
-              <p>
+              <p className="text-sm md:text-md">
                 Giờ mở cửa: <br />
                 Thứ 2 - Thứ 7: 8h00 - 19h00 <br />
                 Chủ nhật: 8h00 - 18h00
@@ -30,13 +30,15 @@ export default function Footer() {
           </div>
 
           {/* Company links */}
-          <div>
-            <h4 className="text-xl font-medium mb-6">Công ty</h4>
+          <div className="col-span-1 md:col-span-1">
+            <h4 className="text-md md:text-xl font-bold md:font-medium mb-6">
+              Công ty
+            </h4>
             <ul className="space-y-3">
               <li>
                 <Link
                   href="/"
-                  className="hover:text-[#B1873F] transition-colors"
+                  className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
                   Trang chủ
                 </Link>
@@ -44,7 +46,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/about"
-                  className="hover:text-[#B1873F] transition-colors"
+                  className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
                   Về chúng tôi
                 </Link>
@@ -52,7 +54,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/blog"
-                  className="hover:text-[#B1873F] transition-colors"
+                  className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
                   Blog Sức khoẻ
                 </Link>
@@ -61,13 +63,15 @@ export default function Footer() {
           </div>
 
           {/* Services links */}
-          <div>
-            <h4 className="text-xl font-medium mb-6">Dịch vụ</h4>
+          <div className="col-span-2 md:col-span-1">
+            <h4 className="text-md md:text-xl font-bold md:font-medium mb-6">
+              Dịch vụ
+            </h4>
             <ul className="space-y-3">
               <li>
                 <Link
                   href="/services/ortho"
-                  className="hover:text-[#B1873F] transition-colors"
+                  className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
                   Khám Cơ - Xương - Khớp
                 </Link>
@@ -75,7 +79,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/services/rehab"
-                  className="hover:text-[#B1873F] transition-colors"
+                  className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
                   Phục hồi chức năng
                 </Link>
@@ -83,7 +87,7 @@ export default function Footer() {
               <li>
                 <Link
                   href="/services/derma"
-                  className="hover:text-[#B1873F] transition-colors"
+                  className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
                   Chăm sóc da & Thẩm mỹ
                 </Link>
@@ -92,15 +96,21 @@ export default function Footer() {
           </div>
 
           {/* Hotline and social */}
-          <div className="md:col-span-3 lg:col-span-1">
-            <h4 className="text-xl font-medium mb-4">HOTLINE</h4>
-            <div className="mb-5">
+          <div className="col-span-3 md:col-span-1 flex items-center md:block">
+            <h4 className="hidden md:block text-xl font-medium mb-4">
+              HOTLINE
+            </h4>
+            <div className="md:mb-5">
               <Link
                 href="tel:0901430077"
-                className="inline-flex items-center px-6 py-3 border border-[#B1873F] hover:bg-[#B1873F]/10 transition-colors rounded-full text-[#B1873F] font-bold"
+                className="inline-flex items-center px-1 py-2 md:px-6 md:py-3 border border-[#B1873F] hover:bg-[#B1873F]/10 transition-colors rounded-xl md:rounded-full text-[#B1873F] font-bold text-xs md:text-md"
               >
                 0901 430 077
-                <svg className="ml-2 w-5 h-5" viewBox="0 0 24 24" fill="none">
+                <svg
+                  className="ml-2 w-4 h-4 md:w-5 md:h-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
                   <path
                     d="M8.25 4.5l7.5 7.5-7.5 7.5"
                     stroke="currentColor"
@@ -112,7 +122,7 @@ export default function Footer() {
               </Link>
             </div>
 
-            <div className="flex space-x-4">
+            <div className="flex space-x-2 md:space-x-4 ml-4 md:ml-0">
               <a
                 href="https://facebook.com"
                 className="rounded-full flex items-center justify-center transition-colors"
@@ -184,11 +194,11 @@ export default function Footer() {
         <div className="border-t border-[#B1873F] my-8"></div>
 
         {/* Copyright and links */}
-        <div className="flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center text-sm text-gray-400">
           <div>
             <p>Bản quyền © 2025 Healthcare Therapy Center</p>
           </div>
-          <div className="flex mt-4 md:mt-0">
+          <div className="hidden md:flex mt-4 md:mt-0">
             <Link href="/terms" className="hover:text-white mr-6">
               Điều khoản
             </Link>

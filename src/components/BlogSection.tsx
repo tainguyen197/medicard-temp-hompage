@@ -9,13 +9,20 @@ interface BlogPostProps {
 }
 
 const BlogPost = ({ image, title, excerpt }: BlogPostProps) => (
-  <div className="bg-white ">
-    <div className="relative aspect-square rounded-2xl overflow-hidden">
-      <Image src={image} alt={title} fill className="object-cover" />
+  <div className="bg-white grid grid-cols-2 gap-4 md:block">
+    <div className="relative md:aspect-square rounded-2xl overflow-hidden">
+      <Image
+        src={image}
+        alt={title}
+        fill
+        className="object-cover h-[100px] w-fit md:h-auto aspect-2/1"
+      />
     </div>
-    <div className="pt-6">
-      <h3 className="text-xl font-bold text-gray-900 mb-4">{title}</h3>
-      <p className="text-gray-600">{excerpt}</p>
+    <div className="md:pt-6">
+      <h3 className="text-sm md:text-xl font-bold text-gray-900 mb-4 line-clamp-2">
+        {title}
+      </h3>
+      <p className="text-gray-600 text-sm md:text-md line-clamp-2">{excerpt}</p>
     </div>
   </div>
 );
@@ -46,9 +53,9 @@ const BlogSection = () => {
   ];
 
   return (
-    <section id="blog" className="pb-20 bg-white">
+    <section id="blog" className="pb-10 md:pb-20 bg-white">
       <div className="container mx-auto px-4">
-        <h2 className="text-5xl font-cormorant font-bold text-center text-gray-900 mb-16 leading-tight">
+        <h2 className="text-xl md:text-5xl font-cormorant font-bold text-center text-gray-900 mb-8 md:mb-16 leading-tight">
           BLOG SỨC KHỎE
         </h2>
 
@@ -63,10 +70,10 @@ const BlogSection = () => {
           ))}
         </div>
 
-        <div className="text-right mt-12">
+        <div className="text-center md:text-right md:mt-12">
           <Link
             href="/blog"
-            className="inline-block bg-[#B1873F] hover:bg-amber-800 text-white font-semibold py-3 px-8 rounded-full"
+            className="bg-transparent inline-block md:bg-[#B1873F] hover:bg-amber-800 text-black md:text-white font-normal underline md:no-underline md:font-semibold py-3 px-8 rounded-full mt-2 md:mt-0"
           >
             Xem thêm
           </Link>

@@ -10,13 +10,13 @@ const ContactSection = () => {
           src="/images/contact-bg.jpg"
           alt="Contact Healthcare Therapy Center"
           fill
-          className="object-cover"
+          className="object-left object-cover"
         />
         <div className="absolute inset-0 bg-black opacity-30"></div>
 
-        <div className="relative z-10 h-full container mx-auto px-4 flex flex-col justify-end pb-10">
+        <div className="relative z-10 h-full container mx-auto px-4 flex flex-col justify-center md:justify-end md:pb-10">
           <div className="max-w-2xl">
-            <h2 className="text-3xl md:text-[40px] font-cormorant font-bold text-[#C99A4D] mb-4">
+            <h2 className="text-xl md:text-[40px] font-cormorant font-bold text-[#C99A4D] mb-4">
               SẴN SÀNG TRẢI NGHIỆM
               <br />
               SỰ KHÁC BIỆT?
