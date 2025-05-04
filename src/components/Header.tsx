@@ -1,10 +1,16 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
 const Header = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
   return (
-    <header className=" bg-[#182134] py-4 fixed top-0 left-0 right-0 z-50">
+    <header className="bg-[#182134] py-4 fixed top-0 left-0 right-0 z-50">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <div className="relative w-32 h-10 md:w-36 md:h-16">
           <Image
@@ -33,7 +39,7 @@ const Header = () => {
             ))}
           </nav>
 
-          <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-amber-50">
+          <div className="hidden md:flex items-center justify-center w-10 h-10 rounded-full border-2 border-amber-50">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -50,11 +56,62 @@ const Header = () => {
             </svg>
           </div>
 
-          <div className="flex items-center justify-center w-10 h-10 rounded-full border-2 border-amber-50">
+          <div className="hidden md:flex items-center justify-center w-10 h-10 rounded-full border-2 border-amber-50">
             <span className="font-cormorant font-bold text-sm text-amber-50">
               VIE
             </span>
           </div>
+
+          {/* Hamburger Button for Mobile */}
+          <button
+            className="md:hidden flex flex-col justify-center items-center w-10 h-10 space-y-1.5 z-50"
+            onClick={toggleMenu}
+            aria-label="Toggle menu"
+          >
+            <span
+              className={`block w-6 h-0.5 bg-white transition-transform duration-300 ease-in-out ${
+                isMenuOpen ? "rotate-45 translate-y-2" : ""
+              }`}
+            ></span>
+            <span
+              className={`block w-6 h-0.5 bg-white transition-opacity duration-300 ease-in-out ${
+                isMenuOpen ? "opacity-0" : "opacity-100"
+              }`}
+            ></span>
+            <span
+              className={`block w-6 h-0.5 bg-white transition-transform duration-300 ease-in-out ${
+                isMenuOpen ? "-rotate-45 -translate-y-2" : ""
+              }`}
+            ></span>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      <div
+        className={`fixed inset-0 bg-[#182134] z-40 transition-transform duration-300 ease-in-out ${
+          isMenuOpen ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
+        <div className="container mx-auto px-4 pt-20 pb-8">
+          <nav className="flex flex-col space-y-6">
+            {[
+              { name: "DỊCH VỤ", href: "#services" },
+              { name: "KHÔNG GIAN", href: "#space" },
+              { name: "VỀ CHÚNG TÔI", href: "#about" },
+              { name: "BLOG SỨC KHOẺ", href: "#blog" },
+              { name: "LIÊN HỆ", href: "#contact" },
+            ].map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className="font-cormorant font-bold text-xl uppercase text-white hover:text-amber-200 transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </nav>
         </div>
       </div>
     </header>
