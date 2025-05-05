@@ -50,8 +50,7 @@ const TreatmentMethodsSection = () => {
                 iconColor="#c7d6e7"
                 icon={
                   <svg
-                    width="35"
-                    height="31"
+                    className="w-5 h-5 md:w-[35px] md:h-[35px]"
                     viewBox="0 0 35 31"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -75,8 +74,7 @@ const TreatmentMethodsSection = () => {
                 iconColor="#6C98C5"
                 icon={
                   <svg
-                    width="36"
-                    height="36"
+                    className="w-5 h-5 md:w-[35px] md:h-[35px]"
                     viewBox="0 0 36 36"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -100,8 +98,7 @@ const TreatmentMethodsSection = () => {
                 iconColor="#99D3E4"
                 icon={
                   <svg
-                    width="36"
-                    height="36"
+                    className="w-5 h-5 md:w-[35px] md:h-[35px]"
                     viewBox="0 0 36 36"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -125,8 +122,7 @@ const TreatmentMethodsSection = () => {
                 iconColor="#235E93"
                 icon={
                   <svg
-                    width="36"
-                    height="36"
+                    className="w-5 h-5 md:w-[35px] md:h-[35px]"
                     viewBox="0 0 36 36"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"

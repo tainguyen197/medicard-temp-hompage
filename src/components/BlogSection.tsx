@@ -53,7 +53,7 @@ const BlogSection = () => {
   ];
 
   return (
-    <section id="blog" className="pb-10 md:pb-20 bg-white">
+    <section id="blog" className="pb-6 md:pb-20 bg-white">
       <div className="container mx-auto px-4">
         <h2 className="text-xl md:text-5xl font-cormorant font-bold text-center text-gray-900 mb-8 md:mb-16 leading-tight">
           BLOG SỨC KHỎE
@@ -73,7 +73,7 @@ const BlogSection = () => {
         <div className="text-center md:text-right md:mt-12">
           <Link
             href="/blog"
-            className="bg-transparent inline-block md:bg-[#B1873F] hover:bg-amber-800 text-black md:text-white font-normal underline md:no-underline md:font-semibold py-3 px-8 rounded-full mt-2 md:mt-0"
+            className="bg-transparent inline-block md:bg-[#B1873F] hover:md:bg-amber-800 text-black md:text-white font-normal underline md:no-underline md:font-semibold py-3 px-8 rounded-full mt-2 md:mt-0"
           >
             Xem thêm
           </Link>
