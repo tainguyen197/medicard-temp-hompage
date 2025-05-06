@@ -61,6 +61,7 @@ const ServicesGallerySection: React.FC = () => {
       setCurrentIndex((prev) => (prev + 1) % services.length);
     }, 3000);
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Trigger animation on active service change
