@@ -8,7 +8,7 @@ const HeroSection = () => {
         <Image
           src="/images/hero-section.png"
           alt="Healthcare Therapy Center"
-          className="w-full h-auto"
+          className="w-full h-auto min-h-72 md:min-h-96 object-cover"
           width={1000}
           height={1000}
         />

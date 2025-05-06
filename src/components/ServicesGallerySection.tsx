@@ -83,7 +83,7 @@ const ServicesGallerySection: React.FC = () => {
           {/* Featured service image and content */}
           <div className="w-full lg:w-1/2">
             <div
-              className={`relative rounded-lg overflow-hidden h-[253px] md:h-[500px] transition-all duration-500 ease-in-out ${
+              className={`relative rounded-4xl overflow-hidden h-[253px] md:h-[500px] transition-all duration-500 ease-in-out ${
                 animate ? "opacity-100 scale-100" : "opacity-0 scale-95"
               }`}
             >
@@ -163,7 +163,7 @@ const ServicesGallerySection: React.FC = () => {
           {services.map((service) => (
             <div
               key={service.id}
-              className={`cursor-pointer relative overflow-hidden rounded-md transition-all duration-300 ${
+              className={`cursor-pointer relative overflow-hidden rounded-3xl transition-all duration-300 ${
                 service.id === activeService.id
                   ? "ring-2 ring-amber-500 scale-[1.02]"
                   : "opacity-75 hover:opacity-100"
@@ -172,7 +172,7 @@ const ServicesGallerySection: React.FC = () => {
                 setCurrentIndex(services.findIndex((s) => s.id === service.id))
               }
             >
-              <div className="relative aspect-[4/3]">
+              <div className="relative aspect-[309/216]">
                 <Image
                   src={service.image}
                   alt={service.title}

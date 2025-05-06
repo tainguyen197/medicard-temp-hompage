@@ -32,7 +32,7 @@ const TeamMember: React.FC<TeamMemberProps> = ({
         />
       </div>
       <div className="text-sm mt-4 text-black">
-        <p className="leading-tight text-center whitespace-normal break-words">
+        <p className="leading-tight whitespace-normal text-justify break-words">
           {description}
         </p>
       </div>

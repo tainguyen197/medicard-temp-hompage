@@ -67,7 +67,7 @@ const AboutSection = () => {
                     BS CKI. Nguyễn Thị Hồng Hạnh.
                   </p>
                   <p className="md:block hidden text-gray-600 text-sm">
-                    Chủ tịch Hội đồng chuyên môn, Healthcare Therapy Center.
+                    Healthcare Therapy Center.
                   </p>
                 </div>
               </div>

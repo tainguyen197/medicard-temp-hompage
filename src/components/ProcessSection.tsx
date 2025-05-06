@@ -27,7 +27,7 @@ const ProcessStep = ({
     <h3 className="text-sm md:text-xl font-bold text-gray-900 mb-3 text-center">
       {title}
     </h3>
-    <p className="text-gray-600 text-center text-sm md:text-md">
+    <p className="text-gray-600 text-sm md:text-md text-justify">
       {description}
     </p>
   </div>
@@ -85,7 +85,7 @@ const ProcessSection = () => {
               </div>
             </div>
             <div className="bg-white md:p-8 rounded-xl">
-              <div className="grid grid-cols-2 md:grid-cols-11 gap-y-6 gap-x-4 md:gap-4 items-center">
+              <div className="grid grid-cols-2 md:grid-cols-11 gap-y-6 gap-x-4 md:gap-4 items-start">
                 <div className="md:col-span-2">
                   <ProcessStep
                     number={1}

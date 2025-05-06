@@ -6,8 +6,8 @@ export default function Footer() {
     <footer className="bg-[#182134] text-white">
       <div className="container mx-auto px-4 py-12">
         {/* Logo and company info */}
-        <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-10 mb-10">
-          <div className="col-span-3 md:col-span-1">
+        <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-10 mb-10">
+          <div className="col-span-3 lg:col-span-2">
             <div className="mb-2">
               <Image
                 src="/images/logo.svg"
@@ -100,7 +100,7 @@ export default function Footer() {
             <h4 className="hidden md:block text-xl font-medium mb-4">
               HOTLINE
             </h4>
-            <div className="md:mb-5">
+            <div className="md:mb-6">
               <Link
                 href="tel:0901430077"
                 className="inline-flex items-center px-1 py-2 md:px-6 md:py-3 border border-[#B1873F] hover:bg-[#B1873F]/10 transition-colors rounded-xl md:rounded-full text-[#B1873F] font-bold text-xs md:text-md"
@@ -124,9 +124,10 @@ export default function Footer() {
 
             <div className="flex space-x-2 md:space-x-4 ml-4 md:ml-0">
               <a
-                href="https://facebook.com"
+                href="https://www.facebook.com/htcwellness/"
                 className="rounded-full flex items-center justify-center transition-colors"
                 aria-label="Facebook"
+                target="_blank"
               >
                 <svg
                   width="32"
@@ -146,6 +147,7 @@ export default function Footer() {
                 href="https://zalo.me"
                 className="font-bold rounded-full flex items-center justify-center transition-colors"
                 aria-label="Zalo"
+                target="_blank"
               >
                 <Image
                   src="/images/icon_zalo.svg"
@@ -155,9 +157,10 @@ export default function Footer() {
                 />
               </a>
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/healthcaretherapycenter/"
                 className=" rounded-full flex items-center justify-center transition-colors"
                 aria-label="Instagram"
+                target="_blank"
               >
                 <svg
                   width="32"
