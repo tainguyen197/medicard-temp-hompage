@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
 interface ServiceItem {
@@ -15,45 +15,85 @@ const ServicesGallerySection: React.FC = () => {
   const services: ServiceItem[] = [
     {
       id: "service1",
-      title: "KHÁM CƠ XƯƠNG KHỚP",
+      title: "Y HỌC CỔ TRUYỀN",
       description:
-        "Vulputate bibendum erat morbi interdum diam sit. Eu sit dolor vel sodales sed nibh ut. Ac fringilla fames eget a aliquet.",
-      details:
-        "Massage, Pink Himalayan hot stone, foot spa, and essential oil.",
-      image: "/images/service_1.jpg",
+        "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể.",
+      details: "Châm cứu, Xoa bóp - Bấm huyệt, Thuốc thang",
+      image: "/images/service_1.png",
     },
     {
       id: "service2",
-      title: "ĐIỀU TRỊ DA LIỄU",
+      title: "ĐIỀU TRỊ VẬT LÝ TRỊ LIỆU CÔNG NGHỆ CAO",
       description:
-        "Diam phasellus vestibulum lorem sed risus ultricies tristique nulla. At varius vel pharetra vel turpis nunc eget.",
+        "Healthcare Therapy Center áp dụng những công nghệ vật lý trị liệu tiên tiến, hiện đại nhằm tối đa hóa khả năng điều trị, phục hồi của khách hàng. Các công nghệ Laser công suất cao, Sóng cao tần Radio Frequency (RF), Sóng xung kích Shockwave được chứng minh qua nhiều nghiên cứu khoa học trên thế giới là hiệu quả cao trong việc điều trị các bệnh lý cơ xương khớp, giảm đau, đẩy nhanh tốc độ tái tạo và phục hồi.",
       details:
-        "Facial treatment, LED therapy, dermabrasion, and skin rejuvenation.",
-      image: "/images/service_2.jpg",
+        "Laser công suất cao, Radio Frequency (Sóng RF), Shockwave Therapy ( Sóng xung kích)",
+      image: "/images/service_2.png",
     },
     {
       id: "service3",
-      title: "VẬT LÝ TRỊ LIỆU",
+      title: "PHỤC HỒI CHỨC NĂNG: CHUẨN ĐOÁN VÀ ĐIỀU TRỊ CHUYÊN SÂU ",
       description:
-        "Lacus luctus accumsan tortor posuere ac ut consequat. Id porta nibh venenatis cras sed felis eget velit aliquet.",
+        "Điều trị các bệnh về cột sống như đau cổ-lưng, đau thần kinh tọa, thoát vị đĩa đệm...; Các bệnh lý về gân - khớp như: viêm chop xoay, đau khớp gối, khớp cổ tay, gai gót chân; hội chứng ống cổ tay, viêm gân duỗi ngón cái, tenis elbow…; Các tình trạng căng mỏi cơ cấp - mạn.",
       details:
-        "Ultrasound therapy, electrical stimulation, heat therapy, and exercise programs.",
-      image: "/images/service_3.jpg",
+        "Thăm khám, tư vấn, chẩn đoán và điều trị các bệnh lý cơ xương khớp, Sử dụng các máy móc vật lý trị liệu, Kỹ thuật viên có tay nghề chuyên môn cao",
+      image: "/images/service_3.png",
     },
     {
       id: "service4",
-      title: "TƯ VẤN DINH DƯỠNG",
+      title: "LIỆU TRÌNH HOÀN HẢO, HÀNH TRÌNH ÊM ÁI",
       description:
-        "Eu tincidunt tortor aliquam nulla facilisi cras fermentum odio. At quis risus sed vulputate odio ut enim blandit.",
-      details:
-        "Personalized meal plans, nutritional assessment, and dietary guidance.",
-      image: "/images/service_4.jpg",
+        "Tận hưởng trọn vẹn sự thư thái sau liệu trình tại Healthcare Therapy Center mà không cần lo lắng về việc di chuyển bởi dịch vụ đưa đón tận nơi. ",
+      details: "Xe đưa đón hiện đại, tiện nghi. Dịch vụ êm áí, thư thái.",
+      image: "/images/service_4.png",
     },
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [animate, setAnimate] = useState(true);
   const activeService = services[currentIndex];
+  const thumbnailsRef = useRef<HTMLDivElement>(null);
+  const thumbnailRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Setup thumbnail refs array
+  useEffect(() => {
+    thumbnailRefs.current = thumbnailRefs.current.slice(0, services.length);
+  }, [services.length]);
+
+  const scrollThumbnails = (direction: "left" | "right") => {
+    if (thumbnailsRef.current) {
+      const scrollAmount = 220; // Adjust based on thumbnail width
+      thumbnailsRef.current.scrollBy({
+        left: direction === "left" ? -scrollAmount : scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  // Scroll to active thumbnail when it changes
+  useEffect(() => {
+    if (thumbnailRefs.current[currentIndex] && thumbnailsRef.current) {
+      const container = thumbnailsRef.current;
+      const thumbnail = thumbnailRefs.current[currentIndex];
+
+      if (thumbnail) {
+        // Calculate the scroll position to center the element
+        const thumbnailRect = thumbnail.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+
+        const centerPosition =
+          thumbnail.offsetLeft -
+          container.offsetLeft -
+          containerRect.width / 2 +
+          thumbnailRect.width / 2;
+
+        container.scrollTo({
+          left: centerPosition,
+          behavior: "smooth",
+        });
+      }
+    }
+  }, [currentIndex]);
 
   // Auto-advance service every 3 seconds
   useEffect(() => {
@@ -70,6 +110,15 @@ const ServicesGallerySection: React.FC = () => {
     const timeout = setTimeout(() => setAnimate(true), 50);
     return () => clearTimeout(timeout);
   }, [currentIndex]);
+
+  const handleServiceClick = (index: number) => {
+    setCurrentIndex(index);
+  };
+
+  // Create a ref setting callback that doesn't return anything
+  const setThumbnailRef = (index: number) => (el: HTMLDivElement | null) => {
+    thumbnailRefs.current[index] = el;
+  };
 
   return (
     <section className="py-10 md:py-20 bg-[#182134] text-white">
@@ -159,30 +208,35 @@ const ServicesGallerySection: React.FC = () => {
           </div>
         </div>
 
-        {/* Service thumbnails */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 md:gap-6">
-          {services.map((service) => (
-            <div
-              key={service.id}
-              className={`cursor-pointer relative overflow-hidden rounded-3xl transition-all duration-300 ${
-                service.id === activeService.id
-                  ? "ring-2 ring-amber-500 scale-[1.02]"
-                  : "opacity-75 hover:opacity-100"
-              }`}
-              onClick={() =>
-                setCurrentIndex(services.findIndex((s) => s.id === service.id))
-              }
-            >
-              <div className="relative aspect-[309/216]">
-                <Image
-                  src={service.image}
-                  alt={service.title}
-                  fill
-                  className="object-cover"
-                />
+        {/* Service thumbnails as horizontal slider */}
+        <div className="relative mt-8">
+          <div
+            ref={thumbnailsRef}
+            className="flex overflow-x-auto gap-4 md:gap-6 no-scrollbar md:grid md:grid-cols-4"
+            style={{ scrollBehavior: "smooth", scrollbarWidth: "none" }}
+          >
+            {services.map((service, index) => (
+              <div
+                key={service.id}
+                ref={setThumbnailRef(index)}
+                className={`cursor-pointer relative overflow-hidden rounded-3xl min-w-[180px] md:min-w-[220px] flex-shrink-0 transition-all duration-300 ${
+                  service.id === activeService.id
+                    ? "ring-2 ring-amber-500"
+                    : "opacity-75 hover:opacity-100"
+                }`}
+                onClick={() => handleServiceClick(index)}
+              >
+                <div className="relative aspect-[309/216]">
+                  <Image
+                    src={service.image}
+                    alt={service.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         <div className="text-center mt-10 md:mt-14">

@@ -89,7 +89,7 @@ const AboutSection = () => {
 
             <FeatureItem
               title="Dịch vụ từ tâm"
-              description="Vulputate bibendum erat morbi interdum diam sit. Eu sit dolor vel sodales sed nibh ut. Ac fringilla fames eget a aliquet. Gravida placerat viverra purus sed ac ultricies sem nulla."
+              description="Tại Healthcare Therapy Center, chúng tôi không chỉ cung cấp liệu pháp, mà còn trao trọn sự tận tâm trong từng dịch vụ. Sức khỏe của bạn là ưu tiên hàng đầu của chúng tôi"
             />
 
             <FeatureItem

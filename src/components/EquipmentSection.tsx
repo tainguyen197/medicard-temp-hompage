@@ -57,10 +57,10 @@ const EquipmentItem: React.FC<EquipmentItemProps> = ({
         />
 
         {isHovered && (
-          <div className="absolute inset-0 bg-black opacity-70 flex flex-col justify-center p-16 text-white transition-all duration-300">
+          <div className="absolute inset-0 bg-black opacity-70 flex flex-col justify-center p-8 md:p-16 text-white transition-all duration-300">
             <div className="text-[#A8C1E0] text-sm uppercase mb-1">{title}</div>
             <h3 className="text-2xl font-bold uppercase mb-6">{subtitle}</h3>
-            <p className="text-md leading-relaxed text-justify">
+            <p className="text-xs md:text-md leading-relaxed text-justify">
               {description}
             </p>
           </div>

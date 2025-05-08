@@ -73,7 +73,7 @@ export default function Footer() {
                   href="/services/ortho"
                   className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
-                  Khám Cơ - Xương - Khớp
+                  Y học cổ truyền
                 </Link>
               </li>
               <li>
@@ -81,7 +81,7 @@ export default function Footer() {
                   href="/services/rehab"
                   className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
-                  Phục hồi chức năng
+                  Vật lý trị liệu
                 </Link>
               </li>
               <li>
@@ -89,7 +89,7 @@ export default function Footer() {
                   href="/services/derma"
                   className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
-                  Chăm sóc da & Thẩm mỹ
+                  Phục hồi chức năng
                 </Link>
               </li>
             </ul>
@@ -144,7 +144,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://zalo.me"
+                href="https://zalo.me/0901430077"
                 className="font-bold rounded-full flex items-center justify-center transition-colors"
                 aria-label="Zalo"
                 target="_blank"
