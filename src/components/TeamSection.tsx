@@ -190,7 +190,7 @@ const TeamSection: React.FC = () => {
               // Desktop view uses grid layout if 4 or fewer items, else slider
               <div className="pt-8 bg-white relative z-1">
                 {teamMembers.length <= 4 ? (
-                  <div className="flex justify-center flex-wrap gap-8 md:gap-14 px-4">
+                  <div className="flex justify-center flex-wrap gap-8 md:gap-x-14 md:gap-y-4 px-4">
                     {teamMembers.map((member, index) => (
                       <TeamMember {...member} index={index} key={index} />
                     ))}
