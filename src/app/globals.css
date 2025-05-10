@@ -26,3 +26,11 @@ body {
   color: var(--foreground);
   font-family: var(--font-manrope);
 }
+
+/* Add scroll padding for fixed header */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px; /* Adjust based on header height */
+}
+
+/* Add anchors for section navigation */
