@@ -3,43 +3,67 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeLink, setActiveLink] = useState<string>("#services");
+  const pathname = usePathname();
+  const router = useRouter();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  const navItems = [
+    { name: "DỊCH VỤ", href: "/services" },
+    { name: "VỀ CHÚNG TÔI", href: "/about" },
+    { name: "BLOG SỨC KHOẺ", href: "/blog" },
+    { name: "LIÊN HỆ", href: "/contact" },
+  ];
+
+  const handleNavigation = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    e.preventDefault();
+
+    // Close mobile menu if open
+    if (isMenuOpen) {
+      setIsMenuOpen(false);
+    }
+
+    // Use router.push for client-side navigation without hash scrolling
+    router.push(href);
+  };
 
   return (
     <header className="bg-[#182134] py-4 fixed top-0 left-0 right-0 z-50">
       <div className="container mx-auto px-4 flex justify-between items-center">
-        <div className="relative w-32 h-10 md:w-36 md:h-16">
+        <Link
+          href="/"
+          onClick={(e) => handleNavigation(e, "/")}
+          className="relative w-32 h-10 md:w-36 md:h-16"
+        >
           <Image
             src="/images/logo.svg"
             alt="Healthcare Therapy Center"
             fill
             className="object-contain"
           />
-        </div>
+        </Link>
         <div className="flex items-center space-x-8">
           <nav className="hidden md:flex items-center space-x-8">
-            {[
-              { name: "DỊCH VỤ", href: "#services" },
-              { name: "VỀ CHÚNG TÔI", href: "#about" },
-              { name: "BLOG SỨC KHOẺ", href: "#blog" },
-              { name: "LIÊN HỆ", href: "#contact" },
-            ].map((item) => (
+            {navItems.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                onClick={() => setActiveLink(item.href)}
+                onClick={(e) => handleNavigation(e, item.href)}
                 className="font-cormorant font-bold uppercase text-amber-50 hover:text-white transition-colors relative group"
               >
                 {item.name}
                 <span
                   className={`absolute left-0 bottom-0 h-0.5 bg-white transition-all duration-300 
                     ${
-                      activeLink === item.href
+                      pathname === item.href
                         ? "w-full"
                         : "w-0 group-hover:w-full"
                     }`}
@@ -105,26 +129,18 @@ const Header = () => {
       >
         <div className="container mx-auto px-4 pt-20 pb-8">
           <nav className="flex flex-col space-y-6">
-            {[
-              { name: "DỊCH VỤ", href: "#services" },
-              { name: "VỀ CHÚNG TÔI", href: "#about" },
-              { name: "BLOG SỨC KHOẺ", href: "#blog" },
-              { name: "LIÊN HỆ", href: "#contact" },
-            ].map((item) => (
+            {navItems.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setActiveLink(item.href);
-                }}
+                onClick={(e) => handleNavigation(e, item.href)}
                 className="font-cormorant font-bold text-xl uppercase text-white hover:text-amber-200 transition-colors relative group"
               >
                 {item.name}
                 <span
                   className={`absolute left-0 bottom-0 h-0.5 bg-amber-200 transition-all duration-300 
                     ${
-                      activeLink === item.href
+                      pathname === item.href
                         ? "w-full"
                         : "w-0 group-hover:w-full"
                     }`}
