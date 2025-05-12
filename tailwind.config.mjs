@@ -39,7 +39,33 @@ export default {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            maxWidth: "100%",
+            color: "#222222",
+            h1: {
+              color: "#222222",
+            },
+            h2: {
+              color: "#222222",
+            },
+            h3: {
+              color: "#222222",
+            },
+            strong: {
+              color: "#222222",
+            },
+            a: {
+              color: "#B1873F",
+              "&:hover": {
+                color: "#9A7235",
+              },
+            },
+          },
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/typography")],
 };
