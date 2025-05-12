@@ -244,9 +244,9 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
             Hãy để Healthcare Therapy Center trở thành điểm tựa vững chắc trong
             hành trình chăm sóc sức khỏe của bạn.
           </p>
-          <Link
-            href="/contact"
-            className="inline-flex items-center px-8 py-4 bg-[#B1873F] text-white rounded-full font-semibold hover:bg-[#9A7235] transition-colors"
+          <a
+            href="tel:0901430077"
+            className="inline-flex items-center justify-center px-8 py-3 bg-[#B1873F] text-white rounded-full text-base md:text-lg font-semibold transition-all hover:bg-[#9A7435]"
           >
             Đặt lịch trải nghiệm
             <svg
@@ -263,7 +263,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
                 strokeLinejoin="round"
               />
             </svg>
-          </Link>
+          </a>
         </div>
       </section>
     </div>

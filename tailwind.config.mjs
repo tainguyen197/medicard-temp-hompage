@@ -10,6 +10,8 @@ export default {
       fontFamily: {
         sans: ["var(--font-manrope)", "sans-serif"],
         serif: ["var(--font-cormorant)", "serif"],
+        cormorant: ["var(--font-cormorant)", "serif"],
+        "cormorant-sc": ["var(--font-cormorant)", "serif"],
       },
       colors: {
         navy: {
