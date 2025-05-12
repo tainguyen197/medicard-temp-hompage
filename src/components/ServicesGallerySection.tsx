@@ -121,7 +121,7 @@ const ServicesGallerySection: React.FC = () => {
   };
 
   return (
-    <section className="py-10 md:py-20 bg-[#182134] text-white">
+    <section id="services" className="py-10 md:py-20 bg-[#182134] text-white">
       <div className="container mx-auto px-4">
         <div className="flex justify-center mb-8 md:mb-16">
           <h2 className="text-xl md:text-4xl font-cormorant font-semibold text-[#FFF7EB] uppercase relative">
@@ -221,7 +221,7 @@ const ServicesGallerySection: React.FC = () => {
                 ref={setThumbnailRef(index)}
                 className={`cursor-pointer relative overflow-hidden rounded-3xl min-w-[180px] md:min-w-[220px] flex-shrink-0 transition-all duration-300 ${
                   service.id === activeService.id
-                    ? "ring-2 ring-amber-500"
+                    ? "border-2 border-amber-500"
                     : "opacity-75 hover:opacity-100"
                 }`}
                 onClick={() => handleServiceClick(index)}
