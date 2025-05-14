@@ -24,7 +24,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
   const { slug } = await params;
 
   return (
-    <div className="pt-20 md:pt-24">
+    <div className="pt-16 md:pt-24">
       {/* Hero Section with Cover Image */}
       <section className="relative w-full h-[40vh] md:h-[70vh]">
         <Image
@@ -108,7 +108,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
               thúc đẩy khả năng tự chữa bệnh một cách tự nhiên của cơ thể.
             </p>
 
-            <div className="my-10 h-[500px] relative aspect-3/2 m-auto">
+            <div className="my-10 h-full md:max-h-[500px] relative aspect-3/2 m-auto">
               <Image
                 src="/images/blog/blog-image-2.jpg"
                 alt="Châm cứu"
@@ -126,7 +126,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
               gian dài, phù hợp trong việc chữa trị các căn bệnh mãn tính.
             </p>
 
-            <div className="my-10 h-[500px] relative aspect-3/2 m-auto">
+            <div className="my-10 h-full md:max-h-[500px] relative aspect-3/2 m-auto">
               <Image
                 src="/images/blog/blog-hero.jpg"
                 alt="Thuốc thang"
@@ -145,7 +145,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
               trên cơ thể bệnh nhân.
             </p>
 
-            <div className="my-10 h-[500px] relative aspect-3/2 m-auto">
+            <div className="my-10 h-full md:max-h-[500px] relative aspect-3/2 m-auto">
               <Image
                 src="/images/blog/blog-image-1.jpg"
                 alt="Xoa bóp, bấm huyệt"
@@ -159,7 +159,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
       </div>
 
       {/* Related Posts */}
-      <div className="container mx-auto px-20 py-14 bg-[#FEF6EA] rounded-4xl">
+      <div className="container mx-auto md:px-20 md:py-14 bg-[#FEF6EA] rounded-4xl">
         <div className="mx-auto px-4">
           <h2 className="text-3xl font-semibold text-[#222222] mb-10">
             Có thể bạn quan tâm
