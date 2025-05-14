@@ -61,7 +61,7 @@ export default function BlogPage() {
       <section className="relative h-[40vh] md:h-[50vh] lg:h-[60vh] w-full mt-16 md:mt-20">
         <div className="absolute inset-0">
           <Image
-            src="/images/blog/blog-hero.jpg"
+            src="/images/hero-section.png"
             alt="Blog Hero"
             fill
             className="object-cover"
@@ -137,13 +137,13 @@ export default function BlogPage() {
       </section>
 
       {/* 4. Topic Listing */}
-      <section className="container mx-auto px-4 mb-20">
-        <h2 className="text-2xl md:text-3xl font-medium mb-8 text-[#222222]">
+      <section className="container mx-auto px-4">
+        <h2 className="text-2xl md:text-3xl font-medium mb-8 text-[#222222] hidden">
           Tất cả bài viết
         </h2>
         {blogPosts.map((post, index) => (
-          <article key={post.id} className="mb-8">
-            <div className="flex flex-col md:flex-row items-center mb-8 md:mb-12">
+          <article key={post.id}>
+            <div className="flex flex-col md:flex-row items-center mb-4 md:mb-12">
               <div className="pr-8 flex flex-col">
                 <Link href={`/blog/${post.slug}`}>
                   <h2 className="text-2xl font-medium text-[#222222] mb-8 hover:text-[#B1873F] transition-colors">
@@ -176,7 +176,7 @@ export default function BlogPage() {
       </section>
 
       {/* Pagination */}
-      <section className="container mx-auto px-4 mb-16 flex justify-center">
+      <section className="container mx-auto px-4 mb-0 flex justify-start">
         <div className="flex items-center gap-2">
           <button
             className="flex items-center justify-center"
@@ -200,7 +200,7 @@ export default function BlogPage() {
           </button>
 
           <button
-            className="w-10 h-10 rounded flex items-center justify-center border border-[#B1873F] bg-[#B1873F] text-white font-bold"
+            className="w-10 h-10 rounded flex items-center justify-center border border-[#B1873F] text-[#B1873F] font-bold"
             aria-label="Page 1"
           >
             1
