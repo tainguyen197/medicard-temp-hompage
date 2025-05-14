@@ -16,8 +16,7 @@ export default function BlogPage() {
       title: "Chiro Therapy trong điều trị các vấn đề về cột sống",
       excerpt:
         "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể.",
-      image: "/images/blog/blog-cover.jpg",
-      date: "05/05/2023",
+      image: "/images/blog/related-blog-1.jpg",
     },
     {
       id: 2,
@@ -26,7 +25,6 @@ export default function BlogPage() {
       excerpt:
         "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể.",
       image: "/images/blog/related-blog-1.jpg",
-      date: "28/04/2023",
     },
     {
       id: 3,
@@ -35,7 +33,6 @@ export default function BlogPage() {
       excerpt:
         "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể.",
       image: "/images/blog/related-blog-2.jpg",
-      date: "15/04/2023",
     },
     {
       id: 4,
@@ -44,7 +41,6 @@ export default function BlogPage() {
       excerpt:
         "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể.",
       image: "/images/blog/related-blog-3.jpg",
-      date: "05/04/2023",
     },
     {
       id: 5,
@@ -52,8 +48,7 @@ export default function BlogPage() {
       title: "Chiro Therapy trong điều trị các vấn đề về cột sống",
       excerpt:
         "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể.",
-      image: "/images/blog/blog-cover.jpg",
-      date: "05/05/2023",
+      image: "/images/blog/related-blog-3.jpg",
     },
   ];
 
@@ -85,33 +80,59 @@ export default function BlogPage() {
 
       {/* 3. Trending Topics */}
       <section className="container mx-auto px-4 mb-16 md:mb-20">
-        <h2 className="text-2xl md:text-3xl font-medium mb-6 md:mb-8 text-[#222222]">
-          Bài viết nổi bật
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
-          {trendingPosts.map((post, index) => (
+        <div className="flex flex-col md:flex-row gap-4">
+          {/* Featured post (larger) - left side */}
+          <div className="md:w-1/2">
             <Link
-              href={`/blog/${post.slug}`}
-              key={post.id}
-              className="group relative rounded-2xl overflow-hidden"
+              href={`/blog/${trendingPosts[0].slug}`}
+              className="group relative rounded-lg overflow-hidden block h-full"
             >
-              <div className="aspect-[4/3] relative">
+              <div className="aspect-auto h-full relative">
                 <Image
-                  src={post.image}
-                  alt={post.title}
+                  src={trendingPosts[0].image}
+                  alt={trendingPosts[0].title}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent">
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <h3 className="text-white font-medium text-base md:text-lg lg:text-xl">
-                      {post.title}
+                <div className="absolute inset-0">
+                  <div className="absolute bottom-0 w-full p-4 md:p-8 bg-[#00000080]">
+                    <h3 className="text-white font-medium text-xl md:text-2xl">
+                      {trendingPosts[0].title}
                     </h3>
                   </div>
                 </div>
               </div>
             </Link>
-          ))}
+          </div>
+
+          {/* Grid of smaller posts - right side */}
+          <div className="md:w-1/2">
+            <div className="grid grid-cols-2 gap-4 h-full">
+              {trendingPosts.slice(1, 5).map((post) => (
+                <Link
+                  href={`/blog/${post.slug}`}
+                  key={post.id}
+                  className="group relative rounded-lg overflow-hidden"
+                >
+                  <div className="aspect-square relative">
+                    <Image
+                      src={post.image}
+                      alt={post.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 ">
+                      <div className="absolute bottom-0 p-4 bg-[#00000080]">
+                        <h3 className="text-white font-medium text-sm md:text-base">
+                          {post.title}
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -122,11 +143,21 @@ export default function BlogPage() {
         </h2>
         {blogPosts.map((post, index) => (
           <article key={post.id} className="mb-8">
-            <div className="flex flex-col md:flex-row gap-8 border-b border-gray-300 pb-8">
-              <div className="md:w-1/3">
+            <div className="flex flex-col md:flex-row items-center mb-8 md:mb-12">
+              <div className="pr-8 flex flex-col">
+                <Link href={`/blog/${post.slug}`}>
+                  <h2 className="text-2xl font-medium text-[#222222] mb-8 hover:text-[#B1873F] transition-colors">
+                    {post.title}
+                  </h2>
+                </Link>
+                <p className="text-gray-600 line-clamp-3 mb-4">
+                  {post.excerpt}
+                </p>
+              </div>
+              <div className="mt-4 md:mt-0">
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="block relative rounded-2xl overflow-hidden h-60"
+                  className="block relative rounded-xl overflow-hidden aspect-square md:h-44"
                 >
                   <Image
                     src={post.image}
@@ -136,37 +167,9 @@ export default function BlogPage() {
                   />
                 </Link>
               </div>
-              <div className="md:w-2/3">
-                <div className="text-sm text-gray-500 mb-2">{post.date}</div>
-                <Link href={`/blog/${post.slug}`}>
-                  <h2 className="text-2xl font-medium text-[#222222] mb-4 hover:text-[#B1873F] transition-colors">
-                    {post.title}
-                  </h2>
-                </Link>
-                <p className="text-gray-600 line-clamp-5 mb-4">
-                  {post.excerpt}
-                </p>
-                <Link
-                  href={`/blog/${post.slug}`}
-                  className="inline-flex items-center text-[#B1873F] font-medium hover:underline"
-                >
-                  Đọc thêm
-                  <svg
-                    className="ml-2 w-4 h-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M5 12H19M19 12L12 5M19 12L12 19"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </Link>
-              </div>
+            </div>
+            <div className="flex justify-center w-full">
+              <div className="w-full mx-10 md:mx-30 border-b border-[#0000004D] mb-8"></div>
             </div>
           </article>
         ))}
