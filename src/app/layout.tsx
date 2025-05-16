@@ -34,7 +34,7 @@ export default function RootLayout({
         className={`${manrope.variable} ${cormorant.variable} font-sans antialiased`}
       >
         <Header />
-        <main className="min-h-screen">{children}</main>
+        <main className="min-h-screen overflow-x-hidden">{children}</main>
         <Footer />
         <div className="fixed bottom-6 right-6 md:bottom-12 md:right-12 z-50">
           <a

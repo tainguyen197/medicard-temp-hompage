@@ -99,7 +99,7 @@ const ServicesGallerySection: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % services.length);
-    }, 3000);
+    }, 6000);
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -129,7 +129,7 @@ const ServicesGallerySection: React.FC = () => {
           </h2>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-4 mb-8">
+        <div className="flex flex-col lg:flex-row gap-4 mb-8 transition-all duration-500 ease-in-out">
           {/* Featured service image and content */}
           <div className="w-full lg:w-1/2">
             <div
@@ -148,62 +148,64 @@ const ServicesGallerySection: React.FC = () => {
           </div>
 
           {/* Service description */}
-          <div className="w-full lg:w-1/2 flex flex-col justify-center">
-            <h3 className="font-cormorant text-md md:text-3xl font-bold mb-2 md:mb-5 text-white">
-              {activeService.title}
-            </h3>
-            <p className="text-gray-300 mb-4 md:mb-16 text-sm md:text-lg leading-relaxed">
-              {activeService.description}
-            </p>
-
-            <div className="mb-10">
-              <h4 className="text-sm md:text-xl font-medium mb-1 md:mb-3 ">
-                Bao gồm:
-              </h4>
-              <p className="text-gray-300 text-sm md:text-md font-normal">
-                {activeService.details}
+          <div className="w-full lg:w-1/2 flex flex-col justify-between">
+            <div>
+              <h3 className="font-cormorant text-md md:text-3xl font-bold mb-2 md:mb-5 text-white line-clamp-1 md:line-clamp-none">
+                {activeService.title}
+              </h3>
+              <p className="text-gray-300 mb-4 md:mb-16 text-sm md:text-lg leading-relaxed line-clamp-5 md:line-clamp-none  min-h-[7.25rem]">
+                {activeService.description}
               </p>
             </div>
-
-            <div className="flex flex-wrap gap-4">
-              <a
-                href="#"
-                className="inline-flex items-center px-4 py-2 md:px-7 md:py-3 bg-[#B1873F] hover:bg-amber-700 transition-colors rounded-xl md:rounded-full text-white font-semibold md:font-medium text-xs md:text-md h-10 md:h-12"
-              >
-                Xem chi tiết
-                <svg
-                  className="ml-2 w-4 h-4 md:w-5 md:h-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+            <div>
+              <div className="mb-10">
+                <h4 className="text-sm md:text-xl font-medium mb-1 md:mb-3 leading-relaxed">
+                  Bao gồm:
+                </h4>
+                <p className="text-gray-300 text-sm md:text-md font-normal line-clamp-2 md:line-clamp-none min-h-[2.75rem]">
+                  {activeService.details}
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-4">
+                <a
+                  href="#"
+                  className="inline-flex items-center px-4 py-2 md:px-7 md:py-3 bg-[#B1873F] hover:bg-amber-700 transition-colors rounded-xl md:rounded-full text-white font-semibold md:font-medium text-xs md:text-md h-10 md:h-12"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </a>
-              <a
-                href="#"
-                className="inline-flex items-center px-4 py-2 md:px-7 md:py-3 border border-[#B1873F] hover:bg-amber-600/10 transition-colors rounded-xl md:rounded-full text-white font-semibold md:font-medium text-xs md:text-md h-10 md:h-12"
-              >
-                Đặt lịch
-                <svg
-                  className="ml-2 w-4 h-4 md:w-5 md:h-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+                  Xem chi tiết
+                  <svg
+                    className="ml-2 w-4 h-4 md:w-5 md:h-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </a>
+                <a
+                  href="#"
+                  className="inline-flex items-center px-4 py-2 md:px-7 md:py-3 border border-[#B1873F] hover:bg-amber-600/10 transition-colors rounded-xl md:rounded-full text-white font-semibold md:font-medium text-xs md:text-md h-10 md:h-12"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </a>
+                  Đặt lịch
+                  <svg
+                    className="ml-2 w-4 h-4 md:w-5 md:h-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </a>
+              </div>
             </div>
           </div>
         </div>
