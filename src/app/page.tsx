@@ -8,20 +8,50 @@ import ContactSection from "@/components/ContactSection";
 import FacilitySection from "../components/FacilitySection";
 import TeamSection from "../components/TeamSection";
 import ServicesGallerySection from "@/components/ServicesGallerySection";
+import AnimatedSection from "@/components/AnimatedSection";
 
 export default function Home() {
   return (
     <>
-      <HeroSection />
-      <AboutSection />
-      <ServicesGallerySection />
-      <TreatmentMethodsSection />
-      <TeamSection />
-      <FacilitySection />
-      <EquipmentSection />
-      <ProcessSection />
-      <BlogSection />
-      <ContactSection />
+      <AnimatedSection animation="fadeIn" duration={0.8}>
+        <HeroSection />
+      </AnimatedSection>
+
+      <AnimatedSection animation="slideUp" delay={0.2} duration={0.7}>
+        <AboutSection />
+      </AnimatedSection>
+
+      <AnimatedSection animation="slideLeft" delay={0.1} duration={0.6}>
+        <ServicesGallerySection />
+      </AnimatedSection>
+
+      <AnimatedSection animation="slideRight" delay={0.2} duration={0.7}>
+        <TreatmentMethodsSection />
+      </AnimatedSection>
+
+      <AnimatedSection animation="zoomIn" delay={0.1} duration={0.8}>
+        <TeamSection />
+      </AnimatedSection>
+
+      <AnimatedSection animation="slideUp" delay={0.2} duration={0.6}>
+        <FacilitySection />
+      </AnimatedSection>
+
+      <AnimatedSection animation="fadeIn" delay={0.1} duration={0.7}>
+        <EquipmentSection />
+      </AnimatedSection>
+
+      <AnimatedSection animation="slideLeft" delay={0.2} duration={0.8}>
+        <ProcessSection />
+      </AnimatedSection>
+
+      <AnimatedSection animation="slideUp" delay={0.1} duration={0.6}>
+        <BlogSection />
+      </AnimatedSection>
+
+      <AnimatedSection animation="zoomIn" delay={0.2} duration={0.7}>
+        <ContactSection />
+      </AnimatedSection>
     </>
   );
 }
