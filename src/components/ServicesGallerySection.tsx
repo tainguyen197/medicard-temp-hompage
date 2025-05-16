@@ -51,6 +51,7 @@ const ServicesGallerySection: React.FC = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [animate, setAnimate] = useState(true);
+  const [autoAdvance, setAutoAdvance] = useState(true);
   const activeService = services[currentIndex];
   const thumbnailsRef = useRef<HTMLDivElement>(null);
   const thumbnailRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -95,14 +96,16 @@ const ServicesGallerySection: React.FC = () => {
     }
   }, [currentIndex]);
 
-  // Auto-advance service every 3 seconds
+  // Auto-advance service every 6 seconds if autoAdvance is true
   useEffect(() => {
+    if (!autoAdvance) return;
+
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % services.length);
     }, 6000);
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [autoAdvance]);
 
   // Trigger animation on active service change
   useEffect(() => {
@@ -113,6 +116,7 @@ const ServicesGallerySection: React.FC = () => {
 
   const handleServiceClick = (index: number) => {
     setCurrentIndex(index);
+    setAutoAdvance(false); // Stop auto-advance when user clicks on a thumbnail
   };
 
   // Create a ref setting callback that doesn't return anything
