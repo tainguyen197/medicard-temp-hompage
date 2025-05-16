@@ -7,13 +7,14 @@ interface InViewOptions {
 }
 
 export function useInView(
-  ref: RefObject<HTMLElement>,
+  ref: RefObject<HTMLElement | null> ,
   options: InViewOptions = {}
 ): boolean {
   const [isInView, setIsInView] = useState(false);
   const { threshold = 0.1, triggerOnce = true, rootMargin = '0px' } = options;
 
   useEffect(() => {
+    if (!ref) return;
     const element = ref.current;
     if (!element) return;
 
