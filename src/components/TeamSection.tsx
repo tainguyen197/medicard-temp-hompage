@@ -25,20 +25,15 @@ const TeamMember: React.FC<TeamMemberProps> = ({
   title,
   index,
 }) => {
-  console.log(index);
   return (
-    <div
-      className={`flex-shrink-0 w-[280px] md:w-[310px] overflow-hidden bg-white flex flex-col mb-8 ${
-        index % 2 === 0 ? "md:mt-20" : ""
-      }`}
-    >
+    <div className="flex-shrink-0 w-full sm:w-[230px] md:w-[230px] lg:w-[250px] xl:w-[280px] overflow-hidden bg-white flex flex-col mb-8">
       <div className="relative rounded-3xl md:rounded-t-4xl overflow-hidden">
         <div className="aspect-[3/4] relative">
           <Image
             src={image}
             alt={name}
             fill
-            className="w-full h-full object-contain object-center transition-transform duration-500"
+            className="w-full h-full object-cover object-top transition-transform duration-500"
           />
         </div>
         <div className="absolute bottom-0 left-0 right-0 bg-[#1C4B82] text-white py-2 px-4 flex flex-col items-center">
@@ -56,18 +51,11 @@ const TeamMember: React.FC<TeamMemberProps> = ({
 const TeamSection: React.FC = () => {
   const teamMembers: TeamMember[] = [
     {
-      image: "/images/doctor1.jpg",
-      name: "ĐOÀN HẢI YẾN",
+      image: "/images/doctor4.jpg",
+      name: "NGUYỄN THỊ HỒNG HẠNH",
       title: "BS. CK",
       description:
-        "Bác sĩ Đoàn Hải Yến có kinh nghiệm chuyên sâu trong lĩnh vực Cơ Xương Khớp - Phục hồi cơ thể.",
-    },
-    {
-      image: "/images/doctor2.jpg",
-      name: "NGUYỄN THỊ MAI LINH",
-      title: "THS. BS",
-      description:
-        "Thành viên chính thức của hiệp hội Trị liệu Cột sống Thần Kinh Chiropractic tại Úc. Thạc sĩ - Bác sĩ Mai Linh đảm nhiệm vai trò Bác sĩ lâm sàng tại nhiều quốc gia tiên tiến trên thế giới như: Úc, Singapore, Việt Nam.",
+        "Nhiều năm kinh nghiệm trong lĩnh vực Vật Lý Trị Liệu - Phục Hồi Chức Năng",
     },
     {
       image: "/images/doctor3.jpg",
@@ -77,33 +65,51 @@ const TeamSection: React.FC = () => {
         "Hơn 15 năm trong lĩnh vực Phục Hồi Chức Năng và Nội Cơ Xương Khớp, Y Học Cổ Truyền, có kinh nghiệm điều trị những trường hợp khó và phức tạp",
     },
     {
-      image: "/images/doctor4.jpg",
-      name: "NGUYỄN THỊ HỒNG HẠNH",
+      image: "/images/doctor2.jpg",
+      name: "NGUYỄN THỊ MAI LINH",
+      title: "THS. BS",
+      description:
+        "Thành viên chính thức của hiệp hội Trị liệu Cột sống Thần Kinh Chiropractic tại Úc. Thạc sĩ - Bác sĩ Mai Linh đảm nhiệm vai trò Bác sĩ lâm sàng tại nhiều quốc gia tiên tiến trên thế giới như: Úc, Singapore, Việt Nam.",
+    },
+    {
+      image: "/images/doctor1.jpg",
+      name: "ĐOÀN HẢI YẾN",
       title: "BS. CK",
       description:
-        "Nhiều năm kinh nghiệm trong lĩnh vực Vật Lý Trị Liệu - Phục Hồi Chức Năng",
+        "Bác sĩ Đoàn Hải Yến có kinh nghiệm chuyên sâu trong lĩnh vực Cơ Xương Khớp - Phục hồi cơ thể.",
     },
   ];
 
   const slidingContainerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [useSlider, setUseSlider] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [autoSlide, setAutoSlide] = useState(true);
 
-  // Check for mobile viewport
+  // Check for mobile viewport and if slider should be used
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+    const checkDisplay = () => {
+      const isMobileView = window.innerWidth < 768;
+      setIsMobile(isMobileView);
+
+      // Check if we need slider on larger screens (when items don't fit)
+      if (!isMobileView && containerRef.current) {
+        const containerWidth = containerRef.current.clientWidth;
+        const itemWidth = 250; // Approximate width of each item including gap
+        const totalWidth = itemWidth * teamMembers.length;
+        setUseSlider(totalWidth > containerWidth);
+      }
     };
 
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+    checkDisplay();
+    window.addEventListener("resize", checkDisplay);
+    return () => window.removeEventListener("resize", checkDisplay);
+  }, [teamMembers.length]);
 
-  // Auto-advance team members every 4 seconds if autoSlide is enabled
+  // Auto-advance if slider is active
   useEffect(() => {
-    if (!autoSlide) return;
+    if (!autoSlide || (!isMobile && !useSlider)) return;
 
     const interval = setInterval(() => {
       const nextIndex = (currentIndex + 1) % teamMembers.length;
@@ -111,7 +117,7 @@ const TeamSection: React.FC = () => {
 
       // Scroll to the next item
       if (slidingContainerRef.current) {
-        const itemWidth = isMobile ? 290 : 350; // Adjust based on item width + gap
+        const itemWidth = 250; // Approximate width of each item + gap
         slidingContainerRef.current.scrollTo({
           left: nextIndex * itemWidth,
           behavior: "smooth",
@@ -120,7 +126,7 @@ const TeamSection: React.FC = () => {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [currentIndex, teamMembers.length, autoSlide, isMobile]);
+  }, [currentIndex, teamMembers.length, autoSlide, isMobile, useSlider]);
 
   // Pause auto-slide when user interacts with the slider
   const pauseAutoSlide = () => {
@@ -133,7 +139,9 @@ const TeamSection: React.FC = () => {
     pauseAutoSlide();
 
     if (slidingContainerRef.current) {
-      const scrollAmount = isMobile ? 290 : 350; // Adjust based on item width + gap
+      const scrollAmount = isMobile
+        ? slidingContainerRef.current.clientWidth
+        : 250;
       const newIndex =
         direction === "left"
           ? Math.max(0, currentIndex - 1)
@@ -148,13 +156,13 @@ const TeamSection: React.FC = () => {
     }
   };
 
-  // Handle touch events to pause auto-slide
+  // Handle touch events
   const handleTouch = () => {
     pauseAutoSlide();
   };
 
   return (
-    <section className="md:pt-20 md:pb-28 bg-white">
+    <section className="md:pt-16 md:pb-20 bg-white">
       <div className="mx-auto relative">
         <div className="relative mx-auto">
           {/* Title with horizontal lines on sides */}
@@ -167,36 +175,12 @@ const TeamSection: React.FC = () => {
             </div>
 
             {/* Team members section */}
-            {isMobile ? (
-              // Mobile view always uses slider
-              <div className="relative py-8 pb-0 bg-white z-1 px-4">
-                <div
-                  ref={slidingContainerRef}
-                  className="flex gap-4 overflow-x-auto no-scrollbar px-10 pb-4 snap-x snap-mandatory"
-                  style={{ scrollBehavior: "smooth", scrollbarWidth: "none" }}
-                  onTouchStart={handleTouch}
-                  onMouseDown={handleTouch}
-                >
-                  {teamMembers.map((member, index) => (
-                    <div key={index} className="snap-center">
-                      <TeamMember {...member} index={index} />
-                    </div>
-                  ))}
-                </div>
-
-                {/* Pagination indicators */}
-              </div>
-            ) : (
-              // Desktop view uses grid layout if 4 or fewer items, else slider
-              <div className="pt-8 bg-white relative z-1">
-                {teamMembers.length <= 4 ? (
-                  <div className="flex justify-center flex-wrap gap-8 md:gap-x-14 md:gap-y-4 px-4">
-                    {teamMembers.map((member, index) => (
-                      <TeamMember {...member} index={index} key={index} />
-                    ))}
-                  </div>
-                ) : (
-                  <div className="relative px-4 md:px-10">
+            <div className="pt-8 bg-white relative z-1" ref={containerRef}>
+              {isMobile || useSlider ? (
+                // Slider view (for mobile or when desktop space is insufficient)
+                <div className="relative py-4 pb-0 bg-white z-1 px-4">
+                  {/* Navigation buttons - show on desktop slider only */}
+                  {!isMobile && useSlider && (
                     <button
                       className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-lg text-[#002447] hover:bg-gray-100 transition-colors border border-[#002447]/10"
                       onClick={() => scrollTeam("left")}
@@ -216,26 +200,14 @@ const TeamSection: React.FC = () => {
                         />
                       </svg>
                     </button>
-                    <div
-                      ref={slidingContainerRef}
-                      className="flex gap-8 md:gap-12 overflow-x-auto no-scrollbar px-10 snap-x snap-mandatory"
-                      style={{
-                        scrollBehavior: "smooth",
-                        scrollbarWidth: "none",
-                      }}
-                      onTouchStart={handleTouch}
-                      onMouseDown={handleTouch}
-                    >
-                      {teamMembers.map((member, index) => (
-                        <div key={index} className="snap-center">
-                          <TeamMember {...member} index={index} />
-                        </div>
-                      ))}
-                    </div>
+                  )}
+
+                  {/* Add navigation buttons for mobile */}
+                  {isMobile && (
                     <button
-                      className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-lg text-[#002447] hover:bg-gray-100 transition-colors border border-[#002447]/10"
-                      onClick={() => scrollTeam("right")}
-                      aria-label="Scroll right"
+                      className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-lg text-[#002447] hover:bg-gray-100 transition-colors border border-[#002447]/10"
+                      onClick={() => scrollTeam("left")}
+                      aria-label="Scroll left"
                     >
                       <svg
                         width="24"
@@ -244,42 +216,51 @@ const TeamSection: React.FC = () => {
                         stroke="currentColor"
                       >
                         <path
-                          d="M9 5l7 7-7 7"
+                          d="M15 19l-7-7 7-7"
                           strokeWidth={2}
                           strokeLinecap="round"
                           strokeLinejoin="round"
                         />
                       </svg>
                     </button>
+                  )}
 
-                    {/* Pagination indicators */}
-                    <div className="flex justify-center mt-4 gap-2">
-                      {teamMembers.map((_, index) => (
-                        <button
-                          key={index}
-                          className={`w-2 h-2 rounded-full transition-all ${
-                            index === currentIndex
-                              ? "bg-[#1C4B82] w-4"
-                              : "bg-gray-300"
-                          }`}
-                          onClick={() => {
-                            pauseAutoSlide();
-                            setCurrentIndex(index);
-                            if (slidingContainerRef.current) {
-                              slidingContainerRef.current.scrollTo({
-                                left: index * 350,
-                                behavior: "smooth",
-                              });
-                            }
-                          }}
-                          aria-label={`Go to slide ${index + 1}`}
-                        />
-                      ))}
-                    </div>
+                  <div
+                    ref={slidingContainerRef}
+                    className={`flex ${
+                      isMobile ? "gap-0" : "gap-4"
+                    } overflow-x-hidden no-scrollbar ${
+                      isMobile ? "px-0" : "px-10"
+                    } pb-4 snap-x snap-mandatory`}
+                    style={{
+                      scrollBehavior: "smooth",
+                      scrollbarWidth: "none",
+                      scrollSnapType: "x mandatory",
+                    }}
+                    onTouchStart={handleTouch}
+                    onMouseDown={handleTouch}
+                  >
+                    {teamMembers.map((member, index) => (
+                      <div
+                        key={index}
+                        className={`snap-center ${
+                          isMobile ? "min-w-full" : "min-w-[230px]"
+                        } flex justify-center`}
+                      >
+                        <TeamMember {...member} index={index} />
+                      </div>
+                    ))}
                   </div>
-                )}
-              </div>
-            )}
+                </div>
+              ) : (
+                // Desktop view with all 4 members in a row (when they fit)
+                <div className="flex justify-center items-start flex-wrap md:flex-nowrap gap-4 md:gap-6 px-4 md:px-8 max-w-[1200px] mx-auto">
+                  {teamMembers.map((member, index) => (
+                    <TeamMember {...member} index={index} key={index} />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
