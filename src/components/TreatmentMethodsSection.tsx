@@ -145,7 +145,7 @@ const TreatmentMethodsSection = () => {
           {/* Right column with image */}
           <div className="hidden md:block col-span-3">
             <Image
-              src="/images/medicare-methods.png"
+              src="/images/medicare-methods.jpg"
               alt="Healthcare Therapy Center Treatment Methods"
               width={500}
               height={600}
