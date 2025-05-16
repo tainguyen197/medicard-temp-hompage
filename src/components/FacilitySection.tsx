@@ -43,40 +43,40 @@ const FacilitySection: React.FC = () => {
 
   const facilities = [
     {
-      image: "/images/spa_1.png",
+      image: "/images/spacing/1.png",
       title: "Tư vấn chuyên gia",
       description: "Tận tình kỹ lưỡng về tinh trạng bệnh lý",
     },
     {
-      image: "/images/spa_2.png",
+      image: "/images/spacing/2.png",
       title: "Bác sĩ đồng hành",
       description: "Trực tiếp thăm khám và kiểm tra tình trạng",
     },
     {
-      image: "/images/spa_3.png",
+      image: "/images/spacing/3.png",
       title: "Không gian",
       description: "Tinh tế, sang trọng, thoải mái, riêng tư",
     },
     {
-      image: "/images/spa_4.png",
-      title: "Chăm sóc chuẩn mực",
+      image: "/images/spacing/4.png",
+      title: "Chăm sóc chuẩn  mực",
       description: "Bác sĩ tay nghề chuyên môn cao, giàu kinh nghiệm",
     },
     {
-      image: "/images/spa_5.png",
+      image: "/images/spacing/5.png",
       title: "Kỹ thuật hiện đại",
       description:
         "Máy móc công nghệ cao, kỹ thuật tiên tiến được thực hiện trực tiếp bởi các bác sĩ chuyên ngành",
     },
     {
-      image: "/images/spa_6.png",
+      image: "/images/spacing/6.png",
       title: "Chu đáo, từ tâm",
       description: "Đội ngũ kỹ thuật viên lành nghề, kinh nghiệm",
     },
     {
-      image: "/images/spa_7.png",
+      image: "/images/spacing/7.png",
       title: "Khách hàng là trung tâm",
-      description: "Thái độ tập trung, tận tâm trong suốt quá trình điều trị",
+      description: "Thái độ tập trung, tận  tâm trong suốt quá trình điều trị",
     },
   ];
 

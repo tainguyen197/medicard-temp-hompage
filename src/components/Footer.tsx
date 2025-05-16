@@ -56,7 +56,7 @@ export default function Footer() {
                   href="/blog"
                   className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
-                  Blog Sức khoẻ
+                  Tin tức
                 </Link>
               </li>
             </ul>
