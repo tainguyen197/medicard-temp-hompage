@@ -79,7 +79,7 @@ export default function BlogPage() {
       </section>
 
       {/* 3. Trending Topics */}
-      <section className="container mx-auto px-4 mb-16 md:mb-20">
+      <section className="container mx-auto px-4 mb-16 md:mb-20 max-w-[1040px]">
         <div className="flex flex-col md:flex-row gap-4">
           {/* Featured post (larger) - left side */}
           <div className="md:w-1/2">
@@ -121,7 +121,7 @@ export default function BlogPage() {
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute inset-0 ">
+                    <div className="absolute inset-0">
                       <div className="absolute bottom-0 p-4 bg-[#00000080]">
                         <h3 className="text-white font-medium text-sm md:text-base">
                           {post.title}
@@ -137,7 +137,7 @@ export default function BlogPage() {
       </section>
 
       {/* 4. Topic Listing */}
-      <section className="container mx-auto px-4">
+      <section className="container mx-auto px-4 max-w-[1040px]">
         <h2 className="text-2xl md:text-3xl font-medium mb-8 text-[#222222] hidden">
           Tất cả bài viết
         </h2>
@@ -146,7 +146,7 @@ export default function BlogPage() {
             <div className="flex flex-col md:flex-row items-center mb-4 md:mb-12">
               <div className="pr-8 flex flex-col">
                 <Link href={`/blog/${post.slug}`}>
-                  <h2 className="text-2xl font-medium text-[#222222] mb-8 hover:text-[#B1873F] transition-colors">
+                  <h2 className="text-2xl font-medium text-[#222222] mb-4 hover:text-[#B1873F] transition-colors">
                     {post.title}
                   </h2>
                 </Link>
@@ -176,7 +176,7 @@ export default function BlogPage() {
       </section>
 
       {/* Pagination */}
-      <section className="container mx-auto px-4 mb-0 flex justify-start">
+      <section className="container mx-auto px-4 mb-0 flex justify-start max-w-[1040px]">
         <div className="flex items-center gap-2">
           <button
             className="flex items-center justify-center"
@@ -258,12 +258,12 @@ export default function BlogPage() {
       </section>
 
       {/* 4. Newsletter */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-white max-w-[1040px] mx-auto">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-[#1F1F1F] mb-6">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl max-text-[51px] font-semibold text-[#1F1F1F] mb-6">
             Sẵn sàng trải nghiệm sự khác biệt
           </h2>
-          <p className="text-lg md:text-xl text-black max-w-3xl mx-auto mb-8">
+          <p className="text-lg md:text-xl px-16 text-black max-w-3xl mx-auto mb-8">
             Hãy để Healthcare Therapy Center trở thành điểm tựa vững chắc trong
             hành trình chăm sóc sức khỏe của bạn.
           </p>
