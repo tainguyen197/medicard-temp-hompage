@@ -28,10 +28,10 @@ export default function ContactPage() {
 
               {/* Address */}
               <div className="mb-8">
-                <h2 className="font-bold text-xl text-[#002447] mb-3">
+                <h2 className="font-bold text-xl text-[#B1873F] mb-3">
                   Địa chỉ
                 </h2>
-                <p className="text-[#909090]">
+                <p className="text-[#000]">
                   327 đường Nguyễn Trọng Tuyển, Phường 10, Quận Phú Nhuận,
                   TP.HCM
                 </p>
@@ -39,22 +39,22 @@ export default function ContactPage() {
 
               {/* Business Hours */}
               <div className="mb-8">
-                <h2 className="font-bold text-xl text-[#002447] mb-3">
+                <h2 className="font-bold text-xl text-[#B1873F] mb-3">
                   Giờ mở cửa
                 </h2>
-                <p className="text-[#909090]">Thứ 2 - Thứ 7: 8h00 - 19h00</p>
-                <p className="text-[#909090]">Chủ nhật: 8h00 - 18h00</p>
+                <p className="text-[#000]">Thứ 2 - Thứ 7: 8h00 - 19h00</p>
+                <p className="text-[#000]">Chủ nhật: 8h00 - 18h00</p>
               </div>
 
               {/* Contact Information */}
               <div className="mb-8">
-                <h2 className="font-bold text-xl text-[#002447] mb-3">
+                <h2 className="font-bold text-xl text-[#B1873F] mb-3">
                   Thông tin liên hệ
                 </h2>
-                <p className="text-[#909090] mb-2">
+                <p className="text-[#000] mb-2">
                   <span className="font-medium">SĐT:</span> 0901 430 077
                 </p>
-                <p className="text-[#909090]">
+                <p className="text-[#000]">
                   <span className="font-medium">Email:</span>{" "}
                   healthcaretherapycenter.89@gmail.com
                 </p>

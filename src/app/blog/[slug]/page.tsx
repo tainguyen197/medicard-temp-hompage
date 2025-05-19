@@ -161,7 +161,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
       {/* Related Posts */}
       <div className="container mx-auto md:px-20 md:py-14 bg-[#FEF6EA] rounded-4xl">
         <div className="mx-auto px-4">
-          <h2 className="text-3xl font-semibold text-[#222222] mb-10">
+          <h2 className="text-2xl font-semibold text-[#222222] mb-10">
             Có thể bạn quan tâm
           </h2>
           <div className="space-y-6">
@@ -237,10 +237,10 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
       {/* Newsletter */}
       <section className="bg-white py-16 md:py-20">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-5xl font-semibold text-[#1F1F1F] mb-6">
+          <h2 className="text-3xl md:text-5xl max-text-[51px] font-semibold text-[#1F1F1F] mb-6">
             Sẵn sàng trải nghiệm sự khác biệt
           </h2>
-          <p className="text-lg md:text-2xl text-black mb-10 max-w-3xl mx-auto">
+          <p className="text-md md:text-lg px-16 text-black mb-10 max-w-3xl mx-auto">
             Hãy để Healthcare Therapy Center trở thành điểm tựa vững chắc trong
             hành trình chăm sóc sức khỏe của bạn.
           </p>
