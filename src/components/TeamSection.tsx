@@ -26,7 +26,11 @@ const TeamMember: React.FC<TeamMemberProps> = ({
   index,
 }) => {
   return (
-    <div className="flex-shrink-0 w-full sm:w-[230px] md:w-[230px] lg:w-[250px] xl:w-[280px] overflow-hidden bg-white flex flex-col mb-8">
+    <div
+      className={`flex-shrink-0 w-full sm:w-[230px] md:w-[230px] lg:w-[250px] xl:w-[280px] overflow-hidden bg-white flex flex-col mb-8 ${
+        index % 2 !== 0 ? "md:mt-20" : ""
+      }`}
+    >
       <div className="relative rounded-3xl md:rounded-t-4xl overflow-hidden">
         <div className="aspect-[3/4] relative">
           <Image
@@ -169,7 +173,7 @@ const TeamSection: React.FC = () => {
           <div className="hidden lg:block border-[3px] border-[#002447] rounded-[40px] py-8 max-w-[1300px] absolute inset-0 -top-8 mx-32 2xl:mx-auto bottom-[-52px]" />
           <div>
             <div className="flex items-center justify-center relative md:top-[-54px]">
-              <h2 className="font-cormorant text-xl md:text-5xl font-bold text-[#002447] uppercase whitespace-nowrap bg-white px-8">
+              <h2 className="font-cormorant text-xl md:text-5xl max-text-[51px] font-bold text-[#002447] uppercase whitespace-nowrap bg-white px-8">
                 ĐỘI NGŨ CHUYÊN GIA
               </h2>
             </div>

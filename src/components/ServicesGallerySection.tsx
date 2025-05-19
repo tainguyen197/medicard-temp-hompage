@@ -125,10 +125,10 @@ const ServicesGallerySection: React.FC = () => {
   };
 
   return (
-    <section id="services" className="py-10 md:py-20 bg-[#182134] text-white">
+    <section id="services" className="py-10 md:py-16   bg-[#182134] text-white">
       <div className="container mx-auto px-4">
         <div className="flex justify-center mb-8 md:mb-16">
-          <h2 className="text-xl md:text-4xl font-cormorant font-semibold text-[#FFF7EB] uppercase relative">
+          <h2 className="text-2xl md:text-[46px] xl:text-[51px] font-cormorant font-semibold text-[#FFF7EB] uppercase relative">
             DỊCH VỤ
           </h2>
         </div>
@@ -152,12 +152,12 @@ const ServicesGallerySection: React.FC = () => {
           </div>
 
           {/* Service description */}
-          <div className="w-full lg:w-1/2 flex flex-col justify-between">
+          <div className="w-full lg:w-1/2 flex flex-col justify-end">
             <div>
-              <h3 className="font-cormorant text-md md:text-3xl font-bold mb-2 md:mb-5 text-white line-clamp-1 md:line-clamp-none">
+              <h3 className="font-cormorant text-md md:text-[30px] font-bold mb-2 md:mb-5 text-white line-clamp-1 md:line-clamp-none">
                 {activeService.title}
               </h3>
-              <p className="text-gray-300 mb-4 md:mb-16 text-sm md:text-lg leading-relaxed line-clamp-5 md:line-clamp-none  min-h-[7.25rem]">
+              <p className="text-gray-300 mb-4 md:mb-16 text-sm md:text-md leading-relaxed line-clamp-5 md:line-clamp-none  min-h-[7.25rem]">
                 {activeService.description}
               </p>
             </div>
@@ -232,7 +232,7 @@ const ServicesGallerySection: React.FC = () => {
                 }`}
                 onClick={() => handleServiceClick(index)}
               >
-                <div className="relative aspect-[309/216]">
+                <div className="relative aspect-[309/216] max-h-[216px]">
                   <Image
                     src={service.image}
                     alt={service.title}

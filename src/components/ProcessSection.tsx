@@ -56,7 +56,7 @@ const ProcessSection = () => {
   return (
     <section
       id="process"
-      className="relative py-10 md:py-20 bg-white overflow-hidden"
+      className="relative pb-10 md:pb-16 bg-white overflow-hidden"
     >
       <div className="container mx-auto">
         <div className="flex ">

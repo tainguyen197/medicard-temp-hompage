@@ -53,7 +53,7 @@ const BlogSection = () => {
   ];
 
   return (
-    <section id="blog" className="pb-6 md:pb-20 bg-white">
+    <section id="blog" className="pb-10 md:pb-16 bg-white">
       <div className="container mx-auto px-4">
         <h2 className="text-xl md:text-5xl font-cormorant font-bold text-center text-gray-900 mb-8 md:mb-16 leading-tight">
           TIN TỨC

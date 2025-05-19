@@ -15,14 +15,14 @@ const TreatmentMethod = ({
   iconColor,
 }: TreatmentMethodProps) => {
   return (
-    <div className="flex last:mb-0">
+    <div className="flex items-center last:mb-0">
       <div
         className={`flex items-center justify-center shrink-0 mr-5 w-10 h-10 md:w-18 md:h-18 rounded-full`}
         style={{ backgroundColor: iconColor }}
       >
         {icon}
       </div>
-      <div className="mt-0 md:mt-4">
+      <div className="mt-0">
         <h3 className="font-bold text-sm md:text-xl mb-2 text-gray-900">
           {title}
         </h3>
@@ -45,7 +45,7 @@ const TreatmentMethodsSection = () => {
               PHƯƠNG THỨC ĐIỀU TRỊ TẠI HEALTHCARE THERAPY CENTER
             </h2>
 
-            <div className="space-y-4 md:space-y-6">
+            <div className="space-y-4 md:space-y-4">
               <TreatmentMethod
                 iconColor="#c7d6e7"
                 icon={
@@ -68,7 +68,7 @@ const TreatmentMethodsSection = () => {
                 description="Liệu trình điều trị tối ưu và an toàn, không yêu cầu sử dụng thuốc hay phẫu thuật."
               />
 
-              <div className="w-[1px] h-8 bg-gray-200 ml-5 -mt-8 md:mt-0 md:ml-8"></div>
+              <div className="w-[1px] h-4 bg-gray-200 ml-5 -mt-8 md:mt-0 md:ml-8"></div>
 
               <TreatmentMethod
                 iconColor="#6C98C5"
@@ -143,11 +143,11 @@ const TreatmentMethodsSection = () => {
           </div>
 
           {/* Right column with image */}
-          <div className="hidden md:block col-span-3">
+          <div className="hidden md:block col-span-3 max-h-[600px]">
             <Image
               src="/images/medicare-methods.jpg"
               alt="Healthcare Therapy Center Treatment Methods"
-              width={500}
+              width={450}
               height={600}
               className="object-contain"
             />
