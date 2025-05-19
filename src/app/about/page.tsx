@@ -87,7 +87,7 @@ const CertificateItem = ({
         className="object-contain object-top"
       />
     </div>
-    <p className="text-center text-sm md:text-2xl text-gray-700">{title}</p>
+    <p className="text-center text-sm md:text-xl text-gray-700">{title}</p>
   </div>
 );
 
@@ -131,13 +131,13 @@ export default function AboutPage() {
         </div>
       </section>
       {/* Healthcare Center Introduction Section (New) */}
-      <section className="py-12 md:py-16 border-t border-b border-blue-100">
+      <section className="pt-10 md:pt-16">
         <div className="container mx-auto px-6">
           <div className="text-center">
-            <h2 className="font-cormorant font-bold text-5xl text-[#B1873F] mb-6">
+            <h2 className="font-cormorant font-bold text-4xl max-text-[40px] text-[#B1873F] mb-6">
               VỀ HEALTHCARE THERAPY CENTER
             </h2>
-            <p className="text-gray-700 max-w-4xl mx-auto text-2xl font-semibold text-justify mb-8">
+            <p className="text-gray-700 max-w-4xl mx-auto text-lg md:text-xl font-semibold text-center mb-8">
               Healthcare Therapy Center cung cấp dịch vụ Y Học Cổ Truyền kết hợp
               Phục Hồi Chức Năng theo hướng hiện đại, an toàn và khoa học. Với
               đội ngũ bác sĩ tận tâm, giàu kinh nghiệm cùng không gian trị liệu
@@ -157,7 +157,7 @@ export default function AboutPage() {
       </section>
 
       {/* Certificates Section (New) */}
-      <section className="py-16 md:py-24">
+      <section className="py-12 md:py-20">
         <div className="container mx-auto px-6">
           <div className="mb-12 text-center">
             <h2 className="font-cormorant font-bold text-2xl md:text-5xl leading-[140%] text-balance text-[#002447] mb-4">
@@ -270,14 +270,14 @@ export default function AboutPage() {
             />
           </div>
           <div className="mb-12 text-center">
-            <h2 className="font-cormorant font-bold text-2xl md:text-5xl leading-[140%] text-balance text-[#002447] mb-4">
+            <h2 className="font-cormorant font-bold text-2xl md:text-5xl md:max-text-[48px] leading-[140%] text-balance text-[#002447] mb-4">
               9.9/10 KHÁCH HÀNG GỬI TRỌN TIN YÊU
             </h2>
           </div>
         </div>
         <div className=" mx-auto px-6 md:flex md:flex-row gap-8 justify-end absolute bottom-0 right-0">
-          <div className="relative bg-[#182134] p-8 border-8 border-white rounded-2xl aspect-square h-[500px]">
-            <div className="text-6xl text-white mb-16">
+          <div className="relative bg-[#182134] p-8 border-8 border-white rounded-2xl aspect-square h-[400px]">
+            <div className="text-4xl text-white mb-4">
               <svg
                 width="50"
                 height="38"
@@ -291,7 +291,7 @@ export default function AboutPage() {
                 />
               </svg>
             </div>
-            <p className="text-white text-md md:text-xl mb-8 leading-[165%]">
+            <p className="text-white text-justify text-md md:text-[18px] mb-2 leading-[165%]">
               Mọi thứ ở Healthcare Therapy Center, từ ánh sáng, âm nhạc đến mùi
               hương đều rất nhẹ nhàng, giúp tôi quên đi những căng thẳng bên
               ngoài. Đây không chỉ là nơi điều trị mà còn là chốn để tôi nghỉ
@@ -308,17 +308,17 @@ export default function AboutPage() {
                 />
               </div>
               <div>
-                <p className="font-semibold text-white text-xl md:text-2xl">
+                <p className="font-semibold text-white text-lg md:text-xl">
                   Thảo Uyên
                 </p>
-                <p className="text-gray-500 text-sm md:text-xl">
+                <p className="text-gray-500 text-sm md:text-lg">
                   Nhân viên văn phòng
                 </p>
               </div>
             </div>
           </div>
-          <div className="relative bg-[#182134] p-8 rounded-2xl aspect-square h-[500px] border-white border-8">
-            <div className="text-6xl text-white mb-16">
+          <div className="relative bg-[#182134] p-8 rounded-2xl aspect-square h-[400px] border-white border-8">
+            <div className="text-4xl text-white mb-4">
               <svg
                 width="50"
                 height="38"
@@ -332,7 +332,7 @@ export default function AboutPage() {
                 />
               </svg>
             </div>
-            <p className="text-white text-md md:text-xl mb-8 leading-[165%]">
+            <p className="text-white text-justify text-md md:text-[18px] mb-2 leading-[165%]">
               Các bác sĩ và chuyên viên Healthcare Therapy Center đều có chuyên
               môn cao, nhiều năm kinh nghiệm, luôn tận tâm lắng nghe và giải
               thích cặn kẽ mọi vấn đề cho tôi. Nhờ vậy, tôi cảm thấy rất yên tâm
@@ -349,10 +349,10 @@ export default function AboutPage() {
                 />
               </div>
               <div>
-                <p className="font-semibold text-white text-xl md:text-2xl">
+                <p className="font-semibold text-white text-lg md:text-xl">
                   Huỳnh Lâm
                 </p>
-                <p className="text-gray-500 text-sm md:text-xl">
+                <p className="text-gray-500 text-sm md:text-lg">
                   Nhân viên văn phòng
                 </p>
               </div>
@@ -364,10 +364,10 @@ export default function AboutPage() {
       {/* Newsletter */}
       <section className="bg-white py-16 md:py-20">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-5xl font-semibold text-[#1F1F1F] mb-6">
+          <h2 className="text-3xl md:text-5xl max-text-[51px] font-semibold text-[#1F1F1F] mb-6">
             Sẵn sàng trải nghiệm sự khác biệt
           </h2>
-          <p className="text-lg md:text-2xl text-black mb-10 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-black mb-10 max-w-3xl mx-auto px-16">
             Hãy để Healthcare Therapy Center trở thành điểm tựa vững chắc trong
             hành trình chăm sóc sức khỏe của bạn.
           </p>
