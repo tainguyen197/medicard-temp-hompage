@@ -20,7 +20,7 @@ const cormorant = Cormorant_SC({
 export const metadata: Metadata = {
   title: "Healthcare Therapy Center | Giải pháp chăm sóc sức khoẻ toàn diện",
   description:
-    "Healthcare Therapy Center mang đến phương pháp điều trị kết hợp hiện đại, không dùng thuốc, không phẫu thuật với hiệu quả cao.",
+    "Healthcare Therapy Center cung cấp dịch vụ Y Học Cổ Truyền kết hợp Phục Hồi Chức Năng theo hướng hiện đại, an toàn và khoa học.",
 };
 
 export default function RootLayout({
