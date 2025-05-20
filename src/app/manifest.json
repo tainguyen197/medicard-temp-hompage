@@ -1,6 +1,6 @@
 {
-  "name": "MyWebSite",
-  "short_name": "MySite",
+  "name": "Healthcare Therapy Center",
+  "short_name": "HTC Wellness",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",

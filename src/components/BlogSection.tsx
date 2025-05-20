@@ -6,31 +6,42 @@ interface BlogPostProps {
   image: string;
   title: string;
   excerpt: string;
+  slug: string;
+  id: number;
 }
 
-const BlogPost = ({ image, title, excerpt }: BlogPostProps) => (
-  <div className="bg-white grid grid-cols-2 gap-4 md:block">
-    <div className="relative md:aspect-square rounded-2xl overflow-hidden">
-      <Image
-        src={image}
-        alt={title}
-        fill
-        className="object-cover h-[100px] w-fit md:h-auto aspect-2/1"
-      />
+const BlogPost = ({ image, title, excerpt, slug, id }: BlogPostProps) => (
+  <Link
+    href={`/blog/${slug}`}
+    key={id}
+    className="group relative rounded-lg overflow-hidden"
+  >
+    <div className="bg-white group grid grid-cols-2 gap-4 md:block">
+      <div className="relative md:aspect-square rounded-2xl overflow-hidden">
+        <Image
+          src={image}
+          alt={title}
+          fill
+          className="object-cover h-[100px] group-hover:scale-105 transition-transform w-fit md:h-auto aspect-2/1"
+        />
+      </div>
+      <div className="md:pt-6">
+        <h3 className="text-sm md:text-xl font-bold text-gray-900 mb-4 line-clamp-2">
+          {title}
+        </h3>
+        <p className="text-gray-600 text-sm md:text-md line-clamp-2">
+          {excerpt}
+        </p>
+      </div>
     </div>
-    <div className="md:pt-6">
-      <h3 className="text-sm md:text-xl font-bold text-gray-900 mb-4 line-clamp-2">
-        {title}
-      </h3>
-      <p className="text-gray-600 text-sm md:text-md line-clamp-2">{excerpt}</p>
-    </div>
-  </div>
+  </Link>
 );
 
 const BlogSection = () => {
   const blogPosts = [
     {
       id: 1,
+      slug: "chiro-therapy-trong-dieu-tri-cac-van-de-ve-cot-song",
       image: "/images/blog1.jpg",
       title: "Chiro Therapy trong điều trị các vấn đề về cột sống",
       excerpt:
@@ -38,6 +49,7 @@ const BlogSection = () => {
     },
     {
       id: 2,
+      slug: "phuong-phap-giam-dau-khong-dung-thuoc-cho-dau-luong-man-tinh",
       image: "/images/blog2.jpg",
       title: "Phương pháp giảm đau không dùng thuốc cho đau lưng mãn tính",
       excerpt:
@@ -45,6 +57,7 @@ const BlogSection = () => {
     },
     {
       id: 3,
+      slug: "tap-luyen-dung-cach-de-phong-ngua-chan-thuong-co-xuong-khoc",
       image: "/images/blog3.jpg",
       title: "Tập luyện đúng cách để phòng ngừa chấn thương cơ xương khớp",
       excerpt:
@@ -63,6 +76,8 @@ const BlogSection = () => {
           {blogPosts.map((post) => (
             <BlogPost
               key={post.id}
+              slug={post.slug}
+              id={post.id}
               image={post.image}
               title={post.title}
               excerpt={post.excerpt}

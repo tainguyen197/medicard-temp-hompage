@@ -21,7 +21,7 @@ export default function Home() {
         <AboutSection />
       </AnimatedSection>
 
-      <AnimatedSection animation="slideLeft" delay={0.1} duration={0.6}>
+      <AnimatedSection animation="fadeIn" delay={0.1} duration={0.6}>
         <ServicesGallerySection />
       </AnimatedSection>
 
