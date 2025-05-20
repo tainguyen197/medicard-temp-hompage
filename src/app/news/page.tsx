@@ -180,7 +180,7 @@ export default function BlogPage() {
       <section className="container mx-auto px-4 mb-0 flex justify-start max-w-[1040px]">
         <div className="flex items-center gap-2">
           <button
-            className="flex items-center justify-center"
+            className="flex items-center justify-center hover:text-[#B1873F] cursor-pointer"
             aria-label="Previous page"
           >
             <svg
@@ -192,7 +192,7 @@ export default function BlogPage() {
             >
               <path
                 d="M15 18L9 12L15 6"
-                stroke="#000000"
+                stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -201,42 +201,42 @@ export default function BlogPage() {
           </button>
 
           <button
-            className="w-10 h-10 rounded flex items-center justify-center border border-[#B1873F] text-[#B1873F] font-bold"
+            className="w-10 h-10 rounded flex items-center justify-center border border-[#B1873F] text-[#B1873F] font-bold cursor-pointer"
             aria-label="Page 1"
           >
             1
           </button>
 
           <button
-            className="w-10 h-10 rounded flex items-center justify-center border border-gray-300 bg-white text-gray-600 font-bold"
+            className="w-10 h-10 rounded flex items-center justify-center border border-gray-300 bg-white text-gray-600 font-bold cursor-pointer"
             aria-label="Page 2"
           >
             2
           </button>
 
           <button
-            className="w-10 h-10 rounded flex items-center justify-center border border-gray-300 bg-white text-gray-600 font-bold"
+            className="w-10 h-10 rounded flex items-center justify-center border border-gray-300 bg-white text-gray-600 font-bold cursor-pointer"
             aria-label="More pages"
           >
             ...
           </button>
 
           <button
-            className="w-10 h-10 rounded flex items-center justify-center border border-gray-300 bg-white text-gray-600 font-bold"
+            className="w-10 h-10 rounded flex items-center justify-center border border-gray-300 bg-white text-gray-600 font-bold cursor-pointer"
             aria-label="Page 9"
           >
             9
           </button>
 
           <button
-            className="w-10 h-10 rounded flex items-center justify-center border border-gray-300 bg-white text-gray-600 font-bold"
+            className="w-10 h-10 rounded flex items-center justify-center border border-gray-300 bg-white text-gray-600 font-bold cursor-pointer"
             aria-label="Page 10"
           >
             10
           </button>
 
           <button
-            className="flex items-center justify-center"
+            className="flex items-center justify-center hover:text-[#B1873F] cursor-pointer"
             aria-label="Next page"
           >
             <svg
@@ -248,7 +248,7 @@ export default function BlogPage() {
             >
               <path
                 d="M9 18L15 12L9 6"
-                stroke="#000000"
+                stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
