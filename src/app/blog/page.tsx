@@ -56,9 +56,9 @@ export default function BlogPage() {
   const trendingPosts = blogPosts.slice(0, 5);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pt-[72px] md:pt-[96px]">
       {/* 1. Hero Section */}
-      <section className="relative h-[40vh] md:h-[50vh] lg:h-[60vh] w-full mt-16 md:mt-20">
+      <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
         <div className="absolute inset-0">
           <Image
             src="/images/hero-section.png"
@@ -67,7 +67,6 @@ export default function BlogPage() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-black/20"></div>
         </div>
       </section>
 
@@ -268,7 +267,8 @@ export default function BlogPage() {
             hành trình chăm sóc sức khỏe của bạn.
           </p>
           <Link
-            href="/contact"
+            href="https://forms.gle/GJETkvXcnZ7hZwBr8"
+            target="_blank"
             className="inline-flex items-center px-8 py-4 bg-[#B1873F] text-white rounded-full font-semibold hover:bg-[#c09857] transition-colors"
           >
             Đặt lịch trải nghiệm

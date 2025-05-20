@@ -23,7 +23,8 @@ const ContactSection = () => {
             </h2>
 
             <Link
-              href="#appointment"
+              href="https://forms.gle/GJETkvXcnZ7hZwBr8"
+              target="_blank"
               className="inline-block bg-[#C99A4D] hover:bg-amber-800 text-white font-cormorant uppercase font-medium py-3 px-8 rounded-full"
             >
               ĐẶT LỊCH

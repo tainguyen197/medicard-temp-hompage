@@ -116,9 +116,9 @@ export default function AboutPage() {
     },
   ];
   return (
-    <div className="">
+    <div className="pt-[72px] md:pt-[96px]">
       {/* 1. Hero Section */}
-      <section className="relative h-[40vh] md:h-[50vh] lg:h-[60vh] w-full mt-16 md:mt-20">
+      <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
         <div className="absolute inset-0">
           <Image
             src="/images/hero-section.png"
@@ -127,7 +127,6 @@ export default function AboutPage() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-black/20"></div>
         </div>
       </section>
       {/* Healthcare Center Introduction Section (New) */}
@@ -146,11 +145,12 @@ export default function AboutPage() {
               cao chất lượng cuộc sống mỗi ngày.
             </p>
             <a
-              href="tel:0901430077"
+              href="https://forms.gle/GJETkvXcnZ7hZwBr8"
+              target="_blank"
               className="inline-block relative rounded-3xl px-6 py-3 bg-[#B1873F] text-white font-medium hover:bg-[#9e7736] transition-colors"
             >
-              <span className="absolute bottom-2 right-2 block w-4 h-4 bg-white rounded-full animate-ping"></span>
-              Đặt lịch trải nghiệm
+              <span className="absolute inset-0 bg-[#a75e24] z-0 rounded-full animate-heath-beat"></span>
+              <span className="relative z-10">Đặt lịch trải nghiệm</span>
             </a>
           </div>
         </div>
@@ -372,11 +372,12 @@ export default function AboutPage() {
             hành trình chăm sóc sức khỏe của bạn.
           </p>
           <a
-            href="tel:0901430077"
+            href="https://forms.gle/GJETkvXcnZ7hZwBr8"
+            target="_blank"
             className="inline-block relative rounded-3xl px-6 py-3 bg-[#B1873F] text-white font-medium hover:bg-[#9e7736] transition-colors"
           >
-            <span className="absolute bottom-2 right-2 block w-4 h-4 bg-white rounded-full animate-ping"></span>
-            Đặt lịch trải nghiệm
+            <span className="absolute inset-0 bg-[#a75e24] z-0 rounded-full animate-heath-beat"></span>
+            <span className="relative z-10">Đặt lịch trải nghiệm</span>
           </a>
         </div>
       </section>

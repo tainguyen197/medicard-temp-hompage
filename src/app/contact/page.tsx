@@ -63,7 +63,8 @@ export default function ContactPage() {
               {/* Appointment Button */}
               <div className="mt-12">
                 <a
-                  href="tel:0901430077"
+                  href="https://forms.gle/GJETkvXcnZ7hZwBr8"
+                  target="_blank"
                   className="inline-flex items-center justify-center bg-[#B1873F] text-white py-3 px-8 rounded-md hover:bg-[#9e7738] transition-colors duration-300"
                 >
                   Đặt lịch trải nghiệm

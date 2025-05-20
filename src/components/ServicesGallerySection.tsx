@@ -173,7 +173,7 @@ const ServicesGallerySection: React.FC = () => {
               <div className="flex flex-wrap gap-4">
                 <a
                   href="#"
-                  className="inline-flex items-center px-4 py-2 md:px-7 md:py-3 bg-[#B1873F] hover:bg-amber-700 transition-colors rounded-xl md:rounded-full text-white font-semibold md:font-medium text-xs md:text-md h-10 md:h-12"
+                  className="inline-flex items-center px-4 py-2 md:px-7 md:py-3 bg-[#B1873F] hover:bg-amber-700 transition-colors rounded-xl md:rounded-full text-white font-semibold md:font-medium text-xs md:text-[16px] h-10 md:h-12"
                 >
                   Xem chi tiết
                   <svg
@@ -191,8 +191,9 @@ const ServicesGallerySection: React.FC = () => {
                   </svg>
                 </a>
                 <a
-                  href="#"
-                  className="inline-flex items-center px-4 py-2 md:px-7 md:py-3 border border-[#B1873F] hover:bg-amber-600/10 transition-colors rounded-xl md:rounded-full text-white font-semibold md:font-medium text-xs md:text-md h-10 md:h-12"
+                  href="https://forms.gle/GJETkvXcnZ7hZwBr8"
+                  target="_blank"
+                  className="inline-flex items-center px-4 py-2 md:px-7 md:py-3 border border-[#B1873F] hover:bg-amber-600/10 transition-colors rounded-xl md:rounded-full text-white font-semibold md:font-medium text-xs md:text-[16px] h-10 md:h-12"
                 >
                   Đặt lịch
                   <svg

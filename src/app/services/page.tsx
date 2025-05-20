@@ -35,7 +35,7 @@ export default function ServicesPage() {
   ];
 
   return (
-    <div className="pt-20 md:pt-24">
+    <div className="pt-[72px] md:pt-[96px]">
       <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
         <Image
           src="/images/hero-section.png"
@@ -122,7 +122,8 @@ export default function ServicesPage() {
             hành trình chăm sóc sức khỏe của bạn.
           </p>
           <a
-            href="tel:0901430077"
+            href="https://forms.gle/GJETkvXcnZ7hZwBr8"
+            target="_blank"
             className="inline-flex items-center justify-center px-8 py-3 bg-[#B1873F] text-white rounded-full text-base md:text-lg font-semibold transition-all hover:bg-[#9A7435]"
           >
             Đặt lịch trải nghiệm

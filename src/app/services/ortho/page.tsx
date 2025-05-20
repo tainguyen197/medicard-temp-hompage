@@ -167,7 +167,8 @@ export default function TraditionalMedicinePage() {
             trong hành trình chăm sóc sức khỏe của bạn.
           </p>
           <a
-            href="tel:0901430077"
+            href="https://forms.gle/GJETkvXcnZ7hZwBr8"
+            target="_blank"
             className="inline-flex items-center justify-center px-8 py-3 bg-[#B1873F] text-white rounded-full text-base md:text-lg font-semibold transition-all hover:bg-[#9A7435]"
           >
             Đặt lịch trải nghiệm
