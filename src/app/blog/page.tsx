@@ -142,13 +142,15 @@ export default function BlogPage() {
         </h2>
         {blogPosts.map((post, index) => (
           <article key={post.id}>
-            <div className="flex flex-col md:flex-row items-center mb-4 md:mb-12">
+            <div className="relative flex flex-col md:flex-row items-center mb-4 md:mb-12 group">
+              <Link
+                href={`/blog/${post.slug}`}
+                className="absolute inset-0 z-1"
+              />
               <div className="pr-8 flex flex-col">
-                <Link href={`/blog/${post.slug}`}>
-                  <h2 className="text-2xl font-medium text-[#222222] mb-4 hover:text-[#B1873F] transition-colors">
-                    {post.title}
-                  </h2>
-                </Link>
+                <h2 className="text-2xl font-medium text-[#222222] mb-4 group-hover:text-[#B1873F] transition-colors">
+                  {post.title}
+                </h2>
                 <p className="text-gray-600 line-clamp-3 mb-4">
                   {post.excerpt}
                 </p>
