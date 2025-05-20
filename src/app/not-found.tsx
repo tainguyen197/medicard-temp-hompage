@@ -11,7 +11,7 @@ export default function NotFound() {
           </h1>
         </div>
       </div>
-      <div className="relative w-full flex justify-start h-[64px] items-center mr-[30%]">
+      <div className="relative w-full flex justify-start h-[64px] items-center mr-[15%]">
         <Image
           src="/images/break_line.png"
           alt="Not Found"
