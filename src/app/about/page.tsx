@@ -298,13 +298,12 @@ export default function AboutPage() {
               ngơi, tái tạo năng lượng sau khi làm việc mệt mỏi.
             </p>
             <div className="flex items-center">
-              <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
+              <div className="relative w-12 h-12 rounded-full overflow-hidden mr-4">
                 <Image
                   src="/images/testimonial_1.jpg"
                   alt="Thảo Uyên"
-                  width={48}
-                  height={48}
-                  className="object-cover"
+                  fill
+                  className="object-cover object-right w-full h-full"
                 />
               </div>
               <div>
@@ -339,18 +338,17 @@ export default function AboutPage() {
               khi thăm khám và điều trị tại đây.
             </p>
             <div className="flex items-center">
-              <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
+              <div className="relative w-12 h-12 rounded-full overflow-hidden mr-4">
                 <Image
-                  src="/images/testimonial_2.jpg"
-                  alt="Huỳnh Lâm"
-                  width={48}
-                  height={48}
-                  className="object-cover"
+                  src="/images/testimonial_2.webp"
+                  alt="Huỳnh Lãm"
+                  fill
+                  className="object-cover object-center w-full h-full"
                 />
               </div>
               <div>
                 <p className="font-semibold text-white text-lg md:text-xl">
-                  Huỳnh Lâm
+                  Huỳnh Lãm
                 </p>
                 <p className="text-gray-500 text-sm md:text-lg">
                   Nhân viên văn phòng
