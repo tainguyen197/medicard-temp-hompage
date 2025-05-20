@@ -53,7 +53,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/blog"
+                  href="/news"
                   className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
                   Tin tức

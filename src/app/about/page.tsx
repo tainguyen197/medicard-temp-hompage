@@ -122,7 +122,7 @@ export default function AboutPage() {
         <div className="absolute inset-0">
           <Image
             src="/images/hero-section.png"
-            alt="Blog Hero"
+            alt="News Hero"
             fill
             className="object-cover"
             priority

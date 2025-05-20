@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Blog Sức Khoẻ | Healthcare Therapy Center",
+  title: "Tin tức sức khoẻ | Healthcare Therapy Center",
   description:
     "Cập nhật những kiến thức hữu ích về sức khoẻ, phương pháp điều trị và lối sống lành mạnh từ Healthcare Therapy Center.",
 };
@@ -16,7 +16,7 @@ export default function BlogPage() {
       title: "Chiro Therapy trong điều trị các vấn đề về cột sống",
       excerpt:
         "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể.",
-      image: "/images/blog/related-blog-1.jpg",
+      image: "/images/news/related-news-1.jpg",
     },
     {
       id: 2,
@@ -24,7 +24,7 @@ export default function BlogPage() {
       title: "Chiro Therapy trong điều trị các vấn đề về cột sống",
       excerpt:
         "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể.",
-      image: "/images/blog/related-blog-1.jpg",
+      image: "/images/news/related-news-1.jpg",
     },
     {
       id: 3,
@@ -32,7 +32,7 @@ export default function BlogPage() {
       title: "Chiro Therapy trong điều trị các vấn đề về cột sống",
       excerpt:
         "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể.",
-      image: "/images/blog/related-blog-2.jpg",
+      image: "/images/news/related-news-2.jpg",
     },
     {
       id: 4,
@@ -40,7 +40,7 @@ export default function BlogPage() {
       title: "Chiro Therapy trong điều trị các vấn đề về cột sống",
       excerpt:
         "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể.",
-      image: "/images/blog/related-blog-3.jpg",
+      image: "/images/news/related-news-3.jpg",
     },
     {
       id: 5,
@@ -48,7 +48,7 @@ export default function BlogPage() {
       title: "Chiro Therapy trong điều trị các vấn đề về cột sống",
       excerpt:
         "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể.",
-      image: "/images/blog/related-blog-3.jpg",
+      image: "/images/news/related-news-3.jpg",
     },
   ];
 
@@ -62,7 +62,7 @@ export default function BlogPage() {
         <div className="absolute inset-0">
           <Image
             src="/images/hero-section.png"
-            alt="Blog Hero"
+            alt="News Hero"
             fill
             className="object-cover"
             priority
@@ -73,7 +73,7 @@ export default function BlogPage() {
       {/* 2. Introduction */}
       <section className="py-16 text-center">
         <h1 className="font-cormorant text-4xl md:text-5xl lg:text-6xl font-bold text-[#B1873F] mb-4">
-          BLOG
+          TIN TỨC
         </h1>
       </section>
 
@@ -83,7 +83,7 @@ export default function BlogPage() {
           {/* Featured post (larger) - left side */}
           <div className="md:w-1/2">
             <Link
-              href={`/blog/${trendingPosts[0].slug}`}
+              href={`/news/${trendingPosts[0].slug}`}
               className="group relative rounded-lg overflow-hidden block h-full"
             >
               <div className="aspect-auto h-full relative">
@@ -109,7 +109,7 @@ export default function BlogPage() {
             <div className="grid grid-cols-2 gap-4 h-full">
               {trendingPosts.slice(1, 5).map((post) => (
                 <Link
-                  href={`/blog/${post.slug}`}
+                  href={`/news/${post.slug}`}
                   key={post.id}
                   className="group relative rounded-lg overflow-hidden"
                 >
@@ -144,7 +144,7 @@ export default function BlogPage() {
           <article key={post.id}>
             <div className="relative flex flex-col md:flex-row items-center mb-4 md:mb-12 group">
               <Link
-                href={`/blog/${post.slug}`}
+                href={`/news/${post.slug}`}
                 className="absolute inset-0 z-1"
               />
               <div className="pr-8 flex flex-col">
@@ -157,7 +157,7 @@ export default function BlogPage() {
               </div>
               <div className="mt-4 md:mt-0">
                 <Link
-                  href={`/blog/${post.slug}`}
+                  href={`/news/${post.slug}`}
                   className="block relative rounded-xl overflow-hidden aspect-square md:h-44"
                 >
                   <Image

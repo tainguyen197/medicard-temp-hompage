@@ -42,7 +42,7 @@ const BlogSection = () => {
     {
       id: 1,
       slug: "chiro-therapy-trong-dieu-tri-cac-van-de-ve-cot-song",
-      image: "/images/blog1.jpg",
+      image: "/images/news1.jpg",
       title: "Chiro Therapy trong điều trị các vấn đề về cột sống",
       excerpt:
         "Hiểu về phương pháp Chiropractic - giải pháp điều trị hiệu quả các vấn đề cột sống mà không cần phẫu thuật hay thuốc giảm đau.",
@@ -50,7 +50,7 @@ const BlogSection = () => {
     {
       id: 2,
       slug: "phuong-phap-giam-dau-khong-dung-thuoc-cho-dau-luong-man-tinh",
-      image: "/images/blog2.jpg",
+      image: "/images/news2.jpg",
       title: "Phương pháp giảm đau không dùng thuốc cho đau lưng mãn tính",
       excerpt:
         "Khám phá các kỹ thuật và liệu pháp tự nhiên giúp giảm đau lưng mãn tính, an toàn và hiệu quả dài lâu.",
@@ -58,7 +58,7 @@ const BlogSection = () => {
     {
       id: 3,
       slug: "tap-luyen-dung-cach-de-phong-ngua-chan-thuong-co-xuong-khoc",
-      image: "/images/blog3.jpg",
+      image: "/images/news3.jpg",
       title: "Tập luyện đúng cách để phòng ngừa chấn thương cơ xương khớp",
       excerpt:
         "Hướng dẫn chi tiết về kỹ thuật tập luyện an toàn, giúp phòng ngừa chấn thương và duy trì sức khoẻ cơ xương khớp.",
@@ -66,7 +66,7 @@ const BlogSection = () => {
   ];
 
   return (
-    <section id="blog" className="pb-10 md:pb-16 bg-white">
+    <section id="news" className="pb-10 md:pb-16 bg-white">
       <div className="container mx-auto px-4">
         <h2 className="text-xl md:text-5xl font-cormorant font-bold text-center text-gray-900 mb-8 md:mb-16 leading-tight">
           TIN TỨC
@@ -87,7 +87,7 @@ const BlogSection = () => {
 
         <div className="text-center md:text-right md:mt-12">
           <Link
-            href="/blog"
+            href="/news"
             className="bg-transparent inline-block md:bg-[#B1873F] hover:md:bg-amber-800 text-black md:text-white font-normal underline md:no-underline md:font-semibold py-3 px-8 rounded-full mt-2 md:mt-0"
           >
             Xem thêm

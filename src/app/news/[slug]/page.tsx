@@ -28,8 +28,8 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
       {/* Hero Section with Cover Image */}
       <section className="relative w-full h-[40vh] md:h-[70vh]">
         <Image
-          src="/images/blog/blog-cover.jpg"
-          alt="Blog Cover"
+          src="/images/news/news-cover.jpg"
+          alt="News Cover"
           fill
           priority
           className="object-cover"
@@ -40,10 +40,10 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
       <div className="container mx-auto px-4 py-6">
         <div className="flex items-center space-x-2">
           <Link
-            href="/blog"
+            href="/news"
             className="text-gray-500 hover:text-gray-700 text-sm md:text-base"
           >
-            Blog
+            Tin tức
           </Link>
           <svg
             width="16"
@@ -110,7 +110,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
 
             <div className="my-10 h-full md:max-h-[500px] relative aspect-3/2 m-auto">
               <Image
-                src="/images/blog/blog-image-2.jpg"
+                src="/images/news/news-image-2.jpg"
                 alt="Châm cứu"
                 fill
                 className="rounded-lg w-full h-auto"
@@ -128,7 +128,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
 
             <div className="my-10 h-full md:max-h-[500px] relative aspect-3/2 m-auto">
               <Image
-                src="/images/blog/blog-hero.jpg"
+                src="/images/news/news-hero.jpg"
                 alt="Thuốc thang"
                 fill
                 className="rounded-lg w-full h-auto"
@@ -147,7 +147,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
 
             <div className="my-10 h-full md:max-h-[500px] relative aspect-3/2 m-auto">
               <Image
-                src="/images/blog/blog-image-1.jpg"
+                src="/images/news/news-image-1.jpg"
                 alt="Xoa bóp, bấm huyệt"
                 fill
                 className="rounded-lg w-full h-auto"
@@ -170,7 +170,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
               <div className="rounded-lg overflow-hidden">
                 <div className="relative ounded-lg overflow-hidden aspect-1/1 h-[200px]">
                   <Image
-                    src="/images/blog/related-blog-1.jpg"
+                    src="/images/news/related-news-1.jpg"
                     alt="Related post"
                     fill
                     className="object-cover hover:scale-105 transition-transform duration-300"
@@ -179,7 +179,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
               </div>
               <div className="md:w-3/4 my-auto">
                 <h3 className="text-xl md:text-2xl font-medium text-[#222222] hover:text-[#B1873F] transition-colors">
-                  <Link href="/blog/an-gi-va-uong-gi-de-khong-beo">
+                  <Link href="/news/an-gi-va-uong-gi-de-khong-beo">
                     Ăn gì và uống gì để không béo? Cách ăn uống cân bằng, khoa
                     học để giữ dáng hiệu quả
                   </Link>
@@ -192,7 +192,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
               <div className="rounded-lg overflow-hidden">
                 <div className="relative rounded-lg overflow-hidden aspect-square h-[200px]">
                   <Image
-                    src="/images/blog/related-blog-2.jpg"
+                    src="/images/news/related-news-2.jpg"
                     alt="Related post"
                     fill
                     className="object-cover hover:scale-105 transition-transform duration-300"
@@ -201,7 +201,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
               </div>
               <div className="md:w-3/4 my-auto">
                 <h3 className="text-xl md:text-2xl font-medium text-[#222222] hover:text-[#B1873F] transition-colors">
-                  <Link href="/blog/lam-the-nao-de-dieu-tri-thoai-hoa-khop-goi">
+                  <Link href="/news/lam-the-nao-de-dieu-tri-thoai-hoa-khop-goi">
                     Làm thế nào để điều trị thoái hoá khớp gối an toàn, hiệu
                     quả?
                   </Link>
@@ -214,7 +214,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
               <div className="rounded-lg overflow-hidden">
                 <div className="relative rounded-lg overflow-hidden aspect-square h-[200px]">
                   <Image
-                    src="/images/blog/related-blog-3.jpg"
+                    src="/images/news/related-news-3.jpg"
                     alt="Related post"
                     fill
                     className="object-cover hover:scale-105 transition-transform duration-300"
@@ -223,7 +223,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
               </div>
               <div className="md:w-3/4 my-auto">
                 <h3 className="text-xl md:text-2xl font-medium text-[#222222] hover:text-[#B1873F] transition-colors">
-                  <Link href="/blog/lam-the-nao-de-dieu-tri-thoai-hoa-khop-vai">
+                  <Link href="/news/lam-the-nao-de-dieu-tri-thoai-hoa-khop-vai">
                     Làm thế nào để điều trị thoái hoá khớp vai an toàn, hiệu
                     quả?
                   </Link>
