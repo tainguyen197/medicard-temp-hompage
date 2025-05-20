@@ -14,7 +14,7 @@ export default function Footer() {
                 alt="Healthcare Therapy Center"
                 width={220}
                 height={60}
-                className="h-auto "
+                className="h-auto"
               />
             </div>
             <div className="text-white mb-4 font-bold">
