@@ -10,7 +10,7 @@ export default function Footer() {
           <div className="col-span-3 lg:col-span-2">
             <div className="mb-2">
               <Image
-                src="/images/logo.svg"
+                src="/images/logo.png"
                 alt="Healthcare Therapy Center"
                 width={220}
                 height={60}

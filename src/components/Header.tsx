@@ -44,7 +44,7 @@ const Header = () => {
           className="relative w-32 h-10 md:w-36 md:h-16"
         >
           <Image
-            src="/images/logo.svg"
+            src="/images/logo.png"
             alt="Healthcare Therapy Center"
             fill
             className="object-contain"
