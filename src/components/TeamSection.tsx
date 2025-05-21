@@ -121,13 +121,28 @@ const TeamSection: React.FC = () => {
 
       // Scroll to the next item
       if (slidingContainerRef.current) {
-        const itemWidth = 250; // Approximate width of each item + gap
-        slidingContainerRef.current.scrollTo({
-          left: nextIndex * itemWidth,
-          behavior: "smooth",
-        });
+        const itemWidth = isMobile
+          ? slidingContainerRef.current.clientWidth
+          : 250; // Approximate width of each item + gap
+
+        // For looping effect
+        const totalWidth = itemWidth * teamMembers.length;
+        const currentPosition = slidingContainerRef.current.scrollLeft;
+
+        if (nextIndex === 0 && currentPosition > 0) {
+          // If we're at the end and looping back to start
+          slidingContainerRef.current.scrollTo({
+            left: 0,
+            behavior: "smooth",
+          });
+        } else {
+          slidingContainerRef.current.scrollTo({
+            left: nextIndex * itemWidth,
+            behavior: "smooth",
+          });
+        }
       }
-    }, 4000);
+    }, 3000); // Changed to 3 seconds per slide
 
     return () => clearInterval(interval);
   }, [currentIndex, teamMembers.length, autoSlide, isMobile, useSlider]);
@@ -146,10 +161,19 @@ const TeamSection: React.FC = () => {
       const scrollAmount = isMobile
         ? slidingContainerRef.current.clientWidth
         : 250;
-      const newIndex =
-        direction === "left"
-          ? Math.max(0, currentIndex - 1)
-          : Math.min(teamMembers.length - 1, currentIndex + 1);
+
+      let newIndex;
+      if (direction === "left") {
+        newIndex = currentIndex - 1;
+        if (newIndex < 0) {
+          newIndex = teamMembers.length - 1; // Loop to the end
+        }
+      } else {
+        newIndex = currentIndex + 1;
+        if (newIndex >= teamMembers.length) {
+          newIndex = 0; // Loop to the beginning
+        }
+      }
 
       setCurrentIndex(newIndex);
 
@@ -160,8 +184,38 @@ const TeamSection: React.FC = () => {
     }
   };
 
-  // Handle touch events
-  const handleTouch = () => {
+  // Handle touch events for swiping
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+    pauseAutoSlide();
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      scrollTeam("right");
+    } else if (isRightSwipe) {
+      scrollTeam("left");
+    }
+
+    setTouchStart(null);
+    setTouchEnd(null);
+  };
+
+  // Handle mouse events
+  const handleMouseDown = () => {
     pauseAutoSlide();
   };
 
@@ -183,51 +237,46 @@ const TeamSection: React.FC = () => {
               {isMobile || useSlider ? (
                 // Slider view (for mobile or when desktop space is insufficient)
                 <div className="relative py-4 pb-0 bg-white z-1 px-4">
-                  {/* Navigation buttons - show on desktop slider only */}
-                  {!isMobile && useSlider && (
-                    <button
-                      className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-lg text-[#002447] hover:bg-gray-100 transition-colors border border-[#002447]/10"
-                      onClick={() => scrollTeam("left")}
-                      aria-label="Scroll left"
+                  {/* Navigation buttons - positioned at the middle of image height */}
+                  <button
+                    className="absolute left-1 top-[30%] z-10 bg-white rounded-full p-2 shadow-lg text-[#002447] hover:bg-gray-100 transition-colors border border-[#002447]/10"
+                    onClick={() => scrollTeam("left")}
+                    aria-label="Scroll left"
+                  >
+                    <svg
+                      width="24"
+                      height="24"
+                      fill="none"
+                      stroke="currentColor"
                     >
-                      <svg
-                        width="24"
-                        height="24"
-                        fill="none"
-                        stroke="currentColor"
-                      >
-                        <path
-                          d="M15 19l-7-7 7-7"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </button>
-                  )}
+                      <path
+                        d="M15 19l-7-7 7-7"
+                        strokeWidth={2}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
 
-                  {/* Add navigation buttons for mobile */}
-                  {isMobile && (
-                    <button
-                      className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow-lg text-[#002447] hover:bg-gray-100 transition-colors border border-[#002447]/10"
-                      onClick={() => scrollTeam("left")}
-                      aria-label="Scroll left"
+                  <button
+                    className="absolute right-1 top-[30%] z-10 bg-white rounded-full p-2 shadow-lg text-[#002447] hover:bg-gray-100 transition-colors border border-[#002447]/10"
+                    onClick={() => scrollTeam("right")}
+                    aria-label="Scroll right"
+                  >
+                    <svg
+                      width="24"
+                      height="24"
+                      fill="none"
+                      stroke="currentColor"
                     >
-                      <svg
-                        width="24"
-                        height="24"
-                        fill="none"
-                        stroke="currentColor"
-                      >
-                        <path
-                          d="M15 19l-7-7 7-7"
-                          strokeWidth={2}
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </button>
-                  )}
+                      <path
+                        d="M9 5l7 7-7 7"
+                        strokeWidth={2}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
 
                   <div
                     ref={slidingContainerRef}
@@ -241,8 +290,10 @@ const TeamSection: React.FC = () => {
                       scrollbarWidth: "none",
                       scrollSnapType: "x mandatory",
                     }}
-                    onTouchStart={handleTouch}
-                    onMouseDown={handleTouch}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                    onMouseDown={handleMouseDown}
                   >
                     {teamMembers.map((member, index) => (
                       <div
