@@ -264,7 +264,7 @@ export default function BlogPage() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl max-text-[51px] font-semibold text-[#1F1F1F] mb-6">
             Sẵn sàng trải nghiệm sự khác biệt
           </h2>
-          <p className="text-lg md:text-xl px-16 text-black max-w-3xl mx-auto mb-8">
+          <p className="text-lg md:text-xl px-4 md:px-16 text-black max-w-3xl mx-auto mb-8">
             Hãy để Healthcare Therapy Center trở thành điểm tựa vững chắc trong
             hành trình chăm sóc sức khỏe của bạn.
           </p>
