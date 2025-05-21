@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, TouchEvent } from "react";
 import Image from "next/image";
 
 interface EquipmentItem {
@@ -15,6 +15,8 @@ interface EquipmentItemProps extends EquipmentItem {
   isActive: boolean;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
+  onTap: () => void;
+  showInfo: boolean;
 }
 
 const EquipmentItem: React.FC<EquipmentItemProps> = ({
@@ -26,17 +28,34 @@ const EquipmentItem: React.FC<EquipmentItemProps> = ({
   isActive,
   onMouseEnter,
   onMouseLeave,
+  onTap,
+  showInfo,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const isMobile = useRef(false);
+
+  useEffect(() => {
+    isMobile.current = window.innerWidth < 768;
+  }, []);
 
   const handleMouseEnter = () => {
-    setIsHovered(true);
-    onMouseEnter();
+    if (!isMobile.current) {
+      setIsHovered(true);
+      onMouseEnter();
+    }
   };
 
   const handleMouseLeave = () => {
-    setIsHovered(false);
-    onMouseLeave();
+    if (!isMobile.current) {
+      setIsHovered(false);
+      onMouseLeave();
+    }
+  };
+
+  const handleClick = () => {
+    if (isMobile.current) {
+      onTap();
+    }
   };
 
   return (
@@ -45,6 +64,7 @@ const EquipmentItem: React.FC<EquipmentItemProps> = ({
       className={`transition-all duration-700 ease-in-out flex-shrink-0 w-full md:w-1/2 flex items-center justify-center`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onClick={handleClick}
     >
       <div className="relative h-[300px] lg:h-[400px] xl:h-[604px] aspect-537/604 overflow-hidden rounded-2xl">
         <Image
@@ -52,11 +72,11 @@ const EquipmentItem: React.FC<EquipmentItemProps> = ({
           alt={subtitle}
           fill
           className={`rounded-2xl overflow-hidden object-over transition-opacity duration-300 ${
-            isHovered ? "opacity-20" : "opacity-100"
+            isHovered || showInfo ? "opacity-20" : "opacity-100"
           }`}
         />
 
-        {isHovered && (
+        {(isHovered || showInfo) && (
           <div className="absolute inset-0 bg-black opacity-70 flex flex-col justify-center p-8 md:p-16 text-white transition-all duration-300">
             <div className="text-[#A8C1E0] text-sm uppercase mb-1">{title}</div>
             <h3 className="text-2xl font-bold uppercase mb-6">{subtitle}</h3>
@@ -109,6 +129,13 @@ const EquipmentSection: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [visibleCount, setVisibleCount] = useState(2);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [prevButtonActive, setPrevButtonActive] = useState(false);
+  const [nextButtonActive, setNextButtonActive] = useState(false);
+  const [infoVisibility, setInfoVisibility] = useState<{
+    [key: string]: boolean;
+  }>({});
+
   const slideContainerRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -135,6 +162,11 @@ const EquipmentSection: React.FC = () => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
+
+    // Button animation
+    setNextButtonActive(true);
+    setTimeout(() => setNextButtonActive(false), 300);
+
     setActiveIndex((current) => {
       const max = equipments.length - visibleCount;
       return current < max ? current + 1 : 0;
@@ -146,6 +178,11 @@ const EquipmentSection: React.FC = () => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
+
+    // Button animation
+    setPrevButtonActive(true);
+    setTimeout(() => setPrevButtonActive(false), 300);
+
     setActiveIndex((current) => {
       const max = equipments.length - visibleCount;
       return current > 0 ? current - 1 : max;
@@ -166,6 +203,52 @@ const EquipmentSection: React.FC = () => {
   const handleMouseLeave = () => {
     setIsPaused(false);
     startAutoScroll();
+  };
+
+  // Toggle info display on mobile tap
+  const handleTap = (id: string) => {
+    // Stop auto-scroll when user views content
+    if (!infoVisibility[id]) {
+      setIsPaused(true);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    } else {
+      // Resume auto-scroll when content is hidden
+      setIsPaused(false);
+      startAutoScroll();
+    }
+
+    setInfoVisibility((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
+  // Touch events for swipe
+  const handleTouchStart = (e: TouchEvent) => {
+    setTouchStart(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: TouchEvent) => {
+    if (touchStart === null) return;
+
+    const touchEnd = e.changedTouches[0].clientX;
+    const diff = touchStart - touchEnd;
+
+    // If the user swiped significantly
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) {
+        // Swiped left
+        handleNext();
+      } else {
+        // Swiped right
+        handlePrev();
+      }
+    }
+
+    setTouchStart(null);
   };
 
   // Start auto scrolling
@@ -215,11 +298,13 @@ const EquipmentSection: React.FC = () => {
         </div>
 
         <div className="relative px-4">
-          {/* Slider with arrow controls */}
+          {/* Slider with touch support */}
           <div
             ref={slideContainerRef}
             className="flex gap-0 overflow-x-hidden scrollbar-hide snap-x justify-start"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
           >
             {equipments.map((equip, index) => (
               <EquipmentItem
@@ -234,6 +319,8 @@ const EquipmentSection: React.FC = () => {
                 }
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
+                onTap={() => handleTap(equip.id)}
+                showInfo={!!infoVisibility[equip.id]}
               />
             ))}
           </div>
@@ -243,14 +330,22 @@ const EquipmentSection: React.FC = () => {
           <div className="grid grid-cols-2 gap-2 items-center">
             <button
               onClick={handlePrev}
-              className="h-9 w-9 flex items-center justify-center border-[1.5px] text-[#002447] border-[#99D3ED] p-2 bg-white rounded-full shadow hover:bg-gray-100 transition"
+              className={`h-9 w-9 flex items-center justify-center border-[1.5px] text-[#002447] border-[#99D3ED] p-2 bg-white rounded-full shadow hover:bg-gray-100 transition-all duration-300 ${
+                prevButtonActive
+                  ? "bg-[#99D3ED] text-white transform scale-110"
+                  : ""
+              }`}
               aria-label="Previous equipment"
             >
               &lt;
             </button>
             <button
               onClick={handleNext}
-              className="h-9 w-9 flex items-center justify-center border-[1.5px] text-[#002447] border-[#99D3ED] p-2 bg-white rounded-full shadow hover:bg-gray-100 transition"
+              className={`h-9 w-9 flex items-center justify-center border-[1.5px] text-[#002447] border-[#99D3ED] p-2 bg-white rounded-full shadow hover:bg-gray-100 transition-all duration-300 ${
+                nextButtonActive
+                  ? "bg-[#99D3ED] text-white transform scale-110"
+                  : ""
+              }`}
               aria-label="Next equipment"
             >
               &gt;
