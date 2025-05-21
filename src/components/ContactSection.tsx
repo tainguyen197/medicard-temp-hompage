@@ -5,7 +5,7 @@ import Link from "next/link";
 const ContactSection = () => {
   return (
     <section id="contact" className="relative">
-      <div className="relative h-96 md:h-[500px]">
+      <div className="relative h-40 md:h-[500px]">
         <Image
           src="/images/contact-bg.jpg"
           alt="Contact Healthcare Therapy Center"
@@ -14,9 +14,9 @@ const ContactSection = () => {
         />
         <div className="absolute inset-0 bg-black opacity-30"></div>
 
-        <div className="relative z-10 h-full container mx-auto px-4 flex flex-col justify-center md:justify-end md:pb-10">
-          <div className="max-w-2xl">
-            <h2 className="text-xl md:text-[40px] font-cormorant font-bold text-[#C99A4D] mb-4">
+        <div className="relative md:static z-10 h-full container mx-auto px-4 flex flex-col justify-center md:justify-end md:pb-10">
+          <div className="max-w-2xl relative w-full h-full md:w-auto md:h-auto">
+            <h2 className="text-sm md:text-[40px] font-cormorant font-bold text-[#C99A4D] mb-4 absolute md:relative bottom-0 left-0">
               SẴN SÀNG TRẢI NGHIỆM
               <br />
               SỰ KHÁC BIỆT?
@@ -25,9 +25,9 @@ const ContactSection = () => {
             <Link
               href="https://forms.gle/GJETkvXcnZ7hZwBr8"
               target="_blank"
-              className="inline-block bg-[#C99A4D] hover:bg-amber-800 text-white font-cormorant uppercase font-medium py-3 px-8 rounded-full"
+              className="inline-block text-sm md:text-base bg-[#C99A4D] hover:bg-amber-800 text-white font-manrope md:font-cormorant md:uppercase font-medium py-1 px-4 md:py-3 md:px-8 rounded-full absolute md:relative top-0 right-0 mt-4 md:mt-0"
             >
-              ĐẶT LỊCH
+              Đặt lịch
             </Link>
           </div>
         </div>
