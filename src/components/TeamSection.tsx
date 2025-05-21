@@ -2,6 +2,9 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
+// Import Slick components
+import Slider from "react-slick";
+// CSS is already imported in the layout.tsx file
 
 interface TeamMember {
   image: string;
@@ -16,6 +19,12 @@ interface TeamMemberProps {
   name: string;
   title: string;
   index: number;
+}
+
+// Define types for arrow props
+interface ArrowProps {
+  onClick?: () => void;
+  className?: string;
 }
 
 const TeamMember: React.FC<TeamMemberProps> = ({
@@ -84,143 +93,101 @@ const TeamSection: React.FC = () => {
     },
   ];
 
-  const slidingContainerRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [useSlider, setUseSlider] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [autoSlide, setAutoSlide] = useState(true);
+  const sliderRef = useRef<Slider | null>(null);
 
-  // Check for mobile viewport and if slider should be used
+  // Check for mobile viewport
   useEffect(() => {
     const checkDisplay = () => {
       const isMobileView = window.innerWidth < 768;
       setIsMobile(isMobileView);
-
-      // Check if we need slider on larger screens (when items don't fit)
-      if (!isMobileView && containerRef.current) {
-        const containerWidth = containerRef.current.clientWidth;
-        const itemWidth = 250; // Approximate width of each item including gap
-        const totalWidth = itemWidth * teamMembers.length;
-        setUseSlider(totalWidth > containerWidth);
-      }
     };
 
     checkDisplay();
     window.addEventListener("resize", checkDisplay);
     return () => window.removeEventListener("resize", checkDisplay);
-  }, [teamMembers.length]);
+  }, []);
 
-  // Auto-advance if slider is active
-  useEffect(() => {
-    if (!autoSlide || (!isMobile && !useSlider)) return;
-
-    const interval = setInterval(() => {
-      const nextIndex = (currentIndex + 1) % teamMembers.length;
-      setCurrentIndex(nextIndex);
-
-      // Scroll to the next item
-      if (slidingContainerRef.current) {
-        const itemWidth = isMobile
-          ? slidingContainerRef.current.clientWidth
-          : 250; // Approximate width of each item + gap
-
-        // For looping effect
-        const totalWidth = itemWidth * teamMembers.length;
-        const currentPosition = slidingContainerRef.current.scrollLeft;
-
-        if (nextIndex === 0 && currentPosition > 0) {
-          // If we're at the end and looping back to start
-          slidingContainerRef.current.scrollTo({
-            left: 0,
-            behavior: "smooth",
-          });
-        } else {
-          slidingContainerRef.current.scrollTo({
-            left: nextIndex * itemWidth,
-            behavior: "smooth",
-          });
-        }
-      }
-    }, 3000); // Changed to 3 seconds per slide
-
-    return () => clearInterval(interval);
-  }, [currentIndex, teamMembers.length, autoSlide, isMobile, useSlider]);
-
-  // Pause auto-slide when user interacts with the slider
-  const pauseAutoSlide = () => {
-    setAutoSlide(false);
-    // Resume after 10 seconds of inactivity
-    setTimeout(() => setAutoSlide(true), 10000);
+  // Custom arrow components
+  const PrevArrow = (props: ArrowProps) => {
+    const { onClick } = props;
+    return (
+      <button
+        className="absolute left-1 top-[30%] z-10 bg-white rounded-full p-2 shadow-lg text-[#002447] hover:bg-gray-100 transition-colors border border-[#002447]/10"
+        onClick={onClick}
+        aria-label="Previous slide"
+      >
+        <svg width="24" height="24" fill="none" stroke="currentColor">
+          <path
+            d="M15 19l-7-7 7-7"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
+    );
   };
 
-  const scrollTeam = (direction: "left" | "right") => {
-    pauseAutoSlide();
-
-    if (slidingContainerRef.current) {
-      const scrollAmount = isMobile
-        ? slidingContainerRef.current.clientWidth
-        : 250;
-
-      let newIndex;
-      if (direction === "left") {
-        newIndex = currentIndex - 1;
-        if (newIndex < 0) {
-          newIndex = teamMembers.length - 1; // Loop to the end
-        }
-      } else {
-        newIndex = currentIndex + 1;
-        if (newIndex >= teamMembers.length) {
-          newIndex = 0; // Loop to the beginning
-        }
-      }
-
-      setCurrentIndex(newIndex);
-
-      slidingContainerRef.current.scrollTo({
-        left: newIndex * scrollAmount,
-        behavior: "smooth",
-      });
-    }
+  const NextArrow = (props: ArrowProps) => {
+    const { onClick } = props;
+    return (
+      <button
+        className="absolute right-1 top-[30%] z-10 bg-white rounded-full p-2 shadow-lg text-[#002447] hover:bg-gray-100 transition-colors border border-[#002447]/10"
+        onClick={onClick}
+        aria-label="Next slide"
+      >
+        <svg width="24" height="24" fill="none" stroke="currentColor">
+          <path
+            d="M9 5l7 7-7 7"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
+    );
   };
 
-  // Handle touch events for swiping
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [touchEnd, setTouchEnd] = useState<number | null>(null);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStart(e.targetTouches[0].clientX);
-    pauseAutoSlide();
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
-
-    if (isLeftSwipe) {
-      scrollTeam("right");
-    } else if (isRightSwipe) {
-      scrollTeam("left");
-    }
-
-    setTouchStart(null);
-    setTouchEnd(null);
-  };
-
-  // Handle mouse events
-  const handleMouseDown = () => {
-    pauseAutoSlide();
+  // Slider settings
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    pauseOnHover: true,
+    arrows: true,
+    prevArrow: <PrevArrow />,
+    nextArrow: <NextArrow />,
+    responsive: [
+      {
+        breakpoint: 1280,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          centerMode: true,
+          centerPadding: "0",
+        },
+      },
+    ],
   };
 
   return (
-    <section className="md:pt-16 md:pb-20 bg-white">
+    <section className="pt-10 md:pt-16 md:pb-20 bg-white">
       <div className="mx-auto relative">
         <div className="relative mx-auto">
           {/* Title with horizontal lines on sides */}
@@ -232,100 +199,42 @@ const TeamSection: React.FC = () => {
               </h2>
             </div>
 
-            {/* Team members section */}
-            <div className="pt-8 bg-white relative z-1" ref={containerRef}>
-              {isMobile || useSlider ? (
-                // Slider view (for mobile or when desktop space is insufficient)
-                <div className="relative py-4 pb-0 bg-white z-1 px-4">
-                  {/* Navigation buttons - positioned at the middle of image height */}
-                  <button
-                    className="absolute left-1 top-[30%] z-10 bg-white rounded-full p-2 shadow-lg text-[#002447] hover:bg-gray-100 transition-colors border border-[#002447]/10"
-                    onClick={() => scrollTeam("left")}
-                    aria-label="Scroll left"
-                  >
-                    <svg
-                      width="24"
-                      height="24"
-                      fill="none"
-                      stroke="currentColor"
-                    >
-                      <path
-                        d="M15 19l-7-7 7-7"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </button>
-
-                  <button
-                    className="absolute right-1 top-[30%] z-10 bg-white rounded-full p-2 shadow-lg text-[#002447] hover:bg-gray-100 transition-colors border border-[#002447]/10"
-                    onClick={() => scrollTeam("right")}
-                    aria-label="Scroll right"
-                  >
-                    <svg
-                      width="24"
-                      height="24"
-                      fill="none"
-                      stroke="currentColor"
-                    >
-                      <path
-                        d="M9 5l7 7-7 7"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </button>
-
-                  <div
-                    ref={slidingContainerRef}
-                    className={`flex ${
-                      isMobile ? "gap-0" : "gap-4"
-                    } overflow-x-hidden no-scrollbar ${
-                      isMobile ? "px-0" : "px-10"
-                    } pb-4 snap-x snap-mandatory`}
-                    style={{
-                      scrollBehavior: "smooth",
-                      scrollbarWidth: "none",
-                      scrollSnapType: "x mandatory",
-                    }}
-                    onTouchStart={handleTouchStart}
-                    onTouchMove={handleTouchMove}
-                    onTouchEnd={handleTouchEnd}
-                    onMouseDown={handleMouseDown}
-                  >
-                    {teamMembers.map((member, index) => (
-                      <div
-                        key={index}
-                        className={`snap-center ${
-                          isMobile ? "min-w-full" : "min-w-[230px]"
-                        } flex justify-center`}
-                      >
-                        <TeamMember {...member} index={index} />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                // Desktop view with all 4 members in a row (when they fit)
-                <div className="flex justify-center items-start flex-wrap md:flex-nowrap gap-4 md:gap-6 px-4 md:px-8 max-w-[1200px] mx-auto">
+            {/* Team members section with React Slick */}
+            <div className="pt-8 bg-white relative z-1">
+              <div className="relative py-4 pb-0 bg-white z-1 px-4 md:px-10 max-w-[1300px] mx-auto">
+                <Slider ref={sliderRef} {...settings} className="team-slider">
                   {teamMembers.map((member, index) => (
-                    <TeamMember {...member} index={index} key={index} />
+                    <div key={index} className="px-2">
+                      <TeamMember {...member} index={index} />
+                    </div>
                   ))}
-                </div>
-              )}
+                </Slider>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <style jsx>{`
-        .no-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
+      <style jsx global>{`
+        /* Custom styling for the slider */
+        .team-slider .slick-track {
+          display: flex !important;
+          align-items: flex-start;
         }
-        .no-scrollbar::-webkit-scrollbar {
-          display: none;
+
+        .team-slider .slick-slide {
+          height: auto;
+          padding: 0 8px;
+        }
+
+        /* Fix height issues */
+        .team-slider .slick-list {
+          overflow: visible;
+          padding: 0 !important;
+        }
+
+        /* Make sure alternating cards have the correct offset */
+        .team-slider .slick-slide:nth-child(even) .md\\:mt-20 {
+          margin-top: 5rem;
         }
       `}</style>
     </section>
