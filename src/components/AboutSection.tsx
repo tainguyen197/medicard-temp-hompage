@@ -94,7 +94,7 @@ const FeatureItem = ({
   index?: number;
 }) => {
   return (
-    <div className="mb-6 md:mb-10   ml-2 md:ml-8" onClick={onToggle}>
+    <div className="mb-6 md:mb-10 ml-2 md:ml-8" onClick={onToggle}>
       <div className="flex items-start mb-2">
         <div
           className={`mr-3 flex-shrink-0 mt-1 p-1 rounded-full  ${iconClassName}`}

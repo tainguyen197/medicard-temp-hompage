@@ -6,8 +6,8 @@ export default function Footer() {
     <footer className="bg-[#182134] text-white">
       <div className="container mx-auto px-4 py-12">
         {/* Logo and company info */}
-        <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-10 mb-10">
-          <div className="col-span-3 lg:col-span-2">
+        <div className="grid grid-cols-5 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-10 mb-10">
+          <div className="col-span-5 lg:col-span-2">
             <div className="mb-2">
               <Image
                 src="/images/logo.png"
@@ -27,10 +27,11 @@ export default function Footer() {
                 Chủ nhật: 8h00 - 18h00
               </p>
             </div>
+            <div className="border-t border-[#B1873F] my-8 mb-4 md:hidden"></div>
           </div>
 
           {/* Company links */}
-          <div className="col-span-1 md:col-span-1">
+          <div className="col-span-2 md:col-span-1">
             <h4 className="text-md md:text-xl font-bold md:font-medium mb-6">
               Công ty
             </h4>
@@ -63,7 +64,7 @@ export default function Footer() {
           </div>
 
           {/* Services links */}
-          <div className="col-span-2 md:col-span-1">
+          <div className="col-span-3 md:col-span-1">
             <h4 className="text-md md:text-xl font-bold md:font-medium mb-6">
               Dịch vụ
             </h4>
@@ -96,7 +97,7 @@ export default function Footer() {
           </div>
 
           {/* Hotline and social */}
-          <div className="col-span-3 md:col-span-1 flex items-center md:block">
+          <div className="col-span-5 md:col-span-1 flex items-center md:block">
             <h4 className="hidden md:block text-xl font-medium mb-4">
               HOTLINE
             </h4>
@@ -122,7 +123,7 @@ export default function Footer() {
               </Link>
             </div>
 
-            <div className="flex space-x-2 md:space-x-4 ml-4 md:ml-0">
+            <div className="flex space-x-2 md:space-x-4 ml-8 md:ml-0">
               <a
                 href="https://www.facebook.com/htcwellness/"
                 className="rounded-full flex items-center justify-center transition-colors"
