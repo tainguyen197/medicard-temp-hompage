@@ -56,7 +56,7 @@ export default function TraditionalMedicinePage() {
       <section className="container mx-auto px-4 pb-16 md:pb-24">
         <div className="space-y-12 md:space-y-16">
           {/* Introduction */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
             <div className="order-2 md:order-1">
               <p className="text-base md:text-lg text-black leading-relaxed">
                 Kể từ thời Văn Lang và Đại Việt, nền y học Việt Nam đã kết hợp
@@ -78,7 +78,7 @@ export default function TraditionalMedicinePage() {
               </p>
             </div>
             <div className="order-1 md:order-2">
-              <div className="relative w-full h-64 md:h-full min-h-[300px]">
+              <div className="relative w-full h-64 md:h-full min-h-[300px] max-w-2xl mx-auto">
                 <Image
                   src="/images/service-img3.png"
                   alt="Y học cổ truyền"
@@ -104,8 +104,8 @@ export default function TraditionalMedicinePage() {
           </div>
 
           {/* Herbal Medicine */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-            <div className="relative w-full h-64 md:h-full min-h-[300px]">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
+            <div className="relative w-full h-64 md:h-full min-h-[300px] max-w-2xl mx-auto">
               <Image
                 src="/images/service-img1.png"
                 alt="Thuốc thang"
@@ -129,7 +129,7 @@ export default function TraditionalMedicinePage() {
           </div>
 
           {/* Massage */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
             <div className="order-2 md:order-1">
               <h3 className="text-xl md:text-2xl font-semibold mb-4">
                 Xoa bóp, bấm huyệt:
@@ -142,7 +142,7 @@ export default function TraditionalMedicinePage() {
               </p>
             </div>
             <div className="order-1 md:order-2">
-              <div className="relative w-full h-64 md:h-full min-h-[300px]">
+              <div className="relative w-full h-64 md:h-full min-h-[300px] max-w-2xl mx-auto">
                 <Image
                   src="/images/service-img2.png"
                   alt="Xoa bóp, bấm huyệt"
