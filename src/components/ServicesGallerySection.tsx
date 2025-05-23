@@ -137,7 +137,7 @@ const ServicesGallerySection: React.FC = () => {
           {/* Featured service image and content */}
           <div className="w-full lg:w-1/2">
             <div
-              className={`relative rounded-4xl overflow-hidden h-[253px] md:h-[500px] transition-all duration-500 ease-in-out ${
+              className={`relative rounded-4xl overflow-hidden h-[253px] md:h-[450px] transition-all duration-500 ease-in-out ${
                 animate ? "opacity-100 scale-100" : "opacity-0 scale-95"
               }`}
             >
@@ -157,7 +157,7 @@ const ServicesGallerySection: React.FC = () => {
               <h3 className="font-cormorant text-md md:text-[30px] font-bold mb-2 md:mb-5 text-white line-clamp-1 md:line-clamp-none">
                 {activeService.title}
               </h3>
-              <p className="text-gray-300 mb-4 md:mb-16 text-sm md:text-md leading-relaxed line-clamp-5 md:line-clamp-none  min-h-[7.25rem]">
+              <p className="text-gray-300 mb-4 md:mb-10 text-sm md:text-md leading-relaxed line-clamp-5 md:line-clamp-none  min-h-[7.25rem]">
                 {activeService.description}
               </p>
             </div>
@@ -219,14 +219,14 @@ const ServicesGallerySection: React.FC = () => {
         <div className="relative mt-8">
           <div
             ref={thumbnailsRef}
-            className="flex overflow-x-auto gap-4 md:gap-6 no-scrollbar md:grid md:grid-cols-4"
+            className="flex overflow-x-auto gap-4 md:gap-6 no-scrollbar"
             style={{ scrollBehavior: "smooth", scrollbarWidth: "none" }}
           >
             {services.map((service, index) => (
               <div
                 key={service.id}
                 ref={setThumbnailRef(index)}
-                className={`cursor-pointer relative overflow-hidden rounded-3xl min-w-[180px] md:min-w-[220px] flex-shrink-0 transition-all duration-300 ${
+                className={`cursor-pointer relative overflow-hidden rounded-3xl min-w-[180px] md:min-w-[220px]  md:max-w-[265px] flex-shrink-0 transition-all duration-300 ${
                   service.id === activeService.id
                     ? "border-2 border-amber-500"
                     : "opacity-75 hover:opacity-100"
