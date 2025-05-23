@@ -3,7 +3,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 // Import Slick components
-import Slider from "react-slick";
+import Slider, { Settings } from "react-slick";
 // CSS is already imported in the layout.tsx file
 
 interface TeamMember {
@@ -19,6 +19,7 @@ interface TeamMemberProps {
   name: string;
   title: string;
   index: number;
+  dynamicCardWidth?: string;
 }
 
 // Define types for arrow props
@@ -33,10 +34,15 @@ const TeamMember: React.FC<TeamMemberProps> = ({
   name,
   title,
   index,
+  dynamicCardWidth,
 }) => {
+  const defaultWidthClasses =
+    "sm:w-[230px] md:w-[230px] lg:w-[250px] xl:w-[280px]";
+  const currentWidthClass = dynamicCardWidth || defaultWidthClasses;
+
   return (
     <div
-      className={`flex-shrink-0 w-full sm:w-[230px] md:w-[230px] lg:w-[250px] xl:w-[280px] overflow-hidden bg-white flex flex-col mb-8 ${
+      className={`flex-shrink-0 w-full ${currentWidthClass} overflow-hidden bg-white flex flex-col mb-8 ${
         index % 2 !== 0 ? "md:mt-20" : ""
       }`}
     >
@@ -48,10 +54,6 @@ const TeamMember: React.FC<TeamMemberProps> = ({
             fill
             className="w-full h-full object-cover object-top transition-transform duration-500"
           />
-        </div>
-        <div className="absolute bottom-0 left-0 right-0 bg-[#1C4B82] text-white py-2 px-4 flex flex-col items-center">
-          <p className="text-sm uppercase">{title}</p>
-          <h3 className="text-lg font-cormorant uppercase font-bold">{name}</h3>
         </div>
       </div>
       <div className="p-4 text-black text-center">
@@ -95,6 +97,13 @@ const TeamSection: React.FC = () => {
 
   const [isMobile, setIsMobile] = useState(false);
   const sliderRef = useRef<Slider | null>(null);
+
+  const [currentSliderSettings, setCurrentSliderSettings] = useState<Settings>(
+    {}
+  );
+  const [dynamicCardWidth, setDynamicCardWidth] = useState<string | undefined>(
+    undefined
+  );
 
   // Check for mobile viewport
   useEffect(() => {
@@ -149,42 +158,139 @@ const TeamSection: React.FC = () => {
     );
   };
 
-  // Slider settings
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    pauseOnHover: true,
-    arrows: true,
-    prevArrow: <PrevArrow />,
-    nextArrow: <NextArrow />,
-    responsive: [
-      {
-        breakpoint: 1280,
-        settings: {
-          slidesToShow: 3,
-        },
-      },
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
+  useEffect(() => {
+    const getSettingsAndCardWidth = (): {
+      settings: Settings;
+      cardWidth: string | undefined;
+    } => {
+      const screenWidth = window.innerWidth;
+      let cardWidth: string | undefined = undefined;
+      const currentTeamSize = teamMembers.length;
+
+      const commonProps: Partial<Settings> = {
+        dots: false,
+        speed: 500,
+        pauseOnHover: true,
+      };
+
+      if (screenWidth < 768) {
+        // Explicit mobile handling
+        return {
+          settings: {
+            ...commonProps,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            centerMode: true,
+            centerPadding: "0px",
+            infinite: currentTeamSize > 1,
+            autoplay: currentTeamSize > 1,
+            autoplaySpeed: 3000,
+            arrows: currentTeamSize > 1,
+            prevArrow: <PrevArrow />,
+            nextArrow: <NextArrow />,
+            draggable: currentTeamSize > 1,
+            swipe: currentTeamSize > 1,
+            touchMove: currentTeamSize > 1,
+            responsive: [], // No further responsive needed
+          },
+          cardWidth: undefined,
+        };
+      } else if (
+        // Static display for >= 768px and 1-4 items
+        currentTeamSize > 0 &&
+        currentTeamSize <= 4
+      ) {
+        // Static display: Calculate card width based on screenWidth and currentTeamSize
+        if (screenWidth < 1024) {
+          // 768px to 1023px (md breakpoint range)
+          if (currentTeamSize === 4) cardWidth = "w-[150px]";
+          else if (currentTeamSize === 3) cardWidth = "w-[200px]";
+        } else if (screenWidth < 1280) {
+          // 1024px to 1279px (lg breakpoint range)
+          if (currentTeamSize === 4) cardWidth = "w-[210px]";
+        }
+        // For xl (>=1280px) or fewer items where defaults are fine, cardWidth remains undefined
+
+        return {
+          settings: {
+            ...commonProps,
+            slidesToShow: currentTeamSize,
+            slidesToScroll: currentTeamSize,
+            infinite: false,
+            autoplay: false,
+            arrows: false,
+            draggable: false,
+            swipe: false,
+            touchMove: false,
+            responsive: [],
+          },
+          cardWidth,
+        };
+      } else {
+        // Slider for >= 768px and (currentTeamSize > 4 or currentTeamSize === 0)
+        // Note: currentTeamSize === 0 is primarily handled by updateLayout initial settings
+        const numSlidesBase =
+          currentTeamSize > 0 ? Math.min(4, currentTeamSize) : 1;
+        const canSlideBase = currentTeamSize > numSlidesBase;
+
+        return {
+          settings: {
+            ...commonProps,
+            infinite: currentTeamSize > 1,
+            slidesToShow: numSlidesBase,
+            slidesToScroll: 1,
+            autoplay: currentTeamSize > 1,
+            autoplaySpeed: 3000,
+            arrows: canSlideBase,
+            prevArrow: <PrevArrow />,
+            nextArrow: <NextArrow />,
+            draggable: currentTeamSize > 1,
+            swipe: currentTeamSize > 1,
+            touchMove: currentTeamSize > 1,
+            responsive: [
+              {
+                breakpoint: 1280, // for screens < 1280px (i.e., 768px to 1279px)
+                settings: {
+                  slidesToShow: Math.min(3, currentTeamSize),
+                  arrows: currentTeamSize > Math.min(3, currentTeamSize),
+                },
+              },
+              {
+                breakpoint: 1024, // for screens < 1024px (i.e., 768px to 1023px)
+                settings: {
+                  slidesToShow: Math.min(2, currentTeamSize),
+                  arrows: currentTeamSize > Math.min(2, currentTeamSize),
+                },
+              },
+            ],
+          },
+          cardWidth: undefined,
+        };
+      }
+    };
+
+    const updateLayout = () => {
+      if (teamMembers.length === 0) {
+        setCurrentSliderSettings({
           slidesToShow: 1,
-          centerMode: true,
-          centerPadding: "0",
-        },
-      },
-    ],
-  };
+          slidesToScroll: 1,
+          dots: false,
+          arrows: false,
+          autoplay: false,
+        });
+        setDynamicCardWidth(undefined);
+      } else {
+        const { settings, cardWidth } = getSettingsAndCardWidth();
+        setCurrentSliderSettings(settings);
+        setDynamicCardWidth(cardWidth);
+      }
+    };
+
+    updateLayout(); // Initial call
+
+    window.addEventListener("resize", updateLayout);
+    return () => window.removeEventListener("resize", updateLayout);
+  }, [teamMembers.length]);
 
   return (
     <section className="pt-10 md:pt-16 md:pb-20 bg-white">
@@ -202,13 +308,27 @@ const TeamSection: React.FC = () => {
             {/* Team members section with React Slick */}
             <div className="pt-8 bg-white relative z-1">
               <div className="relative py-4 pb-0 bg-white z-1 px-4 md:px-10 max-w-[1300px] mx-auto">
-                <Slider ref={sliderRef} {...settings} className="team-slider">
-                  {teamMembers.map((member, index) => (
-                    <div key={index} className="px-2">
-                      <TeamMember {...member} index={index} />
-                    </div>
-                  ))}
-                </Slider>
+                {teamMembers.length > 0 ? (
+                  <Slider
+                    ref={sliderRef}
+                    {...currentSliderSettings}
+                    className="team-slider"
+                  >
+                    {teamMembers.map((member, index) => (
+                      <div key={index} className="px-2">
+                        <TeamMember
+                          {...member}
+                          index={index}
+                          dynamicCardWidth={dynamicCardWidth}
+                        />
+                      </div>
+                    ))}
+                  </Slider>
+                ) : (
+                  <div className="text-center py-8 text-gray-600">
+                    Đội ngũ chuyên gia sẽ sớm được cập nhật.
+                  </div>
+                )}
               </div>
             </div>
           </div>
