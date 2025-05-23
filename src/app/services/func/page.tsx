@@ -46,7 +46,7 @@ export default function RehabilitationPage() {
 
       {/* Title Section */}
       <section className="container mx-auto px-4 pt-4 pb-10 md:pt-6 md:pb-16">
-        <h1 className="text-4xl md:text-5xl font-semibold text-[#222222] mb-6">
+        <h1 className="text-4xl md:text-5xl font-semibold text-[#222222] mb-6 leading-[140%]">
           PHỤC HỒI CHỨC NĂNG: CHẨN ĐOÁN VÀ ĐIỀU TRỊ CHUYÊN SÂU
         </h1>
         <h2 className="text-xl md:text-2xl font-semibold text-black">
