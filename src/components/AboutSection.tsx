@@ -196,7 +196,7 @@ const AboutSection = () => {
                   ngũ Healthcare Therapy Center tận tâm phục vụ.&rdquo;
                 </blockquote>
                 <div>
-                  <p className="md:font-bold text-gray-800 text-xs md:text-md">
+                  <p className="md:font-bold text-gray-800 text-xs md:text-md md:text-[16px]">
                     BS CKI. Nguyễn Thị Hồng Hạnh.
                   </p>
                   <p className="md:block hidden text-gray-600 text-sm">
