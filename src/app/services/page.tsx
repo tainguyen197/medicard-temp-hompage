@@ -20,7 +20,7 @@ export default function ServicesPage() {
     },
     {
       id: "func",
-      title: "PHỤC HỒI CHỨC NĂNG",
+      title: "PHỤC HỒI CHỨC NĂNG CÔNG NGHỆ CAO",
       description:
         "Điều trị các bệnh về cột sống như đau cổ-lưng, đau thần kinh tọa, thoát vị đĩa đệm...; Các bệnh lý về gân - khớp như: viêm chop xoay, đau khớp gối, khớp cổ tay, gai gót chân; hội chứng ống cổ tay, viêm gân duỗi ngón cái, tenis elbow…; Các tình trạng căng mỏi cơ cấp - mạn.",
       image: "/images/service_3.png",
