@@ -66,7 +66,7 @@ const EquipmentItem: React.FC<EquipmentItemProps> = ({
       onMouseLeave={handleMouseLeave}
       onClick={handleClick}
     >
-      <div className="relative h-[300px] lg:h-[400px] xl:h-[604px] aspect-537/604 overflow-hidden rounded-2xl">
+      <div className="relative h-[300px] lg:h-[400px] xl:h-[520px] aspect-537/604 overflow-hidden rounded-2xl">
         <Image
           src={image}
           alt={subtitle}
@@ -112,7 +112,7 @@ const EquipmentSection: React.FC = () => {
       id: "equip3",
       image: "/images/equipment_3.png",
       title: "THIẾT BỊ",
-      subtitle: "Winback Thecar Therapy",
+      subtitle: "Winback Tecar Therapy",
       description:
         "Sử dụng các dòng điện đặc trị tác động lên vùng cơ bị tắt nghẽn. Từ đó kích thích thần kinh cơ, chống teo cơ, kháng viêm, giảm đau",
     },
