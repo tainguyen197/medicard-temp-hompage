@@ -80,7 +80,7 @@ export default function ServicesPage() {
                     </div>
                     <div className="md:w-2/3 p-6 md:p-0">
                       <div className="flex flex-col md:flex-row justify-between items-start mb-3">
-                        <h3 className="text-xl md:text-4xl font-medium text-[#222222] font-cormorant">
+                        <h3 className="text-xl md:text-4xl font-medium text-[#222222] font-cormorant group-hover:text-[#B1873F]">
                           {service.title}
                         </h3>
 
