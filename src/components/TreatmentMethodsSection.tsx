@@ -68,7 +68,7 @@ const TreatmentMethodsSection = () => {
                 description="Liệu trình điều trị tối ưu và an toàn, không yêu cầu sử dụng thuốc hay phẫu thuật."
               />
 
-              <div className="w-[1px] h-4 bg-gray-200 ml-5 -mt-8 md:mt-0 md:ml-8"></div>
+              <div className="w-[1px] h-8 bg-gray-200 ml-5 -mt-8 md:mt-0 md:ml-8"></div>
 
               <TreatmentMethod
                 iconColor="#6C98C5"
