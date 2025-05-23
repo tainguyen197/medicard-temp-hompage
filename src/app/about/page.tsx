@@ -136,7 +136,7 @@ export default function AboutPage() {
             <h2 className="font-cormorant font-bold text-4xl max-text-[40px] text-[#B1873F] mb-6">
               VỀ HEALTHCARE THERAPY CENTER
             </h2>
-            <p className="text-gray-700 max-w-4xl mx-auto text-lg md:text-xl font-semibold text-center mb-8">
+            <p className="text-gray-700 max-w-5xl mx-auto text-lg md:text-xl font-semibold text-justify mb-8">
               Healthcare Therapy Center cung cấp dịch vụ Y Học Cổ Truyền kết hợp
               Phục Hồi Chức Năng theo hướng hiện đại, an toàn và khoa học. Với
               đội ngũ bác sĩ tận tâm, giàu kinh nghiệm cùng không gian trị liệu
