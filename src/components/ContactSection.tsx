@@ -12,7 +12,7 @@ const ContactSection = () => {
           fill
           className="object-left object-cover"
         />
-        <div className="absolute inset-0 bg-black opacity-30"></div>
+        <div className="absolute inset-0 bg-black opacity-10"></div>
 
         <div className="relative md:static z-10 h-full container mx-auto px-4 flex flex-col justify-center md:justify-end md:pb-10">
           <div className="max-w-2xl relative w-full h-full md:w-auto md:h-auto">
