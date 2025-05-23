@@ -1,9 +1,14 @@
 "use client";
 
-import React, { useState, useEffect, useRef, TouchEvent } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
+// Import Slick components
+import Slider, { Settings } from "react-slick";
+// Assuming slick-carousel CSS is imported globally as per TeamSection.tsx
+// import "slick-carousel/slick/slick.css";
+// import "slick-carousel/slick/slick-theme.css";
 
-interface EquipmentItem {
+interface EquipmentItemType {
   id: string;
   image: string;
   title: string;
@@ -11,10 +16,7 @@ interface EquipmentItem {
   description: string;
 }
 
-interface EquipmentItemProps extends EquipmentItem {
-  isActive: boolean;
-  onMouseEnter: () => void;
-  onMouseLeave: () => void;
+interface EquipmentItemProps extends EquipmentItemType {
   onTap: () => void;
   showInfo: boolean;
 }
@@ -25,35 +27,35 @@ const EquipmentItem: React.FC<EquipmentItemProps> = ({
   title,
   subtitle,
   description,
-  isActive,
-  onMouseEnter,
-  onMouseLeave,
   onTap,
   showInfo,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const isMobile = useRef(false);
+  const [isMobileView, setIsMobileView] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    isMobile.current = window.innerWidth < 768;
+    setHasMounted(true);
+    const checkMobile = () => setIsMobileView(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  const handleMouseEnter = () => {
-    if (!isMobile.current) {
+  const handleItemMouseEnter = () => {
+    if (hasMounted && !isMobileView) {
       setIsHovered(true);
-      onMouseEnter();
     }
   };
 
-  const handleMouseLeave = () => {
-    if (!isMobile.current) {
+  const handleItemMouseLeave = () => {
+    if (hasMounted && !isMobileView) {
       setIsHovered(false);
-      onMouseLeave();
     }
   };
 
   const handleClick = () => {
-    if (isMobile.current) {
+    if (hasMounted && isMobileView) {
       onTap();
     }
   };
@@ -61,26 +63,29 @@ const EquipmentItem: React.FC<EquipmentItemProps> = ({
   return (
     <div
       id={id}
-      className={`transition-all duration-700 ease-in-out flex-shrink-0 w-full md:w-1/2 flex items-center justify-center`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      className={`transition-all duration-700 ease-in-out flex-shrink-0 w-full px-2 md:px-3 flex items-center justify-center`} // Added padding for spacing between items
+      onMouseEnter={handleItemMouseEnter}
+      onMouseLeave={handleItemMouseLeave}
       onClick={handleClick}
     >
-      <div className="relative h-[300px] lg:h-[400px] xl:h-[520px] aspect-537/604 overflow-hidden rounded-2xl">
+      <div className="relative h-[300px] lg:h-[400px] xl:h-[520px] aspect-[537/604] overflow-hidden rounded-2xl">
         <Image
           src={image}
           alt={subtitle}
           fill
-          className={`rounded-2xl overflow-hidden object-over transition-opacity duration-300 ${
-            isHovered || showInfo ? "opacity-20" : "opacity-100"
+          className={`rounded-2xl overflow-hidden object-cover transition-opacity duration-300 ${
+            (isHovered || showInfo) && hasMounted ? "opacity-30" : "opacity-100"
           }`}
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" // Added sizes for optimization
         />
 
-        {(isHovered || showInfo) && (
-          <div className="absolute inset-0 bg-black opacity-70 flex flex-col justify-center p-8 md:p-16 text-white transition-all duration-300">
+        {hasMounted && (isHovered || showInfo) && (
+          <div className="absolute inset-0 bg-black opacity-70 flex flex-col justify-center p-4 sm:p-6 md:p-8 text-white transition-all duration-300">
             <div className="text-[#A8C1E0] text-sm uppercase mb-1">{title}</div>
-            <h3 className="text-2xl font-bold uppercase mb-6">{subtitle}</h3>
-            <p className="text-xs md:text-md leading-relaxed text-justify">
+            <h3 className="text-xl sm:text-2xl font-bold uppercase mb-3 sm:mb-6">
+              {subtitle}
+            </h3>
+            <p className="text-xs sm:text-sm md:text-md leading-relaxed text-justify">
               {description}
             </p>
           </div>
@@ -90,8 +95,10 @@ const EquipmentItem: React.FC<EquipmentItemProps> = ({
   );
 };
 
+// Removed PrevArrow and NextArrow components
+
 const EquipmentSection: React.FC = () => {
-  const equipments: EquipmentItem[] = [
+  const equipmentsData: EquipmentItemType[] = [
     {
       id: "equip1",
       image: "/images/equipment_1.png",
@@ -124,166 +131,239 @@ const EquipmentSection: React.FC = () => {
       description:
         "Sử dụng sóng siêu âm tác động đến mô cơ giúp giảm sưng nề mô mềm, giảm đau, giảm co cứng, tăng cường tuần hoàn máu, làm đẩy nhanh quá trình làm lành và hồi phục chức năng.",
     },
+    {
+      id: "equip5",
+      image: "/images/equipment_1.png",
+      title: "THIẾT BỊ 5",
+      subtitle: "SHOCKWAVE THERAPY II",
+      description: "Mô tả cho thiết bị 5, công nghệ tiên tiến.",
+    },
+    {
+      id: "equip6",
+      image: "/images/equipment_2.png",
+      title: "THIẾT BỊ 6",
+      subtitle: "Laser thế hệ mới",
+      description: "Mô tả cho thiết bị 6, hiệu quả vượt trội.",
+    },
   ];
 
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(2);
-  const [touchStart, setTouchStart] = useState<number | null>(null);
-  const [prevButtonActive, setPrevButtonActive] = useState(false);
-  const [nextButtonActive, setNextButtonActive] = useState(false);
   const [infoVisibility, setInfoVisibility] = useState<{
     [key: string]: boolean;
   }>({});
+  const sliderRef = useRef<Slider | null>(null);
+  const [isSliderPausedByTap, setIsSliderPausedByTap] = useState(false);
+  const [currentSlidesToShow, setCurrentSlidesToShow] = useState(2);
+  const [isClient, setIsClient] = useState(false);
+  const [currentSlickSlide, setCurrentSlickSlide] = useState(0);
+  const [prevButtonActive, setPrevButtonActive] = useState(false);
+  const [nextButtonActive, setNextButtonActive] = useState(false);
 
-  const slideContainerRef = useRef<HTMLDivElement>(null);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Update visible count based on screen width
   useEffect(() => {
-    const updateVisibleCount = () => {
-      if (window.innerWidth < 640) {
-        setVisibleCount(1);
-      } else if (window.innerWidth < 1024) {
-        setVisibleCount(2);
-      } else if (window.innerWidth < 1280) {
-        setVisibleCount(2);
+    setIsClient(true);
+    const updateSlidesToShowBasedOnWindowSize = () => {
+      if (window.innerWidth < 768) {
+        setCurrentSlidesToShow(1);
       } else {
-        setVisibleCount(2);
+        setCurrentSlidesToShow(2);
       }
     };
-
-    updateVisibleCount();
-    window.addEventListener("resize", updateVisibleCount);
-    return () => window.removeEventListener("resize", updateVisibleCount);
+    updateSlidesToShowBasedOnWindowSize();
+    window.addEventListener("resize", updateSlidesToShowBasedOnWindowSize);
+    return () =>
+      window.removeEventListener("resize", updateSlidesToShowBasedOnWindowSize);
   }, []);
 
-  const handleNext = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
+  const numEquipments = equipmentsData.length;
+
+  const finalEffectiveSettings = useMemo(() => {
+    let settingsCalc: Settings = {
+      dots: false,
+      infinite: numEquipments > currentSlidesToShow,
+      speed: 700,
+      slidesToShow: currentSlidesToShow,
+      slidesToScroll: 1,
+      autoplay: true,
+      autoplaySpeed: 3000,
+      pauseOnHover: true,
+      arrows: false,
+      cssEase: "ease-in-out",
+      afterChange: (current) => setCurrentSlickSlide(current),
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: Math.min(2, numEquipments),
+            slidesToScroll: 1,
+            infinite: numEquipments > Math.min(2, numEquipments),
+            arrows: false,
+          },
+        },
+        {
+          breakpoint: 768,
+          settings: {
+            slidesToShow: Math.min(1, numEquipments),
+            slidesToScroll: 1,
+            infinite: numEquipments > Math.min(1, numEquipments),
+            arrows: false,
+          },
+        },
+        {
+          breakpoint: 640,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            infinite: numEquipments > 1,
+            arrows: false,
+            centerMode: numEquipments === 1,
+            centerPadding: "0px",
+          },
+        },
+      ],
+    };
+
+    if (isClient) {
+      if (numEquipments <= currentSlidesToShow && window.innerWidth >= 768) {
+        settingsCalc = {
+          ...settingsCalc,
+          slidesToShow: numEquipments,
+          infinite: false,
+          autoplay: false,
+          draggable: false,
+          swipe: false,
+          touchMove: false,
+          responsive:
+            settingsCalc.responsive?.filter((r) => r.breakpoint < 768) || [],
+        };
+      } else if (numEquipments === 1) {
+        settingsCalc = {
+          ...settingsCalc,
+          slidesToShow: 1,
+          infinite: false,
+          autoplay: false,
+          draggable: false,
+          swipe: false,
+          touchMove: false,
+          responsive: [],
+        };
+      }
     }
+    // Ensure responsive settings also have arrows: false
+    if (settingsCalc.responsive) {
+      settingsCalc.responsive = settingsCalc.responsive.map((resp) => ({
+        ...resp,
+        settings: {
+          ...(typeof resp.settings === "object" && resp.settings !== null
+            ? resp.settings
+            : {}),
+          arrows: false,
+        },
+      }));
+    }
+    return settingsCalc;
+  }, [numEquipments, currentSlidesToShow, isClient]);
 
-    // Button animation
-    setNextButtonActive(true);
-    setTimeout(() => setNextButtonActive(false), 300);
+  useEffect(() => {
+    const anyInfoVisible = Object.values(infoVisibility).some((value) => value);
+    if (!anyInfoVisible && isSliderPausedByTap) {
+      console.log(
+        "useEffect: All info cards hidden, slider was paused by tap. Resuming play."
+      );
+      if (finalEffectiveSettings.autoplay) {
+        sliderRef.current?.slickPlay();
+      }
+      setIsSliderPausedByTap(false);
+    }
+  }, [infoVisibility, isSliderPausedByTap, finalEffectiveSettings.autoplay]);
 
-    setActiveIndex((current) => {
-      const max = equipments.length - visibleCount;
-      return current < max ? current + 1 : 0;
+  const handleTap = (id: string) => {
+    const willBeVisible = !infoVisibility[id];
+    console.log(
+      `handleTap: Item ID '${id}'. Current visibility: ${!!infoVisibility[
+        id
+      ]}. Will be visible: ${willBeVisible}.`
+    );
+
+    setInfoVisibility((prev) => {
+      const newState = { ...prev, [id]: willBeVisible };
+      console.log(
+        `handleTap: Queuing setInfoVisibility. Previous state for ID '${id}': ${!!prev[
+          id
+        ]}. New state for ID '${id}': ${newState[id]}. Full new state:`,
+        newState
+      );
+      return newState;
     });
-    startAutoScroll();
+
+    if (willBeVisible) {
+      console.log(
+        `handleTap: Item ID '${id}' is being shown. Pausing slider and setting isSliderPausedByTap to true.`
+      );
+      sliderRef.current?.slickPause();
+      setIsSliderPausedByTap(true);
+    } else {
+      console.log(
+        `handleTap: Item ID '${id}' is being hidden. useEffect will check if slider needs to resume.`
+      );
+    }
   };
 
-  const handlePrev = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-
-    // Button animation
+  const handleExternalPrev = () => {
+    sliderRef.current?.slickPrev();
     setPrevButtonActive(true);
     setTimeout(() => setPrevButtonActive(false), 300);
-
-    setActiveIndex((current) => {
-      const max = equipments.length - visibleCount;
-      return current > 0 ? current - 1 : max;
-    });
-    startAutoScroll();
   };
 
-  // Handle mouse enter to pause the animation
-  const handleMouseEnter = () => {
-    setIsPaused(true);
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
+  const handleExternalNext = () => {
+    sliderRef.current?.slickNext();
+    setNextButtonActive(true);
+    setTimeout(() => setNextButtonActive(false), 300);
   };
 
-  // Handle mouse leave to resume the animation
-  const handleMouseLeave = () => {
-    setIsPaused(false);
-    startAutoScroll();
-  };
+  if (!isClient) {
+    return (
+      <section className="py-10 md:py-16 bg-white overflow-hidden">
+        <div className="container mx-auto px-4 xl:px-16 2xl:px-32">
+          <div className="text-center mb-8 md:mb-16">
+            <h2 className="text-xl md:text-5xl font-cormorant font-bold text-gray-900 uppercase mb-4">
+              CÔNG NGHỆ
+            </h2>
+            <p className="text-xs md:text-xl text-gray-700">
+              Áp dụng công nghệ tiên tiến trong chẩn đoán và điều trị
+            </p>
+          </div>
+          <div className="text-center py-8 text-gray-500">
+            Đang tải thiết bị...
+          </div>
+        </div>
+      </section>
+    );
+  }
 
-  // Toggle info display on mobile tap
-  const handleTap = (id: string) => {
-    // Stop auto-scroll when user views content
-    if (!infoVisibility[id]) {
-      setIsPaused(true);
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-        intervalRef.current = null;
-      }
-    } else {
-      // Resume auto-scroll when content is hidden
-      setIsPaused(false);
-      startAutoScroll();
-    }
+  if (numEquipments === 0) {
+    return (
+      <section className="py-10 md:py-16 bg-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-xl md:text-5xl font-cormorant font-bold text-gray-900 uppercase mb-4">
+            CÔNG NGHỆ
+          </h2>
+          <p className="text-xs md:text-xl text-gray-700 mb-8">
+            Áp dụng công nghệ tiên tiến trong chẩn đoán và điều trị
+          </p>
+          <div className="py-8 text-gray-500">
+            Thông tin thiết bị đang được cập nhật.
+          </div>
+        </div>
+      </section>
+    );
+  }
 
-    setInfoVisibility((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
-
-  // Touch events for swipe
-  const handleTouchStart = (e: TouchEvent) => {
-    setTouchStart(e.touches[0].clientX);
-  };
-
-  const handleTouchEnd = (e: TouchEvent) => {
-    if (touchStart === null) return;
-
-    const touchEnd = e.changedTouches[0].clientX;
-    const diff = touchStart - touchEnd;
-
-    // If the user swiped significantly
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) {
-        // Swiped left
-        handleNext();
-      } else {
-        // Swiped right
-        handlePrev();
-      }
-    }
-
-    setTouchStart(null);
-  };
-
-  // Start auto scrolling
-  const startAutoScroll = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-    intervalRef.current = setInterval(() => {
-      handleNext();
-    }, 3000);
-  };
-
-  // Initialize auto-scroll and clear on unmount
-  useEffect(() => {
-    startAutoScroll();
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [equipments.length, visibleCount]);
-
-  useEffect(() => {
-    if (slideContainerRef.current) {
-      const container = slideContainerRef.current;
-      const itemWidth = container.querySelector("div")?.offsetWidth || 0;
-      const scrollPosition = activeIndex * itemWidth;
-
-      container.scrollTo({
-        left: scrollPosition,
-        behavior: "smooth",
-      });
-    }
-  }, [activeIndex]);
+  const isPrevDisabled =
+    !finalEffectiveSettings.infinite && currentSlickSlide === 0;
+  // Ensure slidesToShow is positive for calculation, or rely on the fact that buttons won't render if numEquipments is 0 or 1 (unless infinite)
+  const effectiveSlidesToShow = finalEffectiveSettings.slidesToShow || 1; // Treat undefined/0 as 1 for safety in calc
+  const isNextDisabled =
+    !finalEffectiveSettings.infinite &&
+    currentSlickSlide >= numEquipments - effectiveSlidesToShow;
 
   return (
     <section className="py-10 md:py-16 bg-white overflow-hidden">
@@ -297,62 +377,70 @@ const EquipmentSection: React.FC = () => {
           </p>
         </div>
 
-        <div className="relative px-4">
-          {/* Slider with touch support */}
-          <div
-            ref={slideContainerRef}
-            className="flex gap-0 overflow-x-hidden scrollbar-hide snap-x justify-start"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-          >
-            {equipments.map((equip, index) => (
+        <div className="relative equipment-slider-container">
+          <Slider ref={sliderRef} {...finalEffectiveSettings}>
+            {equipmentsData.map((equip) => (
               <EquipmentItem
                 key={equip.id}
-                id={equip.id}
-                image={equip.image}
-                title={equip.title}
-                subtitle={equip.subtitle}
-                description={equip.description}
-                isActive={
-                  index >= activeIndex && index < activeIndex + visibleCount
-                }
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
+                {...equip}
                 onTap={() => handleTap(equip.id)}
                 showInfo={!!infoVisibility[equip.id]}
               />
             ))}
-          </div>
+          </Slider>
         </div>
 
-        <div className="flex justify-center mt-10 space-x-4">
-          <div className="grid grid-cols-2 gap-2 items-center">
-            <button
-              onClick={handlePrev}
-              className={`h-9 w-9 flex items-center justify-center border-[1.5px] text-[#002447] border-[#99D3ED] p-2 bg-white rounded-full shadow hover:bg-gray-100 transition-all duration-300 ${
-                prevButtonActive
-                  ? "bg-[#99D3ED] text-white transform scale-110"
-                  : ""
-              }`}
-              aria-label="Previous equipment"
-            >
-              &lt;
-            </button>
-            <button
-              onClick={handleNext}
-              className={`h-9 w-9 flex items-center justify-center border-[1.5px] text-[#002447] border-[#99D3ED] p-2 bg-white rounded-full shadow hover:bg-gray-100 transition-all duration-300 ${
-                nextButtonActive
-                  ? "bg-[#99D3ED] text-white transform scale-110"
-                  : ""
-              }`}
-              aria-label="Next equipment"
-            >
-              &gt;
-            </button>
-          </div>
-        </div>
+        {numEquipments > 0 &&
+          (finalEffectiveSettings.infinite ||
+            numEquipments > (finalEffectiveSettings.slidesToShow || 0)) && (
+            <div className="flex justify-center mt-10 space-x-4">
+              <div className="grid grid-cols-2 gap-2 items-center">
+                <button
+                  onClick={handleExternalPrev}
+                  className={`h-9 w-9 flex items-center justify-center border-[1.5px] text-[#002447] border-[#99D3ED] p-2 bg-white rounded-full shadow hover:bg-gray-100 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
+                    prevButtonActive
+                      ? "bg-[#99D3ED] text-white transform scale-110"
+                      : ""
+                  }`}
+                  aria-label="Previous equipment"
+                  disabled={isPrevDisabled}
+                >
+                  &lt;
+                </button>
+                <button
+                  onClick={handleExternalNext}
+                  className={`h-9 w-9 flex items-center justify-center border-[1.5px] text-[#002447] border-[#99D3ED] p-2 bg-white rounded-full shadow hover:bg-gray-100 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
+                    nextButtonActive
+                      ? "bg-[#99D3ED] text-white transform scale-110"
+                      : ""
+                  }`}
+                  aria-label="Next equipment"
+                  disabled={isNextDisabled}
+                >
+                  &gt;
+                </button>
+              </div>
+            </div>
+          )}
       </div>
+      <style jsx global>{`
+        .equipment-slider-container .slick-list {
+          overflow: hidden; /* Ensure edges are clipped */
+        }
+        .equipment-slider-container .slick-slide > div {
+          display: flex;
+          height: 100%;
+          align-items: stretch;
+        }
+        .equipment-slider-container .slick-slide > div > div {
+          width: 100%;
+          display: flex;
+        }
+        .slick-dots {
+          display: none !important;
+        }
+        /* Removed specific .slick-prev and .slick-next styles as arrows are now external */
+      `}</style>
     </section>
   );
 };
