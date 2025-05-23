@@ -14,10 +14,10 @@ const BlogPost = ({ image, title, excerpt, slug, id }: BlogPostProps) => (
   <Link
     href={`/blog/${slug}`}
     key={id}
-    className="group relative rounded-lg overflow-hidden"
+    className="group relative rounded-lg overflow-hidden max-w-[330px] mx-auto"
   >
     <div className="bg-white group grid grid-cols-2 gap-4 md:block">
-      <div className="relative md:aspect-square rounded-2xl overflow-hidden">
+      <div className="relative md:aspect-square max-h-[330px] rounded-2xl overflow-hidden">
         <Image
           src={image}
           alt={title}
@@ -72,7 +72,7 @@ const BlogSection = () => {
           TIN TỨC
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-16">
           {blogPosts.map((post) => (
             <BlogPost
               key={post.id}
