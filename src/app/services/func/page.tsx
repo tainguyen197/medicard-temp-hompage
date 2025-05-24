@@ -46,10 +46,10 @@ export default function RehabilitationPage() {
 
       {/* Title Section */}
       <section className="container mx-auto px-4 pt-4 pb-10 md:pt-6 md:pb-16">
-        <h1 className="text-4xl md:text-5xl font-semibold text-[#222222] mb-6 leading-[140%]">
+        <h1 className="text-3xl md:text-[42px] font-semibold text-[#222222] mb-6 leading-[140%]">
           PHỤC HỒI CHỨC NĂNG: CHẨN ĐOÁN VÀ ĐIỀU TRỊ CHUYÊN SÂU
         </h1>
-        <h2 className="text-xl md:text-2xl font-semibold text-black">
+        <h2 className="text-md md:text-[20px] font-semibold text-black">
           Tại Healthcare Therapy Center, khách hàng sẽ được thăm - khám, tư vấn
           trực tiếp bởi đội ngũ bác sĩ được đào tạo đầy đủ, có đủ bằng cấp
           chuyên môn, kinh nghiệm.
@@ -62,10 +62,10 @@ export default function RehabilitationPage() {
           {/* Thăm khám section */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
             <div>
-              <h3 className="text-xl md:text-2xl font-semibold mb-4">
+              <h3 className="text-md md:text-[18px] font-semibold mb-4">
                 Thăm khám, tư vấn và chẩn đoán các bệnh lý cơ xương khớp
               </h3>
-              <p className="text-base md:text-lg text-black leading-relaxed">
+              <p className="text-md md:text-[16px] text-black leading-relaxed">
                 Khách hàng sẽ được thăm - khám, tư vấn trực tiếp bởi đội ngũ bác
                 sĩ được đào tạo đầy đủ, có đủ bằng cấp chuyên môn, kinh nghiệm
                 trong lĩnh vực Cơ xương khớp – Phục hồi chức năng. Chẩn đoán dựa
@@ -79,10 +79,10 @@ export default function RehabilitationPage() {
           {/* Máy móc thiết bị section */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
             <div>
-              <h3 className="text-xl md:text-2xl font-semibold mb-4">
+              <h3 className="text-md md:text-[18px] font-semibold mb-4">
                 Sử dụng các máy móc thiết bị vật lý trị liệu
               </h3>
-              <p className="text-base md:text-lg text-black leading-relaxed">
+              <p className="text-md md:text-[16px] text-black leading-relaxed">
                 HTC sử dụng các máy móc, thiết bị vật lý trị liệu hiện đại, phối
                 hợp tinh chỉnh phù hợp với từng phác đồ điều trị, tác động sâu
                 đến các lớp cơ, gân, khớp, hướng tới kết quả điều trị tối ưu.
@@ -131,10 +131,10 @@ export default function RehabilitationPage() {
           {/* Kĩ thuật viên section */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
             <div>
-              <h3 className="text-xl md:text-2xl font-semibold mb-4">
+              <h3 className="text-md md:text-[18px] font-semibold mb-4">
                 Kĩ thuật viên có tay nghề, chuyên môn cao
               </h3>
-              <p className="text-base md:text-lg text-black leading-relaxed">
+              <p className="text-md md:text-[16px] text-black leading-relaxed">
                 Đội ngũ kĩ thuật viên có kinh nghiệm, được đào tạo bài bản về
                 các kĩ thuật bằng tay: Tác động mô mềm, kéo giãn cơ, tập vận
                 động thụ động – chủ động các khớp, các kĩ thuật tập mạnh cơ,...
@@ -146,10 +146,10 @@ export default function RehabilitationPage() {
           {/* Điều trị các bệnh lý section */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
             <div>
-              <h3 className="text-xl md:text-2xl font-semibold mb-4">
+              <h3 className="text-md md:text-[18px] font-semibold mb-4">
                 Điều trị các bệnh lý
               </h3>
-              <ul className="list-disc pl-5 mt-2 space-y-4 text-base md:text-lg text-black">
+              <ul className="list-disc pl-5 mt-2 space-y-4 text-md md:text-[16px] text-black">
                 <li>
                   <strong>Các bệnh về cột sống</strong> như: Đau cổ-lưng, đau
                   thần kinh tọa, thoát vị đĩa đệm,...

@@ -52,7 +52,7 @@ export default function ServicesPage() {
           <h1 className="text-3xl md:text-5xl font-bold text-[#B1873F] font-cormorant text-center mb-8">
             DỊCH VỤ
           </h1>
-          <p className="text-base md:text-2xl font-semibold text-[#444444] max-w-6xl mx-auto text-center leading-relaxed">
+          <p className="text-gray-700 max-w-5xl mx-auto text-lg md:text-xl font-semibold text-justify mb-8">
             Không chỉ nhằm mục đích điều trị sau khi các triệu chứng xuất hiện,
             mà là phòng ngừa ngay từ ban đầu để duy trì và nâng cao chất lượng
             cuộc sống của bạn. Thông qua các chương trình tư vấn, kiểm tra và

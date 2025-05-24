@@ -44,10 +44,10 @@ export default function TransportPage() {
 
       {/* Title Section */}
       <section className="container mx-auto px-4 pt-4 pb-10 md:pt-6 md:pb-16">
-        <h1 className="text-4xl md:text-5xl font-semibold text-[#222222] mb-6 leading-[140%]">
+        <h1 className="text-3xl md:text-[42px] font-semibold text-[#222222] mb-6 leading-[140%]">
           HEALTHCARE THERAPY CENTER: LIỆU TRÌNH HOÀN HẢO, HÀNH TRÌNH ÊM ÁI
         </h1>
-        <h2 className="text-xl md:text-2xl font-semibold text-black">
+        <h2 className="text-md md:text-[20px] font-semibold text-black">
           Tận hưởng trọn vẹn sự thư thái sau liệu trình tại Healthcare Therapy
           Center mà không cần lo lắng về việc di chuyển.
         </h2>
@@ -59,7 +59,7 @@ export default function TransportPage() {
           {/* Introduction */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
             <div className="order-2 md:order-1">
-              <p className="text-base md:text-lg text-black leading-relaxed">
+              <p className="text-md md:text-[16px] text-black leading-relaxed">
                 Chúng tôi hiểu rằng sau những giây phút chăm sóc sức khỏe và thư
                 giãn tuyệt vời, điều bạn cần là một hành trình về nhà thật thoải
                 mái và an tâm. Vì thế, Healthcare Therapy Center hân hạnh mang
@@ -81,7 +81,7 @@ export default function TransportPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
             <div className="order-2 md:order-1">
-              <p className="text-base md:text-lg text-black leading-relaxed">
+              <p className="text-md md:text-[16px] text-black leading-relaxed">
                 Hình dung nhé, bạn vừa kết thúc một buổi trị liệu tuyệt vời, cơ
                 thể và tâm trí đang trong trạng thái cân bằng hoàn hảo. Thay vì
                 phải chờ đợi xe công cộng hay lo lắng về việc lái xe, giờ đây đã
@@ -103,7 +103,7 @@ export default function TransportPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
             <div className="order-2 md:order-1">
-              <p className="text-base md:text-lg text-black leading-relaxed">
+              <p className="text-md md:text-[16px] text-black leading-relaxed">
                 Với không gian nội thất rộng rãi, thiết kế hiện đại, trang bị
                 tiện nghi đầy đủ. Dịch vụ xe của chúng tôi sẽ mang đến cho bạn
                 một chuyến đi êm ái, thư thái và đầy phong cách. Hãy để chúng
@@ -125,7 +125,7 @@ export default function TransportPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
             <strong>
-              <p className="text-center md:text-lg text-black leading-relaxed">
+              <p className="text-center md:text-[16px] text-black leading-relaxed">
                 EALTHCARE THERAPY CENTER - Nâng niu sức khỏe, trọn vẹn an tâm
                 trên từng hành trình.
               </p>

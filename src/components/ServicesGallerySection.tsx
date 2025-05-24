@@ -224,7 +224,7 @@ const ServicesGallerySection: React.FC = () => {
         <div className="relative mt-8">
           <div
             ref={thumbnailsRef}
-            className="flex overflow-x-auto gap-4 md:gap-6 no-scrollbar"
+            className="flex overflow-x-auto gap-4 md:gap-12 no-scrollbar"
             style={{ scrollBehavior: "smooth", scrollbarWidth: "none" }}
           >
             {services.map((service, index) => (

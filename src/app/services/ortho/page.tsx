@@ -44,10 +44,10 @@ export default function TraditionalMedicinePage() {
 
       {/* Title Section */}
       <section className="container mx-auto px-4 pt-4 pb-10 md:pt-6 md:pb-16">
-        <h1 className="text-4xl md:text-5xl font-semibold text-[#222222] mb-6">
+        <h1 className="text-3xl md:text-[42px] font-semibold text-[#222222] mb-6">
           Y HỌC CỔ TRUYỀN
         </h1>
-        <h2 className="text-xl md:text-2xl font-semibold text-black">
+        <h2 className="text-md md:text-[20px] font-semibold text-black">
           Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc
         </h2>
       </section>
@@ -58,7 +58,7 @@ export default function TraditionalMedicinePage() {
           {/* Introduction */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
             <div className="order-2 md:order-1">
-              <p className="text-base md:text-lg text-black leading-relaxed">
+              <p className="text-md md:text-[16px] text-black leading-relaxed">
                 Kể từ thời Văn Lang và Đại Việt, nền y học Việt Nam đã kết hợp
                 lý luận y học từ phương Đông cùng với những kiến thức chữa bệnh
                 tích góp từ 54 dân tộc khác nhau. Họ đã sử dụng đặc quyền am
@@ -67,7 +67,7 @@ export default function TraditionalMedicinePage() {
                 truyền của Việt Nam.
               </p>
               <br />
-              <p className="text-base md:text-lg text-black leading-relaxed">
+              <p className="text-md md:text-[16px] text-black leading-relaxed">
                 Điểm tạo nên sự đặc biệt của phương pháp này chính là những vị
                 thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt
                 theo từng ca bệnh khác nhau. Các phương pháp điều trị khác của y
@@ -91,10 +91,10 @@ export default function TraditionalMedicinePage() {
 
           {/* Acupuncture */}
           <div className="space-y-4">
-            <h3 className="text-xl md:text-2xl font-semibold mb-4">
+            <h3 className="text-md md:text-[18px] font-semibold mb-4">
               Châm cứu:
             </h3>
-            <p className="text-base md:text-lg text-black leading-relaxed">
+            <p className="text-md md:text-[16px] text-black leading-relaxed">
               Các bác sĩ sẽ sử dụng các chiếc kim bằng kim loại nhỏ để châm
               xuyên qua lớp da, sau đó chuyển động bằng tay hoặc sử dụng biện
               pháp kích điện để tác động đến hệ thần kinh trung ương. Cơ chế này
@@ -114,10 +114,10 @@ export default function TraditionalMedicinePage() {
               />
             </div>
             <div>
-              <h3 className="text-xl md:text-2xl font-semibold mb-4">
+              <h3 className="text-md md:text-[18px] font-semibold mb-4">
                 Thuốc thang:
               </h3>
-              <p className="text-base md:text-lg text-black leading-relaxed">
+              <p className="text-md md:text-[16px] text-black leading-relaxed">
                 Thuốc ngành y học cổ truyền đều có thành phần từ nguyên liệu của
                 thiên nhiên bao gồm cả thực vật và động vật. Mỗi vị thuốc sẽ
                 được kết hợp với các dược liệu khác nhau tùy theo chứng bệnh.
@@ -131,10 +131,10 @@ export default function TraditionalMedicinePage() {
           {/* Massage */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
             <div className="order-2 md:order-1">
-              <h3 className="text-xl md:text-2xl font-semibold mb-4">
+              <h3 className="text-md md:text-[18px] font-semibold mb-4">
                 Xoa bóp, bấm huyệt:
               </h3>
-              <p className="text-base md:text-lg text-black leading-relaxed">
+              <p className="text-md md:text-[16px] text-black leading-relaxed">
                 Đây không những là một phương pháp chữa trị các căn bệnh mãn
                 tính mà còn giúp cho việc phòng bệnh rất hiệu quả. Cách thức
                 hoạt động chính là sử dụng bàn tay và ngón tay để tác động lực

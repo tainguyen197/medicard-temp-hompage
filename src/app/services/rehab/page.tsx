@@ -44,10 +44,10 @@ export default function RehabPage() {
 
       {/* Title Section */}
       <section className="container mx-auto px-4 pt-4 pb-10 md:pt-6 md:pb-16">
-        <h1 className="text-4xl md:text-5xl font-semibold text-[#222222] mb-6 leading-[140%]">
+        <h1 className="text-3xl md:text-[42px] font-semibold text-[#222222] mb-6 leading-[140%]">
           ĐIỀU TRỊ VẬT LÝ TRỊ LIỆU CÔNG NGHỆ CAO
         </h1>
-        <h2 className="text-xl md:text-2xl font-semibold text-black">
+        <h2 className="text-md md:text-[20px] font-semibold text-black">
           Tối đa hóa khả năng điều trị, phục hồi với công nghệ tiên tiến
         </h2>
       </section>
@@ -58,13 +58,13 @@ export default function RehabPage() {
           {/* Introduction */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
             <div className="order-2 md:order-1">
-              <p className="text-base md:text-lg text-black leading-relaxed">
+              <p className="text-md md:text-[16px] text-black leading-relaxed">
                 Healthcare Therapy Center áp dụng những công nghệ vật lý trị
                 liệu tiên tiến, hiện đại nhằm tối đa hóa khả năng điều trị, phục
                 hồi của khách hàng.
               </p>
               <br />
-              <p className="text-base md:text-lg text-black leading-relaxed">
+              <p className="text-md md:text-[16px] text-black leading-relaxed">
                 Các công nghệ Laser công suất cao, Sóng cao tần Radio Frequency
                 (RF), Sóng xung kích Shockwave được chứng minh qua nhiều nghiên
                 cứu khoa học trên thế giới là hiệu quả cao trong việc điều trị
@@ -87,21 +87,21 @@ export default function RehabPage() {
           {/* Laser công suất cao */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
             <div>
-              <h3 className="text-xl md:text-2xl font-semibold mb-4">
+              <h3 className="text-md md:text-[18px] font-semibold mb-4">
                 Laser công suất cao:
               </h3>
-              <p className="text-base md:text-lg text-black leading-relaxed">
+              <p className="text-md md:text-[16px] text-black leading-relaxed">
                 Healthcare Therapy center sử dụng dòng máy Laser mới nhất hiện
                 nay, công suất cao cung cấp năng lượng mạnh mẽ tác động đến cấp
                 độ mô – tế bào ở sâu cần phục hồi, tái tạo.
               </p>
-              <p className="text-base md:text-lg text-black leading-relaxed mt-4">
+              <p className="text-md md:text-[16px] text-black leading-relaxed mt-4">
                 <strong>
                   Tác dụng Laser công suất cao trong điều trị các bệnh lý cơ
                   xương khớp:
                 </strong>
               </p>
-              <ul className="list-disc pl-5 mt-2 space-y-2 text-base md:text-lg text-black">
+              <ul className="list-disc pl-5 mt-2 space-y-2 text-md md:text-[16px] text-black">
                 <li>
                   <strong>Giảm đau:</strong> Giúp giảm đau nhanh chóng cho những
                   bệnh nhân bị đau cấp tính hoặc mãn tính, giúp lấy lại khả năng
@@ -129,7 +129,7 @@ export default function RehabPage() {
                   dinh dưỡng và loại bỏ chất thải.
                 </li>
               </ul>
-              <p className="text-base md:text-lg text-black leading-relaxed mt-4">
+              <p className="text-md md:text-[16px] text-black leading-relaxed mt-4">
                 Tùy vào các bước sóng khác nhau: 810nm, 650nm, 915nm mà mang đến
                 các tác dụng khác nhau, Laser được bác sĩ tinh chỉnh ứng dụng
                 phù hợp với bệnh lý cơ xương khớp, tình trạng và đáp ứng của
@@ -150,15 +150,15 @@ export default function RehabPage() {
           {/* Radio Frequency */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
             <div className="order-2 md:order-1">
-              <h3 className="text-xl md:text-2xl font-semibold mb-4">
+              <h3 className="text-md md:text-[18px] font-semibold mb-4">
                 Radio Frequency (Sóng RF):
               </h3>
-              <p className="text-base md:text-lg text-black leading-relaxed">
+              <p className="text-md md:text-[16px] text-black leading-relaxed">
                 Phương pháp này sử dụng công nghệ sóng cao tần (RF) tạo ra năng
                 lượng cao, thúc đẩy quá trình tái tạo cơ và khớp, kích thích cơ
                 chế tự phục hồi tự nhiên của cơ thể con người.
               </p>
-              <p className="text-base md:text-lg text-black leading-relaxed mt-2">
+              <p className="text-md md:text-[16px] text-black leading-relaxed mt-2">
                 Phương pháp trị liệu ứng dụng trong chấn thương cấp tính và bán
                 cấp tính, bệnh lý cơ xương khớp mãn tính, phục hồi chức năng,
                 kiểm soát cơn đau.
@@ -173,7 +173,7 @@ export default function RehabPage() {
                   />
                 </div>
               </div>
-              <p className="text-base md:text-lg text-black leading-relaxed mt-4">
+              <p className="text-md md:text-[16px] text-black leading-relaxed mt-4">
                 <strong>Tác dụng của sóng cao tần trong điều trị:</strong>
               </p>
               <div className="order-1 md:order-2">
@@ -186,7 +186,7 @@ export default function RehabPage() {
                   />
                 </div>
               </div>
-              <ul className="list-disc pl-5 mt-2 space-y-2 text-base md:text-lg text-black">
+              <ul className="list-disc pl-5 mt-2 space-y-2 text-md md:text-[16px] text-black">
                 <li>
                   <strong>Loại bỏ cơn đau:</strong> Năng lượng sóng RF ngăn chặn
                   các xung thần kinh liên quan đến cơn đau, giảm đau ngay lập
