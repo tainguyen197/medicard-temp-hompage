@@ -19,7 +19,7 @@ export default function RehabPage() {
       </section>
 
       {/* Breadcrumb */}
-      <section className="container mx-auto px-4 py-4 md:py-6">
+      <section className="container mx-auto px-4 py-4 md:py-6 max-w-7xl">
         <div className="flex items-center text-lg">
           <Link href="/services" className="text-gray-500 hover:text-gray-700">
             Dịch vụ
@@ -43,7 +43,7 @@ export default function RehabPage() {
       </section>
 
       {/* Title Section */}
-      <section className="container mx-auto px-4 pt-4 pb-10 md:pt-6 md:pb-16">
+      <section className="container mx-auto px-4 pt-4 pb-10 md:pt-6 md:pb-16 max-w-7xl">
         <h1 className="text-3xl md:text-[42px] font-semibold text-[#222222] mb-6 leading-[140%]">
           ĐIỀU TRỊ VẬT LÝ TRỊ LIỆU CÔNG NGHỆ CAO
         </h1>
@@ -53,7 +53,7 @@ export default function RehabPage() {
       </section>
 
       {/* Content Section */}
-      <section className="container mx-auto px-4 pb-16 md:pb-24">
+      <section className="container mx-auto px-4 pb-16 md:pb-24 max-w-7xl">
         <div className="space-y-12 md:space-y-16">
           {/* Introduction */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">

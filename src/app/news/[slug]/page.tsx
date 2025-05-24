@@ -67,7 +67,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
       </div>
 
       {/* Title & Headline */}
-      <div className="container mx-auto px-4 py-4 md:py-8">
+      <div className="container mx-auto px-4 py-4 md:py-8 max-w-7xl">
         <h1 className="text-2xl md:text-[42px] text-[#222222] font-semibold leading-tight mb-6">
           Chiro Therapy trong điều trị các vấn đề về cột sống
         </h1>
@@ -77,7 +77,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
       </div>
 
       {/* Article Content */}
-      <div className="container mx-auto px-4 mb-16">
+      <div className="container mx-auto px-4 mb-16 max-w-7xl">
         <div className="mx-auto">
           <div className="prose prose-lg max-w-none">
             <p className="text-md md:text-[16px] text-black mb-8">
@@ -163,7 +163,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
       </div>
 
       {/* Related Posts */}
-      <div className="container mx-auto md:px-20 md:py-14 bg-[#FEF6EA] rounded-4xl">
+      <div className="container mx-auto md:px-20 md:py-14 bg-[#FEF6EA] rounded-4xl max-w-7xl">
         <div className="mx-auto px-4">
           <h2 className="text-2xl font-semibold text-[#222222] mb-10">
             Có thể bạn quan tâm
