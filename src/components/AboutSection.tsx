@@ -178,7 +178,7 @@ const AboutSection = () => {
             </div>
 
             <h2 className="font-cormorant uppercase font-bold text-2xl md:text-[46px] text-navy-800 mb-10 md:mb-10 leading-[140%] text-[#002447]">
-              Sức khỏe của bạn là niềm vui của Heathcare therapy center
+              Sức khỏe của bạn là niềm vui của Healthcare therapy center
             </h2>
 
             <div className="relative flex rounded-lg overflow-hidden border border-gray-200 mb-8">

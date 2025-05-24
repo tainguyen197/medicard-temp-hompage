@@ -126,7 +126,7 @@ export default function TransportPage() {
           <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
             <strong>
               <p className="text-center md:text-[16px] text-black leading-relaxed">
-                EALTHCARE THERAPY CENTER - Nâng niu sức khỏe, trọn vẹn an tâm
+                HEALTHCARE THERAPY CENTER - Nâng niu sức khỏe, trọn vẹn an tâm
                 trên từng hành trình.
               </p>
             </strong>
