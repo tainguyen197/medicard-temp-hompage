@@ -54,7 +54,7 @@ const Header = () => {
           <nav className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
               <Link
-                key={item.name}
+                key={item.href}
                 href={item.href}
                 onClick={(e) => handleNavigation(e, item.href)}
                 className="font-cormorant font-bold uppercase text-amber-50 hover:text-white transition-colors relative group"
