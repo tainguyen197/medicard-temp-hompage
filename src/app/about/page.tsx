@@ -131,7 +131,7 @@ export default function AboutPage() {
       </section>
       {/* Healthcare Center Introduction Section (New) */}
       <section className="pt-10 md:pt-16">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-6 max-w-7xl">
           <div className="text-center">
             <h2 className="font-cormorant font-bold text-4xl max-text-[40px] text-[#B1873F] mb-6">
               VỀ HEALTHCARE THERAPY CENTER
@@ -158,7 +158,7 @@ export default function AboutPage() {
 
       {/* Certificates Section (New) */}
       <section className="py-12 md:py-20">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-6 max-w-7xl">
           <div className="mb-12 text-center">
             <h2 className="font-cormorant font-bold text-2xl md:text-5xl leading-[140%] text-balance text-[#002447] mb-4">
               SỨC KHOẺ CỦA BẠN LÀ NIỀM VUI CỦA HEALTHCARE THERAPY CENTER
@@ -259,7 +259,7 @@ export default function AboutPage() {
       </section>
 
       {/* Testimonial Section */}
-      <section className="relative container py-16 md:py-24 bg-white">
+      <section className="relative container py-16 md:py-24 bg-white max-w-7xl mx-auto">
         <div className="relative mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="relative aspect-square rounded-lg overflow-hidden">
             <Image

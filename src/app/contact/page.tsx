@@ -6,7 +6,7 @@ export default function ContactPage() {
     <div className="pt-20">
       {/* Main Contact Section */}
       <section className="py-16 md:py-24">
-        <div className="container mx-auto px-6">
+        <div className="container mx-auto px-6 max-w-7xl">
           <div className="flex flex-col md:flex-row gap-12">
             {/* Left side - Image with overlay text */}
             <div className="md:w-1/2">
