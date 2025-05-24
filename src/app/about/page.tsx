@@ -1,50 +1,19 @@
+"use client"; // Required for Swiper
+
 import React from "react";
 import Image from "next/image";
 import StarburstIcon from "@/components/StarburstIcon";
 import Link from "next/link";
 import AnimatedSection from "@/components/AnimatedSection";
 
-// Feature Item component for "Why Choose Us" section
-const FeatureItem = ({
-  title,
-  description,
-}: {
-  title: string;
-  description: string;
-}) => (
-  <div className="flex items-start mb-8">
-    <span className="text-blue-700 mr-3 flex-shrink-0 mt-1">
-      <StarburstIcon size={24} className="text-[#002447] size-4 md:size-6" />
-    </span>
-    <div>
-      <h3 className="font-bold text-md md:text-xl text-gray-800 mb-2">
-        {title}
-      </h3>
-      <p className="text-[#909090] text-justify text-sm md:text-base">
-        {description}
-      </p>
-    </div>
-  </div>
-);
+// Import Swiper React components
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
 
-// Team Member component
-const TeamMember = ({
-  image,
-  name,
-  role,
-}: {
-  image: string;
-  name: string;
-  role: string;
-}) => (
-  <div className="flex flex-col items-center">
-    <div className="relative w-full aspect-square overflow-hidden rounded-lg mb-4">
-      <Image src={image} alt={name} fill className="object-cover" />
-    </div>
-    <h3 className="font-bold text-lg text-[#002447] mb-1">{name}</h3>
-    <p className="text-[#909090] text-sm">{role}</p>
-  </div>
-);
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 // Mission/Value Item component
 const ValueItem = ({
@@ -116,6 +85,38 @@ export default function AboutPage() {
       image: "/images/service_3.png",
     },
   ];
+
+  const testimonials = [
+    {
+      quote:
+        "Mọi thứ ở Healthcare Therapy Center, từ ánh sáng, âm nhạc đến mùi hương đều rất nhẹ nhàng, giúp tôi quên đi những căng thẳng bên ngoài. Đây không chỉ là nơi điều trị mà còn là chốn để tôi nghỉ ngơi, tái tạo năng lượng sau khi làm việc mệt mỏi.",
+      name: "Thảo Uyên",
+      title: "Nhân viên văn phòng",
+      image: "/images/testimonial_1.png",
+    },
+    {
+      quote:
+        "Các bác sĩ và chuyên viên Healthcare Therapy Center đều có chuyên môn cao, nhiều năm kinh nghiệm, luôn tận tâm lắng nghe và giải thích cặn kẽ mọi vấn đề cho tôi. Nhờ vậy, tôi cảm thấy rất yên tâm khi thăm khám và điều trị tại đây.",
+      name: "Huỳnh Lãm",
+      title: "Nhân viên văn phòng",
+      image: "/images/testimonial_2.webp",
+    },
+    {
+      quote:
+        "Trải nghiệm tại Healthcare Therapy Center khiến tôi có cảm giác như đang được chăm sóc hơn là điều trị bệnh. Mọi thao tác đều nhẹ nhàng, các chuyên viên rất chú ý đến cảm xúc và sự thoải mái của khách hàng.",
+      name: "Hoàng Ánh",
+      title: "Quản lý nhân sự",
+      image: "/images/testimonial_3.png", // Assuming a similar image path
+    },
+    {
+      quote:
+        "Trước khi bắt đầu liệu trình, tôi được bác sĩ khám và tư vấn cực kỳ chi tiết và dễ hiểu. Bác sĩ giải thích tình trạng sức khỏe và đề xuất các phương án phù hợp nhất với tình hình của tôi giúp tôi cảm thấy an tâm hơn.",
+      name: "Quốc Anh",
+      title: "Doanh nhân",
+      image: "/images/testimonial_4.png", // Placeholder image
+    },
+  ];
+
   return (
     <div className="pt-[72px] md:pt-[96px]">
       {/* 1. Hero Section */}
@@ -282,87 +283,72 @@ export default function AboutPage() {
               </h2>
             </div>
           </div>
-          <div className=" mx-auto px-6 md:flex md:flex-row gap-8 justify-end absolute bottom-0 right-0">
-            <div className="relative bg-[#182134] p-8 border-8 border-white rounded-2xl aspect-square h-[400px]">
-              <div className="text-4xl text-white mb-4">
-                <svg
-                  width="50"
-                  height="38"
-                  viewBox="0 0 50 38"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0.563921 38V27.7727C0.563921 24.7543 1.1321 21.576 2.26847 18.2379C3.40483 14.8999 4.98509 11.7038 7.00923 8.64986C9.03338 5.59588 11.4126 2.98579 14.147 0.819603L22.0305 6.4659C19.8643 9.62642 18.0178 12.929 16.4908 16.3736C14.9638 19.8182 14.2003 23.5646 14.2003 27.6129V38H0.563921ZM27.7301 38V27.7727C27.7301 24.7543 28.2983 21.576 29.4347 18.2379C30.571 14.8999 32.1513 11.7038 34.1754 8.64986C36.1996 5.59588 38.5788 2.98579 41.3132 0.819603L49.1967 6.4659C47.0305 9.62642 45.184 12.929 43.657 16.3736C42.13 19.8182 41.3665 23.5646 41.3665 27.6129V38H27.7301Z"
-                    fill="white"
-                  />
-                </svg>
-              </div>
-              <p className="text-white text-justify text-md md:text-[18px] mb-2 leading-[165%]">
-                Mọi thứ ở Healthcare Therapy Center, từ ánh sáng, âm nhạc đến
-                mùi hương đều rất nhẹ nhàng, giúp tôi quên đi những căng thẳng
-                bên ngoài. Đây không chỉ là nơi điều trị mà còn là chốn để tôi
-                nghỉ ngơi, tái tạo năng lượng sau khi làm việc mệt mỏi.
-              </p>
-              <div className="flex items-center">
-                <div className="relative w-12 h-12 rounded-full overflow-hidden mr-4">
-                  <Image
-                    src="/images/testimonial_1.jpg"
-                    alt="Thảo Uyên"
-                    fill
-                    className="object-cover object-right w-full h-full"
-                  />
-                </div>
-                <div>
-                  <p className="font-semibold text-white text-lg md:text-xl">
-                    Thảo Uyên
-                  </p>
-                  <p className="text-gray-500 text-sm md:text-lg">
-                    Nhân viên văn phòng
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="relative bg-[#182134] p-8 rounded-2xl aspect-square h-[400px] border-white border-8">
-              <div className="text-4xl text-white mb-4">
-                <svg
-                  width="50"
-                  height="38"
-                  viewBox="0 0 50 38"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M0.563921 38V27.7727C0.563921 24.7543 1.1321 21.576 2.26847 18.2379C3.40483 14.8999 4.98509 11.7038 7.00923 8.64986C9.03338 5.59588 11.4126 2.98579 14.147 0.819603L22.0305 6.4659C19.8643 9.62642 18.0178 12.929 16.4908 16.3736C14.9638 19.8182 14.2003 23.5646 14.2003 27.6129V38H0.563921ZM27.7301 38V27.7727C27.7301 24.7543 28.2983 21.576 29.4347 18.2379C30.571 14.8999 32.1513 11.7038 34.1754 8.64986C36.1996 5.59588 38.5788 2.98579 41.3132 0.819603L49.1967 6.4659C47.0305 9.62642 45.184 12.929 43.657 16.3736C42.13 19.8182 41.3665 23.5646 41.3665 27.6129V38H27.7301Z"
-                    fill="white"
-                  />
-                </svg>
-              </div>
-              <p className="text-white text-justify text-md md:text-[18px] mb-2 leading-[165%]">
-                Các bác sĩ và chuyên viên Healthcare Therapy Center đều có
-                chuyên môn cao, nhiều năm kinh nghiệm, luôn tận tâm lắng nghe và
-                giải thích cặn kẽ mọi vấn đề cho tôi. Nhờ vậy, tôi cảm thấy rất
-                yên tâm khi thăm khám và điều trị tại đây.
-              </p>
-              <div className="flex items-center">
-                <div className="relative w-12 h-12 rounded-full overflow-hidden mr-4">
-                  <Image
-                    src="/images/testimonial_2.webp"
-                    alt="Huỳnh Lãm"
-                    fill
-                    className="object-cover object-center w-full h-full"
-                  />
-                </div>
-                <div>
-                  <p className="font-semibold text-white text-lg md:text-xl">
-                    Huỳnh Lãm
-                  </p>
-                  <p className="text-gray-500 text-sm md:text-lg">
-                    Nhân viên văn phòng
-                  </p>
-                </div>
-              </div>
-            </div>
+          <div className="absolute h-[480px] -bottom-[40px] w-full mx-auto px-6 pb-16 md:pb-20 left-[400px]">
+            <Swiper
+              modules={[Autoplay]}
+              spaceBetween={30}
+              slidesPerView={1}
+              loop={true}
+              autoplay={{
+                delay: 6000,
+                disableOnInteraction: false,
+              }}
+              breakpoints={{
+                768: {
+                  slidesPerView: 1,
+                  spaceBetween: 30,
+                },
+                1024: {
+                  slidesPerView: 3,
+                  spaceBetween: 30,
+                },
+              }}
+              className="mySwiper"
+            >
+              {testimonials.map((testimonial, index) => (
+                <SwiperSlide key={index} className="h-auto">
+                  <div className="relative bg-[#182134] p-8 border-8 border-white rounded-2xl aspect-square h-[400px] max-w-sm mx-auto flex flex-col justify-between">
+                    <div>
+                      <div className="text-4xl text-white mb-4">
+                        <svg
+                          width="50"
+                          height="38"
+                          viewBox="0 0 50 38"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M0.563921 38V27.7727C0.563921 24.7543 1.1321 21.576 2.26847 18.2379C3.40483 14.8999 4.98509 11.7038 7.00923 8.64986C9.03338 5.59588 11.4126 2.98579 14.147 0.819603L22.0305 6.4659C19.8643 9.62642 18.0178 12.929 16.4908 16.3736C14.9638 19.8182 14.2003 23.5646 14.2003 27.6129V38H0.563921ZM27.7301 38V27.7727C27.7301 24.7543 28.2983 21.576 29.4347 18.2379C30.571 14.8999 32.1513 11.7038 34.1754 8.64986C36.1996 5.59588 38.5788 2.98579 41.3132 0.819603L49.1967 6.4659C47.0305 9.62642 45.184 12.929 43.657 16.3736C42.13 19.8182 41.3665 23.5646 41.3665 27.6129V38H27.7301Z"
+                            fill="white"
+                          />
+                        </svg>
+                      </div>
+                      <p className="text-white text-justify text-sm md:text-[17px] mb-4 leading-[160%]">
+                        {testimonial.quote}
+                      </p>
+                    </div>
+                    <div className="flex items-center mt-auto">
+                      <div className="relative w-12 h-12 rounded-full overflow-hidden mr-4 flex-shrink-0">
+                        <Image
+                          src={testimonial.image}
+                          alt={testimonial.name}
+                          fill
+                          className="object-cover object-center w-full h-full"
+                        />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-white text-lg md:text-xl">
+                          {testimonial.name}
+                        </p>
+                        <p className="text-gray-400 text-sm md:text-base">
+                          {testimonial.title}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
         </section>
       </AnimatedSection>
