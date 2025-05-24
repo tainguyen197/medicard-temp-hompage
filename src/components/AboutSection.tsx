@@ -177,7 +177,7 @@ const AboutSection = () => {
               </div>
             </div>
 
-            <h2 className="font-cormorant uppercase font-bold text-2xl md:text-[46px] xl:text-[51px] text-navy-800 mb-10 md:mb-20 leading-[140%] text-[#002447]">
+            <h2 className="font-cormorant uppercase font-bold text-2xl md:text-[46px] text-navy-800 mb-10 md:mb-10 leading-[140%] text-[#002447]">
               Sức khỏe của bạn là niềm vui của Heathcare therapy center
             </h2>
 
