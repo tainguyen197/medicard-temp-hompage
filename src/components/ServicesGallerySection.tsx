@@ -9,6 +9,7 @@ interface ServiceItem {
   description: string;
   details: string;
   image: string;
+  link: string;
 }
 
 const ServicesGallerySection: React.FC = () => {
@@ -20,6 +21,7 @@ const ServicesGallerySection: React.FC = () => {
         "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể.",
       details: "Châm cứu, Xoa bóp - Bấm huyệt, Thuốc thang",
       image: "/images/service_1.png",
+      link: "/services/ortho",
     },
     {
       id: "service2",
@@ -29,6 +31,7 @@ const ServicesGallerySection: React.FC = () => {
       details:
         "Laser công suất cao, Radio Frequency (Sóng RF), Shockwave Therapy ( Sóng xung kích)",
       image: "/images/service_2.png",
+      link: "/services/rehab",
     },
     {
       id: "service3",
@@ -38,6 +41,7 @@ const ServicesGallerySection: React.FC = () => {
       details:
         "Thăm khám, tư vấn, chẩn đoán và điều trị các bệnh lý cơ xương khớp, Sử dụng các máy móc vật lý trị liệu, Kỹ thuật viên có tay nghề chuyên môn cao",
       image: "/images/service_3.png",
+      link: "/services/func",
     },
     {
       id: "service4",
@@ -46,6 +50,7 @@ const ServicesGallerySection: React.FC = () => {
         "Tận hưởng trọn vẹn sự thư thái sau liệu trình tại Healthcare Therapy Center mà không cần lo lắng về việc di chuyển bởi dịch vụ đưa đón tận nơi. ",
       details: "Xe đưa đón hiện đại, tiện nghi. Dịch vụ êm áí, thư thái.",
       image: "/images/service_4.png",
+      link: "/services/transport",
     },
   ];
 
@@ -172,7 +177,7 @@ const ServicesGallerySection: React.FC = () => {
               </div>
               <div className="flex flex-wrap gap-4">
                 <a
-                  href="#"
+                  href={activeService.link}
                   className="inline-flex items-center px-4 py-2 md:px-7 md:py-3 bg-[#B1873F] hover:bg-amber-700 transition-colors rounded-xl md:rounded-full text-white font-semibold md:font-medium text-xs md:text-[16px] h-10 md:h-12"
                 >
                   Xem chi tiết
