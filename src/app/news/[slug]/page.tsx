@@ -68,19 +68,19 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
 
       {/* Title & Headline */}
       <div className="container mx-auto px-4 py-4 md:py-8">
-        <h1 className="text-3xl md:text-5xl text-[#222222] font-semibold leading-tight mb-6">
+        <h1 className="text-2xl md:text-[42px] text-[#222222] font-semibold leading-tight mb-6">
           Chiro Therapy trong điều trị các vấn đề về cột sống
         </h1>
-        <p className="text-xl md:text-2xl text-black font-semibold mb-10">
+        <h2 className="text-md md:text-[20px] text-black font-semibold mb-10">
           Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc
-        </p>
+        </h2>
       </div>
 
       {/* Article Content */}
       <div className="container mx-auto px-4 mb-16">
         <div className="mx-auto">
           <div className="prose prose-lg max-w-none">
-            <p className="mb-8">
+            <p className="text-md md:text-[16px] text-black mb-8">
               Kể từ thời Văn Lang và Đại Việt, nền y học Việt Nam đã kết hợp lý
               luận y học từ phương Đông cùng với những kiến thức chữa bệnh tích
               góp từ 54 dân tộc khác nhau. Họ đã sử dụng đặc quyền am hiểu về
@@ -89,7 +89,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
               Việt Nam.
             </p>
 
-            <p className="mb-8">
+            <p className="text-md md:text-[16px] text-black mb-8">
               Điểm tạo nên sự đặc biệt của phương pháp này chính là những vị
               thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt
               theo từng ca bệnh khác nhau. Các phương pháp điều trị khác của y
@@ -99,8 +99,10 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
               an toàn
             </p>
 
-            <h3 className="text-xl font-bold mt-10 mb-4">Châm cứu:</h3>
-            <p className="mb-8">
+            <h3 className="text-md md:text-[18px] font-bold mt-10 mb-4">
+              Châm cứu:
+            </h3>
+            <p className="text-md md:text-[16px] text-black mb-8">
               Các bác sĩ sẽ sử dụng các chiếc kim bằng kim loại nhỏ để châm
               xuyên qua lớp da, sau đó chuyển động bằng tay hoặc sử dụng biện
               pháp kích điện để tác động đến hệ thần kinh trung ương. Cơ chế này
@@ -117,8 +119,10 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
               />
             </div>
 
-            <h3 className="text-xl font-bold mt-10 mb-4">Thuốc thang:</h3>
-            <p className="mb-8">
+            <h3 className="text-md md:text-[18px] font-bold mt-10 mb-4">
+              Thuốc thang:
+            </h3>
+            <p className="text-md md:text-[16px] text-black mb-8">
               Thuốc ngành y học cổ truyền đều có thành phần từ nguyên liệu của
               thiên nhiên bao gồm cả thực vật và động vật. Mỗi vị thuốc sẽ được
               kết hợp với các dược liệu khác nhau tùy theo chứng bệnh. Đặc trưng
@@ -135,10 +139,10 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
               />
             </div>
 
-            <h3 className="text-xl font-bold mt-10 mb-4">
+            <h3 className="text-md md:text-[18px] font-bold mt-10 mb-4">
               Xoa bóp, bấm huyệt:
             </h3>
-            <p className="mb-8">
+            <p className="text-md md:text-[16px] text-black mb-8">
               Đây không những là một phương pháp chữa trị các căn bệnh mãn tính
               mà còn giúp cho việc phòng bệnh rất hiệu quả. Cách thức hoạt động
               chính là sử dụng bàn tay và ngón tay để tác động lực lên các huyệt
@@ -168,7 +172,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
             {/* Related Post 1 */}
             <div className="flex flex-col md:flex-row gap-6 pb-6 border-b border-gray-200">
               <div className="rounded-lg overflow-hidden">
-                <div className="relative ounded-lg overflow-hidden aspect-1/1 h-[200px]">
+                <div className="block relative rounded-xl overflow-hidden aspect-square md:h-44">
                   <Image
                     src="/images/news/related-news-1.jpg"
                     alt="Related post"
@@ -178,7 +182,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
                 </div>
               </div>
               <div className="md:w-3/4 my-auto">
-                <h3 className="text-xl md:text-2xl font-medium text-[#222222] hover:text-[#B1873F] transition-colors">
+                <h3 className="text-md md:text-[20px] font-medium text-[#222222] hover:text-[#B1873F] transition-colors">
                   <Link href="/news/an-gi-va-uong-gi-de-khong-beo">
                     Ăn gì và uống gì để không béo? Cách ăn uống cân bằng, khoa
                     học để giữ dáng hiệu quả
@@ -190,7 +194,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
             {/* Related Post 2 */}
             <div className="flex flex-col md:flex-row gap-6 pb-6 border-b border-gray-200">
               <div className="rounded-lg overflow-hidden">
-                <div className="relative rounded-lg overflow-hidden aspect-square h-[200px]">
+                <div className="block relative rounded-xl overflow-hidden aspect-square md:h-44">
                   <Image
                     src="/images/news/related-news-2.jpg"
                     alt="Related post"
@@ -200,7 +204,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
                 </div>
               </div>
               <div className="md:w-3/4 my-auto">
-                <h3 className="text-xl md:text-2xl font-medium text-[#222222] hover:text-[#B1873F] transition-colors">
+                <h3 className="text-md md:text-[20px] font-medium text-[#222222] hover:text-[#B1873F] transition-colors">
                   <Link href="/news/lam-the-nao-de-dieu-tri-thoai-hoa-khop-goi">
                     Làm thế nào để điều trị thoái hoá khớp gối an toàn, hiệu
                     quả?
@@ -212,7 +216,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
             {/* Related Post 3 */}
             <div className="flex flex-col md:flex-row gap-6 pb-6 border-b border-gray-200">
               <div className="rounded-lg overflow-hidden">
-                <div className="relative rounded-lg overflow-hidden aspect-square h-[200px]">
+                <div className="block relative rounded-xl overflow-hidden aspect-square md:h-44">
                   <Image
                     src="/images/news/related-news-3.jpg"
                     alt="Related post"
@@ -222,7 +226,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
                 </div>
               </div>
               <div className="md:w-3/4 my-auto">
-                <h3 className="text-xl md:text-2xl font-medium text-[#222222] hover:text-[#B1873F] transition-colors">
+                <h3 className="text-md md:text-[20px] font-medium text-[#222222] hover:text-[#B1873F] transition-colors">
                   <Link href="/news/lam-the-nao-de-dieu-tri-thoai-hoa-khop-vai">
                     Làm thế nào để điều trị thoái hoá khớp vai an toàn, hiệu
                     quả?
