@@ -58,7 +58,7 @@ const ProcessSection = () => {
       id="process"
       className="relative pb-10 md:pb-16 bg-white overflow-hidden"
     >
-      <div className="container mx-auto">
+      <div className="container mx-auto max-w-7xl">
         <div className="flex ">
           <div className="w-full px-4">
             <div className="flex flex-col gap-4 md:gap-20 md:flex-row mb-8">

@@ -37,7 +37,7 @@ const TreatmentMethod = ({
 const TreatmentMethodsSection = () => {
   return (
     <section className="py-10 md:py-16 bg-white border-t border-gray-100">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-7 gap-8">
           {/* Left column with methods */}
           <div className="col-span-4">

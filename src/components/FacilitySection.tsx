@@ -149,7 +149,7 @@ const FacilitySection: React.FC = () => {
       className="py-10 md:py-16 md:pb-12"
       style={{ background: "#FEF6EA" }}
     >
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6 max-w-7xl">
         <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center">
           <div className="w-full md:w-1/3 pr-0 md:pr-12 overflow-hidden">
             <h2 className="text-xl md:text-5xl font-cormorant font-bold text-gray-900 mb-6 uppercase">

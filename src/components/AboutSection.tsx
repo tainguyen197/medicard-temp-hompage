@@ -159,7 +159,7 @@ const AboutSection = () => {
 
   return (
     <section id="about" className="py-10 md:py-16 bg-white">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-6 max-w-7xl">
         <div className="md:grid md:grid-cols-1 lg:grid-cols-5 gap-8">
           {/* Left column with title */}
           <div className="col-span-3">
