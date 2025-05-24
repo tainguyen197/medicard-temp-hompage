@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import AnimatedSection from "@/components/AnimatedSection";
 
 export default function ServicesPage() {
   const services = [
@@ -46,19 +47,20 @@ export default function ServicesPage() {
         />
       </section>
       {/* Introduction Section */}
-      <section className="container mx-auto px-4 pt-10 md:pt-16 pb-12 md:pb-20">
-        <h1 className="text-3xl md:text-5xl font-bold text-[#B1873F] font-cormorant text-center mb-8">
-          DỊCH VỤ
-        </h1>
-        <p className="text-base md:text-2xl font-semibold text-[#444444] max-w-6xl mx-auto text-center leading-relaxed">
-          Không chỉ nhằm mục đích điều trị sau khi các triệu chứng xuất hiện, mà
-          là phòng ngừa ngay từ ban đầu để duy trì và nâng cao chất lượng cuộc
-          sống của bạn. Thông qua các chương trình tư vấn, kiểm tra và chăm sóc
-          được cá nhân hóa, chúng tôi đồng hành cùng bạn trên hành trình chăm
-          sóc sức khỏe.
-        </p>
-      </section>
-
+      <AnimatedSection animation="zoomIn" delay={0.1} duration={0.8}>
+        <section className="container mx-auto px-4 pt-10 md:pt-16 pb-12 md:pb-20">
+          <h1 className="text-3xl md:text-5xl font-bold text-[#B1873F] font-cormorant text-center mb-8">
+            DỊCH VỤ
+          </h1>
+          <p className="text-base md:text-2xl font-semibold text-[#444444] max-w-6xl mx-auto text-center leading-relaxed">
+            Không chỉ nhằm mục đích điều trị sau khi các triệu chứng xuất hiện,
+            mà là phòng ngừa ngay từ ban đầu để duy trì và nâng cao chất lượng
+            cuộc sống của bạn. Thông qua các chương trình tư vấn, kiểm tra và
+            chăm sóc được cá nhân hóa, chúng tôi đồng hành cùng bạn trên hành
+            trình chăm sóc sức khỏe.
+          </p>
+        </section>
+      </AnimatedSection>
       {/* Services Detail Section */}
       <section className="bg-[#FEF6EA] py-14 md:py-16">
         <div className="container mx-auto px-4 max-w-6xl">

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
+import AnimatedSection from "@/components/AnimatedSection";
 
 export const metadata: Metadata = {
   title: "Tin tức sức khoẻ | Healthcare Therapy Center",
@@ -71,12 +72,13 @@ export default function BlogPage() {
       </section>
 
       {/* 2. Introduction */}
-      <section className="py-16 text-center">
-        <h1 className="font-cormorant text-4xl md:text-5xl lg:text-6xl font-bold text-[#B1873F] mb-4">
-          TIN TỨC
-        </h1>
-      </section>
-
+      <AnimatedSection animation="zoomIn" delay={0.1} duration={0.8}>
+        <section className="py-16 text-center">
+          <h1 className="font-cormorant text-4xl md:text-5xl lg:text-6xl font-bold text-[#B1873F] mb-4">
+            TIN TỨC
+          </h1>
+        </section>
+      </AnimatedSection>
       {/* 3. Trending Topics */}
       <section className="container mx-auto px-4 mb-16 md:mb-20 max-w-[1040px]">
         <div className="flex flex-col md:flex-row gap-4">
