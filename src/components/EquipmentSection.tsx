@@ -131,20 +131,6 @@ const EquipmentSection: React.FC = () => {
       description:
         "Sử dụng sóng siêu âm tác động đến mô cơ giúp giảm sưng nề mô mềm, giảm đau, giảm co cứng, tăng cường tuần hoàn máu, làm đẩy nhanh quá trình làm lành và hồi phục chức năng.",
     },
-    {
-      id: "equip5",
-      image: "/images/equipment_1.png",
-      title: "THIẾT BỊ 5",
-      subtitle: "SHOCKWAVE THERAPY II",
-      description: "Mô tả cho thiết bị 5, công nghệ tiên tiến.",
-    },
-    {
-      id: "equip6",
-      image: "/images/equipment_2.png",
-      title: "THIẾT BỊ 6",
-      subtitle: "Laser thế hệ mới",
-      description: "Mô tả cho thiết bị 6, hiệu quả vượt trội.",
-    },
   ];
 
   const [infoVisibility, setInfoVisibility] = useState<{
