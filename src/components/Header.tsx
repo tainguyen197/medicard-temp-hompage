@@ -61,7 +61,7 @@ const Header = () => {
               >
                 {item.name}
                 <span
-                  className={`absolute left-0 bottom-0 h-0.5 bg-white transition-all duration-300 
+                  className={`absolute left-0 bottom-0 h-0.5 bg-[#B1873F] transition-all duration-300 
                     ${
                       pathname === item.href
                         ? "w-full"

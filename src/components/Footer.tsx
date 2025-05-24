@@ -87,7 +87,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/services/derma"
+                  href="/services/func"
                   className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
                   Phục hồi chức năng
