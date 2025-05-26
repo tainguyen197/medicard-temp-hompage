@@ -77,16 +77,6 @@ export default function TraditionalMedicinePage() {
                 và an toàn
               </p>
             </div>
-            <div className="order-1 md:order-2">
-              <div className="relative w-full h-64 md:h-full min-h-[300px] max-w-2xl mx-auto">
-                <Image
-                  src="/images/service-img3.png"
-                  alt="Y học cổ truyền"
-                  className="object-cover rounded-lg"
-                  fill
-                />
-              </div>
-            </div>
           </div>
 
           {/* Acupuncture */}
@@ -102,29 +92,14 @@ export default function TraditionalMedicinePage() {
               thúc đẩy khả năng tự chữa bệnh một cách tự nhiên của cơ thể.
             </p>
           </div>
-
-          {/* Herbal Medicine */}
-          <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
+          <div className="order-1 md:order-2">
             <div className="relative w-full h-64 md:h-full min-h-[300px] max-w-2xl mx-auto">
               <Image
-                src="/images/service-img1.png"
-                alt="Thuốc thang"
+                src="/images/service-img3.png"
+                alt="Y học cổ truyền"
                 className="object-cover rounded-lg"
                 fill
               />
-            </div>
-            <div>
-              <h3 className="text-md md:text-[18px] font-semibold mb-4">
-                Thuốc thang:
-              </h3>
-              <p className="text-md md:text-[16px] text-black leading-relaxed">
-                Thuốc ngành y học cổ truyền đều có thành phần từ nguyên liệu của
-                thiên nhiên bao gồm cả thực vật và động vật. Mỗi vị thuốc sẽ
-                được kết hợp với các dược liệu khác nhau tùy theo chứng bệnh.
-                Đặc trưng của thuốc y học cổ truyền đó là có thể sử dụng được
-                trong thời gian dài, phù hợp trong việc chữa trị các căn bệnh
-                mãn tính.
-              </p>
             </div>
           </div>
 
@@ -141,6 +116,7 @@ export default function TraditionalMedicinePage() {
                 lên các huyệt trên cơ thể bệnh nhân.
               </p>
             </div>
+
             <div className="order-1 md:order-2">
               <div className="relative w-full h-64 md:h-full min-h-[300px] max-w-2xl mx-auto">
                 <Image
@@ -151,6 +127,31 @@ export default function TraditionalMedicinePage() {
                 />
               </div>
             </div>
+          </div>
+
+          {/* Herbal Medicine */}
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
+            <div>
+              <h3 className="text-md md:text-[18px] font-semibold mb-4">
+                Thuốc thang:
+              </h3>
+              <p className="text-md md:text-[16px] text-black leading-relaxed">
+                Thuốc ngành y học cổ truyền đều có thành phần từ nguyên liệu của
+                thiên nhiên bao gồm cả thực vật và động vật. Mỗi vị thuốc sẽ
+                được kết hợp với các dược liệu khác nhau tùy theo chứng bệnh.
+                Đặc trưng của thuốc y học cổ truyền đó là có thể sử dụng được
+                trong thời gian dài, phù hợp trong việc chữa trị các căn bệnh
+                mãn tính.
+              </p>
+            </div>
+          </div>
+          <div className="relative w-full h-64 md:h-full min-h-[300px] max-w-2xl mx-auto">
+            <Image
+              src="/images/service-img1.png"
+              alt="Thuốc thang"
+              className="object-cover rounded-lg"
+              fill
+            />
           </div>
         </div>
       </section>

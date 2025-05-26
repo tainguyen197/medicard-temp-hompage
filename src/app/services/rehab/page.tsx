@@ -221,10 +221,10 @@ export default function RehabPage() {
           {/* Shockwave Therapy */}
           <div className="grid grid-cols-1 md:grid-cols-1 gap-8 md:gap-12">
             <div>
-              <h3 className="text-xl md:text-2xl font-semibold mb-4">
+              <h3 className="text-md md:text-[18px] font-semibold mb-4">
                 Shockwave Therapy (Sóng xung kích):
               </h3>
-              <p className="text-base md:text-lg text-black leading-relaxed">
+              <p className="text-md md:text-[16px] text-black leading-relaxed">
                 Sóng xung kích là một dạng sóng âm có năng lượng cao, được sử
                 dụng rộng rãi trong y học, đặc biệt là trong lĩnh vực vật lý trị
                 liệu và điều trị các bệnh lý về cơ xương khớp. Máy sóng xung
@@ -242,13 +242,13 @@ export default function RehabPage() {
                 </div>
               </div>
 
-              <p className="text-base md:text-lg text-black leading-relaxed mt-4">
+              <p className="text-md md:text-[16px] text-black leading-relaxed mt-4">
                 <strong>
                   Tác dụng của Shockwave Therapy trong điều trị các bệnh lý Cơ
                   xương khớp:
                 </strong>
               </p>
-              <ul className="list-disc pl-5 mt-2 space-y-2 text-base md:text-lg text-black">
+              <ul className="list-disc pl-5 mt-2 space-y-2 text-md md:text-[16px] text-black">
                 <li>
                   <strong>Kích thích phục hồi:</strong> Sóng xung kích kích
                   thích quá trình chữa lành tự nhiên của cơ thể, thúc đẩy quá
