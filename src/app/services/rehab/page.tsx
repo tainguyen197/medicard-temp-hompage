@@ -72,16 +72,6 @@ export default function RehabPage() {
                 phục hồi.
               </p>
             </div>
-            <div className="order-1 md:order-2">
-              <div className="relative w-full h-64 md:h-full min-h-[300px] max-w-2xl mx-auto">
-                <Image
-                  src="/images/VLTL 1.jpg"
-                  alt="Radio Frequency"
-                  className="object-contain rounded-lg"
-                  fill
-                />
-              </div>
-            </div>
           </div>
 
           {/* Laser công suất cao */}
@@ -95,6 +85,16 @@ export default function RehabPage() {
                 nay, công suất cao cung cấp năng lượng mạnh mẽ tác động đến cấp
                 độ mô – tế bào ở sâu cần phục hồi, tái tạo.
               </p>
+              <div className="order-1 md:order-2">
+                <div className="relative w-full h-64 md:h-full min-h-[300px] max-w-2xl mx-auto">
+                  <Image
+                    src="/images/VLTL 1.jpg"
+                    alt="Radio Frequency"
+                    className="object-contain rounded-lg"
+                    fill
+                  />
+                </div>
+              </div>
               <p className="text-md md:text-[16px] text-black leading-relaxed mt-4">
                 <strong>
                   Tác dụng Laser công suất cao trong điều trị các bệnh lý cơ
