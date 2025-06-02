@@ -9,9 +9,9 @@ import {
   ChevronRightIcon,
 } from "lucide-react";
 
-import { authOptions } from "../../../lib/auth";
-import prisma from "../../../lib/prisma";
-import { formatDate } from "../../../lib/utils";
+import { authOptions } from "../../../../lib/auth";
+import prisma from "../../../../lib/prisma";
+import { formatDate } from "../../../../lib/utils";
 
 type SearchParams = {
   page?: string;
