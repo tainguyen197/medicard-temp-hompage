@@ -24,6 +24,7 @@ const postSchema = z.object({
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
+  console.log("API Request params:", searchParams);
   // Parse query parameters
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "10");
@@ -31,11 +32,27 @@ export async function GET(request: Request) {
   const categoryId = searchParams.get("categoryId");
   const search = searchParams.get("search");
 
+  console.log("API Request params:", {
+    page,
+    limit,
+    status: status || "null",
+    categoryId: categoryId || "null",
+    search: search || "null",
+  });
+
   // Build filter object
-  const where: any = {};
+  const where: {
+    status?: string;
+    OR?: Array<{
+      title?: { contains: string; mode: string };
+      content?: { contains: string; mode: string };
+    }>;
+    categories?: { some: { categoryId: string } };
+  } = {};
 
   if (status) {
     where.status = status;
+    console.log(`Filtering by status: "${status}"`);
   }
 
   if (search) {
@@ -53,9 +70,20 @@ export async function GET(request: Request) {
     };
   }
 
+  console.log("Query filter:", JSON.stringify(where));
+
   try {
+    // First check how many posts of each status exist
+    const statusCounts = await prisma.$queryRaw`
+      SELECT status, COUNT(*) as count
+      FROM Post
+      GROUP BY status
+    `;
+    console.log("Posts by status:", statusCounts);
+
     // Get total count for pagination
     const total = await prisma.post.count({ where });
+    console.log(`Total matching posts: ${total}`);
 
     // Get posts with pagination
     const posts = await prisma.post.findMany({
@@ -78,6 +106,12 @@ export async function GET(request: Request) {
         },
       },
     });
+
+    console.log(`Returning ${posts.length} posts`);
+
+    // Debug the statuses of returned posts
+    const returnedStatuses = posts.map((post) => post.status);
+    console.log("Returned post statuses:", returnedStatuses);
 
     return NextResponse.json({
       posts,

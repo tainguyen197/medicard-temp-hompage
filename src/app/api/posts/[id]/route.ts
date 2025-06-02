@@ -23,16 +23,20 @@ const postUpdateSchema = z.object({
   slug: z.string().optional(),
 });
 
-// GET /api/posts/[id] - Get a specific post by ID
+// GET /api/posts/[id] - Get a specific post by ID or slug
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const id = (await params).id;
+  const identifier = (await params).id;
 
   try {
+    // Determine if the identifier is a cuid (ID) or a slug
+    // CUIDs are typically 25 characters long and contain letters and numbers
+    const isCuid = /^[a-z0-9]{25}$/.test(identifier);
+
     const post = await prisma.post.findUnique({
-      where: { id },
+      where: isCuid ? { id: identifier } : { slug: identifier },
       include: {
         author: {
           select: {

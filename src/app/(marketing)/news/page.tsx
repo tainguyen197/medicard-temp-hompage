@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import AnimatedSection from "@/components/AnimatedSection";
+import prisma from "@/lib/prisma";
+import { Post } from "@/types/post";
 
 export const metadata: Metadata = {
   title: "Tin tức sức khoẻ | Healthcare Therapy Center",
@@ -9,52 +11,111 @@ export const metadata: Metadata = {
     "Cập nhật những kiến thức hữu ích về sức khoẻ, phương pháp điều trị và lối sống lành mạnh từ Healthcare Therapy Center.",
 };
 
-export default function BlogPage() {
-  const blogPosts = [
-    {
-      id: 1,
-      slug: "chiro-therapy-trong-dieu-tri-cac-van-de-ve-cot-song",
-      title: "Chiro Therapy trong điều trị các vấn đề về cột sống",
-      excerpt:
-        "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể.",
-      image: "/images/news/related-news-1.jpg",
-    },
-    {
-      id: 2,
-      slug: "an-gi-va-uong-gi-de-khong-beo",
-      title: "Chiro Therapy trong điều trị các vấn đề về cột sống",
-      excerpt:
-        "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể.",
-      image: "/images/news/related-news-1.jpg",
-    },
-    {
-      id: 3,
-      slug: "lam-the-nao-de-dieu-tri-thoai-hoa-khop-goi",
-      title: "Chiro Therapy trong điều trị các vấn đề về cột sống",
-      excerpt:
-        "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể.",
-      image: "/images/news/related-news-2.jpg",
-    },
-    {
-      id: 4,
-      slug: "lam-the-nao-de-dieu-tri-thoai-hoa-khop-vai",
-      title: "Chiro Therapy trong điều trị các vấn đề về cột sống",
-      excerpt:
-        "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể.",
-      image: "/images/news/related-news-3.jpg",
-    },
-    {
-      id: 5,
-      slug: "chiro-therapy-trong-dieu-tri-cac-van-de-ve-cot-song-2",
-      title: "Chiro Therapy trong điều trị các vấn đề về cột sống",
-      excerpt:
-        "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể.",
-      image: "/images/news/related-news-3.jpg",
-    },
-  ];
+// Default image fallback if no featured image
+const DEFAULT_IMAGE = "/images/news/news-image-1.jpg";
 
+export default async function BlogPage() {
+  let blogPosts: Post[] = [];
+
+  try {
+    // Fetch posts directly from the database with Prisma
+    console.log("Fetching posts from database...");
+
+    // Build filter object (only show published posts for public page)
+    const where = {
+      status: "PUBLISHED",
+    };
+
+    // Get posts with pagination
+    const posts = await prisma.post.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      take: 20,
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+        categories: {
+          include: {
+            category: true,
+          },
+        },
+      },
+    });
+
+    // Convert Prisma results to Post type
+    blogPosts = posts.map((post) => ({
+      ...post,
+      createdAt: post.createdAt.toISOString(),
+      updatedAt: post.updatedAt.toISOString(),
+      publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
+    })) as Post[];
+
+    console.log(`Found ${blogPosts.length} posts`);
+
+    if (blogPosts.length > 0) {
+      console.log("First post title:", blogPosts[0]?.title);
+      console.log("First post status:", blogPosts[0]?.status);
+    }
+  } catch (error) {
+    console.error("Failed to fetch posts:", error);
+    blogPosts = [];
+  }
+
+  // If no posts from database, show a message or fallback
+  if (blogPosts.length === 0) {
+    console.log("No posts found, showing empty state");
+    return (
+      <div className="min-h-screen pt-[72px] md:pt-[96px]">
+        {/* Hero Section */}
+        <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
+          <div className="absolute inset-0">
+            <Image
+              src="/images/hero-section.png"
+              alt="News Hero"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+        </section>
+
+        {/* Introduction */}
+        <AnimatedSection animation="zoomIn" delay={0.1} duration={0.8}>
+          <section className="py-16 text-center">
+            <h1 className="font-cormorant text-4xl md:text-5xl lg:text-6xl font-bold text-[#B1873F] mb-4">
+              TIN TỨC
+            </h1>
+          </section>
+        </AnimatedSection>
+
+        {/* No posts message */}
+        <section className="container mx-auto px-4 mb-16 md:mb-20 max-w-[1040px] text-center py-20">
+          <h2 className="text-2xl text-gray-600 mb-4">
+            Hiện tại chưa có bài viết nào được xuất bản
+          </h2>
+          <p className="text-gray-500">
+            Vui lòng quay lại sau để xem nội dung mới.
+          </p>
+        </section>
+      </div>
+    );
+  }
+
+  console.log("Rendering news page with posts");
   // Featured trending posts (first 5 posts)
   const trendingPosts = blogPosts.slice(0, 5);
+
+  // Calculate total pages for pagination
+  const totalPosts = await prisma.post.count({
+    where: { status: "PUBLISHED" },
+  });
+  const postsPerPage = 20;
+  const totalPages = Math.ceil(totalPosts / postsPerPage);
 
   return (
     <div className="min-h-screen pt-[72px] md:pt-[96px]">
@@ -79,6 +140,7 @@ export default function BlogPage() {
           </h1>
         </section>
       </AnimatedSection>
+
       {/* 3. Trending Topics */}
       <section className="container mx-auto px-4 mb-16 md:mb-20 max-w-[1040px]">
         <div className="flex flex-col md:flex-row gap-4">
@@ -90,7 +152,7 @@ export default function BlogPage() {
             >
               <div className="aspect-auto h-full relative">
                 <Image
-                  src={trendingPosts[0].image}
+                  src={trendingPosts[0].featuredImage || DEFAULT_IMAGE}
                   alt={trendingPosts[0].title}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -117,7 +179,7 @@ export default function BlogPage() {
                 >
                   <div className="aspect-square relative">
                     <Image
-                      src={post.image}
+                      src={post.featuredImage || DEFAULT_IMAGE}
                       alt={post.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -144,7 +206,7 @@ export default function BlogPage() {
         </h2>
         {blogPosts.map((post, index) => (
           <article key={post.id}>
-            <div className="relative flex flex-col md:flex-row items-center mb-4 md:mb-12 group">
+            <div className="relative flex flex-col md:flex-row items-center mb-4 md:mb-12 group justify-between">
               <Link
                 href={`/news/${post.slug}`}
                 className="absolute inset-0 z-1"
@@ -154,7 +216,7 @@ export default function BlogPage() {
                   {post.title}
                 </h2>
                 <p className="text-gray-600 line-clamp-3 mb-4">
-                  {post.excerpt}
+                  {post.excerpt || `${post.content.substring(0, 200)}...`}
                 </p>
               </div>
               <div className="mt-4 md:mt-0">
@@ -163,7 +225,7 @@ export default function BlogPage() {
                   className="block relative rounded-xl overflow-hidden aspect-square md:h-44"
                 >
                   <Image
-                    src={post.image}
+                    src={post.featuredImage || DEFAULT_IMAGE}
                     alt={post.title}
                     fill
                     className="object-cover"
@@ -209,33 +271,34 @@ export default function BlogPage() {
             1
           </button>
 
-          <button
-            className="w-10 h-10 rounded flex items-center justify-center border border-gray-300 bg-white text-gray-600 font-bold cursor-pointer"
-            aria-label="Page 2"
-          >
-            2
-          </button>
+          {totalPages > 1 && (
+            <>
+              <button
+                className="w-10 h-10 rounded flex items-center justify-center border border-gray-300 bg-white text-gray-600 font-bold cursor-pointer"
+                aria-label="Page 2"
+              >
+                2
+              </button>
 
-          <button
-            className="w-10 h-10 rounded flex items-center justify-center border border-gray-300 bg-white text-gray-600 font-bold cursor-pointer"
-            aria-label="More pages"
-          >
-            ...
-          </button>
+              {totalPages > 3 && (
+                <button
+                  className="w-10 h-10 rounded flex items-center justify-center border border-gray-300 bg-white text-gray-600 font-bold cursor-pointer"
+                  aria-label="More pages"
+                >
+                  ...
+                </button>
+              )}
 
-          <button
-            className="w-10 h-10 rounded flex items-center justify-center border border-gray-300 bg-white text-gray-600 font-bold cursor-pointer"
-            aria-label="Page 9"
-          >
-            9
-          </button>
-
-          <button
-            className="w-10 h-10 rounded flex items-center justify-center border border-gray-300 bg-white text-gray-600 font-bold cursor-pointer"
-            aria-label="Page 10"
-          >
-            10
-          </button>
+              {totalPages > 2 && (
+                <button
+                  className="w-10 h-10 rounded flex items-center justify-center border border-gray-300 bg-white text-gray-600 font-bold cursor-pointer"
+                  aria-label={`Page ${totalPages}`}
+                >
+                  {totalPages}
+                </button>
+              )}
+            </>
+          )}
 
           <button
             className="flex items-center justify-center hover:text-[#B1873F] cursor-pointer"
