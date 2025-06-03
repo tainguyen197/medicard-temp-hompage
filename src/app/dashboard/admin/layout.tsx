@@ -29,47 +29,45 @@ export default async function AdminLayout({
   }
 
   // Check if user has admin or editor role
-  // @ts-ignore - role is added by our custom session callback
   if (!["ADMIN", "EDITOR"].includes(session.user.role)) {
     // Redirect to unauthorized page or home
     redirect("/");
   }
 
-  // @ts-ignore - role is added by our custom session callback
   const isAdmin = session.user.role === "ADMIN";
 
   // Define navigation items
   const navItems = [
     {
       label: "Dashboard",
-      href: "/admin",
+      href: "/dashboard/admin",
       icon: <LayoutDashboard className="h-5 w-5" />,
     },
     {
       label: "Blog Posts",
-      href: "/admin/posts",
+      href: "/dashboard/admin/posts",
       icon: <FileText className="h-5 w-5" />,
     },
     {
       label: "Services",
-      href: "/admin/services",
+      href: "/dashboard/admin/services",
       icon: <Flag className="h-5 w-5" />,
       adminOnly: true,
     },
     {
       label: "Team Members",
-      href: "/admin/team",
+      href: "/dashboard/admin/team",
       icon: <Users className="h-5 w-5" />,
       adminOnly: true,
     },
     {
       label: "Media Library",
-      href: "/admin/media",
+      href: "/dashboard/admin/media",
       icon: <Image className="h-5 w-5" />,
     },
     {
       label: "Settings",
-      href: "/admin/settings",
+      href: "/dashboard/admin/settings",
       icon: <Settings className="h-5 w-5" />,
       adminOnly: true,
     },
@@ -85,7 +83,10 @@ export default async function AdminLayout({
       {/* Mobile header */}
       <div className="md:hidden bg-white border-b shadow-sm p-4">
         <div className="flex items-center justify-between">
-          <Link href="/admin" className="text-xl font-bold text-blue-600">
+          <Link
+            href="/dashboard/admin"
+            className="text-xl font-bold text-blue-600"
+          >
             Medicare Dashboard
           </Link>
           <button className="p-2 rounded-md hover:bg-gray-100">
@@ -98,15 +99,17 @@ export default async function AdminLayout({
         {/* Sidebar */}
         <aside className="admin-sidebar hidden md:flex flex-col w-64">
           <div className="admin-sidebar-logo">
-            <svg
-              className="w-8 h-8 mr-2"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM9 17H7V10H9V17ZM13 17H11V7H13V17ZM17 17H15V13H17V17Z" />
-            </svg>
-            Medicare Dashboard
+            <Link href="/dashboard/admin" className="flex items-center">
+              <svg
+                className="w-8 h-8 mr-2"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM9 17H7V10H9V17ZM13 17H11V7H13V17ZM17 17H15V13H17V17Z" />
+              </svg>
+              Medicare Dashboard
+            </Link>
           </div>
 
           <nav className="flex-1 px-4 py-4 space-y-1">
@@ -125,7 +128,6 @@ export default async function AdminLayout({
               </div>
               <div>
                 <div className="font-medium">{session.user.name}</div>
-                {/* @ts-ignore - role is added by our custom session callback */}
                 <div className="text-xs text-gray-500">{session.user.role}</div>
               </div>
             </div>
@@ -140,7 +142,7 @@ export default async function AdminLayout({
         </aside>
 
         {/* Main content */}
-        <main className="admin-content flex-1">{children}</main>
+        <main className="admin-content flex-1 md:ml-[20%]">{children}</main>
       </div>
     </div>
   );
