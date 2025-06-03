@@ -72,7 +72,7 @@ export default function EditPostPage({
       } catch (error) {
         console.error("Error fetching post:", error);
         toast.error("Failed to load post");
-        router.push("/admin/posts");
+        router.push("/dashboard/admin/posts");
       }
     };
 
@@ -171,7 +171,7 @@ export default function EditPostPage({
       }
 
       toast.success("Post updated successfully!");
-      router.push("/admin/posts");
+      router.push("/dashboard/admin/posts");
       router.refresh();
     } catch (error) {
       console.error("Error updating post:", error);
@@ -199,10 +199,14 @@ export default function EditPostPage({
   }
 
   return (
-    <div className="container mx-auto py-8 bg-white rounded-md">
+    <div className="container mx-auto p-8 bg-white rounded-md">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Edit Blog Post</h1>
-        <Button variant="outline" onClick={() => router.push("/admin/posts")}>
+        <Button
+          className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
+          variant="outline"
+          onClick={() => router.push("/dashboard/admin/posts")}
+        >
           Cancel
         </Button>
       </div>
@@ -328,13 +332,18 @@ export default function EditPostPage({
 
         <div className="flex justify-end space-x-4 pt-4">
           <Button
+            className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
             type="button"
             variant="outline"
-            onClick={() => router.push("/admin/posts")}
+            onClick={() => router.push("/dashboard/admin/posts")}
           >
             Cancel
           </Button>
-          <Button type="submit" disabled={isSubmitting || isImageUploading}>
+          <Button
+            className="bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-200 cursor-pointer"
+            type="submit"
+            disabled={isSubmitting || isImageUploading}
+          >
             {isSubmitting ? "Saving..." : "Update Post"}
           </Button>
         </div>

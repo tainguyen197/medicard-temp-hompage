@@ -17,6 +17,10 @@ body {
   color: black;
 }
 
+
+.border{
+  border: 1px solid var(--ck-color-base-border);
+}
 /* a {
   color: inherit;
   text-decoration: none;

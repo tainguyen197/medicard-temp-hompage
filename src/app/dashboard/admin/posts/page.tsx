@@ -9,9 +9,9 @@ import {
   ChevronRightIcon,
 } from "lucide-react";
 
-import { authOptions } from "../../../../lib/auth";
-import prisma from "../../../../lib/prisma";
-import { formatDate } from "../../../../lib/utils";
+import { authOptions } from "@/lib/auth";
+import prisma from "@/lib/prisma";
+import { formatDate } from "@/lib/utils";
 
 type SearchParams = {
   page?: string;
@@ -98,7 +98,7 @@ export default async function PostsPage({
         <h1 className="text-3xl font-bold">Blog Posts</h1>
 
         <Link
-          href="/admin/posts/new"
+          href="/dashboard/admin/posts/new"
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
         >
           <PlusIcon size={16} />
@@ -108,7 +108,7 @@ export default async function PostsPage({
 
       {/* Filters */}
       <form
-        action="/admin/posts"
+        action="/dashboard/admin/posts"
         method="GET"
         className="bg-white p-4 rounded-md shadow mb-6"
       >
@@ -266,19 +266,19 @@ export default async function PostsPage({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium align-middle">
                     <Link
-                      href={`/admin/posts/${post.id}`}
+                      href={`/dashboard/admin/posts/${post.id}`}
                       className="text-blue-600 hover:text-blue-900 mr-4"
                     >
                       Edit
                     </Link>
                     <Link
-                      href={`/admin/posts/${post.id}/preview`}
+                      href={`/dashboard/admin/posts/${post.id}/preview`}
                       className="text-gray-600 hover:text-gray-900 mr-4"
                     >
                       Preview
                     </Link>
                     <Link
-                      href={`/admin/posts/${post.id}/delete`}
+                      href={`/dashboard/admin/posts/${post.id}/delete`}
                       className="text-red-600 hover:text-red-900"
                     >
                       Delete
@@ -310,7 +310,7 @@ export default async function PostsPage({
             {Number(page) > 1 && (
               <Link
                 href={{
-                  pathname: "/admin/posts",
+                  pathname: "/dashboard/admin/posts",
                   query: {
                     page: Number(page) - 1,
                     limit,
@@ -329,7 +329,7 @@ export default async function PostsPage({
             {Number(page) < totalPages && (
               <Link
                 href={{
-                  pathname: "/admin/posts",
+                  pathname: "/dashboard/admin/posts",
                   query: {
                     page: Number(page) + 1,
                     limit,

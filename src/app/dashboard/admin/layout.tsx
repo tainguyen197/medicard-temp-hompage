@@ -140,7 +140,7 @@ export default async function AdminLayout({
         </aside>
 
         {/* Main content */}
-        <main className="admin-content flex-1 overflow-auto">{children}</main>
+        <main className="admin-content flex-1">{children}</main>
       </div>
     </div>
   );

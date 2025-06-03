@@ -237,7 +237,7 @@ export default function ImageUpload({
       ) : (
         <div
           {...getRootProps()}
-          className={`border-2 border-dashed rounded-md p-4 text-center cursor-pointer transition-colors ${
+          className={`border-2 border-gray-300 border-dashed rounded-md p-4 text-center cursor-pointer transition-colors ${
             isDragActive
               ? "border-primary bg-primary/5"
               : "border-muted-foreground/25 hover:border-primary/50"
