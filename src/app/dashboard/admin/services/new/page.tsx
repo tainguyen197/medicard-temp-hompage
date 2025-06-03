@@ -17,6 +17,7 @@ export default function NewServicePage() {
   const [description, setDescription] = useState("");
   const [slug, setSlug] = useState("");
   const [featuredImage, setFeaturedImage] = useState("");
+  const [featureImageId, setFeatureImageId] = useState("");
   const [isImageUploading, setIsImageUploading] = useState(false);
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
 
@@ -83,8 +84,8 @@ export default function NewServicePage() {
           title,
           description,
           slug,
-          // For now, we'll just use the image URL. Later we can enhance this to use media ID
-          featuredImage,
+          featuredImage, // Send the image URL
+          featureImageId, // Send the media ID if available
         }),
       });
 
@@ -138,6 +139,7 @@ export default function NewServicePage() {
               value={featuredImage}
               onChange={setFeaturedImage}
               onImageUploading={setIsImageUploading}
+              onMediaIdChange={setFeatureImageId}
             />
             <p className="text-xs text-gray-500">
               Recommended aspect ratio: 270:200

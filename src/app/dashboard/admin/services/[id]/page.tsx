@@ -118,6 +118,7 @@ export default function EditServicePage({
           status,
           slug,
           description,
+          featuredImage: featuredImageUrl,
           featureImageId,
         }),
       });

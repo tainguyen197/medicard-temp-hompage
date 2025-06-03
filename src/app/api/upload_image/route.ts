@@ -8,7 +8,7 @@ import { S3 } from "aws-sdk"; // For Cloudflare R2
 
 /**
  * Image Upload API
- * 
+ *
  * This API handles image uploads for the application.
  * - Supports both local storage and Cloudflare R2 storage
  * - Authentication required

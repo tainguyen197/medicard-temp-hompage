@@ -13,6 +13,7 @@ const serviceUpdateSchema = z.object({
   status: z.string().optional(),
   slug: z.string().optional(),
   description: z.string().optional(),
+  featuredImage: z.string().optional(), // Accept the image URL
   featureImageId: z.string().optional(),
 });
 
@@ -102,11 +103,28 @@ export async function PUT(
       }
     }
 
+    // Find the media record if featuredImage URL is provided
+    let featureImageId = validatedData.featureImageId;
+
+    if (validatedData.featuredImage && !featureImageId) {
+      // Try to find the media record by URL
+      const media = await prisma.media.findFirst({
+        where: { url: validatedData.featuredImage },
+      });
+
+      if (media) {
+        featureImageId = media.id;
+      }
+    }
+
     const service = await prisma.service.update({
       where: { id },
       data: {
-        ...validatedData,
+        title: validatedData.title,
+        description: validatedData.description,
+        status: validatedData.status,
         slug,
+        ...(featureImageId && { featureImageId }), // Only add if we have an image ID
       },
       include: {
         featureImage: true,
