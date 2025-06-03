@@ -12,13 +12,13 @@ import {
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
-import { Prisma } from "@prisma/client";
 import ServicesTable from "@/components/ServicesTable";
 
 type SearchParams = {
   page?: string;
   limit?: string;
   search?: string;
+  status?: string;
 };
 
 export default async function ServicesPage({
@@ -32,13 +32,17 @@ export default async function ServicesPage({
     redirect("/auth/login");
   }
 
-  const { page = "1", limit = "10", search } = await searchParams;
+  const { page = "1", limit = "10", search, status } = await searchParams;
 
   // Build filter object
-  const where: Prisma.ServiceWhereInput = {};
+  const where: any = {};
 
   if (search) {
     where.OR = [{ title: { contains: search } }];
+  }
+
+  if (status) {
+    where.status = status;
   }
 
   // Get services with pagination
@@ -104,6 +108,17 @@ export default async function ServicesPage({
           </div>
 
           <div className="flex gap-4">
+            <select
+              name="status"
+              defaultValue={status || ""}
+              className="px-4 py-2 border border-gray-300 rounded-md"
+            >
+              <option value="">All Statuses</option>
+              <option value="PUBLISHED">Published</option>
+              <option value="DRAFT">Draft</option>
+              <option value="ARCHIVED">Archived</option>
+            </select>
+
             <button
               type="submit"
               className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
@@ -146,6 +161,7 @@ export default async function ServicesPage({
                     page: Number(page) - 1,
                     limit,
                     ...(search && { search }),
+                    ...(status && { status }),
                   },
                 }}
                 className="flex items-center gap-1 px-4 py-2 bg-blue-50 text-blue-600 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors duration-200"
@@ -163,6 +179,7 @@ export default async function ServicesPage({
                     page: Number(page) + 1,
                     limit,
                     ...(search && { search }),
+                    ...(status && { status }),
                   },
                 }}
                 className="flex items-center gap-1 px-4 py-2 bg-blue-50 text-blue-600 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors duration-200"

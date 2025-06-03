@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
+import { useState, useEffect, use, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import ImageUpload from "@/components/ImageUpload";
+import CKEditorComponent from "@/components/CKEditorComponent";
 
 export default function EditServicePage({
   params,
@@ -21,6 +22,7 @@ export default function EditServicePage({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState("DRAFT");
   const [slug, setSlug] = useState("");
+  const [description, setDescription] = useState("");
   const [featuredImageUrl, setFeaturedImageUrl] = useState("");
   const [featureImageId, setFeatureImageId] = useState("");
   const [isImageUploading, setIsImageUploading] = useState(false);
@@ -42,6 +44,7 @@ export default function EditServicePage({
         setTitle(service.title || "");
         setStatus(service.status || "DRAFT");
         setSlug(service.slug || "");
+        setDescription(service.description || "");
         setFeaturedImageUrl(service.featureImage?.url || "");
         setFeatureImageId(service.featureImageId || "");
 
@@ -85,6 +88,15 @@ export default function EditServicePage({
     setIsSlugManuallyEdited(true);
   };
 
+  // Use useCallback to memoize the onChange handler to prevent re-renders
+  const handleEditorChange = useCallback(
+    (event: unknown, editor: { getData: () => string }) => {
+      const data = editor.getData();
+      setDescription(data);
+    },
+    []
+  );
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -105,6 +117,7 @@ export default function EditServicePage({
           title,
           status,
           slug,
+          description,
           featureImageId,
         }),
       });
@@ -193,6 +206,20 @@ export default function EditServicePage({
           />
           <p className="text-xs text-gray-500">
             This will be used in the URL: /services/{slug}
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <Label>Service Description</Label>
+          <div>
+            <CKEditorComponent
+              data={description}
+              onChange={handleEditorChange}
+            />
+          </div>
+          <p className="text-xs text-gray-500">
+            Describe your healthcare service in detail. You can include
+            formatting, images, and links.
           </p>
         </div>
 

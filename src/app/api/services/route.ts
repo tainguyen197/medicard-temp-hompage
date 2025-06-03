@@ -9,6 +9,7 @@ import { createSlug } from "../../../lib/utils";
 // Schema for service creation/update
 const serviceSchema = z.object({
   title: z.string().min(1, "Title is required"),
+  description: z.string().optional(),
   status: z.string().optional().default("DRAFT"),
   slug: z.string().optional(),
   featureImageId: z.string().optional(),
@@ -122,4 +123,4 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
-} 
+}

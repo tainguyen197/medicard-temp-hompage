@@ -86,7 +86,15 @@ async function main() {
 
   for (const post of postsData) {
     const { categories, ...postData } = post;
-    const postPayload: any = { ...postData };
+    const postPayload: {
+      title: string;
+      slug: string;
+      content: string;
+      excerpt?: string;
+      status: string;
+      authorId: string;
+      publishedAt?: string | null;
+    } = { ...postData };
     if (postData.publishedAt === undefined && postData.status === "DRAFT") {
       postPayload.publishedAt = null;
     }
@@ -104,6 +112,50 @@ async function main() {
       },
     });
     console.log(`Created post with id: ${createdPost.id}`);
+  }
+
+  // Create sample services
+  const servicesData = [
+    {
+      title: "CHĂM SÓC TẠI NHÀ",
+      slug: "home-care",
+      description:
+        "Dịch vụ chăm sóc y tế tại nhà với đội ngũ y tá chuyên nghiệp.",
+      status: "PUBLISHED",
+    },
+    {
+      title: "CHĂM SÓC NGƯỜI CAO TUỔI",
+      slug: "elderly-care",
+      description: "Dịch vụ chăm sóc đặc biệt dành cho người cao tuổi.",
+      status: "PUBLISHED",
+    },
+    {
+      title: "CHĂM SÓC SỨC KHỎE TINH THẦN",
+      slug: "mental-health",
+      description: "Dịch vụ tư vấn và hỗ trợ sức khỏe tinh thần.",
+      status: "PUBLISHED",
+    },
+    {
+      title: "TƯ VẤN DINH DƯỠNG CHUYÊN NGHIỆP",
+      slug: "nutrition-consultation",
+      description: "Dịch vụ tư vấn dinh dưỡng từ các chuyên gia dinh dưỡng.",
+      status: "PUBLISHED",
+    },
+    {
+      title: "CHÂM CỨU Y HỌC CỔ TRUYỀN",
+      slug: "acupuncture",
+      description: "Dịch vụ châm cứu theo phương pháp y học cổ truyền.",
+      status: "PUBLISHED",
+    },
+  ];
+
+  for (const service of servicesData) {
+    const createdService = await prisma.service.upsert({
+      where: { slug: service.slug },
+      update: service,
+      create: service,
+    });
+    console.log(`Created service with id: ${createdService.id}`);
   }
 
   console.log(`Seeding finished.`);

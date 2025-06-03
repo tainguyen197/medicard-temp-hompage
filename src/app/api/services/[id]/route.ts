@@ -12,6 +12,7 @@ const serviceUpdateSchema = z.object({
   title: z.string().min(1, "Title is required"),
   status: z.string().optional(),
   slug: z.string().optional(),
+  description: z.string().optional(),
   featureImageId: z.string().optional(),
 });
 
@@ -45,10 +46,7 @@ export async function GET(
     });
 
     if (!service) {
-      return NextResponse.json(
-        { error: "Service not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Service not found" }, { status: 404 });
     }
 
     return NextResponse.json(service);
@@ -87,10 +85,7 @@ export async function PUT(
     });
 
     if (!existingService) {
-      return NextResponse.json(
-        { error: "Service not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Service not found" }, { status: 404 });
     }
 
     // Check if slug is being changed and if it already exists
@@ -152,10 +147,7 @@ export async function DELETE(
     });
 
     if (!existingService) {
-      return NextResponse.json(
-        { error: "Service not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Service not found" }, { status: 404 });
     }
 
     await prisma.service.delete({
@@ -170,4 +162,4 @@ export async function DELETE(
       { status: 500 }
     );
   }
-} 
+}
