@@ -69,7 +69,7 @@ model Service {
   id              String   @id @default(cuid())
   slug            String   @unique             // "transport", etc.
   title           String                       // "Dịch vụ đưa đón"
-  description     String?                      // optional longer text/HTML
+  status          String   @default("DRAFT")   // "DRAFT", "PUBLISHED", etc.
   featureImage    Media?   @relation("ServiceFeatureImage", fields: [featureImageId], references: [id])
   featureImageId  String?  @unique
   createdAt       DateTime @default(now())

@@ -11,12 +11,14 @@ interface ImageUploadProps {
   value: string;
   onChange: (value: string) => void;
   onImageUploading?: (isUploading: boolean) => void;
+  onMediaIdChange?: (mediaId: string) => void;
 }
 
 export default function ImageUpload({
   value,
   onChange,
   onImageUploading,
+  onMediaIdChange,
 }: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
@@ -142,6 +144,7 @@ export default function ImageUpload({
 
       const data = await response.json();
       onChange(data.url);
+      onMediaIdChange?.(data.mediaId);
       setShowCropper(false);
       toast.success("Image uploaded successfully");
     } catch (error) {
@@ -152,7 +155,7 @@ export default function ImageUpload({
       setIsUploading(false);
       onImageUploading?.(false);
     }
-  }, [imageBlob, getCroppedImage, onChange, onImageUploading]);
+  }, [imageBlob, getCroppedImage, onChange, onImageUploading, onMediaIdChange]);
 
   const handleCancelCrop = () => {
     setShowCropper(false);
@@ -162,6 +165,7 @@ export default function ImageUpload({
 
   const handleRemoveImage = () => {
     onChange("");
+    onMediaIdChange?.("");
     setPreview(null);
     setShowCropper(false);
   };
@@ -170,12 +174,14 @@ export default function ImageUpload({
     <div className="relative w-full">
       {showCropper && preview ? (
         <div className="bg-gray-50 p-4 rounded-md space-y-4">
-          <div className="text-sm font-medium mb-2">Crop Image (1:1 ratio)</div>
+          <div className="text-sm font-medium mb-2">
+            Crop Image (270:200 ratio)
+          </div>
           <div className="max-w-full overflow-auto">
             <ReactCrop
               crop={crop}
               onChange={(c: Crop) => setCrop(c)}
-              aspect={1}
+              aspect={270 / 200}
             >
               <img
                 src={preview}
@@ -184,6 +190,9 @@ export default function ImageUpload({
                 className="max-w-full max-h-[300px] object-contain"
               />
             </ReactCrop>
+          </div>
+          <div className="text-xs text-gray-600 mb-2">
+            Recommended aspect ratio: 270:200
           </div>
           <div className="flex gap-2 justify-end mt-2">
             <Button
@@ -216,7 +225,10 @@ export default function ImageUpload({
         </div>
       ) : value ? (
         <div className="relative w-full">
-          <div className="relative aspect-square overflow-hidden rounded-md border border-border">
+          <div
+            className="relative overflow-hidden rounded-md border border-border"
+            style={{ aspectRatio: "270/200" }}
+          >
             <Image
               src={value}
               alt="Featured image"
@@ -247,7 +259,7 @@ export default function ImageUpload({
           <div className="flex flex-col items-center justify-center gap-1 text-xs text-muted-foreground">
             <CropIcon className="h-6 w-6 mb-1" />
             <p className="font-medium">Drag & drop or click to upload</p>
-            <p>Square images work best</p>
+            <p>270:200 aspect ratio recommended</p>
           </div>
         </div>
       )}
