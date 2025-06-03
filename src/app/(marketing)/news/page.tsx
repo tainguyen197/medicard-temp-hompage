@@ -124,44 +124,54 @@ export default async function BlogPage({
 
   console.log("Rendering news page with posts");
 
-  // Calculate if we need trending posts
-  let allPostsForTrending: Post[] = currentPage === 1 ? blogPosts : [];
-  // Additional fetch for trending posts if we're not on the first page
-  if (currentPage > 1) {
-    try {
-      const trendingPostsData = await prisma.post.findMany({
-        where: { status: "PUBLISHED" },
-        orderBy: { createdAt: "desc" },
-        take: 5,
-        include: {
-          author: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-            },
-          },
-          categories: {
-            include: {
-              category: true,
-            },
+  // Fetch trending posts (featured posts)
+  let trendingPosts: Post[] = [];
+  try {
+    const featuredPostsData = await prisma.post.findMany({
+      where: {
+        status: "PUBLISHED",
+        featured: true,
+      },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
           },
         },
-      });
+        categories: {
+          include: {
+            category: true,
+          },
+        },
+      },
+    });
 
-      allPostsForTrending = trendingPostsData.map((post) => ({
-        ...post,
-        createdAt: post.createdAt.toISOString(),
-        updatedAt: post.updatedAt.toISOString(),
-        publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
-      })) as Post[];
-    } catch (error) {
-      console.error("Failed to fetch trending posts:", error);
-    }
+    trendingPosts = featuredPostsData.map((post) => ({
+      ...post,
+      createdAt: post.createdAt.toISOString(),
+      updatedAt: post.updatedAt.toISOString(),
+      publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
+    })) as Post[];
+
+    console.log(`Found ${trendingPosts.length} featured posts`);
+  } catch (error) {
+    console.error("Failed to fetch featured posts:", error);
   }
 
-  // Featured trending posts (first 5 posts)
-  const trendingPosts = allPostsForTrending.slice(0, 5);
+  // If we don't have enough featured posts, supplement with most recent posts
+  if (trendingPosts.length < 5) {
+    const recentPostsForTrending = blogPosts.filter(
+      (post) => !trendingPosts.some((tp) => tp.id === post.id)
+    );
+    trendingPosts = [
+      ...trendingPosts,
+      ...recentPostsForTrending.slice(0, 5 - trendingPosts.length),
+    ];
+  }
 
   // Calculate total pages for pagination
   const totalPages = Math.ceil(totalPosts / postsPerPage);
@@ -226,8 +236,8 @@ export default async function BlogPage({
         </section>
       </AnimatedSection>
 
-      {/* 3. Trending Topics - Only show on first page */}
-      {currentPage === 1 && trendingPosts.length >= 5 && (
+      {/* 3. Trending Topics - Only show if we have enough posts */}
+      {trendingPosts.length >= 5 && (
         <section className="container mx-auto px-4 mb-16 md:mb-20 max-w-[1040px]">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Featured post (larger) - left side */}

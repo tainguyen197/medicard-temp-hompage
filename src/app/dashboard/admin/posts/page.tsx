@@ -7,11 +7,14 @@ import {
   FilterIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  StarIcon,
 } from "lucide-react";
 
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
+import { Post } from "@/types/post";
+import { Prisma } from "@prisma/client";
 
 type SearchParams = {
   page?: string;
@@ -19,6 +22,7 @@ type SearchParams = {
   status?: string;
   categoryId?: string;
   search?: string;
+  featured?: string;
 };
 
 export default async function PostsPage({
@@ -38,19 +42,24 @@ export default async function PostsPage({
     status,
     categoryId,
     search,
+    featured,
   } = await searchParams;
 
   // Build filter object
-  const where: any = {};
+  const where: Prisma.PostWhereInput = {};
 
   if (status) {
     where.status = status;
   }
 
+  if (featured === "true") {
+    where.featured = true;
+  }
+
   if (search) {
     where.OR = [
-      { title: { contains: search, mode: "insensitive" } },
-      { content: { contains: search, mode: "insensitive" } },
+      { title: { contains: search } },
+      { content: { contains: search } },
     ];
   }
 
@@ -61,6 +70,11 @@ export default async function PostsPage({
       },
     };
   }
+
+  // Get total featured posts for validation
+  const totalFeaturedPosts = await prisma.post.count({
+    where: { featured: true },
+  });
 
   // Get posts with pagination
   const total = await prisma.post.count({ where });
@@ -106,6 +120,34 @@ export default async function PostsPage({
         </Link>
       </div>
 
+      {/* Featured Posts Count */}
+      <div className="bg-amber-50 border border-amber-200 rounded-md p-4 mb-6 flex items-center justify-between">
+        <div>
+          <h2 className="font-medium text-amber-800 flex items-center">
+            <StarIcon className="mr-2" size={18} />
+            Featured Posts: {totalFeaturedPosts}/5
+          </h2>
+          <p className="text-sm text-amber-700 mt-1">
+            Maximum of 5 posts can be featured at a time. Featured posts appear
+            in the highlighted section on the news page.
+          </p>
+        </div>
+
+        <Link
+          href={{
+            pathname: "/dashboard/admin/posts",
+            query: { featured: "true" },
+          }}
+          className={`px-3 py-1.5 rounded text-sm ${
+            featured === "true"
+              ? "bg-amber-500 text-white"
+              : "bg-amber-100 text-amber-800 hover:bg-amber-200"
+          }`}
+        >
+          View Featured
+        </Link>
+      </div>
+
       {/* Filters */}
       <form
         action="/dashboard/admin/posts"
@@ -148,7 +190,7 @@ export default async function PostsPage({
               className="border border-gray-300 rounded-md px-3 py-2"
             >
               <option value="">All Categories</option>
-              {categories.map((category: any) => (
+              {categories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
                 </option>
@@ -168,6 +210,7 @@ export default async function PostsPage({
         {/* Hidden fields to preserve pagination when filtering */}
         <input type="hidden" name="page" value="1" />
         <input type="hidden" name="limit" value={limit} />
+        {featured && <input type="hidden" name="featured" value={featured} />}
       </form>
 
       {/* Posts Table */}
@@ -191,6 +234,9 @@ export default async function PostsPage({
                 Status
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Featured
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Date
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -202,14 +248,14 @@ export default async function PostsPage({
             {posts.length === 0 ? (
               <tr>
                 <td
-                  colSpan={7}
+                  colSpan={8}
                   className="px-6 py-4 text-center text-sm text-gray-500"
                 >
                   No posts found
                 </td>
               </tr>
             ) : (
-              posts.map((post: any) => (
+              posts.map((post) => (
                 <tr key={post.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap align-middle">
                     <div className="flex items-center justify-center">
@@ -237,12 +283,10 @@ export default async function PostsPage({
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">
-                    {post.author.name}
+                    {post.author?.name}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">
-                    {post.categories
-                      .map((pc: any) => pc.category.name)
-                      .join(", ")}
+                    {post.categories?.map((pc) => pc.category.name).join(", ")}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap align-middle">
                     <span
@@ -258,6 +302,28 @@ export default async function PostsPage({
                     >
                       {post.status.replace("_", " ")}
                     </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap align-middle">
+                    <Link
+                      href={`/dashboard/admin/posts/${post.id}/toggle-featured`}
+                      className={`inline-flex items-center px-2 py-1 rounded ${
+                        post?.featured
+                          ? "bg-amber-100 text-amber-800 hover:bg-amber-200"
+                          : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+                      }`}
+                    >
+                      <StarIcon
+                        size={16}
+                        className={
+                          post?.featured
+                            ? "text-amber-500 fill-amber-500"
+                            : "text-gray-400"
+                        }
+                      />
+                      <span className="ml-1 text-xs">
+                        {post?.featured ? "Featured" : "Not Featured"}
+                      </span>
+                    </Link>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">
                     {post.publishedAt
@@ -317,6 +383,7 @@ export default async function PostsPage({
                     ...(status && { status }),
                     ...(categoryId && { categoryId }),
                     ...(search && { search }),
+                    ...(featured && { featured }),
                   },
                 }}
                 className="flex items-center gap-1 px-4 py-2 bg-blue-50 text-blue-600 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors duration-200"
@@ -336,6 +403,7 @@ export default async function PostsPage({
                     ...(status && { status }),
                     ...(categoryId && { categoryId }),
                     ...(search && { search }),
+                    ...(featured && { featured }),
                   },
                 }}
                 className="flex items-center gap-1 px-4 py-2 bg-blue-50 text-blue-600 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors duration-200"

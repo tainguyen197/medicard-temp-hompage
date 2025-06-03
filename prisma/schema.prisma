@@ -31,6 +31,7 @@ model Post {
   content        String
   excerpt        String?
   featuredImage  String?        // URL or path to the featured image
+  featured       Boolean        @default(false) // Whether this post is featured
   status         String         @default("DRAFT") // "DRAFT", "PUBLISHED", etc.
   publishedAt    DateTime?
   createdAt      DateTime       @default(now())

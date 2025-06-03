@@ -5,6 +5,7 @@ export interface Post {
   content: string;
   excerpt?: string;
   featuredImage?: string;
+  featured: boolean;
   status: string;
   publishedAt?: string | null;
   createdAt: string;
