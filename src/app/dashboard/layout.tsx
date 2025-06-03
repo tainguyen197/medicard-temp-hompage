@@ -1,5 +1,5 @@
-import "./reset.css";
-import "./globals.css";
+// import "./reset.css";
+import "@/app/dashboard/globals.css";
 import { Inter } from "next/font/google";
 import { Metadata } from "next";
 import { Providers } from "@/app/dashboard/providers";

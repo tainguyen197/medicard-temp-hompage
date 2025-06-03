@@ -120,7 +120,7 @@ export default async function PostsPage({
                 name="search"
                 placeholder="Search posts..."
                 defaultValue={search || ""}
-                className="w-full pl-10 pr-4 py-2 border rounded-md"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md"
               />
               <SearchIcon
                 className="absolute left-3 top-2.5 text-gray-400"
@@ -133,7 +133,7 @@ export default async function PostsPage({
             <select
               name="status"
               defaultValue={status || ""}
-              className="border rounded-md px-3 py-2"
+              className="border border-gray-300 rounded-md px-3 py-2"
             >
               <option value="">All Status</option>
               <option value="DRAFT">Draft</option>
@@ -145,7 +145,7 @@ export default async function PostsPage({
             <select
               name="categoryId"
               defaultValue={categoryId || ""}
-              className="border rounded-md px-3 py-2"
+              className="border border-gray-300 rounded-md px-3 py-2"
             >
               <option value="">All Categories</option>
               {categories.map((category: any) => (
