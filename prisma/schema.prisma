@@ -64,6 +64,18 @@ model PostCategory {
   @@id([postId, categoryId])
 }
 
+// Service model for marketing pages
+model Service {
+  id              String   @id @default(cuid())
+  slug            String   @unique             // "transport", etc.
+  title           String                       // "Dịch vụ đưa đón"
+  description     String?                      // optional longer text/HTML
+  featureImage    Media?   @relation("ServiceFeatureImage", fields: [featureImageId], references: [id])
+  featureImageId  String?  @unique
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
 model Media {
   id           String   @id @default(cuid())
   url          String
@@ -76,6 +88,9 @@ model Media {
   uploadedById String?
   post         Post?    @relation(fields: [postId], references: [id])
   postId       String?
+  
+  // Back-relation for Service.featureImage
+  serviceImage Service? @relation("ServiceFeatureImage")
 }
 
 // Audit Log for tracking changes
