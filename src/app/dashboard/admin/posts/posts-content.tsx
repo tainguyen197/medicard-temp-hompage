@@ -13,9 +13,7 @@ import {
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
-import { Post } from "@/types/post";
 import { Prisma } from "@prisma/client";
-import PostsTable from "@/components/PostsTable";
 
 type SearchParams = {
   page?: string;
@@ -26,10 +24,13 @@ type SearchParams = {
   featured?: string;
 };
 
-export default async function PostsPage({
+// Server component
+export async function PostsPageContent({
   searchParams,
+  openDeleteModal,
 }: {
-  searchParams: Promise<SearchParams>;
+  searchParams: SearchParams;
+  openDeleteModal: (id: string, title: string) => void;
 }) {
   // Check authentication
   const session = await getServerSession(authOptions);
@@ -44,7 +45,7 @@ export default async function PostsPage({
     categoryId,
     search,
     featured,
-  } = await searchParams;
+  } = searchParams;
 
   // Build filter object
   const where: Prisma.PostWhereInput = {};
@@ -215,7 +216,148 @@ export default async function PostsPage({
       </form>
 
       {/* Posts Table */}
-      <PostsTable posts={posts} />
+      <div className="bg-white rounded-md shadow overflow-x-auto">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-20">
+                Image
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Title
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Author
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Category
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Status
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Featured
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Date
+              </th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody className="bg-white divide-y divide-gray-200">
+            {posts.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={8}
+                  className="px-6 py-4 text-center text-sm text-gray-500"
+                >
+                  No posts found
+                </td>
+              </tr>
+            ) : (
+              posts.map((post) => (
+                <tr key={post.id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap align-middle">
+                    <div className="flex items-center justify-center">
+                      {post.featuredImage ? (
+                        <img
+                          src={post.featuredImage}
+                          alt={post.title}
+                          className="h-14 w-14 object-cover rounded-md"
+                        />
+                      ) : (
+                        <div className="h-14 w-14 bg-gray-100 rounded-md flex items-center justify-center text-xs text-gray-500">
+                          No image
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap align-middle">
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {post.title}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        /blog/{post.slug}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">
+                    {post.author?.name}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">
+                    {post.categories?.map((pc) => pc.category.name).join(", ")}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap align-middle">
+                    <span
+                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        post.status === "PUBLISHED"
+                          ? "bg-green-100 text-green-800"
+                          : post.status === "DRAFT"
+                          ? "bg-gray-100 text-gray-800"
+                          : post.status === "PENDING_REVIEW"
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-blue-100 text-blue-800"
+                      }`}
+                    >
+                      {post.status.replace("_", " ")}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap align-middle">
+                    <Link
+                      href={`/dashboard/admin/posts/${post.id}/toggle-featured`}
+                      className={`inline-flex items-center px-2 py-1 rounded ${
+                        post?.featured
+                          ? "bg-amber-100 text-amber-800 hover:bg-amber-200"
+                          : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+                      }`}
+                    >
+                      <StarIcon
+                        size={16}
+                        className={
+                          post?.featured
+                            ? "text-amber-500 fill-amber-500"
+                            : "text-gray-400"
+                        }
+                      />
+                      <span className="ml-1 text-xs">
+                        {post?.featured ? "Featured" : "Not Featured"}
+                      </span>
+                    </Link>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">
+                    {post.publishedAt
+                      ? formatDate(post.publishedAt)
+                      : formatDate(post.createdAt)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium align-middle">
+                    <Link
+                      href={`/dashboard/admin/posts/${post.id}`}
+                      className="text-blue-600 hover:text-blue-900 mr-4"
+                    >
+                      Edit
+                    </Link>
+                    <Link
+                      href={`/dashboard/admin/posts/${post.id}/preview`}
+                      className="text-gray-600 hover:text-gray-900 mr-4"
+                    >
+                      Preview
+                    </Link>
+                    <button
+                      onClick={() => openDeleteModal(post.id, post.title)}
+                      className="text-red-600 hover:text-red-900"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {/* Pagination */}
       {totalPages > 1 && (

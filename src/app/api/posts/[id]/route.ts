@@ -184,7 +184,7 @@ export async function PUT(
 // DELETE /api/posts/[id] - Delete a specific post
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession(authOptions);
 
@@ -193,7 +193,7 @@ export async function DELETE(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const id = params.id;
+  const id = (await params).id;
 
   try {
     // Check if post exists and user has permission
@@ -214,7 +214,18 @@ export async function DELETE(
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    // Delete the post
+    // First delete all related records to avoid foreign key constraint errors
+    // Delete categories relationships
+    await prisma.postCategory.deleteMany({
+      where: { postId: id },
+    });
+
+    // Delete media related to the post
+    await prisma.media.deleteMany({
+      where: { postId: id },
+    });
+
+    // Now delete the post itself
     await prisma.post.delete({
       where: { id },
     });
