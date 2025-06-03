@@ -129,7 +129,7 @@ export default function NewPostPage() {
       }
 
       toast.success("Post created successfully!");
-      router.push("/admin/posts");
+      router.push("/dashboard/admin/posts");
       router.refresh();
     } catch (error) {
       console.error("Error creating post:", error);
@@ -142,10 +142,14 @@ export default function NewPostPage() {
   };
 
   return (
-    <div className="container mx-auto py-8 bg-white rounded-md">
+    <div className="container mx-auto p-8 bg-white rounded-md">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Create New Blog Post</h1>
-        <Button variant="outline" onClick={() => router.push("/admin/posts")}>
+        <Button
+          className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
+          variant="outline"
+          onClick={() => router.push("/dashboard/admin/posts")}
+        >
           Cancel
         </Button>
       </div>
@@ -245,7 +249,7 @@ export default function NewPostPage() {
           </div>
         </div>
 
-        <div className="bg-gray-50 p-4 rounded-md space-y-4">
+        {/* <div className="bg-gray-50 p-4 rounded-md space-y-4">
           <h3 className="text-lg font-medium">SEO Settings</h3>
           <div className="space-y-2">
             <Label htmlFor="metaTitle">Meta Title</Label>
@@ -267,17 +271,22 @@ export default function NewPostPage() {
               className="w-full"
             />
           </div>
-        </div>
+        </div> */}
 
         <div className="flex justify-end space-x-4 pt-4">
           <Button
+            className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
             type="button"
             variant="outline"
-            onClick={() => router.push("/admin/posts")}
+            onClick={() => router.push("/dashboard/admin/posts")}
           >
             Cancel
           </Button>
-          <Button type="submit" disabled={isSubmitting || isImageUploading}>
+          <Button
+            className="bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-200 cursor-pointer"
+            type="submit"
+            disabled={isSubmitting || isImageUploading}
+          >
             {isSubmitting ? "Creating..." : "Create Post"}
           </Button>
         </div>

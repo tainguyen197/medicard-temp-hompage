@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
+import React from "react";
 import AnimatedSection from "@/components/AnimatedSection";
 import prisma from "@/lib/prisma";
 import { Post } from "@/types/post";
@@ -14,8 +15,17 @@ export const metadata: Metadata = {
 // Default image fallback if no featured image
 const DEFAULT_IMAGE = "/images/news/news-image-1.jpg";
 
-export default async function BlogPage() {
+export default async function BlogPage({
+  searchParams,
+}: {
+  searchParams: { page?: string };
+}) {
+  // Get the current page from search params or default to 1
+  const currentPage = Number(searchParams.page) || 1;
+  const postsPerPage = 10;
+
   let blogPosts: Post[] = [];
+  let totalPosts = 0;
 
   try {
     // Fetch posts directly from the database with Prisma
@@ -26,11 +36,17 @@ export default async function BlogPage() {
       status: "PUBLISHED",
     };
 
+    // Get total count for pagination
+    totalPosts = await prisma.post.count({
+      where,
+    });
+
     // Get posts with pagination
     const posts = await prisma.post.findMany({
       where,
       orderBy: { createdAt: "desc" },
-      take: 20,
+      take: postsPerPage,
+      skip: (currentPage - 1) * postsPerPage,
       include: {
         author: {
           select: {
@@ -55,7 +71,7 @@ export default async function BlogPage() {
       publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
     })) as Post[];
 
-    console.log(`Found ${blogPosts.length} posts`);
+    console.log(`Found ${blogPosts.length} posts on page ${currentPage}`);
 
     if (blogPosts.length > 0) {
       console.log("First post title:", blogPosts[0]?.title);
@@ -107,15 +123,84 @@ export default async function BlogPage() {
   }
 
   console.log("Rendering news page with posts");
+
+  // Calculate if we need trending posts
+  let allPostsForTrending: Post[] = currentPage === 1 ? blogPosts : [];
+  // Additional fetch for trending posts if we're not on the first page
+  if (currentPage > 1) {
+    try {
+      const trendingPostsData = await prisma.post.findMany({
+        where: { status: "PUBLISHED" },
+        orderBy: { createdAt: "desc" },
+        take: 5,
+        include: {
+          author: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+          categories: {
+            include: {
+              category: true,
+            },
+          },
+        },
+      });
+
+      allPostsForTrending = trendingPostsData.map((post) => ({
+        ...post,
+        createdAt: post.createdAt.toISOString(),
+        updatedAt: post.updatedAt.toISOString(),
+        publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
+      })) as Post[];
+    } catch (error) {
+      console.error("Failed to fetch trending posts:", error);
+    }
+  }
+
   // Featured trending posts (first 5 posts)
-  const trendingPosts = blogPosts.slice(0, 5);
+  const trendingPosts = allPostsForTrending.slice(0, 5);
 
   // Calculate total pages for pagination
-  const totalPosts = await prisma.post.count({
-    where: { status: "PUBLISHED" },
-  });
-  const postsPerPage = 20;
   const totalPages = Math.ceil(totalPosts / postsPerPage);
+
+  // Generate array of page numbers to display
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+
+    // Always include page 1
+    pageNumbers.push(1);
+
+    // Calculate start and end page numbers to show
+    const startPage = Math.max(2, currentPage - 1);
+    const endPage = Math.min(totalPages - 1, currentPage + 1);
+
+    // Add ellipsis after page 1 if needed
+    if (startPage > 2) {
+      pageNumbers.push("...");
+    }
+
+    // Add page numbers between start and end
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+
+    // Add ellipsis before last page if needed
+    if (endPage < totalPages - 1) {
+      pageNumbers.push("...");
+    }
+
+    // Always include last page if there is more than one page
+    if (totalPages > 1) {
+      pageNumbers.push(totalPages);
+    }
+
+    return pageNumbers;
+  };
+
+  const pageNumbers = getPageNumbers();
 
   return (
     <div className="min-h-screen pt-[72px] md:pt-[96px]">
@@ -141,63 +226,65 @@ export default async function BlogPage() {
         </section>
       </AnimatedSection>
 
-      {/* 3. Trending Topics */}
-      <section className="container mx-auto px-4 mb-16 md:mb-20 max-w-[1040px]">
-        <div className="flex flex-col md:flex-row gap-4">
-          {/* Featured post (larger) - left side */}
-          <div className="md:w-1/2">
-            <Link
-              href={`/news/${trendingPosts[0].slug}`}
-              className="group relative rounded-lg overflow-hidden block h-full"
-            >
-              <div className="aspect-auto h-full relative">
-                <Image
-                  src={trendingPosts[0].featuredImage || DEFAULT_IMAGE}
-                  alt={trendingPosts[0].title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0">
-                  <div className="absolute bottom-0 w-full p-4 md:p-8 bg-[#00000080]">
-                    <h3 className="text-white font-medium text-xl md:text-2xl">
-                      {trendingPosts[0].title}
-                    </h3>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          </div>
-
-          {/* Grid of smaller posts - right side */}
-          <div className="md:w-1/2">
-            <div className="grid grid-cols-2 gap-4 h-full">
-              {trendingPosts.slice(1, 5).map((post) => (
-                <Link
-                  href={`/news/${post.slug}`}
-                  key={post.id}
-                  className="group relative rounded-lg overflow-hidden"
-                >
-                  <div className="aspect-square relative">
-                    <Image
-                      src={post.featuredImage || DEFAULT_IMAGE}
-                      alt={post.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0">
-                      <div className="absolute bottom-0 p-4 bg-[#00000080]">
-                        <h3 className="text-white font-medium text-sm md:text-base">
-                          {post.title}
-                        </h3>
-                      </div>
+      {/* 3. Trending Topics - Only show on first page */}
+      {currentPage === 1 && trendingPosts.length >= 5 && (
+        <section className="container mx-auto px-4 mb-16 md:mb-20 max-w-[1040px]">
+          <div className="flex flex-col md:flex-row gap-4">
+            {/* Featured post (larger) - left side */}
+            <div className="md:w-1/2">
+              <Link
+                href={`/news/${trendingPosts[0].slug}`}
+                className="group relative rounded-lg overflow-hidden block h-full"
+              >
+                <div className="aspect-auto h-full relative">
+                  <Image
+                    src={trendingPosts[0].featuredImage || DEFAULT_IMAGE}
+                    alt={trendingPosts[0].title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0">
+                    <div className="absolute bottom-0 w-full p-4 md:p-8 bg-[#00000080]">
+                      <h3 className="text-white font-medium text-xl md:text-2xl">
+                        {trendingPosts[0].title}
+                      </h3>
                     </div>
                   </div>
-                </Link>
-              ))}
+                </div>
+              </Link>
+            </div>
+
+            {/* Grid of smaller posts - right side */}
+            <div className="md:w-1/2">
+              <div className="grid grid-cols-2 gap-4 h-full">
+                {trendingPosts.slice(1, 5).map((post) => (
+                  <Link
+                    href={`/news/${post.slug}`}
+                    key={post.id}
+                    className="group relative rounded-lg overflow-hidden"
+                  >
+                    <div className="aspect-square relative">
+                      <Image
+                        src={post.featuredImage || DEFAULT_IMAGE}
+                        alt={post.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0">
+                        <div className="absolute bottom-0 p-4 bg-[#00000080]">
+                          <h3 className="text-white font-medium text-sm md:text-base">
+                            {post.title}
+                          </h3>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* 4. Topic Listing */}
       <section className="container mx-auto px-4 max-w-[1040px]">
@@ -241,10 +328,16 @@ export default async function BlogPage() {
       </section>
 
       {/* Pagination */}
-      <section className="container mx-auto px-4 mb-0 flex justify-start max-w-[1040px]">
+      <section className="container mx-auto px-4 mb-12 flex justify-start max-w-[1040px]">
         <div className="flex items-center gap-2">
-          <button
-            className="flex items-center justify-center hover:text-[#B1873F] cursor-pointer"
+          {/* Previous page button */}
+          <Link
+            href={currentPage > 1 ? `/news?page=${currentPage - 1}` : "#"}
+            className={`flex items-center justify-center ${
+              currentPage === 1
+                ? "text-gray-300 cursor-not-allowed"
+                : "hover:text-[#B1873F] cursor-pointer"
+            }`}
             aria-label="Previous page"
           >
             <svg
@@ -262,46 +355,42 @@ export default async function BlogPage() {
                 strokeLinejoin="round"
               />
             </svg>
-          </button>
+          </Link>
 
-          <button
-            className="w-10 h-10 rounded flex items-center justify-center border border-[#B1873F] text-[#B1873F] font-bold cursor-pointer"
-            aria-label="Page 1"
-          >
-            1
-          </button>
-
-          {totalPages > 1 && (
-            <>
-              <button
-                className="w-10 h-10 rounded flex items-center justify-center border border-gray-300 bg-white text-gray-600 font-bold cursor-pointer"
-                aria-label="Page 2"
-              >
-                2
-              </button>
-
-              {totalPages > 3 && (
-                <button
-                  className="w-10 h-10 rounded flex items-center justify-center border border-gray-300 bg-white text-gray-600 font-bold cursor-pointer"
-                  aria-label="More pages"
-                >
+          {/* Page numbers */}
+          {pageNumbers.map((pageNumber, index) => (
+            <React.Fragment key={index}>
+              {pageNumber === "..." ? (
+                <span className="w-10 h-10 flex items-center justify-center text-gray-600">
                   ...
-                </button>
-              )}
-
-              {totalPages > 2 && (
-                <button
-                  className="w-10 h-10 rounded flex items-center justify-center border border-gray-300 bg-white text-gray-600 font-bold cursor-pointer"
-                  aria-label={`Page ${totalPages}`}
+                </span>
+              ) : (
+                <Link
+                  href={`/news?page=${pageNumber}`}
+                  className={`w-10 h-10 rounded flex items-center justify-center border ${
+                    currentPage === pageNumber
+                      ? "border-[#B1873F] text-[#B1873F]"
+                      : "border-gray-300 bg-white text-gray-600"
+                  } font-bold cursor-pointer`}
+                  aria-label={`Page ${pageNumber}`}
+                  aria-current={currentPage === pageNumber ? "page" : undefined}
                 >
-                  {totalPages}
-                </button>
+                  {pageNumber}
+                </Link>
               )}
-            </>
-          )}
+            </React.Fragment>
+          ))}
 
-          <button
-            className="flex items-center justify-center hover:text-[#B1873F] cursor-pointer"
+          {/* Next page button */}
+          <Link
+            href={
+              currentPage < totalPages ? `/news?page=${currentPage + 1}` : "#"
+            }
+            className={`flex items-center justify-center ${
+              currentPage >= totalPages
+                ? "text-gray-300 cursor-not-allowed"
+                : "hover:text-[#B1873F] cursor-pointer"
+            }`}
             aria-label="Next page"
           >
             <svg
@@ -319,7 +408,7 @@ export default async function BlogPage() {
                 strokeLinejoin="round"
               />
             </svg>
-          </button>
+          </Link>
         </div>
       </section>
 
