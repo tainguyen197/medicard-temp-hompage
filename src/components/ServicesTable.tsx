@@ -11,6 +11,7 @@ interface Service {
   slug: string;
   status: string;
   createdAt: Date | string;
+  shortDescription: string;
   featureImage?: {
     id: string;
     url: string;
