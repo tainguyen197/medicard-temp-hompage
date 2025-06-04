@@ -52,7 +52,7 @@ export default async function AdminLayout({
       label: "Services",
       href: "/dashboard/admin/services",
       icon: <Flag className="h-5 w-5" />,
-      adminOnly: true,
+      // adminOnly: true,
     },
     {
       label: "Team Members",

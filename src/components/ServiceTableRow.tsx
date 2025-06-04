@@ -17,6 +17,7 @@ interface Service {
   slug: string;
   status: string;
   createdAt: Date | string;
+  shortDescription: string;
   featureImage?: {
     id: string;
     url: string;
@@ -184,10 +185,10 @@ export default function ServiceTableRow({
           <div className="text-sm text-gray-500">/services/{service.slug}</div>
         </div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">
-        <code className="bg-gray-100 px-2 py-1 rounded text-xs">
-          {service.slug}
-        </code>
+      <td className="px-6 py-4 whitespace-wrap text-sm text-gray-500">
+        <span className="text-justify text-xs line-clamp-3">
+          {service.shortDescription}
+        </span>
       </td>
       <td className="px-6 py-4 whitespace-nowrap align-middle">
         {getStatusBadge(service.status)}
