@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function NotFound() {
+export default function MarketingNotFound() {
   return (
     <div className="min-h-[100vh] flex flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-blue-100 px-4 py-16">
       <div className="relative flex items-center justify-center w-full max-w-lg mx-auto mb-8 mt-10">

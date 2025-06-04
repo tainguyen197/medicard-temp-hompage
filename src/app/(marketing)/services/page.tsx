@@ -99,7 +99,6 @@ export default async function ServicesPage() {
     } services for display`
   );
 
-  console.log(services);
   return (
     <div className="pt-[72px] md:pt-[96px]">
       <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
