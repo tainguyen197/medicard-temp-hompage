@@ -13,6 +13,7 @@ const serviceUpdateSchema = z.object({
   status: z.string().optional(),
   slug: z.string().optional(),
   description: z.string().optional(),
+  shortDescription: z.string().optional(),
   featuredImage: z.string().optional(), // Accept the image URL
   featureImageId: z.string().optional(),
 });
@@ -122,6 +123,7 @@ export async function PUT(
       data: {
         title: validatedData.title,
         description: validatedData.description,
+        shortDescription: validatedData.shortDescription,
         status: validatedData.status,
         slug,
         ...(featureImageId && { featureImageId }), // Only add if we have an image ID

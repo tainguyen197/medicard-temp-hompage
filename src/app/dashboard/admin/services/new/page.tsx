@@ -15,6 +15,7 @@ export default function NewServicePage() {
   const [title, setTitle] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [description, setDescription] = useState("");
+  const [shortDescription, setShortDescription] = useState("");
   const [slug, setSlug] = useState("");
   const [featuredImage, setFeaturedImage] = useState("");
   const [featureImageId, setFeatureImageId] = useState("");
@@ -83,6 +84,7 @@ export default function NewServicePage() {
         body: JSON.stringify({
           title,
           description,
+          shortDescription,
           slug,
           featuredImage, // Send the image URL
           featureImageId, // Send the media ID if available
@@ -158,6 +160,21 @@ export default function NewServicePage() {
           />
           <p className="text-xs text-gray-500">
             This will be used in the URL: /services/{slug}
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="shortDescription">Short Description</Label>
+          <Input
+            id="shortDescription"
+            value={shortDescription}
+            onChange={(e) => setShortDescription(e.target.value)}
+            placeholder="Brief summary of the service"
+            className="w-full"
+          />
+          <p className="text-xs text-gray-500">
+            A brief summary that will be displayed in service listings and
+            previews.
           </p>
         </div>
 

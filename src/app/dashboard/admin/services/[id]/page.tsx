@@ -23,6 +23,7 @@ export default function EditServicePage({
   const [status, setStatus] = useState("DRAFT");
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
+  const [shortDescription, setShortDescription] = useState("");
   const [featuredImageUrl, setFeaturedImageUrl] = useState("");
   const [featureImageId, setFeatureImageId] = useState("");
   const [isImageUploading, setIsImageUploading] = useState(false);
@@ -45,6 +46,7 @@ export default function EditServicePage({
         setStatus(service.status || "DRAFT");
         setSlug(service.slug || "");
         setDescription(service.description || "");
+        setShortDescription(service.shortDescription || "");
         setFeaturedImageUrl(service.featureImage?.url || "");
         setFeatureImageId(service.featureImageId || "");
 
@@ -118,6 +120,7 @@ export default function EditServicePage({
           status,
           slug,
           description,
+          shortDescription,
           featuredImage: featuredImageUrl,
           featureImageId,
         }),
@@ -207,6 +210,21 @@ export default function EditServicePage({
           />
           <p className="text-xs text-gray-500">
             This will be used in the URL: /services/{slug}
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="shortDescription">Short Description</Label>
+          <Input
+            id="shortDescription"
+            value={shortDescription}
+            onChange={(e) => setShortDescription(e.target.value)}
+            placeholder="Brief summary of the service"
+            className="w-full"
+          />
+          <p className="text-xs text-gray-500">
+            A brief summary that will be displayed in service listings and
+            previews.
           </p>
         </div>
 

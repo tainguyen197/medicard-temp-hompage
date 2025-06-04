@@ -10,6 +10,7 @@ import { createSlug } from "../../../lib/utils";
 const serviceSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().optional(),
+  shortDescription: z.string().optional(),
   status: z.string().optional().default("DRAFT"),
   slug: z.string().optional(),
   featuredImage: z.string().optional(), // Accept the image URL
@@ -120,6 +121,7 @@ export async function POST(request: Request) {
       data: {
         title: validatedData.title,
         description: validatedData.description,
+        shortDescription: validatedData.shortDescription,
         status: validatedData.status,
         slug,
         ...(featureImageId && { featureImageId }), // Only add if we have an image ID
