@@ -2,39 +2,104 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import AnimatedSection from "@/components/AnimatedSection";
+import prisma from "@/lib/prisma";
 
-export default function ServicesPage() {
-  const services = [
-    {
-      id: "ortho",
-      title: "Y HỌC CỔ TRUYỀN",
-      description:
-        "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại...",
-      image: "/images/service_1.png",
-    },
-    {
-      id: "rehab",
-      title: "ĐIỀU TRỊ VẬT LÝ TRỊ LIỆU CÔNG NGHỆ CAO",
-      description:
-        "Healthcare Therapy Center áp dụng những công nghệ vật lý trị liệu tiên tiến, hiện đại nhằm tối đa hóa khả năng điều trị, phục hồi của khách hàng. Các công nghệ Laser công suất cao, Sóng cao tần Radio Frequency (RF), Sóng xung kích Shockwave được chứng minh qua nhiều nghiên cứu khoa học trên thế giới là hiệu quả...",
-      image: "/images/service_2.png",
-    },
-    {
-      id: "func",
-      title: "PHỤC HỒI CHỨC NĂNG CÔNG NGHỆ CAO",
-      description:
-        "Điều trị các bệnh về cột sống như đau cổ-lưng, đau thần kinh tọa, thoát vị đĩa đệm...; Các bệnh lý về gân - khớp như: viêm chop xoay, đau khớp gối, khớp cổ tay, gai gót chân; hội chứng ống cổ tay, viêm gân duỗi ngón cái, tenis elbow…; Các tình trạng căng mỏi cơ cấp - mạn.",
-      image: "/images/service_3.png",
-    },
-    {
-      id: "transport",
-      title: "HÀNH TRÌNH ÊM ÁI",
-      description:
-        "Tận hưởng trọn vẹn sự thư thái sau liệu trình tại Healthcare Therapy Center mà không cần lo lắng về việc di chuyển bởi dịch vụ đưa đón tận nơi.",
-      image: "/images/service_4.png",
-    },
-  ];
+interface Service {
+  id: string;
+  slug: string;
+  title: string;
+  description?: string | null;
+  shortDescription?: string | null;
+  status: string;
+  featureImageId?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  featureImage?: {
+    id: string;
+    url: string;
+    fileName?: string | null;
+    originalName?: string | null;
+  } | null;
+}
 
+export default async function ServicesPage() {
+  let services: Service[] = [];
+
+  try {
+    // Fetch services directly from the database with Prisma (like posts page does)
+    console.log("Fetching services from database...");
+
+    // Get services (only show published services for public page)
+    const servicesData = await prisma.service.findMany({
+      where: {
+        status: "PUBLISHED",
+      },
+      orderBy: { createdAt: "desc" },
+      include: {
+        featureImage: true, // Include the related Media record
+      },
+    });
+
+    services = servicesData;
+    console.log(`Found ${services.length} published services`);
+
+    if (services.length > 0) {
+      console.log("First service title:", services[0]?.title);
+      console.log("First service status:", services[0]?.status);
+    }
+  } catch (error) {
+    console.error("Failed to fetch services:", error);
+    services = [];
+  }
+
+  // Map services to the format expected by the UI
+  const displayServices =
+    services.length > 0
+      ? services.map((service) => ({
+          id: service.slug || service.id, // Use slug for URL, fallback to id
+          title: service.title,
+          shortDescription: service.shortDescription || "",
+          image: service.featureImage?.url || "/images/service_1.png", // Fallback to existing service image
+        }))
+      : [
+          // Fallback to hardcoded data if no services from database
+          {
+            id: "ortho",
+            title: "Y HỌC CỔ TRUYỀN",
+            shortDescription:
+              "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại...",
+            image: "/images/service_1.png",
+          },
+          {
+            id: "rehab",
+            title: "ĐIỀU TRỊ VẬT LÝ TRỊ LIỆU CÔNG NGHỆ CAO",
+            shortDescription:
+              "Healthcare Therapy Center áp dụng những công nghệ vật lý trị liệu tiên tiến, hiện đại nhằm tối đa hóa khả năng điều trị, phục hồi của khách hàng. Các công nghệ Laser công suất cao, Sóng cao tần Radio Frequency (RF), Sóng xung kích Shockwave được chứng minh qua nhiều nghiên cứu khoa học trên thế giới là hiệu quả...",
+            image: "/images/service_2.png",
+          },
+          {
+            id: "func",
+            title: "PHỤC HỒI CHỨC NĂNG CÔNG NGHỆ CAO",
+            shortDescription:
+              "Điều trị các bệnh về cột sống như đau cổ-lưng, đau thần kinh tọa, thoát vị đĩa đệm...; Các bệnh lý về gân - khớp như: viêm chop xoay, đau khớp gối, khớp cổ tay, gai gót chân; hội chứng ống cổ tay, viêm gân duỗi ngón cái, tenis elbow…; Các tình trạng căng mỏi cơ cấp - mạn.",
+            image: "/images/service_3.png",
+          },
+          {
+            id: "transport",
+            title: "HÀNH TRÌNH ÊM ÁI",
+            shortDescription:
+              "Tận hưởng trọn vẹn sự thư thái sau liệu trình tại Healthcare Therapy Center mà không cần lo lắng về việc di chuyển bởi dịch vụ đưa đón tận nơi.",
+            image: "/images/service_4.png",
+          },
+        ];
+
+  console.log(
+    `Using ${
+      services.length > 0 ? "database" : "fallback"
+    } services for display`
+  );
+
+  console.log(services);
   return (
     <div className="pt-[72px] md:pt-[96px]">
       <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
@@ -64,7 +129,7 @@ export default function ServicesPage() {
       {/* Services Detail Section */}
       <section className="bg-[#FEF6EA] py-14 md:py-16">
         <div className="container mx-auto px-4 max-w-6xl">
-          {services.map((service, index) => (
+          {displayServices.map((service, index) => (
             <div key={service.id} className="mb-10 last:mb-0">
               <Link
                 href={`/services/${service.id}`}
@@ -105,7 +170,7 @@ export default function ServicesPage() {
                         </button>
                       </div>
                       <p className="text-md md:text-lg text-[#909090] leading-relaxed">
-                        {service.description}
+                        {service.shortDescription}
                       </p>
                     </div>
                   </div>

@@ -51,22 +51,23 @@ model PostCategory {
   postId     String
   categoryId String
   assignedAt DateTime @default(now())
-  post       Post     @relation(fields: [postId], references: [id])
   category   Category @relation(fields: [categoryId], references: [id])
+  post       Post     @relation(fields: [postId], references: [id])
 
   @@id([postId, categoryId])
 }
 
 model Service {
-  id             String   @id @default(cuid())
-  slug           String   @unique
-  title          String
-  description    String?
-  status         String   @default("DRAFT")
-  featureImageId String?  @unique
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  featureImage   Media?   @relation("ServiceFeatureImage", fields: [featureImageId], references: [id])
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  title            String
+  description      String?
+  shortDescription String?
+  status           String   @default("DRAFT")
+  featureImageId   String?  @unique
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  featureImage     Media?   @relation("ServiceFeatureImage", fields: [featureImageId], references: [id])
 }
 
 model Media {
@@ -79,8 +80,8 @@ model Media {
   createdAt    DateTime @default(now())
   uploadedById String?
   postId       String?
-  uploadedBy   User?    @relation(fields: [uploadedById], references: [id])
   post         Post?    @relation(fields: [postId], references: [id])
+  uploadedBy   User?    @relation(fields: [uploadedById], references: [id])
   serviceImage Service? @relation("ServiceFeatureImage")
 }
 
