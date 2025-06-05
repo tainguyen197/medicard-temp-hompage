@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import ImageUpload from "@/components/ImageUpload";
 import dynamic from "next/dynamic";
+import { ROUTES } from "@/lib/router";
 
 const CKEditorComponent = dynamic(
   () => import("@/components/CKEditorComponent"),
@@ -136,7 +137,7 @@ export default function EditServicePage({
       }
 
       toast.success("Service updated successfully!");
-      router.push("/dashboard/admin/services");
+      router.push(ROUTES.ADMIN_SERVICES);
       router.refresh();
     } catch (error) {
       console.error("Error updating service:", error);
@@ -170,7 +171,7 @@ export default function EditServicePage({
         <Button
           className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
           variant="outline"
-          onClick={() => router.push("/dashboard/admin/services")}
+          onClick={() => router.push(ROUTES.ADMIN_SERVICES)}
         >
           Cancel
         </Button>
@@ -271,7 +272,7 @@ export default function EditServicePage({
             className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
             type="button"
             variant="outline"
-            onClick={() => router.push("/dashboard/admin/services")}
+            onClick={() => router.push(ROUTES.ADMIN_SERVICES)}
           >
             Cancel
           </Button>

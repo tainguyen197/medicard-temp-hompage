@@ -204,13 +204,6 @@ export default function ServiceTableRow({
         >
           Edit
         </Link>
-        <Link
-          href={ROUTES.SERVICES + `/${service.slug}`}
-          target="_blank"
-          className="text-gray-600 hover:text-gray-900 mr-4"
-        >
-          View
-        </Link>
         <DeleteServiceModal
           service={{
             id: service.id,
@@ -218,7 +211,9 @@ export default function ServiceTableRow({
           }}
           onServiceDeleted={onServiceDeleted}
         >
-          <button className="text-red-600 hover:text-red-900">Delete</button>
+          <button className="text-red-600 hover:text-red-900 cursor-pointer">
+            Delete
+          </button>
         </DeleteServiceModal>
       </td>
     </tr>

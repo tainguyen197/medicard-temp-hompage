@@ -12,6 +12,8 @@ interface ImageUploadProps {
   onChange: (value: string) => void;
   onImageUploading?: (isUploading: boolean) => void;
   onMediaIdChange?: (mediaId: string) => void;
+  aspectRatio?: number;
+  aspectRatioText?: string;
 }
 
 export default function ImageUpload({
@@ -19,6 +21,8 @@ export default function ImageUpload({
   onChange,
   onImageUploading,
   onMediaIdChange,
+  aspectRatio = 270 / 200,
+  aspectRatioText = "270:200",
 }: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
@@ -175,13 +179,13 @@ export default function ImageUpload({
       {showCropper && preview ? (
         <div className="bg-gray-50 p-4 rounded-md space-y-4">
           <div className="text-sm font-medium mb-2">
-            Crop Image (270:200 ratio)
+            Crop Image ({aspectRatioText} ratio)
           </div>
           <div className="max-w-full overflow-auto">
             <ReactCrop
               crop={crop}
               onChange={(c: Crop) => setCrop(c)}
-              aspect={270 / 200}
+              aspect={aspectRatio}
             >
               <img
                 src={preview}
@@ -192,7 +196,7 @@ export default function ImageUpload({
             </ReactCrop>
           </div>
           <div className="text-xs text-gray-600 mb-2">
-            Recommended aspect ratio: 270:200
+            Recommended aspect ratio: {aspectRatioText}
           </div>
           <div className="flex gap-2 justify-end mt-2">
             <Button
@@ -227,7 +231,7 @@ export default function ImageUpload({
         <div className="relative w-full">
           <div
             className="relative overflow-hidden rounded-md border border-border"
-            style={{ aspectRatio: "270/200" }}
+            style={{ aspectRatio: aspectRatioText.replace(":", "/") }}
           >
             <Image
               src={value}
@@ -259,7 +263,7 @@ export default function ImageUpload({
           <div className="flex flex-col items-center justify-center gap-1 text-xs text-muted-foreground">
             <CropIcon className="h-6 w-6 mb-1" />
             <p className="font-medium">Drag & drop or click to upload</p>
-            <p>270:200 aspect ratio recommended</p>
+            <p>{aspectRatioText} aspect ratio recommended</p>
           </div>
         </div>
       )}

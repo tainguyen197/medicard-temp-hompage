@@ -179,7 +179,12 @@ export default function NewPostPage() {
               value={featuredImage}
               onChange={setFeaturedImage}
               onImageUploading={setIsImageUploading}
+              aspectRatio={1}
+              aspectRatioText="1:1"
             />
+            <p className="text-xs text-gray-500">
+              Recommended aspect ratio: 1:1 (square)
+            </p>
           </div>
         </div>
 

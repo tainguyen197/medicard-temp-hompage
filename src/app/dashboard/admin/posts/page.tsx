@@ -148,16 +148,6 @@ export default async function PostsPage({
       </div>
 
       {/* Filters */}
-      <FilterForm
-        initialValues={{
-          search: search || "",
-          status: status || "",
-          categoryId: categoryId || "",
-          featured: featured || "",
-          limit: limit || "10",
-        }}
-        categories={categories}
-      />
 
       {/* Posts Table */}
       <PostsTable posts={posts} />

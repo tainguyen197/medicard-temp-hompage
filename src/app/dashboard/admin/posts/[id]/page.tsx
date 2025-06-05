@@ -237,6 +237,8 @@ export default function EditPostPage({
               value={featuredImage}
               onChange={setFeaturedImage}
               onImageUploading={setIsImageUploading}
+              aspectRatio={200 / 200}
+              aspectRatioText="200:200"
             />
           </div>
         </div>

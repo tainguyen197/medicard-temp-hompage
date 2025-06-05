@@ -13,6 +13,7 @@ import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 import ServicesTable from "@/components/ServicesTable";
+import { ROUTES } from "@/lib/router";
 
 type SearchParams = {
   page?: string;
@@ -65,7 +66,7 @@ export default async function ServicesPage({
         <h1 className="text-3xl font-bold">Services</h1>
 
         <Link
-          href="/dashboard/admin/services/new"
+          href={ROUTES.ADMIN_SERVICES + "/new"}
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
         >
           <PlusIcon size={16} />
@@ -83,56 +84,6 @@ export default async function ServicesPage({
           </p>
         </div>
       </div>
-
-      {/* Filters */}
-      <form
-        action="/dashboard/admin/services"
-        method="GET"
-        className="bg-white p-4 rounded-md shadow mb-6"
-      >
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1">
-            <div className="relative">
-              <input
-                type="text"
-                name="search"
-                placeholder="Search services..."
-                defaultValue={search || ""}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md"
-              />
-              <SearchIcon
-                className="absolute left-3 top-2.5 text-gray-400"
-                size={18}
-              />
-            </div>
-          </div>
-
-          <div className="flex gap-4">
-            <select
-              name="status"
-              defaultValue={status || ""}
-              className="px-4 py-2 border border-gray-300 rounded-md"
-            >
-              <option value="">All Statuses</option>
-              <option value="PUBLISHED">Published</option>
-              <option value="DRAFT">Draft</option>
-              <option value="ARCHIVED">Archived</option>
-            </select>
-
-            <button
-              type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
-            >
-              <FilterIcon size={16} />
-              Search
-            </button>
-          </div>
-        </div>
-
-        {/* Hidden fields to preserve pagination when filtering */}
-        <input type="hidden" name="page" value="1" />
-        <input type="hidden" name="limit" value={limit} />
-      </form>
 
       {/* Services Table */}
       <ServicesTable services={services as any} />
@@ -156,7 +107,7 @@ export default async function ServicesPage({
             {Number(page) > 1 && (
               <Link
                 href={{
-                  pathname: "/dashboard/admin/services",
+                  pathname: ROUTES.ADMIN_SERVICES,
                   query: {
                     page: Number(page) - 1,
                     limit,
@@ -174,7 +125,7 @@ export default async function ServicesPage({
             {Number(page) < totalPages && (
               <Link
                 href={{
-                  pathname: "/dashboard/admin/services",
+                  pathname: ROUTES.ADMIN_SERVICES,
                   query: {
                     page: Number(page) + 1,
                     limit,
