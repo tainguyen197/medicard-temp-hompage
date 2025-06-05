@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
+import { ROUTES } from "@/lib/router";
 
 export async function GET(
   request: NextRequest,
@@ -14,6 +15,11 @@ export async function GET(
   if (!session?.user) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
+
+  // Get the host from the request to preserve the subdomain
+  const host = request.headers.get("host") || "";
+  const protocol = request.headers.get("x-forwarded-proto") || "http";
+  const baseUrl = `${protocol}://${host}`;
 
   const id = (await params).id;
 
@@ -30,7 +36,7 @@ export async function GET(
 
     if (!post) {
       return NextResponse.redirect(
-        new URL(`/posts?error=Post not found`, request.url)
+        new URL(`${ROUTES.ADMIN_POSTS}?error=Post not found`, baseUrl)
       );
     }
 
@@ -43,8 +49,8 @@ export async function GET(
       if (featuredCount >= 5) {
         return NextResponse.redirect(
           new URL(
-            `/posts?error=Maximum of 5 featured posts allowed. Please unfeature a post first.`,
-            request.url
+            `${ROUTES.ADMIN_POSTS}?error=Maximum of 5 featured posts allowed. Please unfeature a post first.`,
+            baseUrl
           )
         );
       }
@@ -64,12 +70,12 @@ export async function GET(
       : `"${post.title}" is no longer featured`;
 
     return NextResponse.redirect(
-      new URL(`/posts?success=${successMessage}`, request.url)
+      new URL(`${ROUTES.ADMIN_POSTS}?success=${successMessage}`, baseUrl)
     );
   } catch (error) {
     console.error("Error toggling featured status:", error);
     return NextResponse.redirect(
-      new URL(`/posts?error=Failed to update post`, request.url)
+      new URL(`${ROUTES.ADMIN_POSTS}?error=Failed to update post`, baseUrl)
     );
   }
-} 
+}

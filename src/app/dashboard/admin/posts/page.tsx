@@ -12,8 +12,6 @@ import {
 
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { formatDate } from "@/lib/utils";
-import { Post } from "@/types/post";
 import { Prisma } from "@prisma/client";
 import PostsTable from "@/components/PostsTable";
 import { ROUTES } from "@/lib/router";
@@ -60,8 +58,8 @@ export default async function PostsPage({
 
   if (search) {
     where.OR = [
-      { title: { contains: search } },
-      { content: { contains: search } },
+      { title: { contains: search, mode: "insensitive" } },
+      { content: { contains: search, mode: "insensitive" } },
     ];
   }
 
@@ -152,7 +150,7 @@ export default async function PostsPage({
 
       {/* Filters */}
       <form
-        action="/posts"
+        action={ROUTES.ADMIN_POSTS}
         method="GET"
         className="bg-white p-4 rounded-md shadow mb-6"
       >

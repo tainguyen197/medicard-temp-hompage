@@ -60,7 +60,7 @@ export default function PostTableRow({
       <td className="px-6 py-4 whitespace-nowrap align-middle">
         <div>
           <div className="text-sm font-medium text-gray-900">{post.title}</div>
-          <div className="text-sm text-gray-500">/blog/{post.slug}</div>
+          <div className="text-sm text-gray-500">/news/{post.slug}</div>
         </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">
@@ -86,7 +86,7 @@ export default function PostTableRow({
       </td>
       <td className="px-6 py-4 whitespace-nowrap align-middle">
         <Link
-          href={`/posts/${post.id}/toggle-featured`}
+          href={`${ROUTES.ADMIN_POSTS}/${post.id}/toggle-featured`}
           className={`inline-flex items-center px-2 py-1 rounded ${
             post?.featured
               ? "bg-amber-100 text-amber-800 hover:bg-amber-200"
@@ -116,12 +116,6 @@ export default function PostTableRow({
         >
           Edit
         </Link>
-        <Link
-          href={ROUTES.ADMIN_POSTS + `/${post.id}/preview`}
-          className="text-gray-600 hover:text-gray-900 mr-4"
-        >
-          Preview
-        </Link>
         <DeletePostModal
           post={{
             id: post.id,
@@ -131,7 +125,9 @@ export default function PostTableRow({
           }}
           onPostDeleted={onPostDeleted}
         >
-          <button className="text-red-600 hover:text-red-900">Delete</button>
+          <button className="text-red-600 hover:text-red-900 cursor-pointer">
+            Delete
+          </button>
         </DeletePostModal>
       </td>
     </tr>
