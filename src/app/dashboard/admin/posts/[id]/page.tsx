@@ -72,7 +72,7 @@ export default function EditPostPage({
       } catch (error) {
         console.error("Error fetching post:", error);
         toast.error("Failed to load post");
-        router.push("/dashboard/admin/posts");
+        router.push("/posts");
       }
     };
 
@@ -171,7 +171,7 @@ export default function EditPostPage({
       }
 
       toast.success("Post updated successfully!");
-      router.push("/dashboard/admin/posts");
+      router.push("/posts");
       router.refresh();
     } catch (error) {
       console.error("Error updating post:", error);
@@ -205,7 +205,7 @@ export default function EditPostPage({
         <Button
           className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
           variant="outline"
-          onClick={() => router.push("/dashboard/admin/posts")}
+          onClick={() => router.push("/posts")}
         >
           Cancel
         </Button>
@@ -335,7 +335,7 @@ export default function EditPostPage({
             className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
             type="button"
             variant="outline"
-            onClick={() => router.push("/dashboard/admin/posts")}
+            onClick={() => router.push("/posts")}
           >
             Cancel
           </Button>

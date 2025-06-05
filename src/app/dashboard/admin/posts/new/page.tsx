@@ -129,7 +129,7 @@ export default function NewPostPage() {
       }
 
       toast.success("Post created successfully!");
-      router.push("/dashboard/admin/posts");
+      router.push("/posts");
       router.refresh();
     } catch (error) {
       console.error("Error creating post:", error);
@@ -148,7 +148,7 @@ export default function NewPostPage() {
         <Button
           className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
           variant="outline"
-          onClick={() => router.push("/dashboard/admin/posts")}
+          onClick={() => router.push("/posts")}
         >
           Cancel
         </Button>
@@ -278,7 +278,7 @@ export default function NewPostPage() {
             className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
             type="button"
             variant="outline"
-            onClick={() => router.push("/dashboard/admin/posts")}
+            onClick={() => router.push("/posts")}
           >
             Cancel
           </Button>

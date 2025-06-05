@@ -113,7 +113,7 @@ export default async function PostsPage({
         <h1 className="text-3xl font-bold">Blog Posts</h1>
 
         <Link
-          href="/dashboard/admin/posts/new"
+          href="/posts/new"
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
         >
           <PlusIcon size={16} />
@@ -136,7 +136,7 @@ export default async function PostsPage({
 
         <Link
           href={{
-            pathname: "/dashboard/admin/posts",
+            pathname: "/posts",
             query: { featured: "true" },
           }}
           className={`px-3 py-1.5 rounded text-sm ${
@@ -151,7 +151,7 @@ export default async function PostsPage({
 
       {/* Filters */}
       <form
-        action="/dashboard/admin/posts"
+        action="/posts"
         method="GET"
         className="bg-white p-4 rounded-md shadow mb-6"
       >
@@ -236,7 +236,7 @@ export default async function PostsPage({
             {Number(page) > 1 && (
               <Link
                 href={{
-                  pathname: "/dashboard/admin/posts",
+                  pathname: "/posts",
                   query: {
                     page: Number(page) - 1,
                     limit,
@@ -256,7 +256,7 @@ export default async function PostsPage({
             {Number(page) < totalPages && (
               <Link
                 href={{
-                  pathname: "/dashboard/admin/posts",
+                  pathname: "/posts",
                   query: {
                     page: Number(page) + 1,
                     limit,

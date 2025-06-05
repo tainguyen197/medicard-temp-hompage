@@ -114,7 +114,7 @@ export async function PostsPageContent({
         <h1 className="text-3xl font-bold">Blog Posts</h1>
 
         <Link
-          href="/dashboard/admin/posts/new"
+          href="/posts/new"
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
         >
           <PlusIcon size={16} />
@@ -137,7 +137,7 @@ export async function PostsPageContent({
 
         <Link
           href={{
-            pathname: "/dashboard/admin/posts",
+            pathname: "/posts",
             query: { featured: "true" },
           }}
           className={`px-3 py-1.5 rounded text-sm ${
@@ -152,7 +152,7 @@ export async function PostsPageContent({
 
       {/* Filters */}
       <form
-        action="/dashboard/admin/posts"
+        action="/posts"
         method="GET"
         className="bg-white p-4 rounded-md shadow mb-6"
       >
@@ -307,7 +307,7 @@ export async function PostsPageContent({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap align-middle">
                     <Link
-                      href={`/dashboard/admin/posts/${post.id}/toggle-featured`}
+                      href={`/posts/${post.id}/toggle-featured`}
                       className={`inline-flex items-center px-2 py-1 rounded ${
                         post?.featured
                           ? "bg-amber-100 text-amber-800 hover:bg-amber-200"
@@ -334,13 +334,13 @@ export async function PostsPageContent({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium align-middle">
                     <Link
-                      href={`/dashboard/admin/posts/${post.id}`}
+                      href={`/posts/${post.id}`}
                       className="text-blue-600 hover:text-blue-900 mr-4"
                     >
                       Edit
                     </Link>
                     <Link
-                      href={`/dashboard/admin/posts/${post.id}/preview`}
+                      href={`/posts/${post.id}/preview`}
                       className="text-gray-600 hover:text-gray-900 mr-4"
                     >
                       Preview
@@ -378,7 +378,7 @@ export async function PostsPageContent({
             {Number(page) > 1 && (
               <Link
                 href={{
-                  pathname: "/dashboard/admin/posts",
+                  pathname: "/posts",
                   query: {
                     page: Number(page) - 1,
                     limit,
@@ -398,7 +398,7 @@ export async function PostsPageContent({
             {Number(page) < totalPages && (
               <Link
                 href={{
-                  pathname: "/dashboard/admin/posts",
+                  pathname: "/posts",
                   query: {
                     page: Number(page) + 1,
                     limit,

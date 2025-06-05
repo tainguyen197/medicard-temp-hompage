@@ -342,6 +342,7 @@ const CKEditorComponent: React.FC<CKEditorComponentProps> = ({
     <div className="ckeditor-container">
       <CKEditor
         editor={ClassicEditor}
+        // @ts-ignore: the shipped d.ts is missing `data`
         data={data}
         onChange={(event, editor) => {
           console.log("Editor content:", editor.getData());

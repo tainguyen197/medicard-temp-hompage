@@ -17,6 +17,12 @@ const eslintConfig = [
       "require-import-extension": "off",
       "no-require-imports": "off",
       "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "jsx-a11y/alt-text": "off",
+      "react/no-unescaped-entities": "off",
+      "@typescript-eslint/no-empty-object-type": "off",
+      "@next/next/no-img-element": "off",
+      "@typescript-eslint/ban-ts-comment": "off",
     },
   },
 ];

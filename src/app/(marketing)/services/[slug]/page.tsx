@@ -39,14 +39,18 @@ interface ContentSection {
 
 export default async function ServiceDetailPage({
   params,
-}: ServiceDetailProps) {
+}: {
+  params: Promise<{ slug?: string }>;
+}) {
   let service: Service | null = null;
+  const slug = (await params).slug;
+  console.log("slug", slug);
 
   try {
     // Fetch service by slug from database
     service = await prisma.service.findFirst({
       where: {
-        slug: params.slug,
+        slug: slug,
         status: "PUBLISHED",
       },
       include: {
@@ -210,11 +214,15 @@ export async function generateStaticParams() {
 }
 
 // Generate metadata for SEO (optional)
-export async function generateMetadata({ params }: ServiceDetailProps) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug?: string }>;
+}) {
   try {
     const service = await prisma.service.findFirst({
       where: {
-        slug: params.slug,
+        slug: (await params).slug,
         status: "PUBLISHED",
       },
     });

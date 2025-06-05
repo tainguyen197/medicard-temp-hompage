@@ -7,7 +7,7 @@ import prisma from "@/lib/prisma";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   // Protect route
   const session = await getServerSession(authOptions);
@@ -15,7 +15,7 @@ export async function GET(
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
-  const { id } = params;
+  const id = (await params).id;
 
   try {
     // Get current post
@@ -30,7 +30,7 @@ export async function GET(
 
     if (!post) {
       return NextResponse.redirect(
-        new URL(`/dashboard/admin/posts?error=Post not found`, request.url)
+        new URL(`/posts?error=Post not found`, request.url)
       );
     }
 
@@ -43,7 +43,7 @@ export async function GET(
       if (featuredCount >= 5) {
         return NextResponse.redirect(
           new URL(
-            `/dashboard/admin/posts?error=Maximum of 5 featured posts allowed. Please unfeature a post first.`,
+            `/posts?error=Maximum of 5 featured posts allowed. Please unfeature a post first.`,
             request.url
           )
         );
@@ -64,15 +64,12 @@ export async function GET(
       : `"${post.title}" is no longer featured`;
 
     return NextResponse.redirect(
-      new URL(`/dashboard/admin/posts?success=${successMessage}`, request.url)
+      new URL(`/posts?success=${successMessage}`, request.url)
     );
   } catch (error) {
     console.error("Error toggling featured status:", error);
     return NextResponse.redirect(
-      new URL(
-        `/dashboard/admin/posts?error=Failed to update post`,
-        request.url
-      )
+      new URL(`/posts?error=Failed to update post`, request.url)
     );
   }
 } 

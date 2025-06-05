@@ -40,34 +40,34 @@ export default async function AdminLayout({
   const navItems = [
     {
       label: "Dashboard",
-      href: "/dashboard/admin",
+      href: "/",
       icon: <LayoutDashboard className="h-5 w-5" />,
     },
     {
       label: "Blog Posts",
-      href: "/dashboard/admin/posts",
+      href: "/posts",
       icon: <FileText className="h-5 w-5" />,
     },
     {
       label: "Services",
-      href: "/dashboard/admin/services",
+      href: "/services",
       icon: <Flag className="h-5 w-5" />,
       // adminOnly: true,
     },
     {
       label: "Team Members",
-      href: "/dashboard/admin/team",
+      href: "/team",
       icon: <Users className="h-5 w-5" />,
       adminOnly: true,
     },
     {
       label: "Media Library",
-      href: "/dashboard/admin/media",
+      href: "/media",
       icon: <Image className="h-5 w-5" />,
     },
     {
       label: "Settings",
-      href: "/dashboard/admin/settings",
+      href: "/settings",
       icon: <Settings className="h-5 w-5" />,
       adminOnly: true,
     },
@@ -83,10 +83,7 @@ export default async function AdminLayout({
       {/* Mobile header */}
       <div className="md:hidden bg-white border-b shadow-sm p-4">
         <div className="flex items-center justify-between">
-          <Link
-            href="/dashboard/admin"
-            className="text-xl font-bold text-blue-600"
-          >
+          <Link href="/" className="text-xl font-bold text-blue-600">
             Medicare Dashboard
           </Link>
           <button className="p-2 rounded-md hover:bg-gray-100">
@@ -99,7 +96,7 @@ export default async function AdminLayout({
         {/* Sidebar */}
         <aside className="admin-sidebar hidden md:flex flex-col w-64">
           <div className="admin-sidebar-logo">
-            <Link href="/dashboard/admin" className="flex items-center">
+            <Link href="/" className="flex items-center">
               <svg
                 className="w-8 h-8 mr-2"
                 viewBox="0 0 24 24"

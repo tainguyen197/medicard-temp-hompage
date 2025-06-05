@@ -135,7 +135,7 @@ export default async function ServicesPage({
       </form>
 
       {/* Services Table */}
-      <ServicesTable services={services} />
+      <ServicesTable services={services as any} />
 
       {/* Pagination */}
       {totalPages > 1 && (

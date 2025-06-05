@@ -7,6 +7,10 @@ export function middleware(request: NextRequest) {
   const subdomain = request.headers.get('host')?.split('.')[0]
   console.log('subdomain', subdomain)
 
+  if (nextUrl.pathname.startsWith('/api')) {
+    return NextResponse.next()
+  }
+
   if (nextUrl.pathname.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL("/not-found", request.url));
   }
