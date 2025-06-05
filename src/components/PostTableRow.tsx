@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { StarIcon } from "lucide-react";
 import DeletePostModal from "./DeletePostModal";
+import { ROUTES } from "@/lib/router";
 
 interface Post {
   id: string;
@@ -110,13 +111,13 @@ export default function PostTableRow({
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium align-middle">
         <Link
-          href={`/posts/${post.id}`}
+          href={ROUTES.ADMIN_POSTS + `/${post.id}`}
           className="text-blue-600 hover:text-blue-900 mr-4"
         >
           Edit
         </Link>
         <Link
-          href={`/posts/${post.id}/preview`}
+          href={ROUTES.ADMIN_POSTS + `/${post.id}/preview`}
           className="text-gray-600 hover:text-gray-900 mr-4"
         >
           Preview

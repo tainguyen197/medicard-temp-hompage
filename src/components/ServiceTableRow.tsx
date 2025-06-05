@@ -10,6 +10,7 @@ import {
   MoreVertical,
 } from "lucide-react";
 import DeleteServiceModal from "./DeleteServiceModal";
+import { ROUTES } from "@/lib/router";
 
 interface Service {
   id: string;
@@ -198,13 +199,13 @@ export default function ServiceTableRow({
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium align-middle">
         <Link
-          href={`/dashboard/admin/services/${service.id}`}
+          href={ROUTES.ADMIN_SERVICES + `/${service.id}`}
           className="text-blue-600 hover:text-blue-900 mr-4"
         >
           Edit
         </Link>
         <Link
-          href={`/services/${service.slug}`}
+          href={ROUTES.SERVICES + `/${service.slug}`}
           target="_blank"
           className="text-gray-600 hover:text-gray-900 mr-4"
         >

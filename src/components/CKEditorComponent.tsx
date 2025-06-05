@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import dynamic from "next/dynamic";
 
 /*
  * CUSTOM UPLOAD ADAPTER FIX:
@@ -11,7 +12,8 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
  * CKEditor Classic build with image uploads.
  *
  * The custom adapter works with the existing /api/upload_image endpoint
- * and doesn't require any additional CKEditor plugins or custom builds.
+ * and doesn't r
+ * equire any additional CKEditor plugins or custom builds.
  */
 
 interface CKEditorComponentProps {
@@ -337,6 +339,10 @@ const CKEditorComponent: React.FC<CKEditorComponentProps> = ({
       // Manual upload logic would be here if needed
     }
   };
+
+  if (typeof window === "undefined") {
+    return null;
+  }
 
   return (
     <div className="ckeditor-container">

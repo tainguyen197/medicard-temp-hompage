@@ -14,15 +14,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import CKEditorComponent from "@/components/CKEditorComponent";
 import ImageUpload from "@/components/ImageUpload";
 import { ROUTES } from "@/lib/router";
+import dynamic from "next/dynamic";
+
+const CKEditorComponent = dynamic(
+  () => import("@/components/CKEditorComponent"),
+  { ssr: false }
+);
 
 export default function EditPostPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  console.log("edit post page");
   const router = useRouter();
   const { id } = use(params);
   const [isLoading, setIsLoading] = useState(true);
@@ -303,7 +309,9 @@ export default function EditPostPage({
         <div className="space-y-2">
           <Label>Content</Label>
           <div>
-            <CKEditorComponent data={content} onChange={handleEditorChange} />
+            {typeof window !== "undefined" && (
+              <CKEditorComponent data={content} onChange={handleEditorChange} />
+            )}
           </div>
         </div>
 
