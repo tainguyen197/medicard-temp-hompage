@@ -16,6 +16,7 @@ import {
 
 import { authOptions } from "@/lib/auth";
 import { ROUTES } from "@/lib/router";
+import { MessageHandler } from "@/components/MessageHandler";
 
 // Admin dashboard layout component
 export default async function AdminLayout({
@@ -81,6 +82,9 @@ export default async function AdminLayout({
 
   return (
     <div className="admin-layout">
+      {/* Message Handler for all admin routes */}
+      <MessageHandler />
+
       {/* Mobile header */}
       <div className="md:hidden bg-white border-b shadow-sm p-4">
         <div className="flex items-center justify-between">
