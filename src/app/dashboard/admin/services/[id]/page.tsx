@@ -8,8 +8,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import ImageUpload from "@/components/ImageUpload";
-import CKEditorComponent from "@/components/CKEditorComponent";
+import dynamic from "next/dynamic";
 
+const CKEditorComponent = dynamic(
+  () => import("@/components/CKEditorComponent"),
+  { ssr: false }
+);
 export default function EditServicePage({
   params,
 }: {
@@ -231,10 +235,12 @@ export default function EditServicePage({
         <div className="space-y-2">
           <Label>Service Description</Label>
           <div>
-            <CKEditorComponent
-              data={description}
-              onChange={handleEditorChange}
-            />
+            {typeof window !== "undefined" && (
+              <CKEditorComponent
+                data={description}
+                onChange={handleEditorChange}
+              />
+            )}
           </div>
           <p className="text-xs text-gray-500">
             Describe your healthcare service in detail. You can include
