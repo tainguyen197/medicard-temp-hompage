@@ -44,8 +44,8 @@ export async function GET(request: Request) {
   const where: {
     status?: string;
     OR?: Array<{
-      title?: { contains: string; mode: string };
-      content?: { contains: string; mode: string };
+      title?: { contains: string; mode: "insensitive" };
+      content?: { contains: string; mode: "insensitive" };
     }>;
     categories?: { some: { categoryId: string } };
   } = {};

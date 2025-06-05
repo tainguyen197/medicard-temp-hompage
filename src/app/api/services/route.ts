@@ -29,8 +29,8 @@ export async function GET(request: Request) {
   // Build filter object
   const where: {
     OR?: Array<{
-      title?: { contains: string; mode: string };
-      description?: { contains: string; mode: string };
+      title?: { contains: string; mode: "insensitive" };
+      description?: { contains: string; mode: "insensitive" };
     }>;
   } = {};
 
