@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { ROUTES } from "@/lib/router";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,10 +15,10 @@ const Header = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const navItems = [
-    { name: "DỊCH VỤ", href: "/services" },
-    { name: "VỀ CHÚNG TÔI", href: "/about" },
-    { name: "TIN TỨC", href: "/news" },
-    { name: "LIÊN HỆ", href: "/contact" },
+    { name: "DỊCH VỤ", href: ROUTES.SERVICES },
+    { name: "VỀ CHÚNG TÔI", href: ROUTES.ABOUT },
+    { name: "TIN TỨC", href: ROUTES.NEWS },
+    { name: "LIÊN HỆ", href: ROUTES.CONTACT },
   ];
 
   const handleNavigation = (
@@ -39,8 +40,8 @@ const Header = () => {
     <header className="bg-[#182134] py-4 fixed top-0 left-0 right-0 z-50 min-h-[72px] md:min-h-[96px]">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link
-          href="/"
-          onClick={(e) => handleNavigation(e, "/")}
+          href={ROUTES.HOME}
+          onClick={(e) => handleNavigation(e, ROUTES.HOME)}
           className="relative w-32 h-10 md:w-36 md:h-16"
         >
           <Image

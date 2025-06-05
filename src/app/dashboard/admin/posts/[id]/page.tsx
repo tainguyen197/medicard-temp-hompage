@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import CKEditorComponent from "@/components/CKEditorComponent";
 import ImageUpload from "@/components/ImageUpload";
+import { ROUTES } from "@/lib/router";
 
 export default function EditPostPage({
   params,
@@ -72,7 +73,7 @@ export default function EditPostPage({
       } catch (error) {
         console.error("Error fetching post:", error);
         toast.error("Failed to load post");
-        router.push("/posts");
+        router.push(ROUTES.ADMIN_POSTS);
       }
     };
 
@@ -171,7 +172,7 @@ export default function EditPostPage({
       }
 
       toast.success("Post updated successfully!");
-      router.push("/posts");
+      router.push(ROUTES.ADMIN_POSTS);
       router.refresh();
     } catch (error) {
       console.error("Error updating post:", error);
@@ -205,7 +206,7 @@ export default function EditPostPage({
         <Button
           className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
           variant="outline"
-          onClick={() => router.push("/posts")}
+          onClick={() => router.push(ROUTES.ADMIN_POSTS)}
         >
           Cancel
         </Button>
@@ -335,7 +336,7 @@ export default function EditPostPage({
             className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
             type="button"
             variant="outline"
-            onClick={() => router.push("/posts")}
+            onClick={() => router.push(ROUTES.ADMIN_POSTS)}
           >
             Cancel
           </Button>

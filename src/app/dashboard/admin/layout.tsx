@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 import { authOptions } from "@/lib/auth";
+import { ROUTES } from "@/lib/router";
 
 // Admin dashboard layout component
 export default async function AdminLayout({
@@ -40,34 +41,34 @@ export default async function AdminLayout({
   const navItems = [
     {
       label: "Dashboard",
-      href: "/",
+      href: ROUTES.ADMIN_DASHBOARD,
       icon: <LayoutDashboard className="h-5 w-5" />,
     },
     {
       label: "Blog Posts",
-      href: "/posts",
+      href: ROUTES.ADMIN_POSTS,
       icon: <FileText className="h-5 w-5" />,
     },
     {
       label: "Services",
-      href: "/services",
+      href: ROUTES.ADMIN_SERVICES,
       icon: <Flag className="h-5 w-5" />,
       // adminOnly: true,
     },
     {
       label: "Team Members",
-      href: "/team",
+      href: ROUTES.ADMIN_TEAM,
       icon: <Users className="h-5 w-5" />,
       adminOnly: true,
     },
     {
       label: "Media Library",
-      href: "/media",
+      href: ROUTES.ADMIN_MEDIA,
       icon: <Image className="h-5 w-5" />,
     },
     {
       label: "Settings",
-      href: "/settings",
+      href: ROUTES.ADMIN_SETTINGS,
       icon: <Settings className="h-5 w-5" />,
       adminOnly: true,
     },
@@ -83,7 +84,10 @@ export default async function AdminLayout({
       {/* Mobile header */}
       <div className="md:hidden bg-white border-b shadow-sm p-4">
         <div className="flex items-center justify-between">
-          <Link href="/" className="text-xl font-bold text-blue-600">
+          <Link
+            href={ROUTES.ADMIN_DASHBOARD}
+            className="text-xl font-bold text-blue-600"
+          >
             Medicare Dashboard
           </Link>
           <button className="p-2 rounded-md hover:bg-gray-100">
@@ -96,7 +100,7 @@ export default async function AdminLayout({
         {/* Sidebar */}
         <aside className="admin-sidebar hidden md:flex flex-col w-64">
           <div className="admin-sidebar-logo">
-            <Link href="/" className="flex items-center">
+            <Link href={ROUTES.ADMIN_DASHBOARD} className="flex items-center">
               <svg
                 className="w-8 h-8 mr-2"
                 viewBox="0 0 24 24"
@@ -129,7 +133,7 @@ export default async function AdminLayout({
               </div>
             </div>
             <Link
-              href="/api/auth/signout"
+              href={ROUTES.AUTH_LOGOUT}
               className="flex items-center px-4 py-2 text-red-600 hover:bg-red-50 hover:text-red-700 rounded-md w-full transition-colors"
             >
               <LogOut className="h-4 w-4 mr-3" />

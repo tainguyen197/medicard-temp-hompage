@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { footerServiceLinks, ROUTES } from "@/lib/router";
 
 export default function Footer() {
   return (
@@ -38,7 +39,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/"
+                  href={ROUTES.HOME}
                   className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
                   Trang chủ
@@ -46,7 +47,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/about"
+                  href={ROUTES.ABOUT}
                   className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
                   Về chúng tôi
@@ -54,7 +55,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  href="/news"
+                  href={ROUTES.NEWS}
                   className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
                   Tin tức
@@ -71,26 +72,26 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <Link
-                  href="/services/ortho"
+                  href={footerServiceLinks[0].href}
                   className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
-                  Y học cổ truyền
+                  {footerServiceLinks[0].name}
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/services/rehab"
+                  href={footerServiceLinks[1].href}
                   className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
-                  Vật lý trị liệu
+                  {footerServiceLinks[1].name}
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/services/func"
+                  href={footerServiceLinks[2].href}
                   className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
-                  Phục hồi chức năng
+                  {footerServiceLinks[2].name}
                 </Link>
               </li>
             </ul>

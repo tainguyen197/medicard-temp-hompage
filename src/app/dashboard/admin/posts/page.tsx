@@ -16,6 +16,7 @@ import { formatDate } from "@/lib/utils";
 import { Post } from "@/types/post";
 import { Prisma } from "@prisma/client";
 import PostsTable from "@/components/PostsTable";
+import { ROUTES } from "@/lib/router";
 
 type SearchParams = {
   page?: string;
@@ -34,7 +35,7 @@ export default async function PostsPage({
   // Check authentication
   const session = await getServerSession(authOptions);
   if (!session?.user) {
-    redirect("/auth/login");
+    redirect(ROUTES.AUTH_LOGIN);
   }
 
   const {
@@ -113,7 +114,7 @@ export default async function PostsPage({
         <h1 className="text-3xl font-bold">Blog Posts</h1>
 
         <Link
-          href="/posts/new"
+          href={ROUTES.ADMIN_POSTS_NEW}
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
         >
           <PlusIcon size={16} />
@@ -136,7 +137,7 @@ export default async function PostsPage({
 
         <Link
           href={{
-            pathname: "/posts",
+            pathname: ROUTES.ADMIN_POSTS,
             query: { featured: "true" },
           }}
           className={`px-3 py-1.5 rounded text-sm ${
@@ -236,7 +237,7 @@ export default async function PostsPage({
             {Number(page) > 1 && (
               <Link
                 href={{
-                  pathname: "/posts",
+                  pathname: ROUTES.ADMIN_POSTS,
                   query: {
                     page: Number(page) - 1,
                     limit,
@@ -256,7 +257,7 @@ export default async function PostsPage({
             {Number(page) < totalPages && (
               <Link
                 href={{
-                  pathname: "/posts",
+                  pathname: ROUTES.ADMIN_POSTS,
                   query: {
                     page: Number(page) + 1,
                     limit,

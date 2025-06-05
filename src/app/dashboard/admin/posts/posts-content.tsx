@@ -14,6 +14,7 @@ import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
+import { ROUTES } from "@/lib/router";
 
 type SearchParams = {
   page?: string;
@@ -114,7 +115,7 @@ export async function PostsPageContent({
         <h1 className="text-3xl font-bold">Blog Posts</h1>
 
         <Link
-          href="/posts/new"
+          href={ROUTES.ADMIN_POSTS_NEW}
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
         >
           <PlusIcon size={16} />
@@ -307,7 +308,7 @@ export async function PostsPageContent({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap align-middle">
                     <Link
-                      href={`/posts/${post.id}/toggle-featured`}
+                      href={`${ROUTES.ADMIN_POSTS}/${post.id}/toggle-featured`}
                       className={`inline-flex items-center px-2 py-1 rounded ${
                         post?.featured
                           ? "bg-amber-100 text-amber-800 hover:bg-amber-200"
@@ -334,13 +335,13 @@ export async function PostsPageContent({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium align-middle">
                     <Link
-                      href={`/posts/${post.id}`}
+                      href={`${ROUTES.ADMIN_POSTS}/${post.id}`}
                       className="text-blue-600 hover:text-blue-900 mr-4"
                     >
                       Edit
                     </Link>
                     <Link
-                      href={`/posts/${post.id}/preview`}
+                      href={`${ROUTES.ADMIN_POSTS}/${post.id}/preview`}
                       className="text-gray-600 hover:text-gray-900 mr-4"
                     >
                       Preview
