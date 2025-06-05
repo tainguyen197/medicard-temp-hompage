@@ -7,8 +7,14 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import CKEditorComponent from "@/components/CKEditorComponent";
 import ImageUpload from "@/components/ImageUpload";
+import { ROUTES } from "@/lib/router";
+import dynamic from "next/dynamic";
+
+const CKEditorComponent = dynamic(
+  () => import("@/components/CKEditorComponent"),
+  { ssr: false }
+);
 
 export default function NewServicePage() {
   const router = useRouter();
@@ -116,7 +122,7 @@ export default function NewServicePage() {
         <Button
           className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
           variant="outline"
-          onClick={() => router.push("/dashboard/admin/services")}
+          onClick={() => router.push(ROUTES.ADMIN_SERVICES)}
         >
           Cancel
         </Button>
@@ -181,10 +187,12 @@ export default function NewServicePage() {
         <div className="space-y-2">
           <Label>Service Description</Label>
           <div>
-            <CKEditorComponent
-              data={description}
-              onChange={handleEditorChange}
-            />
+            {typeof window !== "undefined" && (
+              <CKEditorComponent
+                data={description}
+                onChange={handleEditorChange}
+              />
+            )}
           </div>
           <p className="text-xs text-gray-500">
             Describe your healthcare service in detail. You can include
@@ -197,7 +205,7 @@ export default function NewServicePage() {
             className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
             type="button"
             variant="outline"
-            onClick={() => router.push("/dashboard/admin/services")}
+            onClick={() => router.push(ROUTES.ADMIN_SERVICES)}
           >
             Cancel
           </Button>

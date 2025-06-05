@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "lint": "next lint",
-    "start": "NODE_ENV=production node server.js",
+    "start": "next start",
     "postinstall": "prisma generate",
     "prisma:seed": "ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} prisma/seed.ts",
     "seed:posts": "ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} prisma/seed-posts.ts"
