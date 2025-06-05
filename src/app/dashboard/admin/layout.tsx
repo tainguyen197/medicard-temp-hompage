@@ -11,14 +11,14 @@ import {
   Image,
   Settings,
   Menu,
-  LogOut,
 } from "lucide-react";
 
 import { authOptions } from "@/lib/auth";
 import { ROUTES } from "@/lib/router";
 import { MessageHandler } from "@/components/MessageHandler";
+import { AdminNavItems } from "./components/AdminNavItems";
 
-// Admin dashboard layout component
+// Server component
 export default async function AdminLayout({
   children,
 }: {
@@ -40,11 +40,11 @@ export default async function AdminLayout({
 
   // Define navigation items
   const navItems = [
-    {
-      label: "Dashboard",
-      href: ROUTES.ADMIN_DASHBOARD,
-      icon: <LayoutDashboard className="h-5 w-5" />,
-    },
+    // {
+    //   label: "Dashboard",
+    //   href: ROUTES.ADMIN_DASHBOARD,
+    //   icon: <LayoutDashboard className="h-5 w-5" />,
+    // },
     {
       label: "Blog Posts",
       href: ROUTES.ADMIN_POSTS,
@@ -54,25 +54,24 @@ export default async function AdminLayout({
       label: "Services",
       href: ROUTES.ADMIN_SERVICES,
       icon: <Flag className="h-5 w-5" />,
-      // adminOnly: true,
     },
-    {
-      label: "Team Members",
-      href: ROUTES.ADMIN_TEAM,
-      icon: <Users className="h-5 w-5" />,
-      adminOnly: true,
-    },
-    {
-      label: "Media Library",
-      href: ROUTES.ADMIN_MEDIA,
-      icon: <Image className="h-5 w-5" />,
-    },
-    {
-      label: "Settings",
-      href: ROUTES.ADMIN_SETTINGS,
-      icon: <Settings className="h-5 w-5" />,
-      adminOnly: true,
-    },
+    // {
+    //   label: "Team Members",
+    //   href: ROUTES.ADMIN_TEAM,
+    //   icon: <Users className="h-5 w-5" />,
+    //   adminOnly: true,
+    // },
+    // {
+    //   label: "Media Library",
+    //   href: ROUTES.ADMIN_MEDIA,
+    //   icon: <Image className="h-5 w-5" />,
+    // },
+    // {
+    //   label: "Settings",
+    //   href: ROUTES.ADMIN_SETTINGS,
+    //   icon: <Settings className="h-5 w-5" />,
+    //   adminOnly: true,
+    // },
   ];
 
   // Filter out admin-only items for editors
@@ -92,7 +91,7 @@ export default async function AdminLayout({
             href={ROUTES.ADMIN_DASHBOARD}
             className="text-xl font-bold text-blue-600"
           >
-            Medicare Dashboard
+            Dashboard
           </Link>
           <button className="p-2 rounded-md hover:bg-gray-100">
             <Menu className="h-6 w-6" />
@@ -113,37 +112,16 @@ export default async function AdminLayout({
               >
                 <path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM9 17H7V10H9V17ZM13 17H11V7H13V17ZM17 17H15V13H17V17Z" />
               </svg>
-              Medicare Dashboard
+              Dashboard
             </Link>
           </div>
 
-          <nav className="flex-1 px-4 py-4 space-y-1">
-            {filteredNavItems.map((item) => (
-              <Link key={item.href} href={item.href} className="admin-nav-item">
-                <span className="mr-3">{item.icon}</span>
-                {item.label}
-              </Link>
-            ))}
+          <nav className="flex-1 px-4 py-4 space-y-1 flex flex-col justify-between">
+            <AdminNavItems
+              navItems={filteredNavItems}
+              userData={session.user}
+            />
           </nav>
-
-          <div className="p-4 border-t">
-            <div className="flex items-center mb-4">
-              <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3 shadow-sm">
-                {session.user.name?.[0] || "U"}
-              </div>
-              <div>
-                <div className="font-medium">{session.user.name}</div>
-                <div className="text-xs text-gray-500">{session.user.role}</div>
-              </div>
-            </div>
-            <Link
-              href={ROUTES.AUTH_LOGOUT}
-              className="flex items-center px-4 py-2 text-red-600 hover:bg-red-50 hover:text-red-700 rounded-md w-full transition-colors"
-            >
-              <LogOut className="h-4 w-4 mr-3" />
-              Sign Out
-            </Link>
-          </div>
         </aside>
 
         {/* Main content */}
