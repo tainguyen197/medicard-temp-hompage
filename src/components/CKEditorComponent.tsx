@@ -172,30 +172,13 @@ const CKEditorComponent: React.FC<CKEditorComponentProps> = ({
     },
     image: {
       toolbar: [
-        "imageTextAlternative",
-        "toggleImageCaption",
-        "imageStyle:inline",
-        "imageStyle:block",
-        "imageStyle:side",
         "linkImage", // Add link image option
       ],
       styles: {
         options: [
           {
-            name: "side",
-            className: "image-style-side",
-            title: "Side image",
-            modelElements: ["imageBlock"],
-          },
-          {
-            name: "inline",
-            className: "image-style-inline",
-            title: "Inline image",
-            modelElements: ["imageInline"],
-          },
-          {
             name: "block",
-            className: "image-style-block",
+            className: "mx-auto",
             title: "Centered image",
             modelElements: ["imageBlock"],
             isDefault: true,
