@@ -1,8 +1,11 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
+
+const withNextIntl = createNextIntlPlugin("./src/i18n.ts");
 
 export const config = {
-  matcher: ['/((?!_next|favicon.ico).*)'],
-}
+  matcher: ["/((?!_next|favicon.ico).*)"],
+};
 
 const nextConfig: NextConfig = {
   images: {
@@ -20,4 +23,4 @@ const nextConfig: NextConfig = {
   /* config options here */
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

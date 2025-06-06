@@ -35,7 +35,6 @@ export default function Home() {
       <AnimatedSection animation="slideLeft" delay={0.2} duration={0.8}>
         <ProcessSection />
       </AnimatedSection>
-      z
       <AnimatedSection animation="slideUp" delay={0.1} duration={0.6}>
         <BlogSection />
       </AnimatedSection>

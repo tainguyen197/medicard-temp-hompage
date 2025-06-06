@@ -4,7 +4,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import LayoutWithHeader from "../_layouts/LayoutWithHeader";
+import LayoutWithHeader from "@/app/_layouts/LayoutWithHeader";
 
 export const metadata: Metadata = {
   title: "Healthcare Therapy Center | Giải pháp chăm sóc sức khoẻ toàn diện",
