@@ -1,16 +1,23 @@
-import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import createIntlMiddleware from "next-intl/middleware";
+
+const intlMiddleware = createIntlMiddleware({
+  locales: ["en", "vi"],
+  defaultLocale: "vi",
+  localeDetection: true,
+});
 
 export function middleware(request: NextRequest) {
   const { nextUrl } = request;
   const subdomain = request.headers.get("host")?.split(".")[0];
 
+  // Handle API routes
   if (nextUrl.pathname.startsWith("/api")) {
     return NextResponse.next();
   }
 
-  // only rewrite if you're NOT already under /dashboard/admin
+  // Handle subdomain routing for dashboard
   if (subdomain === "dashboard") {
     if (nextUrl.pathname.startsWith("/auth")) {
       console.log(
@@ -31,13 +38,24 @@ export function middleware(request: NextRequest) {
     );
   }
 
+  // Redirect dashboard access from main domain
   if (nextUrl.pathname.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL("/not-found", request.url));
   }
 
-  return NextResponse.next();
+  // Handle internationalization for marketing pages
+  return intlMiddleware(request);
 }
 
 export const config = {
-  matcher: ["/((?!_next|favicon.ico).*)"],
+  matcher: [
+    // Match internationalized pathnames
+    // "/",
+    // "/(vi|en)/:path*",
+    // // Match dashboard and API routes
+    // "/dashboard/:path*",
+    // "/api/:path*",
+
+    "/((?!api|dashboard|_next|favicon\\.ico).*)",
+  ],
 };

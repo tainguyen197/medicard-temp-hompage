@@ -1,0 +1,20 @@
+{
+  "services": {
+    "breadcrumb": {
+      "services": "Services"
+    },
+    "cta": {
+      "heading": "Ready to experience the difference",
+      "subheading": "Let Healthcare Therapy Center become your reliable support in your healthcare journey.",
+      "button": "Book an experience"
+    },
+    "notFound": {
+      "title": "Service not found",
+      "description": "The service you are looking for does not exist or has been deleted."
+    }
+  },
+  "metadata": {
+    "serviceNotFound": "Service Not Found",
+    "service": "Service"
+  }
+} 

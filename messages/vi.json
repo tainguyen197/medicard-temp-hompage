@@ -1,0 +1,20 @@
+{
+  "services": {
+    "breadcrumb": {
+      "services": "Dịch vụ"
+    },
+    "cta": {
+      "heading": "Sẵn sàng trải nghiệm sự khác biệt",
+      "subheading": "Hãy để Healthcare Therapy Center trở thành điểm tựa vững chắc trong hành trình chăm sóc sức khỏe của bạn.",
+      "button": "Đặt lịch trải nghiệm"
+    },
+    "notFound": {
+      "title": "Dịch vụ không tìm thấy",
+      "description": "Dịch vụ bạn đang tìm kiếm không tồn tại hoặc đã bị xóa."
+    }
+  },
+  "metadata": {
+    "serviceNotFound": "Dịch vụ không tìm thấy",
+    "service": "Dịch vụ"
+  }
+} 
