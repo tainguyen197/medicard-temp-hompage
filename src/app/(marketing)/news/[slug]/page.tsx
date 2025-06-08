@@ -6,7 +6,7 @@ import prisma from "@/lib/prisma";
 import NewsDetailContent from "./NewsDetailContent";
 import NewsDetailLoading from "./loading";
 
-type Params = { slug: string };
+type Params = Promise<{ slug: string }>;
 
 // Category item type definition
 interface CategoryItem {
@@ -27,7 +27,7 @@ export async function generateMetadata({
 }: {
   params: Params;
 }): Promise<Metadata> {
-  const { slug } = params;
+  const { slug } = await params;
 
   try {
     // Fetch post directly using Prisma
@@ -54,8 +54,8 @@ export async function generateMetadata({
   }
 }
 
-export default function BlogDetailPage({ params }: { params: Params }) {
-  const { slug } = params;
+export default async function BlogDetailPage({ params }: { params: Params }) {
+  const { slug } = await params;
 
   return (
     <div>

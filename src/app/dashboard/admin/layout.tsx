@@ -133,7 +133,7 @@ export default async function AdminLayout({
           <nav className="flex-1 px-4 py-4 space-y-1 flex flex-col justify-between">
             <AdminNavItems
               navItems={filteredNavItems}
-              userData={session.user}
+              userData={session.user as any}
             />
           </nav>
         </aside>

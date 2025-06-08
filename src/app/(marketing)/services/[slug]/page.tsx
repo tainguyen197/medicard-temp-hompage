@@ -7,9 +7,7 @@ import ServiceDetailContent from "./ServiceDetailContent";
 import ServiceDetailLoading from "./loading";
 
 interface ServiceDetailProps {
-  params: {
-    slug: string;
-  };
+  params: Promise<{ slug: string }>;
 }
 
 interface Service {
@@ -39,8 +37,10 @@ interface ContentSection {
   image?: string;
 }
 
-export default function ServiceDetailPage({ params }: ServiceDetailProps) {
-  const { slug } = params;
+export default async function ServiceDetailPage({
+  params,
+}: ServiceDetailProps) {
+  const { slug } = await params;
 
   return (
     <>
@@ -123,12 +123,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
   try {
     const service = await prisma.service.findFirst({
       where: {
-        slug: params.slug,
+        slug: (await params).slug,
         status: "PUBLISHED",
       },
     });

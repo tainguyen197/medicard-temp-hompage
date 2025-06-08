@@ -18,7 +18,7 @@ type SearchParams = {
 export default async function ServicesContent({
   searchParams,
 }: {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }) {
   // Check authentication
   const session = await getServerSession(authOptions);
@@ -26,7 +26,7 @@ export default async function ServicesContent({
     redirect("/auth/login");
   }
 
-  const { page = "1", limit = "10", search, status } = searchParams;
+  const { page = "1", limit = "10", search, status } = await searchParams;
 
   // Build filter object
   const where: any = {};

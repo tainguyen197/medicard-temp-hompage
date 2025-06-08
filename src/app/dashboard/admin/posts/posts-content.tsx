@@ -30,7 +30,7 @@ type SearchParams = {
 export default async function PostsContent({
   searchParams,
 }: {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }) {
   // Check authentication
   const session = await getServerSession(authOptions);
@@ -45,7 +45,7 @@ export default async function PostsContent({
     categoryId,
     search,
     featured,
-  } = searchParams;
+  } = await searchParams;
 
   // Build filter object
   const where: Prisma.PostWhereInput = {};

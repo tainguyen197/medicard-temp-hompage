@@ -15,7 +15,7 @@ type SearchParams = {
 export default function ServicesPage({
   searchParams,
 }: {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }) {
   return (
     <div className="container mx-auto py-10">
