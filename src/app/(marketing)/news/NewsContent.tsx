@@ -10,10 +10,10 @@ const DEFAULT_IMAGE = "/images/news/news-image-1.jpg";
 export default async function NewsContent({
   searchParams,
 }: {
-  searchParams: { page?: string };
+  searchParams: Promise<{ page?: string }>;
 }) {
   // Get the current page from search params or default to 1
-  const { page = "1" } = searchParams;
+  const { page = "1" } = await searchParams;
   const currentPage = Number(page);
   const postsPerPage = 10;
 

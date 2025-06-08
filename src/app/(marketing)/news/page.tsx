@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default async function BlogPage({
   searchParams,
 }: {
-  searchParams: { page?: string };
+  searchParams: Promise<{ page?: string }>;
 }) {
   return (
     <div className="min-h-screen pt-[72px] md:pt-[96px]">
