@@ -208,7 +208,7 @@ export default function EditPostPage({
   return (
     <div className="container mx-auto p-8 bg-white rounded-md">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Edit Blog Post</h1>
+        <h1 className="text-2xl font-bold">Edit News</h1>
         <Button
           className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
           variant="outline"
@@ -355,7 +355,7 @@ export default function EditPostPage({
             type="submit"
             disabled={isSubmitting || isImageUploading}
           >
-            {isSubmitting ? "Saving..." : "Update Post"}
+            {isSubmitting ? "Saving..." : "Update News"}
           </Button>
         </div>
       </form>

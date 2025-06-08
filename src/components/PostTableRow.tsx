@@ -45,11 +45,13 @@ export default function PostTableRow({
       <td className="px-6 py-4 whitespace-nowrap align-middle">
         <div className="flex items-center justify-center">
           {post.featuredImage ? (
-            <img
-              src={post.featuredImage}
-              alt={post.title}
-              className="h-14 w-14 object-cover rounded-md"
-            />
+            <div className="h-14 w-14 rounded-md overflow-hidden">
+              <img
+                src={post.featuredImage}
+                alt={post.title}
+                className="h-full w-full object-cover"
+              />
+            </div>
           ) : (
             <div className="h-14 w-14 bg-gray-100 rounded-md flex items-center justify-center text-xs text-gray-500">
               No image

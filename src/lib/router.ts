@@ -81,7 +81,7 @@ export const adminRoutes: Record<string, AdminRoute> = {
     protected: true,
   },
   posts: {
-    name: "Blog Posts",
+    name: "News",
     href: "/admin/posts",
     description: "Quản lý bài viết tin tức",
     protected: true,

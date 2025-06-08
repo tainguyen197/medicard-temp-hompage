@@ -46,7 +46,19 @@ export default async function AdminLayout({
     //   icon: <LayoutDashboard className="h-5 w-5" />,
     // },
     {
-      label: "Blog Posts",
+      label: "Home",
+      href: ROUTES.ADMIN_DASHBOARD,
+      icon: <LayoutDashboard className="h-5 w-5" />,
+      adminOnly: true,
+    },
+    {
+      label: "Dashboard",
+      href: ROUTES.ADMIN_DASHBOARD,
+      icon: <LayoutDashboard className="h-5 w-5" />,
+      adminOnly: true,
+    },
+    {
+      label: "News",
       href: ROUTES.ADMIN_POSTS,
       icon: <FileText className="h-5 w-5" />,
     },
@@ -55,12 +67,12 @@ export default async function AdminLayout({
       href: ROUTES.ADMIN_SERVICES,
       icon: <Flag className="h-5 w-5" />,
     },
-    {
-      label: "Team Members",
-      href: ROUTES.ADMIN_TEAM,
-      icon: <Users className="h-5 w-5" />,
-      adminOnly: true,
-    },
+    // {
+    //   label: "Team Members",
+    //   href: ROUTES.ADMIN_TEAM,
+    //   icon: <Users className="h-5 w-5" />,
+    //   adminOnly: true,
+    // },
     // {
     //   label: "Media Library",
     //   href: ROUTES.ADMIN_MEDIA,
@@ -98,7 +110,9 @@ export default async function AdminLayout({
           </button>
         </div>
       </div>
-
+      <div>
+        <Link href={ROUTES.ADMIN_DASHBOARD}>Home</Link>
+      </div>
       <div className="flex h-screen">
         {/* Sidebar */}
         <aside className="admin-sidebar hidden md:flex flex-col w-64">
@@ -119,7 +133,7 @@ export default async function AdminLayout({
           <nav className="flex-1 px-4 py-4 space-y-1 flex flex-col justify-between">
             <AdminNavItems
               navItems={filteredNavItems}
-              userData={session.user as any}
+              userData={session.user}
             />
           </nav>
         </aside>

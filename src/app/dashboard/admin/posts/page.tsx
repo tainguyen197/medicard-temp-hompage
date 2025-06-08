@@ -100,22 +100,17 @@ export default async function PostsPage({
     },
   });
 
-  // Get categories for filter dropdown
-  const categories = await prisma.category.findMany({
-    orderBy: { name: "asc" },
-  });
-
   return (
     <div className="container mx-auto py-10">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Blog Posts</h1>
+        <h1 className="text-3xl font-bold">News</h1>
 
         <Link
           href={ROUTES.ADMIN_POSTS_NEW}
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
         >
           <PlusIcon size={16} />
-          New Post
+          New News
         </Link>
       </div>
 
@@ -131,20 +126,6 @@ export default async function PostsPage({
             in the highlighted section on the news page.
           </p>
         </div>
-
-        <Link
-          href={{
-            pathname: ROUTES.ADMIN_POSTS,
-            query: { featured: "true" },
-          }}
-          className={`px-3 py-1.5 rounded text-sm ${
-            featured === "true"
-              ? "bg-amber-500 text-white"
-              : "bg-amber-100 text-amber-800 hover:bg-amber-200"
-          }`}
-        >
-          View Featured
-        </Link>
       </div>
 
       {/* Filters */}
