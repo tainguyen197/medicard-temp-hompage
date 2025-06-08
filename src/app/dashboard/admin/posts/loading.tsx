@@ -1,58 +1,26 @@
+import { PlusIcon, StarIcon } from "lucide-react";
 import Link from "next/link";
-import { Suspense } from "react";
-import { PlusIcon } from "lucide-react";
-
 import { ROUTES } from "@/lib/router";
-import ServicesContent from "./services-content";
 
-type SearchParams = {
-  page?: string;
-  limit?: string;
-  search?: string;
-  status?: string;
-};
-
-export default function ServicesPage({
-  searchParams,
-}: {
-  searchParams: SearchParams;
-}) {
+export default function PostsLoading() {
   return (
-    <div className="container mx-auto py-10">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Services</h1>
-
-        <Link
-          href={ROUTES.ADMIN_SERVICES + "/new"}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
-        >
-          <PlusIcon size={16} />
-          New Service
-        </Link>
-      </div>
-
-      {/* Info Banner */}
-      <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-6">
+    <div className="container mx-auto">
+      {/* Featured Posts Count */}
+      <div className="bg-amber-50 border border-amber-200 rounded-md p-4 mb-6 flex items-center justify-between">
         <div>
-          <h2 className="font-medium text-blue-800">Service Management</h2>
-          <p className="text-sm text-blue-700 mt-1">
-            Manage your healthcare services. Services are displayed on the
-            services page of your website.
+          <h2 className="font-medium text-amber-800 flex items-center">
+            <StarIcon className="mr-2" size={18} />
+            Featured Posts:{" "}
+            <div className="w-6 h-6 bg-amber-100 animate-pulse rounded ml-1"></div>
+            /5
+          </h2>
+          <p className="text-sm text-amber-700 mt-1">
+            Maximum of 5 posts can be featured at a time. Featured posts appear
+            in the highlighted section on the news page.
           </p>
         </div>
       </div>
 
-      <Suspense fallback={<ServicesSkeletonContent />}>
-        <ServicesContent searchParams={searchParams} />
-      </Suspense>
-    </div>
-  );
-}
-
-// Inline skeleton component for just the table and pagination
-function ServicesSkeletonContent() {
-  return (
-    <>
       {/* Table Skeleton */}
       <div className="bg-white rounded-md shadow overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
@@ -65,13 +33,19 @@ function ServicesSkeletonContent() {
                 Title
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Short Description
+                Author
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Category
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Status
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Created
+                Featured
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Date
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Actions
@@ -88,10 +62,16 @@ function ServicesSkeletonContent() {
                   <div className="h-6 bg-gray-200 rounded w-40"></div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="h-5 bg-gray-200 rounded w-60"></div>
+                  <div className="h-5 bg-gray-200 rounded w-24"></div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="h-5 bg-gray-200 rounded w-20"></div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="h-6 bg-gray-200 rounded w-24"></div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="h-5 bg-gray-200 rounded w-12"></div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="h-5 bg-gray-200 rounded w-28"></div>
@@ -114,6 +94,6 @@ function ServicesSkeletonContent() {
           <div className="w-24 h-10 bg-gray-200 animate-pulse rounded-md"></div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

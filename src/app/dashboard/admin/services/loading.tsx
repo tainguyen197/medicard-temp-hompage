@@ -1,22 +1,8 @@
 import Link from "next/link";
-import { Suspense } from "react";
 import { PlusIcon } from "lucide-react";
-
 import { ROUTES } from "@/lib/router";
-import ServicesContent from "./services-content";
 
-type SearchParams = {
-  page?: string;
-  limit?: string;
-  search?: string;
-  status?: string;
-};
-
-export default function ServicesPage({
-  searchParams,
-}: {
-  searchParams: SearchParams;
-}) {
+export default function ServicesLoading() {
   return (
     <div className="container mx-auto py-10">
       <div className="flex justify-between items-center mb-8">
@@ -42,17 +28,6 @@ export default function ServicesPage({
         </div>
       </div>
 
-      <Suspense fallback={<ServicesSkeletonContent />}>
-        <ServicesContent searchParams={searchParams} />
-      </Suspense>
-    </div>
-  );
-}
-
-// Inline skeleton component for just the table and pagination
-function ServicesSkeletonContent() {
-  return (
-    <>
       {/* Table Skeleton */}
       <div className="bg-white rounded-md shadow overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
@@ -114,6 +89,6 @@ function ServicesSkeletonContent() {
           <div className="w-24 h-10 bg-gray-200 animate-pulse rounded-md"></div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

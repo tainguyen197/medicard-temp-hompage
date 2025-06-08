@@ -14,6 +14,7 @@ import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 import { Prisma } from "@prisma/client";
+import PostsTable from "@/components/PostsTable";
 import { ROUTES } from "@/lib/router";
 
 type SearchParams = {
@@ -26,17 +27,15 @@ type SearchParams = {
 };
 
 // Server component
-export async function PostsPageContent({
+export default async function PostsContent({
   searchParams,
-  openDeleteModal,
 }: {
   searchParams: SearchParams;
-  openDeleteModal: (id: string, title: string) => void;
 }) {
   // Check authentication
   const session = await getServerSession(authOptions);
   if (!session?.user) {
-    redirect("/auth/login");
+    redirect(ROUTES.AUTH_LOGIN);
   }
 
   const {
@@ -61,8 +60,8 @@ export async function PostsPageContent({
 
   if (search) {
     where.OR = [
-      { title: { contains: search } },
-      { content: { contains: search } },
+      { title: { contains: search, mode: "insensitive" } },
+      { content: { contains: search, mode: "insensitive" } },
     ];
   }
 
@@ -110,19 +109,7 @@ export async function PostsPageContent({
   });
 
   return (
-    <div className="container mx-auto py-10">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">News</h1>
-
-        <Link
-          href={ROUTES.ADMIN_POSTS_NEW}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
-        >
-          <PlusIcon size={16} />
-          New News
-        </Link>
-      </div>
-
+    <>
       {/* Featured Posts Count */}
       <div className="bg-amber-50 border border-amber-200 rounded-md p-4 mb-6 flex items-center justify-between">
         <div>
@@ -137,214 +124,8 @@ export async function PostsPageContent({
         </div>
       </div>
 
-      {/* Filters */}
-      <form
-        action="/posts"
-        method="GET"
-        className="bg-white p-4 rounded-md shadow mb-6"
-      >
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1">
-            <div className="relative">
-              <input
-                type="text"
-                name="search"
-                placeholder="Search posts..."
-                defaultValue={search || ""}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md"
-              />
-              <SearchIcon
-                className="absolute left-3 top-2.5 text-gray-400"
-                size={18}
-              />
-            </div>
-          </div>
-
-          <div className="flex gap-4">
-            <select
-              name="status"
-              defaultValue={status || ""}
-              className="border border-gray-300 rounded-md px-3 py-2"
-            >
-              <option value="">All Status</option>
-              <option value="DRAFT">Draft</option>
-              <option value="PENDING_REVIEW">Pending Review</option>
-              <option value="PUBLISHED">Published</option>
-              <option value="SCHEDULED">Scheduled</option>
-            </select>
-
-            <select
-              name="categoryId"
-              defaultValue={categoryId || ""}
-              className="border border-gray-300 rounded-md px-3 py-2"
-            >
-              <option value="">All Categories</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-
-            <button
-              type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
-            >
-              <FilterIcon size={16} />
-              Apply Filters
-            </button>
-          </div>
-        </div>
-
-        {/* Hidden fields to preserve pagination when filtering */}
-        <input type="hidden" name="page" value="1" />
-        <input type="hidden" name="limit" value={limit} />
-        {featured && <input type="hidden" name="featured" value={featured} />}
-      </form>
-
       {/* Posts Table */}
-      <div className="bg-white rounded-md shadow overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-20">
-                Image
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Title
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Author
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Category
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Featured
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Date
-              </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {posts.length === 0 ? (
-              <tr>
-                <td
-                  colSpan={8}
-                  className="px-6 py-4 text-center text-sm text-gray-500"
-                >
-                  No posts found
-                </td>
-              </tr>
-            ) : (
-              posts.map((post) => (
-                <tr key={post.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap align-middle">
-                    <div className="flex items-center justify-center">
-                      {post.featuredImage ? (
-                        <img
-                          src={post.featuredImage}
-                          alt={post.title}
-                          className="h-14 w-14 object-cover rounded-md"
-                        />
-                      ) : (
-                        <div className="h-14 w-14 bg-gray-100 rounded-md flex items-center justify-center text-xs text-gray-500">
-                          No image
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap align-middle">
-                    <div>
-                      <div className="text-sm font-medium text-gray-900">
-                        {post.title}
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        /blog/{post.slug}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">
-                    {post.author?.name}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">
-                    {post.categories?.map((pc) => pc.category.name).join(", ")}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap align-middle">
-                    <span
-                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        post.status === "PUBLISHED"
-                          ? "bg-green-100 text-green-800"
-                          : post.status === "DRAFT"
-                          ? "bg-gray-100 text-gray-800"
-                          : post.status === "PENDING_REVIEW"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-blue-100 text-blue-800"
-                      }`}
-                    >
-                      {post.status.replace("_", " ")}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap align-middle">
-                    <Link
-                      href={`${ROUTES.ADMIN_POSTS}/${post.id}/toggle-featured`}
-                      className={`inline-flex items-center px-2 py-1 rounded ${
-                        post?.featured
-                          ? "bg-amber-100 text-amber-800 hover:bg-amber-200"
-                          : "bg-gray-100 text-gray-800 hover:bg-gray-200"
-                      }`}
-                    >
-                      <StarIcon
-                        size={16}
-                        className={
-                          post?.featured
-                            ? "text-amber-500 fill-amber-500"
-                            : "text-gray-400"
-                        }
-                      />
-                      <span className="ml-1 text-xs">
-                        {post?.featured ? "Featured" : "Not Featured"}
-                      </span>
-                    </Link>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">
-                    {post.publishedAt
-                      ? formatDate(post.publishedAt)
-                      : formatDate(post.createdAt)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium align-middle">
-                    <Link
-                      href={`${ROUTES.ADMIN_POSTS}/${post.id}`}
-                      className="text-blue-600 hover:text-blue-900 mr-4"
-                    >
-                      Edit
-                    </Link>
-                    <Link
-                      href={`${ROUTES.ADMIN_POSTS}/${post.id}/preview`}
-                      className="text-gray-600 hover:text-gray-900 mr-4"
-                    >
-                      Preview
-                    </Link>
-                    <button
-                      onClick={() => openDeleteModal(post.id, post.title)}
-                      className="text-red-600 hover:text-red-900"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <PostsTable posts={posts} />
 
       {/* Pagination */}
       {totalPages > 1 && (
@@ -365,7 +146,7 @@ export async function PostsPageContent({
             {Number(page) > 1 && (
               <Link
                 href={{
-                  pathname: "/posts",
+                  pathname: ROUTES.ADMIN_POSTS,
                   query: {
                     page: Number(page) - 1,
                     limit,
@@ -385,7 +166,7 @@ export async function PostsPageContent({
             {Number(page) < totalPages && (
               <Link
                 href={{
-                  pathname: "/posts",
+                  pathname: ROUTES.ADMIN_POSTS,
                   query: {
                     page: Number(page) + 1,
                     limit,
@@ -404,6 +185,6 @@ export async function PostsPageContent({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
