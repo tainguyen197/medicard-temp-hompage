@@ -4,7 +4,6 @@ import { Metadata } from "next";
 import { Suspense } from "react";
 import prisma from "@/lib/prisma";
 import NewsDetailContent from "./NewsDetailContent";
-import NewsDetailLoading from "./loading";
 
 type Params = Promise<{ slug: string }>;
 
