@@ -4,7 +4,7 @@ import AnimatedSection from "@/components/AnimatedSection";
 
 export default function NewsLoading() {
   return (
-    <div className="min-h-screen pt-[72px] md:pt-[96px]">
+    <div className="">
       {/* Trending Topics Skeleton */}
       <section className="container mx-auto px-4 mb-16 md:mb-20 max-w-[1040px]">
         <div className="flex flex-col md:flex-row gap-4">
