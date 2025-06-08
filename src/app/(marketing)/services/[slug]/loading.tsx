@@ -5,19 +5,6 @@ import Link from "next/link";
 export default function ServiceDetailLoading() {
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative mt-16 md:mt-20">
-        <div className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
-          <Image
-            src={"/images/hero-section.png"}
-            alt="Loading"
-            className="object-cover object-center"
-            priority
-            fill
-          />
-        </div>
-      </section>
-
       {/* Breadcrumb */}
       <section className="container mx-auto px-4 py-4 md:py-6 max-w-7xl">
         <div className="flex items-center text-lg">
