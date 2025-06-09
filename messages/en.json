@@ -1,4 +1,72 @@
 {
+  "about": {
+    "title": "ABOUT HEALTHCARE THERAPY CENTER",
+    "metadata": {
+      "title": "About Us | Healthcare Therapy Center",
+      "description": "Learn about Healthcare Therapy Center - providing modern, safe and scientific Traditional Medicine combined with Functional Rehabilitation services."
+    },
+    "intro": {
+      "description": "Healthcare Therapy Center provides Traditional Medicine services combined with Functional Rehabilitation in a modern, safe and scientific way. With a dedicated and experienced team of doctors and a friendly treatment environment, we provide personalized healthcare solutions - helping customers recover mobility, effectively reduce pain and improve quality of life every day."
+    },
+    "appointmentButton": "Book an experience",
+    "certificates": {
+      "title": "YOUR HEALTH IS THE JOY OF HEALTHCARE THERAPY CENTER",
+      "items": [
+        "Medical Practice License No. 10651/HCM-GPHĐ",
+        "Medical Practice License No. 10674/HCM-GPHĐ", 
+        "Business Registration Certificate 0318485902"
+      ]
+    },
+    "ourServices": {
+      "title": "OUR SERVICES",
+      "exploreMore": "Explore more",
+      "viewDetails": "View details",
+      "services": [
+        {
+          "title": "TRADITIONAL MEDICINE",
+          "description": "Preserving community health with national essence: Natural medicines flexibly adjusted according to different cases, combined with other traditional medicine treatment methods such as acupuncture, massage, acupressure,... with the main goal of adjusting and balancing Yin-Yang factors in the body..."
+        },
+        {
+          "title": "HIGH-TECH PHYSICAL THERAPY TREATMENT...",
+          "description": "Healthcare Therapy Center applies advanced, modern physical therapy technologies to maximize customers' treatment and recovery capabilities. High-power laser, Radio Frequency (RF), and Shockwave technologies have been proven through many scientific studies worldwide to be highly effective..."
+        },
+        {
+          "title": "FUNCTIONAL REHABILITATION...", 
+          "description": "Treatment of spinal diseases such as neck-back pain, sciatica, herniated disc...; Tendon-joint disorders such as: rotator cuff inflammation, knee joint pain, wrist joint pain, heel spurs; carpal tunnel syndrome, thumb extensor tendonitis, tennis elbow...; Acute-chronic muscle strain conditions."
+        }
+      ]
+    },
+    "testimonials": {
+      "title": "9.9/10 CUSTOMERS GIVE THEIR COMPLETE TRUST",
+      "items": [
+        {
+          "quote": "Everything at Healthcare Therapy Center, from lighting, music to fragrance, is very gentle, helping me forget the stress from outside. This is not only a place for treatment but also a place for me to rest and recharge after tiring work.",
+          "name": "Thao Uyen",
+          "title": "Office worker"
+        },
+        {
+          "quote": "The doctors and specialists at Healthcare Therapy Center are all highly qualified, with many years of experience, always dedicated to listening and explaining every issue to me in detail. Thanks to that, I feel very reassured when examining and treating here.",
+          "name": "Huynh Lam", 
+          "title": "Office worker"
+        },
+        {
+          "quote": "The experience at Healthcare Therapy Center makes me feel like being cared for rather than being treated for illness. All procedures are gentle, the specialists pay great attention to customers' emotions and comfort.",
+          "name": "Hoang Anh",
+          "title": "HR Manager"
+        },
+        {
+          "quote": "Before starting the treatment, I was examined and consulted by the doctor in extremely detailed and easy-to-understand manner. The doctor explained my health condition and suggested the most suitable options for my situation, helping me feel more reassured.",
+          "name": "Quoc Anh",
+          "title": "Entrepreneur"
+        }
+      ]
+    },
+    "cta": {
+      "heading": "Ready to experience the difference",
+      "subheading": "Let Healthcare Therapy Center become your reliable support in your healthcare journey.",
+      "button": "Book an experience"
+    }
+  },
   "news": {
     "title": "NEWS",
     "metadata": {

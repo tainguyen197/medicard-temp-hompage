@@ -1,4 +1,72 @@
 {
+  "about": {
+    "title": "VỀ HEALTHCARE THERAPY CENTER",
+    "metadata": {
+      "title": "Về chúng tôi | Healthcare Therapy Center",
+      "description": "Tìm hiểu về Healthcare Therapy Center - cung cấp dịch vụ Y Học Cổ Truyền kết hợp Phục Hồi Chức Năng theo hướng hiện đại, an toàn và khoa học."
+    },
+    "intro": {
+      "description": "Healthcare Therapy Center cung cấp dịch vụ Y Học Cổ Truyền kết hợp Phục Hồi Chức Năng theo hướng hiện đại, an toàn và khoa học. Với đội ngũ bác sĩ tận tâm, giàu kinh nghiệm cùng không gian trị liệu thân thiện, chúng tôi mang đến giải pháp chăm sóc sức khỏe cá nhân hóa - giúp khách hàng phục hồi vận động, giảm đau hiệu quả và nâng cao chất lượng cuộc sống mỗi ngày."
+    },
+    "appointmentButton": "Đặt lịch trải nghiệm",
+    "certificates": {
+      "title": "SỨC KHOẺ CỦA BẠN LÀ NIỀM VUI CỦA HEALTHCARE THERAPY CENTER",
+      "items": [
+        "Giấy phép Hoạt động Khám bệnh, Chữa bệnh số 10651/HCM-GPHĐ",
+        "Giấy phép Hoạt động Khám bệnh, Chữa bệnh số 10674/HCM-GPHĐ",
+        "Giấy Chứng nhận ĐKDN 0318485902"
+      ]
+    },
+    "ourServices": {
+      "title": "DỊCH VỤ CỦA CHÚNG TÔI",
+      "exploreMore": "Khám phá thêm",
+      "viewDetails": "Xem chi tiết",
+      "services": [
+        {
+          "title": "Y HỌC CỔ TRUYỀN",
+          "description": "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể cũng đã được ghi nhận về tính hiệu quả và an toàn."
+        },
+        {
+          "title": "ĐIỀU TRỊ VẬT LÝ TRỊ LIỆU CÔNG NGHỆ CAO",
+          "description": "Healthcare Therapy Center áp dụng những công nghệ vật lý trị liệu tiên tiến, hiện đại nhằm tối đa hóa khả năng điều trị, phục hồi của khách hàng. Các công nghệ Laser công suất cao, Sóng cao tần Radio Frequency (RF), Sóng xung kích Shockwave được chứng minh qua nhiều nghiên cứu khoa học trên thế giới là hiệu quả cao trong việc điều trị các bệnh lý cơ xương khớp, giảm đau, đẩy nhanh tốc độ tái tạo và phục hồi."
+        },
+        {
+          "title": "PHỤC HỒI CHỨC NĂNG: CHẨN ĐOÁN VÀ ĐIỀU TRỊ CHUYÊN SÂU",
+          "description": "Điều trị các bệnh về cột sống như đau cổ-lưng, đau thần kinh tọa, thoát vị đĩa đệm...; Các bệnh lý về gân - khớp như: viêm chop xoay, đau khớp gối, khớp cổ tay, gai gót chân; hội chứng ống cổ tay, viêm gân duỗi ngón cái, tenis elbow…; Các tình trạng căng mỏi cơ cấp - mạn."
+        }
+      ]
+    },
+    "testimonials": {
+      "title": "9.9/10 KHÁCH HÀNG GỬI TRỌN TIN YÊU",
+      "items": [
+        {
+          "quote": "Mọi thứ ở Healthcare Therapy Center, từ ánh sáng, âm nhạc đến mùi hương đều rất nhẹ nhàng, giúp tôi quên đi những căng thẳng bên ngoài. Đây không chỉ là nơi điều trị mà còn là chốn để tôi nghỉ ngơi, tái tạo năng lượng sau khi làm việc mệt mỏi.",
+          "name": "Thảo Uyên",
+          "title": "Nhân viên văn phòng"
+        },
+        {
+          "quote": "Các bác sĩ và chuyên viên Healthcare Therapy Center đều có chuyên môn cao, nhiều năm kinh nghiệm, luôn tận tâm lắng nghe và giải thích cặn kẽ mọi vấn đề cho tôi. Nhờ vậy, tôi cảm thấy rất yên tâm khi thăm khám và điều trị tại đây.",
+          "name": "Huỳnh Lãm",
+          "title": "Nhân viên văn phòng"
+        },
+        {
+          "quote": "Trải nghiệm tại Healthcare Therapy Center khiến tôi có cảm giác như đang được chăm sóc hơn là điều trị bệnh. Mọi thao tác đều nhẹ nhàng, các chuyên viên rất chú ý đến cảm xúc và sự thoải mái của khách hàng.",
+          "name": "Hoàng Ánh",
+          "title": "Quản lý nhân sự"
+        },
+        {
+          "quote": "Trước khi bắt đầu liệu trình, tôi được bác sĩ khám và tư vấn cực kỳ chi tiết và dễ hiểu. Bác sĩ giải thích tình trạng sức khỏe và đề xuất các phương án phù hợp nhất với tình hình của tôi giúp tôi cảm thấy an tâm hơn.",
+          "name": "Quốc Anh",
+          "title": "Doanh nhân"
+        }
+      ]
+    },
+    "cta": {
+      "heading": "Sẵn sàng trải nghiệm sự khác biệt",
+      "subheading": "Hãy để Healthcare Therapy Center trở thành điểm tựa vững chắc trong hành trình chăm sóc sức khỏe của bạn.",
+      "button": "Đặt lịch trải nghiệm"
+    }
+  },
   "news": {
     "title": "TIN TỨC",
     "metadata": {
