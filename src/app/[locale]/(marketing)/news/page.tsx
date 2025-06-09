@@ -28,8 +28,6 @@ export default async function BlogPage({
   const messages = await getMessages();
   const t = messages.news;
 
-  console.log("messages", messages);
-
   // Get the current page from search params or default to 1
   const { page = "1" } = await searchParams;
   const currentPage = Number(page);

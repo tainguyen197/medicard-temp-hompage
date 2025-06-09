@@ -1,7 +1,7 @@
 {
   "navigation": {
     "services": "DỊCH VỤ",
-    "about": "VỀ CHÚNG TÔI", 
+    "about": "VỀ CHÚNG TÔI",
     "news": "TIN TỨC",
     "contact": "LIÊN HỆ",
     "language": "VIE"
@@ -590,4 +590,4 @@
     "serviceNotFound": "Dịch vụ không tìm thấy",
     "service": "Dịch vụ"
   }
-} 
+}
