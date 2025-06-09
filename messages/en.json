@@ -495,6 +495,7 @@
       "description": "The service you are looking for does not exist or has been deleted."
     },
     "individual": {
+      "viewDetails": "View details",
       "traditionalMedicine": {
         "title": "TRADITIONAL MEDICINE",
         "subtitle": "Preserving community health with national essence",
@@ -550,7 +551,8 @@
             "circulation": "Enhanced blood circulation: Shockwaves stimulate new blood vessel formation, improving blood flow to injured areas, helping tissues receive adequate oxygen and nutrients for recovery.",
             "calciumDeposits": "Dispersing calcium deposits: Shockwaves can break down calcium deposits accumulated in joints and tendons, helping reduce pain and improve movement."
           }
-        }
+        },
+        "viewDetails": "View details"
       },
       "functionalRehabilitation": {
         "title": "FUNCTIONAL REHABILITATION: SPECIALIZED DIAGNOSIS AND TREATMENT",

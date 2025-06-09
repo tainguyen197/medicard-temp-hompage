@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import prisma from "@/lib/prisma";
 import { getMessages } from "next-intl/server";
+import ServiceDetailContent from "./ServiceDetailContent";
 
 interface ServiceDetailProps {
   params: Promise<{ slug: string }>;
@@ -141,7 +142,7 @@ export default async function ServiceDetailPage({
 
       {/* Dynamic Content with Suspense */}
       <Suspense fallback={<ServiceDetailLoading />}>
-        <ServiceDetailContent slug={slug} />
+        <ServiceDetailContent slug={slug || ""} />
       </Suspense>
 
       {/* CTA Section */}
@@ -180,7 +181,10 @@ export default async function ServiceDetailPage({
   );
 }
 
-function ServiceDetailLoading() {
+async function ServiceDetailLoading() {
+  const messages = await getMessages();
+  const t = messages.services;
+
   return (
     <>
       {/* Breadcrumb */}
