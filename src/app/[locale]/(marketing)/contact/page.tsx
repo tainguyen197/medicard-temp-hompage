@@ -1,8 +1,12 @@
 import React from "react";
 import Image from "next/image";
 import AnimatedSection from "@/components/AnimatedSection";
+import { getMessages } from "next-intl/server";
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const messages = await getMessages();
+  const t = messages.contact;
+
   return (
     <div className="pt-20">
       {/* Main Contact Section */}
@@ -25,39 +29,37 @@ export default function ContactPage() {
               {/* Right side - Contact Information */}
               <div className="md:w-1/2">
                 <h1 className="font-cormorant font-bold text-3xl md:text-5xl text-[#B1873F] mb-8 leading-tight">
-                  KẾT NỐI VỚI CHÚNG TÔI
+                  {t.title}
                 </h1>
 
                 {/* Address */}
                 <div className="mb-8">
                   <h2 className="font-bold text-xl text-[#B1873F] mb-3">
-                    Địa chỉ
+                    {t.address.title}
                   </h2>
-                  <p className="text-[#000]">
-                    327 đường Nguyễn Trọng Tuyển, Phường 10, Quận Phú Nhuận,
-                    TP.HCM
-                  </p>
+                  <p className="text-[#000]">{t.address.text}</p>
                 </div>
 
                 {/* Business Hours */}
                 <div className="mb-8">
                   <h2 className="font-bold text-xl text-[#B1873F] mb-3">
-                    Giờ mở cửa
+                    {t.businessHours.title}
                   </h2>
-                  <p className="text-[#000]">Thứ 2 - Thứ 7: 8h00 - 19h00</p>
-                  <p className="text-[#000]">Chủ nhật: 8h00 - 18h00</p>
+                  <p className="text-[#000]">{t.businessHours.weekdays}</p>
+                  <p className="text-[#000]">{t.businessHours.sunday}</p>
                 </div>
 
                 {/* Contact Information */}
                 <div className="mb-8">
                   <h2 className="font-bold text-xl text-[#B1873F] mb-3">
-                    Thông tin liên hệ
+                    {t.contactInfo.title}
                   </h2>
                   <p className="text-[#000] mb-2">
-                    <span className="font-medium">SĐT:</span> 0901 430 077
+                    <span className="font-medium">{t.contactInfo.phone}</span>{" "}
+                    0901 430 077
                   </p>
                   <p className="text-[#000]">
-                    <span className="font-medium">Email:</span>{" "}
+                    <span className="font-medium">{t.contactInfo.email}</span>{" "}
                     healthcaretherapycenter.89@gmail.com
                   </p>
                 </div>
@@ -69,7 +71,7 @@ export default function ContactPage() {
                     target="_blank"
                     className="inline-flex items-center justify-center bg-[#B1873F] text-white py-3 px-8 rounded-md hover:bg-[#9e7738] transition-colors duration-300"
                   >
-                    Đặt lịch trải nghiệm
+                    {t.appointmentButton}
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"

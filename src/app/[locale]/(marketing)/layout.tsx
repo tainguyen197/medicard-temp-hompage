@@ -1,10 +1,23 @@
-import type { Metadata } from "next";
+import { Cormorant_SC, Manrope } from "next/font/google";
 import "@/app/globals.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import LayoutWithHeader from "@/app/_layouts/LayoutWithHeader";
+import { NextIntlClientProvider } from "next-intl";
+import type { Metadata } from "next";
+
+const manrope = Manrope({
+  subsets: ["latin", "vietnamese"],
+  variable: "--font-manrope",
+  display: "swap",
+});
+
+const cormorant = Cormorant_SC({
+  subsets: ["latin", "vietnamese"],
+  variable: "--font-cormorant",
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
+});
 
 export const metadata: Metadata = {
   title: "Healthcare Therapy Center | Giải pháp chăm sóc sức khoẻ toàn diện",
@@ -12,10 +25,23 @@ export const metadata: Metadata = {
     "Healthcare Therapy Center cung cấp dịch vụ Y Học Cổ Truyền kết hợp Phục Hồi Chức Năng theo hướng hiện đại, an toàn và khoa học.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
-  return <LayoutWithHeader>{children}</LayoutWithHeader>;
+  const { locale } = await params;
+  return (
+    <html lang={locale} className="scroll-smooth">
+      <body
+        className={`${manrope.variable} ${cormorant.variable} font-sans antialiased`}
+      >
+        <NextIntlClientProvider>
+          <LayoutWithHeader>{children}</LayoutWithHeader>
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  );
 }

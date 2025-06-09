@@ -1,4 +1,22 @@
 {
+  "contact": {
+    "title": "KẾT NỐI VỚI CHÚNG TÔI",
+    "address": {
+      "title": "Địa chỉ",
+      "text": "327 đường Nguyễn Trọng Tuyển, Phường 10, Quận Phú Nhuận, TP.HCM"
+    },
+    "businessHours": {
+      "title": "Giờ mở cửa",
+      "weekdays": "Thứ 2 - Thứ 7: 8h00 - 19h00",
+      "sunday": "Chủ nhật: 8h00 - 18h00"
+    },
+    "contactInfo": {
+      "title": "Thông tin liên hệ",
+      "phone": "SĐT:",
+      "email": "Email:"
+    },
+    "appointmentButton": "Đặt lịch trải nghiệm"
+  },
   "services": {
     "breadcrumb": {
       "services": "Dịch vụ"

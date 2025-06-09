@@ -1,4 +1,22 @@
 {
+  "contact": {
+    "title": "CONNECT WITH US",
+    "address": {
+      "title": "Address",
+      "text": "327 Nguyen Trong Tuyen Street, Ward 10, Phu Nhuan District, Ho Chi Minh City"
+    },
+    "businessHours": {
+      "title": "Opening Hours",
+      "weekdays": "Monday - Saturday: 8:00 AM - 7:00 PM",
+      "sunday": "Sunday: 8:00 AM - 6:00 PM"
+    },
+    "contactInfo": {
+      "title": "Contact Information",
+      "phone": "Phone:",
+      "email": "Email:"
+    },
+    "appointmentButton": "Book an experience"
+  },
   "services": {
     "breadcrumb": {
       "services": "Services"
