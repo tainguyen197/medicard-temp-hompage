@@ -28,6 +28,8 @@ export default async function BlogPage({
   const messages = await getMessages();
   const t = messages.news;
 
+  console.log("messages", messages);
+
   // Get the current page from search params or default to 1
   const { page = "1" } = await searchParams;
   const currentPage = Number(page);
@@ -463,7 +465,10 @@ export default async function BlogPage({
   );
 }
 
-function NewsLoading() {
+async function NewsLoading() {
+  const messages = await getMessages();
+  const t = messages.news;
+
   return (
     <div className="">
       {/* Trending Topics Skeleton */}
@@ -523,14 +528,17 @@ function NewsLoading() {
       <section className="py-16 bg-white max-w-[1040px] mx-auto">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl lg:text-5xl max-text-[51px] font-semibold text-[#1F1F1F] mb-6">
-            Sẵn sàng trải nghiệm sự khác biệt
+            {t.cta.heading}
           </h2>
           <p className="text-lg md:text-xl px-4 md:px-16 text-black max-w-3xl mx-auto mb-8">
-            Hãy để Healthcare Therapy Center trở thành điểm tựa vững chắc trong
-            hành trình chăm sóc sức khỏe của bạn.
+            {t.cta.subheading}
           </p>
-          <div className="inline-flex items-center px-8 py-4 bg-[#B1873F] text-white rounded-full font-semibold">
-            Đặt lịch trải nghiệm
+          <Link
+            href="https://forms.gle/GJETkvXcnZ7hZwBr8"
+            target="_blank"
+            className="inline-flex items-center px-8 py-4 bg-[#B1873F] text-white rounded-full font-semibold hover:bg-[#c09857] transition-colors"
+          >
+            {t.cta.button}
             <svg
               className="ml-2 w-5 h-5"
               viewBox="0 0 24 24"
@@ -545,7 +553,7 @@ function NewsLoading() {
                 strokeLinejoin="round"
               />
             </svg>
-          </div>
+          </Link>
         </div>
       </section>
     </div>

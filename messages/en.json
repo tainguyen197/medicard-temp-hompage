@@ -2,7 +2,7 @@
   "navigation": {
     "services": "SERVICES",
     "about": "ABOUT US",
-    "news": "NEWS", 
+    "news": "NEWS",
     "contact": "CONTACT",
     "language": "ENG"
   },
@@ -20,7 +20,7 @@
       "title": "YOUR HEALTH IS THE JOY OF HEALTHCARE THERAPY CENTER",
       "items": [
         "Medical Practice License No. 10651/HCM-GPHĐ",
-        "Medical Practice License No. 10674/HCM-GPHĐ", 
+        "Medical Practice License No. 10674/HCM-GPHĐ",
         "Business Registration Certificate 0318485902"
       ]
     },
@@ -38,7 +38,7 @@
           "description": "Healthcare Therapy Center applies advanced, modern physical therapy technologies to maximize customers' treatment and recovery capabilities. High-power laser, Radio Frequency (RF), and Shockwave technologies have been proven through many scientific studies worldwide to be highly effective..."
         },
         {
-          "title": "FUNCTIONAL REHABILITATION...", 
+          "title": "FUNCTIONAL REHABILITATION...",
           "description": "Treatment of spinal diseases such as neck-back pain, sciatica, herniated disc...; Tendon-joint disorders such as: rotator cuff inflammation, knee joint pain, wrist joint pain, heel spurs; carpal tunnel syndrome, thumb extensor tendonitis, tennis elbow...; Acute-chronic muscle strain conditions."
         }
       ]
@@ -53,7 +53,7 @@
         },
         {
           "quote": "The doctors and specialists at Healthcare Therapy Center are all highly qualified, with many years of experience, always dedicated to listening and explaining every issue to me in detail. Thanks to that, I feel very reassured when examining and treating here.",
-          "name": "Huynh Lam", 
+          "name": "Huynh Lam",
           "title": "Office worker"
         },
         {
@@ -250,19 +250,14 @@
           "image": "/images/equipment_1.png"
         },
         {
-          "name": "Smart High-Power Laser",
-          "description": "Uses high-frequency laser rays penetrating muscle and bone tissue to help reduce pain, accelerate metabolism, help cells recover faster, thereby enhancing treatment capabilities and wound healing.",
+          "name": "LASER THERAPY",
+          "description": "Uses a single wavelength of light, concentrated into a narrow beam, creating a high-energy area. When this beam of light is projected onto the treatment area, it will create a biological effect that stimulates the treatment and regeneration process of the tissue.",
           "image": "/images/equipment_2.png"
         },
         {
-          "name": "Winback Tecar Therapy",
-          "description": "Uses special electrical currents acting on blocked muscle areas. This stimulates muscle nerves, prevents muscle atrophy, reduces inflammation, and relieves pain.",
+          "name": "RF - RADIO FREQUENCY",
+          "description": "A non-invasive treatment method, using radiofrequency waves to pass through the skin, acting on the tissue layers below, generating heat to help reduce pain, reduce inflammation, increase circulation and promote tissue regeneration.",
           "image": "/images/equipment_3.png"
-        },
-        {
-          "name": "Electrical Stimulation Combined with Ultrasound",
-          "description": "Uses ultrasound waves acting on muscle tissue to help reduce soft tissue swelling, reduce pain, reduce stiffness, enhance blood circulation, accelerate healing and functional recovery.",
-          "image": "/images/equipment_4.png"
         }
       ]
     },
@@ -276,7 +271,7 @@
           "description": "Doctors will base on provided information such as: medical history, symptom examination & initial diagnosis."
         },
         {
-          "step": "02", 
+          "step": "02",
           "title": "Health Diagnosis",
           "description": "Customers may need additional X-rays or MRI to get the most accurate diagnostic results."
         },
@@ -447,7 +442,17 @@
       "defaultTitle": "Health News & Updates",
       "defaultDescription": "Latest health news, treatment updates, and wellness tips from Healthcare Therapy Center.",
       "keywords": "health news, medical updates, wellness tips, healthcare, therapy"
-    }
+    },
+    "breadcrumb": {
+      "home": "Home",
+      "news": "News"
+    },
+    "all": "All",
+    "featured": "Featured Posts",
+    "latest": "Latest Posts",
+    "viewAll": "View all",
+    "noResults": "No articles found.",
+    "loadMore": "Load more"
   },
   "contact": {
     "title": "CONNECT WITH US",
@@ -589,5 +594,49 @@
   "metadata": {
     "serviceNotFound": "Service Not Found",
     "service": "Service"
+  },
+  "newsDetail": {
+    "metadata": {
+      "notFoundTitle": "Post not found | Healthcare Therapy Center",
+      "notFoundDescription": "The post you are looking for does not exist or has been deleted."
+    },
+    "breadcrumb": {
+      "news": "News"
+    },
+    "relatedPosts": {
+      "title": "You might be interested"
+    },
+    "cta": {
+      "heading": "Ready to experience the difference",
+      "subheading": "Let Healthcare Therapy Center become your reliable support in your healthcare journey.",
+      "button": "Book an experience"
+    }
+  },
+  "contactPage": {
+    "metadata": {
+      "title": "Contact | Healthcare Therapy Center",
+      "description": "Contact Healthcare Therapy Center for consultation and to book an appointment."
+    },
+    "title": "Contact Information",
+    "address": "786B Nguyen Kiem, Ward 3, Go Vap District, Ho Chi Minh City",
+    "phone": "1900 234 567",
+    "email": "info@healthcaretherapy.com",
+    "form": {
+      "title": "Book an appointment",
+      "name": "Full name",
+      "phone": "Phone number",
+      "service": "Service of interest",
+      "message": "Message",
+      "submit": "Book now"
+    }
+  },
+  "serviceDetail": {
+    "metadata": {
+      "defaultTitle": "Service | Healthcare Therapy Center",
+      "defaultDescription": "Detailed information about our healthcare services.",
+      "keywords": "service details, therapy information, healthcare"
+    },
+    "notFound": "Service not found",
+    "service": "Service"
   }
-} 
+}
