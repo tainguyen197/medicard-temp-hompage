@@ -51,12 +51,29 @@ export default async function ServicesPage() {
         status: "PUBLISHED",
       },
       orderBy: { createdAt: "desc" },
-      include: {
-        featureImage: true, // Include the related Media record
+      select: {
+        id: true,
+        slug: true,
+        title: true,
+        shortDescription: true,
+        featureImage: {
+          select: {
+            url: true,
+          },
+        },
       },
     });
 
-    services = servicesData;
+    services = servicesData.map((service) => ({
+      ...service,
+      status: "PUBLISHED", // Manually add status as it's not selected
+      createdAt: new Date(), // Add dummy date
+      updatedAt: new Date(), // Add dummy date
+      featureImage: service.featureImage
+        ? { ...service.featureImage, id: "" }
+        : null,
+    }));
+
     console.log(`Found ${services.length} published services`);
 
     if (services.length > 0) {
