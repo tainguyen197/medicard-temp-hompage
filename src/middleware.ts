@@ -56,6 +56,6 @@ export const config = {
     // "/dashboard/:path*",
     // "/api/:path*",
 
-    "/((?!api|dashboard|_next|favicon\\.ico).*)",
+    "/((?!api|dashboard|_next/static|_next/image|images|favicon\\.ico).*)",
   ],
 };
