@@ -1,4 +1,26 @@
 {
+  "news": {
+    "title": "NEWS",
+    "metadata": {
+      "title": "Health News | Healthcare Therapy Center",
+      "description": "Stay updated with useful health knowledge, treatment methods and healthy lifestyle tips from Healthcare Therapy Center."
+    },
+    "emptyState": {
+      "title": "No articles published yet",
+      "description": "Please check back later for new content."
+    },
+    "allPosts": "All Articles",
+    "pagination": {
+      "previousPage": "Previous page",
+      "nextPage": "Next page",
+      "page": "Page"
+    },
+    "cta": {
+      "heading": "Ready to experience the difference",
+      "subheading": "Let Healthcare Therapy Center become your reliable support in your healthcare journey.",
+      "button": "Book an experience"
+    }
+  },
   "contact": {
     "title": "CONNECT WITH US",
     "address": {

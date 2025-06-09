@@ -1,4 +1,26 @@
 {
+  "news": {
+    "title": "TIN TỨC",
+    "metadata": {
+      "title": "Tin tức sức khoẻ | Healthcare Therapy Center",
+      "description": "Cập nhật những kiến thức hữu ích về sức khoẻ, phương pháp điều trị và lối sống lành mạnh từ Healthcare Therapy Center."
+    },
+    "emptyState": {
+      "title": "Hiện tại chưa có bài viết nào được xuất bản",
+      "description": "Vui lòng quay lại sau để xem nội dung mới."
+    },
+    "allPosts": "Tất cả bài viết",
+    "pagination": {
+      "previousPage": "Trang trước",
+      "nextPage": "Trang tiếp theo",
+      "page": "Trang"
+    },
+    "cta": {
+      "heading": "Sẵn sàng trải nghiệm sự khác biệt",
+      "subheading": "Hãy để Healthcare Therapy Center trở thành điểm tựa vững chắc trong hành trình chăm sóc sức khỏe của bạn.",
+      "button": "Đặt lịch trải nghiệm"
+    }
+  },
   "contact": {
     "title": "KẾT NỐI VỚI CHÚNG TÔI",
     "address": {
