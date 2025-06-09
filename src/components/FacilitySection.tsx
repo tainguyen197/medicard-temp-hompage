@@ -4,6 +4,15 @@ import React, { useState, useRef } from "react";
 import Image from "next/image";
 import Slider from "react-slick";
 
+interface FacilitySectionProps {
+  t: {
+    title: string;
+    subtitle: string;
+    description: string;
+    features: string[];
+  };
+}
+
 interface FacilityItemProps {
   image: string;
   title: string;
@@ -37,48 +46,25 @@ interface ArrowProps {
   className?: string;
 }
 
-const FacilitySection: React.FC = () => {
+const FacilitySection = ({ t }: FacilitySectionProps) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const sliderRef = useRef<Slider | null>(null);
 
-  const facilities = [
-    {
-      image: "/images/spacing/1.png",
-      title: "Tư vấn chuyên gia",
-      description: "Tận tình kỹ lưỡng về tinh trạng bệnh lý",
-    },
-    {
-      image: "/images/spacing/2.png",
-      title: "Bác sĩ đồng hành",
-      description: "Trực tiếp thăm khám và kiểm tra tình trạng",
-    },
-    {
-      image: "/images/spacing/3.png",
-      title: "Không gian",
-      description: "Tinh tế, sang trọng, thoải mái, riêng tư",
-    },
-    {
-      image: "/images/spacing/4.png",
-      title: "Chăm sóc chuẩn  mực",
-      description: "Bác sĩ tay nghề chuyên môn cao, giàu kinh nghiệm",
-    },
-    {
-      image: "/images/spacing/5.png",
-      title: "Kỹ thuật hiện đại",
-      description:
-        "Máy móc công nghệ cao, kỹ thuật tiên tiến được thực hiện trực tiếp bởi các bác sĩ chuyên ngành",
-    },
-    {
-      image: "/images/spacing/6.png",
-      title: "Chu đáo, từ tâm",
-      description: "Đội ngũ kỹ thuật viên lành nghề, kinh nghiệm",
-    },
-    {
-      image: "/images/spacing/7.png",
-      title: "Khách hàng là trung tâm",
-      description: "Thái độ tập trung, tận tâm trong suốt quá trình điều trị",
-    },
+  const facilityImages = [
+    "/images/spacing/1.png",
+    "/images/spacing/2.png",
+    "/images/spacing/3.png",
+    "/images/spacing/4.png",
+    "/images/spacing/5.png",
+    "/images/spacing/6.png",
+    "/images/spacing/7.png",
   ];
+
+  const facilities = t.features.map((feature, index) => ({
+    image: facilityImages[index] || "/images/spacing/1.png",
+    title: feature.split(": ")[0] || feature,
+    description: feature.split(": ")[1] || "",
+  }));
 
   // Custom arrow components
   const PrevArrow = (props: ArrowProps) => {
@@ -153,11 +139,10 @@ const FacilitySection: React.FC = () => {
         <div className="flex flex-col md:flex-row gap-8 md:gap-16 items-center">
           <div className="w-full md:w-1/3 pr-0 md:pr-12 overflow-hidden">
             <h2 className="text-xl md:text-5xl font-cormorant font-bold text-gray-900 mb-6 uppercase">
-              KHÔNG GIAN
+              {t.title}
             </h2>
             <p className="text-sm md:text-[20px] text-[#797979] mb-10 md:mb-20">
-              Tại Healthcare Therapy Center, từng chi tiết đều được chăm chút kỹ
-              lưỡng để mang đến trải nghiệm hoàn hảo cho khách hàng.
+              {t.description}
             </p>
             <div className="h-0.5 w-32 bg-gray-400 md:mb-10"></div>
           </div>

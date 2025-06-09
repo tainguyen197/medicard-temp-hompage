@@ -8,6 +8,18 @@ import Slider, { Settings } from "react-slick";
 // import "slick-carousel/slick/slick.css";
 // import "slick-carousel/slick/slick-theme.css";
 
+interface EquipmentSectionProps {
+  t: {
+    title: string;
+    subtitle: string;
+    items: Array<{
+      name: string;
+      description: string;
+      image: string;
+    }>;
+  };
+}
+
 interface EquipmentItemType {
   id: string;
   image: string;
@@ -97,41 +109,14 @@ const EquipmentItem: React.FC<EquipmentItemProps> = ({
 
 // Removed PrevArrow and NextArrow components
 
-const EquipmentSection: React.FC = () => {
-  const equipmentsData: EquipmentItemType[] = [
-    {
-      id: "equip1",
-      image: "/images/equipment_1.png",
-      title: "THIẾT BỊ",
-      subtitle: "SHOCKWAVE THERAPY",
-      description:
-        "Sử dụng sóng xung kích tạo áp lực cơ học và sức căng lên mô tổn thương, làm tăng tính thấm của màng tế bào, giúp tăng tuần hoàn tại chỗ và chuyển hóa tại phần mô được điều trị.",
-    },
-    {
-      id: "equip2",
-      image: "/images/equipment_2.png",
-      title: "THIẾT BỊ",
-      subtitle: "Laser công suất cao thông minh",
-      description:
-        "Dùng tia Laser tần số cao đi vào mô cơ, mô xương giúp giảm đau, tăng tốc chuyển hóa, giúp phục hồi tế bào nhanh hơn từ đó nâng cao khả năng điều trị và làm lành lại vết thương",
-    },
-    {
-      id: "equip3",
-      image: "/images/equipment_3.png",
-      title: "THIẾT BỊ",
-      subtitle: "Winback Tecar Therapy",
-      description:
-        "Sử dụng các dòng điện đặc trị tác động lên vùng cơ bị tắt nghẽn. Từ đó kích thích thần kinh cơ, chống teo cơ, kháng viêm, giảm đau",
-    },
-    {
-      id: "equip4",
-      image: "/images/equipment_4.png",
-      title: "THIẾT BỊ",
-      subtitle: "Điện xung kết hợp siêu âm",
-      description:
-        "Sử dụng sóng siêu âm tác động đến mô cơ giúp giảm sưng nề mô mềm, giảm đau, giảm co cứng, tăng cường tuần hoàn máu, làm đẩy nhanh quá trình làm lành và hồi phục chức năng.",
-    },
-  ];
+const EquipmentSection = ({ t }: EquipmentSectionProps) => {
+  const equipmentsData: EquipmentItemType[] = t.items.map((item, index) => ({
+    id: `equip${index + 1}`,
+    image: item.image,
+    title: "EQUIPMENT",
+    subtitle: item.name,
+    description: item.description,
+  }));
 
   const [infoVisibility, setInfoVisibility] = useState<{
     [key: string]: boolean;
@@ -162,7 +147,7 @@ const EquipmentSection: React.FC = () => {
   const numEquipments = equipmentsData.length;
 
   const finalEffectiveSettings = useMemo(() => {
-    let settingsCalc: Settings = {
+    const settingsCalc: Settings = {
       dots: false,
       infinite: numEquipments > currentSlidesToShow,
       speed: 700,
@@ -200,39 +185,11 @@ const EquipmentSection: React.FC = () => {
             slidesToScroll: 1,
             infinite: numEquipments > 1,
             arrows: false,
-            centerMode: numEquipments === 1,
-            centerPadding: "0px",
           },
         },
       ],
     };
 
-    if (isClient) {
-      if (numEquipments <= currentSlidesToShow && window.innerWidth >= 768) {
-        settingsCalc = {
-          ...settingsCalc,
-          slidesToShow: numEquipments,
-          infinite: false,
-          autoplay: false,
-          draggable: false,
-          swipe: false,
-          touchMove: false,
-          responsive:
-            settingsCalc.responsive?.filter((r) => r.breakpoint < 768) || [],
-        };
-      } else if (numEquipments === 1) {
-        settingsCalc = {
-          ...settingsCalc,
-          slidesToShow: 1,
-          infinite: false,
-          autoplay: false,
-          draggable: false,
-          swipe: false,
-          touchMove: false,
-          responsive: [],
-        };
-      }
-    }
     // Ensure responsive settings also have arrows: false
     if (settingsCalc.responsive) {
       settingsCalc.responsive = settingsCalc.responsive.map((resp) => ({
@@ -311,14 +268,12 @@ const EquipmentSection: React.FC = () => {
         <div className="container mx-auto px-4 xl:px-16 2xl:px-32 max-w-7xl">
           <div className="text-center mb-8 md:mb-16">
             <h2 className="text-xl md:text-5xl font-cormorant font-bold text-gray-900 uppercase mb-4">
-              CÔNG NGHỆ
+              {t.title}
             </h2>
-            <p className="text-xs md:text-xl text-gray-700">
-              Áp dụng công nghệ tiên tiến trong chẩn đoán và điều trị
-            </p>
+            <p className="text-xs md:text-xl text-gray-700">{t.subtitle}</p>
           </div>
           <div className="text-center py-8 text-gray-500">
-            Đang tải thiết bị...
+            Loading equipment...
           </div>
         </div>
       </section>
@@ -330,13 +285,11 @@ const EquipmentSection: React.FC = () => {
       <section className="py-10 md:py-16 bg-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-xl md:text-5xl font-cormorant font-bold text-gray-900 uppercase mb-4">
-            CÔNG NGHỆ
+            {t.title}
           </h2>
-          <p className="text-xs md:text-xl text-gray-700 mb-8">
-            Áp dụng công nghệ tiên tiến trong chẩn đoán và điều trị
-          </p>
+          <p className="text-xs md:text-xl text-gray-700 mb-8">{t.subtitle}</p>
           <div className="py-8 text-gray-500">
-            Thông tin thiết bị đang được cập nhật.
+            Equipment information is being updated.
           </div>
         </div>
       </section>
@@ -356,11 +309,9 @@ const EquipmentSection: React.FC = () => {
       <div className="container mx-auto px-4 xl:px-16 2xl:px-32 max-w-7xl">
         <div className="text-center mb-8 md:mb-16">
           <h2 className="text-xl md:text-5xl font-cormorant font-bold text-gray-900 uppercase mb-4">
-            CÔNG NGHỆ
+            {t.title}
           </h2>
-          <p className="text-xs md:text-xl text-gray-700">
-            Áp dụng công nghệ tiên tiến trong chẩn đoán và điều trị
-          </p>
+          <p className="text-xs md:text-xl text-gray-700">{t.subtitle}</p>
         </div>
 
         <div className="relative equipment-slider-container">

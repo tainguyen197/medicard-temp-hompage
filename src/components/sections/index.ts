@@ -1,0 +1,9 @@
+export { default as AboutSectionWithAnimation } from "./AboutSectionWithAnimation";
+export { default as ServicesGallerySectionWithAnimation } from "./ServicesGallerySectionWithAnimation";
+export { default as TreatmentMethodsSectionWithAnimation } from "./TreatmentMethodsSectionWithAnimation";
+export { default as TeamSectionWithAnimation } from "./TeamSectionWithAnimation";
+export { default as FacilitySectionWithAnimation } from "./FacilitySectionWithAnimation";
+export { default as EquipmentSectionWithAnimation } from "./EquipmentSectionWithAnimation";
+export { default as ProcessSectionWithAnimation } from "./ProcessSectionWithAnimation";
+export { default as BlogSectionWithAnimation } from "./BlogSectionWithAnimation";
+export { default as ContactSectionWithAnimation } from "./ContactSectionWithAnimation";

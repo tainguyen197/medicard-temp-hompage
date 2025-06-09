@@ -67,6 +67,257 @@
       "button": "Book an experience"
     }
   },
+  "home": {
+    "hero": {
+      "alt": "Healthcare Therapy Center"
+    },
+    "about": {
+      "title": "ABOUT HEALTHCARE THERAPY CENTER",
+      "heading": "Your health is the joy of Healthcare therapy center",
+      "quote": "Each customer is a \"family member\" that the Healthcare Therapy Center team dedicates to serve.",
+      "doctor": "Dr. Specialist Nguyen Thi Hong Hanh.",
+      "designation": "Professional Director of Healthcare Therapy Center",
+      "features": [
+        {
+          "title": "Peaceful and relaxing space",
+          "description": "Amidst the bustling city, Healthcare Therapy Center brings a warm, peaceful space. Every detail is carefully crafted so that each customer visiting can enjoy tranquility and balance of body - mind - spirit."
+        },
+        {
+          "title": "Service from the heart",
+          "description": "At Healthcare Therapy Center, we not only provide therapy, but also deliver complete dedication in every service. Your health is our top priority"
+        },
+        {
+          "title": "Proactive healthcare",
+          "description": "With an experienced team of experts, we highly value applying advanced methods combined with modern machinery in treatment. Especially, we focus on Preventive Medicine to help customers prevent future health problems."
+        }
+      ]
+    },
+    "services": {
+      "title": "SERVICES",
+      "viewDetails": "View details",
+      "bookExperience": "Book experience",
+      "items": [
+        {
+          "id": "service1",
+          "title": "TRADITIONAL MEDICINE",
+          "description": "Preserving community health with national essence: Natural medicines flexibly adjusted according to each different case, combined with other traditional medicine treatment methods such as acupuncture, massage, acupressure,... with the main goal of focusing on adjusting and rebalancing the Yin-Yang factors inside the body.",
+          "details": "Acupuncture, Massage - Acupressure, Herbal medicine",
+          "image": "/images/service_1.png",
+          "link": "/services/ortho"
+        },
+        {
+          "id": "service2",
+          "title": "HIGH-TECH PHYSICAL THERAPY TREATMENT",
+          "description": "Healthcare Therapy Center applies advanced, modern physical therapy technologies to maximize customers' treatment and recovery capabilities. High-power laser, Radio Frequency (RF), and Shockwave technologies have been proven through many scientific studies worldwide to be highly effective in treating musculoskeletal disorders, pain relief, and accelerating regeneration and recovery speed.",
+          "details": "High-power laser, Radio Frequency (RF waves), Shockwave Therapy",
+          "image": "/images/service_2.png",
+          "link": "/services/rehab"
+        },
+        {
+          "id": "service3",
+          "title": "FUNCTIONAL REHABILITATION: SPECIALIZED DIAGNOSIS AND TREATMENT",
+          "description": "Treatment of spinal diseases such as neck-back pain, sciatica, herniated disc...; Tendon-joint disorders such as: rotator cuff inflammation, knee joint pain, wrist joint pain, heel spurs; carpal tunnel syndrome, thumb extensor tendonitis, tennis elbow...; Acute-chronic muscle strain conditions.",
+          "details": "Examination, consultation, diagnosis and treatment of musculoskeletal disorders, Using physical therapy machines and equipment, Skilled and highly specialized technicians",
+          "image": "/images/service_3.png",
+          "link": "/services/func"
+        },
+        {
+          "id": "service4",
+          "title": "PERFECT TREATMENT, SMOOTH JOURNEY",
+          "description": "Enjoy the complete relaxation after treatment at Healthcare Therapy Center without worrying about transportation with our delivery service.",
+          "details": "Modern, convenient vehicles. Smooth, relaxing service.",
+          "image": "/images/service_4.png",
+          "link": "/services/transport"
+        }
+      ]
+    },
+    "treatments": {
+      "title": "TREATMENT METHODS",
+      "subtitle": "Applying advanced technologies and modern treatment methods",
+      "items": [
+        {
+          "icon": "acupuncture",
+          "title": "Acupuncture",
+          "description": "Traditional acupuncture methods combined with modern technology"
+        },
+        {
+          "icon": "massage",
+          "title": "Massage and acupressure",
+          "description": "Professional massage and acupressure techniques"
+        },
+        {
+          "icon": "herbal",
+          "title": "Herbal medicine",
+          "description": "Traditional herbal remedies prepared using modern methods"
+        },
+        {
+          "icon": "laser",
+          "title": "High-power laser",
+          "description": "Advanced laser technology for musculoskeletal treatment"
+        },
+        {
+          "icon": "rf",
+          "title": "RF radio frequency",
+          "description": "Radio frequency waves for pain relief and functional recovery"
+        },
+        {
+          "icon": "shockwave",
+          "title": "Shockwave",
+          "description": "Shockwave technology for musculoskeletal disorder treatment"
+        }
+      ]
+    },
+    "team": {
+      "title": "MEDIacCAL TEAM",
+      "subtitle": "Experienced and dedicated medical team",
+      "members": [
+        {
+          "name": "NGUYEN THI HONG HANH",
+          "title": "MD. Specialist",
+          "description": "Many years of experience in the field of Physical Therapy - Functional Rehabilitation",
+          "image": "/images/doctor4.jpg"
+        },
+        {
+          "name": "NGUYEN VAN THINH",
+          "title": "MD. Specialist",
+          "description": "Over 15 years in the field of Functional Rehabilitation and Internal Medicine Musculoskeletal, Traditional Medicine, with experience treating difficult and complex cases",
+          "image": "/images/doctor3.jpg"
+        },
+        {
+          "name": "NGUYEN THI MAI LINH",
+          "title": "MSc. MD",
+          "description": "Official member of the Chiropractic Neurological Spinal Therapy Association in Australia. Master - Doctor Mai Linh serves as a Clinical Doctor in many advanced countries around the world such as: Australia, Singapore, Vietnam.",
+          "image": "/images/doctor2.jpg"
+        },
+        {
+          "name": "DOAN HAI YEN",
+          "title": "MD. Specialist",
+          "description": "Dr. Doan Hai Yen has deep experience in the field of Musculoskeletal - Body rehabilitation.",
+          "image": "/images/doctor1.jpg"
+        }
+      ]
+    },
+    "treatmentMethods": {
+      "title": "TREATMENT METHODS AT HEALTHCARE THERAPY CENTER",
+      "subtitle": "Advanced and safe treatment methods",
+      "items": [
+        {
+          "title": "Western Medicine Spinal Neurological Therapy",
+          "description": "Optimal and safe treatment regimen that does not require medication or surgery."
+        },
+        {
+          "title": "High-Tech Application",
+          "description": "Continuously updating modern, advanced technologies to bring the best treatment results."
+        },
+        {
+          "title": "Pharmacotherapy",
+          "description": "Suitable for each individual to reduce pain, reduce inflammation, use regenerative substances to help health quickly recover."
+        },
+        {
+          "title": "Eastern Traditional Medicine Functional Rehabilitation",
+          "description": "Building separate treatment protocols to help customers soon return to enjoying daily life."
+        }
+      ]
+    },
+    "facility": {
+      "title": "FACILITIES",
+      "subtitle": "Modern space with advanced equipment",
+      "description": "At Healthcare Therapy Center, every detail is carefully crafted to provide the perfect experience for customers.",
+      "features": [
+        "Expert Consultation: Dedicated and thorough care about pathological conditions",
+        "Accompanying Doctors: Direct examination and condition monitoring",
+        "Space: Refined, luxurious, comfortable, private",
+        "Standard Care: Highly skilled doctors with rich experience",
+        "Modern Techniques: High-tech machinery and advanced techniques performed directly by specialist doctors",
+        "Thoughtful, Heartfelt: Skilled and experienced technical staff",
+        "Customer-Centered: Focused and dedicated attitude throughout the treatment process"
+      ]
+    },
+    "equipment": {
+      "title": "EQUIPMENT",
+      "subtitle": "Leading advanced medical technology",
+      "items": [
+        {
+          "name": "SHOCKWAVE THERAPY",
+          "description": "Uses shock waves to create mechanical pressure and tension on damaged tissue, increasing cell membrane permeability, helping to increase local circulation and metabolism in the treated tissue area.",
+          "image": "/images/equipment_1.png"
+        },
+        {
+          "name": "Smart High-Power Laser",
+          "description": "Uses high-frequency laser rays penetrating muscle and bone tissue to help reduce pain, accelerate metabolism, help cells recover faster, thereby enhancing treatment capabilities and wound healing.",
+          "image": "/images/equipment_2.png"
+        },
+        {
+          "name": "Winback Tecar Therapy",
+          "description": "Uses special electrical currents acting on blocked muscle areas. This stimulates muscle nerves, prevents muscle atrophy, reduces inflammation, and relieves pain.",
+          "image": "/images/equipment_3.png"
+        },
+        {
+          "name": "Electrical Stimulation Combined with Ultrasound",
+          "description": "Uses ultrasound waves acting on muscle tissue to help reduce soft tissue swelling, reduce pain, reduce stiffness, enhance blood circulation, accelerate healing and functional recovery.",
+          "image": "/images/equipment_4.png"
+        }
+      ]
+    },
+    "process": {
+      "title": "HEALTHCARE PROCESS",
+      "subtitle": "proudly provides cellular-level musculoskeletal treatment and rehabilitation therapy solutions, non-surgical and highly personalized.",
+      "steps": [
+        {
+          "step": "01",
+          "title": "Information Collection",
+          "description": "Doctors will base on provided information such as: medical history, symptom examination & initial diagnosis."
+        },
+        {
+          "step": "02", 
+          "title": "Health Diagnosis",
+          "description": "Customers may need additional X-rays or MRI to get the most accurate diagnostic results."
+        },
+        {
+          "step": "03",
+          "title": "Combined Therapy",
+          "description": "Design treatment roadmap with Spinal Neurological Therapy methods, combined with modern technology and physical therapy for treatment."
+        },
+        {
+          "step": "04",
+          "title": "Comprehensive Care",
+          "description": "After the treatment process, patients will continue to be monitored, recovery status checked, and comprehensive health care advice provided."
+        }
+      ]
+    },
+    "news": {
+      "title": "NEWS",
+      "viewMore": "View more",
+      "posts": [
+        {
+          "id": 1,
+          "slug": "chiro-therapy-trong-dieu-tri-cac-van-de-ve-cot-song",
+          "image": "/images/news1.jpg",
+          "title": "Chiro Therapy in treating spinal problems",
+          "excerpt": "Understanding the Chiropractic method - an effective treatment solution for spinal problems without surgery or pain medication."
+        },
+        {
+          "id": 2,
+          "slug": "phuong-phap-giam-dau-khong-dung-thuoc-cho-dau-luong-man-tinh",
+          "image": "/images/news2.jpg",
+          "title": "Non-drug pain relief methods for chronic back pain",
+          "excerpt": "Discover natural techniques and therapies that help reduce chronic back pain, safe and effective long-term."
+        },
+        {
+          "id": 3,
+          "slug": "tap-luyen-dung-cach-de-phong-ngua-chan-thuong-co-xuong-khoc",
+          "image": "/images/news3.jpg",
+          "title": "Proper exercise to prevent musculoskeletal injuries",
+          "excerpt": "Detailed guide on safe exercise techniques, helping prevent injuries and maintain musculoskeletal health."
+        }
+      ]
+    },
+    "contact": {
+      "title": "READY TO EXPERIENCE",
+      "subtitle": "THE DIFFERENCE?",
+      "button": "Book appointment"
+    }
+  },
   "news": {
     "title": "NEWS",
     "metadata": {
