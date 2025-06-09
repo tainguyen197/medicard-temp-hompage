@@ -2,8 +2,9 @@ import React, { Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 import prisma from "@/lib/prisma";
-import ServiceDetailContent from "./ServiceDetailContent";
+import { getMessages } from "next-intl/server";
 
 interface ServiceDetailProps {
   params: Promise<{ slug: string }>;
@@ -36,10 +37,92 @@ interface ContentSection {
   image?: string;
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug?: string }>;
+}): Promise<Metadata> {
+  const messages = await getMessages();
+  const t = messages.services.notFound;
+
+  try {
+    const service = await prisma.service.findFirst({
+      where: {
+        slug: (await params).slug,
+        status: "PUBLISHED",
+      },
+    });
+
+    if (!service) {
+      return {
+        title: t.title,
+        description: t.description,
+      };
+    }
+
+    return {
+      title: `${service.title} | Healthcare Therapy Center`,
+      description: service.shortDescription || service.description || "",
+    };
+  } catch (error) {
+    return {
+      title: t.title,
+      description: t.description,
+    };
+  }
+}
+
 export default async function ServiceDetailPage({
   params,
-}: ServiceDetailProps) {
-  const { slug } = await params;
+}: {
+  params: Promise<{ slug?: string }>;
+}) {
+  const messages = await getMessages();
+  const t = messages.services;
+
+  let service: Service | null = null;
+  const slug = (await params).slug;
+  console.log("slug", slug);
+
+  try {
+    // Fetch service by slug from database
+    service = await prisma.service.findFirst({
+      where: {
+        slug: slug,
+        status: "PUBLISHED",
+      },
+      include: {
+        featureImage: true,
+      },
+    });
+
+    if (!service) {
+      notFound();
+    }
+  } catch (error) {
+    console.error("Failed to fetch service:", error);
+    notFound();
+  }
+
+  // Parse content sections if available (assuming content is stored as JSON or structured text)
+  const parseContentSections = (content: string | null): ContentSection[] => {
+    if (!content) return [];
+
+    try {
+      // Try to parse as JSON first
+      const parsed = JSON.parse(content);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      // If not JSON, split by double line breaks and create simple sections
+      return content.split("\n\n").map((section, index) => ({
+        type: "text" as const,
+        title: index === 0 ? "" : `Section ${index}`,
+        content: section.trim(),
+      }));
+    }
+  };
+
+  const contentSections = parseContentSections(service.content || null);
 
   return (
     <>
@@ -104,7 +187,7 @@ function ServiceDetailLoading() {
       <section className="container mx-auto px-4 py-4 md:py-6 max-w-7xl">
         <div className="flex items-center text-lg">
           <Link href="/services" className="text-gray-500 hover:text-gray-700">
-            Dịch vụ
+            {t.breadcrumb.services}
           </Link>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -155,19 +238,17 @@ function ServiceDetailLoading() {
       <section className="bg-white py-16 md:py-24">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-5xl font-semibold text-[#1F1F1F] mb-4 md:mb-6">
-            Sẵn sàng trải nghiệm sự khác biệt
+            {t.cta.heading}
           </h2>
           <p className="text-lg md:text-2xl text-black mb-10 max-w-4xl mx-auto">
-            Hãy để Healthcare Therapy Center trở thành điểm tựa vững chắc
-            <br />
-            trong hành trình chăm sóc sức khỏe của bạn.
+            {t.cta.subheading}
           </p>
           <a
             href="https://forms.gle/GJETkvXcnZ7hZwBr8"
             target="_blank"
             className="inline-flex items-center justify-center px-8 py-3 bg-[#B1873F] text-white rounded-full text-base md:text-lg font-semibold transition-all hover:bg-[#9A7435]"
           >
-            Đặt lịch trải nghiệm
+            {t.cta.button}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 ml-2"
@@ -205,36 +286,5 @@ export async function generateStaticParams() {
   } catch (error) {
     console.error("Failed to generate static params:", error);
     return [];
-  }
-}
-
-// Generate metadata for SEO (optional)
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  try {
-    const service = await prisma.service.findFirst({
-      where: {
-        slug: (await params).slug,
-        status: "PUBLISHED",
-      },
-    });
-
-    if (!service) {
-      return {
-        title: "Service Not Found",
-      };
-    }
-
-    return {
-      title: service.title,
-      description: service.shortDescription || service.description,
-    };
-  } catch (error) {
-    return {
-      title: "Service",
-    };
   }
 }

@@ -48,9 +48,18 @@
     "appointmentButton": "Book an experience"
   },
   "services": {
+    "title": "SERVICES",
+    "metadata": {
+      "title": "Healthcare Services | Healthcare Therapy Center",
+      "description": "Professional healthcare services including traditional medicine, physical therapy, functional rehabilitation and transport services."
+    },
+    "intro": {
+      "description": "Not only aimed at treating symptoms after they appear, but preventing them from the beginning to maintain and improve your quality of life. Through personalized consultation, examination and care programs, we accompany you on your healthcare journey."
+    },
     "breadcrumb": {
       "services": "Services"
     },
+    "viewDetails": "View details",
     "cta": {
       "heading": "Ready to experience the difference",
       "subheading": "Let Healthcare Therapy Center become your reliable support in your healthcare journey.",
@@ -59,6 +68,102 @@
     "notFound": {
       "title": "Service not found",
       "description": "The service you are looking for does not exist or has been deleted."
+    },
+    "individual": {
+      "traditionalMedicine": {
+        "title": "TRADITIONAL MEDICINE",
+        "subtitle": "Preserving community health with national essence",
+        "intro1": "Since the time of Van Lang and Dai Viet, Vietnamese medicine has combined medical theories from the East with healing knowledge accumulated from 54 different ethnic groups. They have used their expertise in understanding herbal medicines and natural medicinal materials from the tropical monsoon region and finally accumulated to create Vietnam's traditional medicine.",
+        "intro2": "What makes this method special is the medicines derived from nature and flexibly adjusted according to each different case. Other treatment methods of traditional medicine such as acupuncture, massage, acupressure,... with the main goal of focusing on adjusting and rebalancing the Yin-Yang factors inside the body have also been recognized for their effectiveness and safety.",
+        "acupuncture": {
+          "title": "Acupuncture:",
+          "description": "Doctors will use small metal needles to pierce through the skin, then move by hand or use electrical stimulation to affect the central nervous system. This mechanism helps release chemicals into muscles, spinal cord or brain and promotes the body's natural self-healing ability."
+        },
+        "massage": {
+          "title": "Massage and acupressure:",
+          "description": "This is not only a method of treating chronic diseases but also helps prevent diseases very effectively. The method of operation is to use hands and fingers to apply force to acupoints on the patient's body."
+        },
+        "herbalMedicine": {
+          "title": "Herbal medicine:",
+          "description": "Traditional medicine drugs all have ingredients from natural materials including both plants and animals. Each medicine will be combined with different medicinal ingredients depending on the disease. The characteristic of traditional medicine is that it can be used for a long time, suitable for treating chronic diseases."
+        }
+      },
+      "physicalTherapy": {
+        "title": "HIGH-TECH PHYSICAL THERAPY TREATMENT",
+        "subtitle": "Maximizing treatment and recovery capabilities with advanced technology",
+        "intro1": "Healthcare Therapy Center applies advanced, modern physical therapy technologies to maximize customers' treatment and recovery capabilities.",
+        "intro2": "High-power laser, Radio Frequency (RF), and Shockwave technologies have been proven through many scientific studies worldwide to be highly effective in treating musculoskeletal disorders, pain relief, and accelerating regeneration and recovery speed.",
+        "laser": {
+          "title": "High-power laser:",
+          "description": "Healthcare Therapy Center uses the latest high-power laser machines, providing powerful energy that acts on tissue-cell level deep for recovery and regeneration.",
+          "effects": {
+            "title": "Effects of high-power laser in treating musculoskeletal disorders:",
+            "painRelief": "Pain relief: Helps quickly relieve pain for patients with acute or chronic pain, helping to regain mobility and improve quality of life.",
+            "cellRecovery": "Faster cell recovery: Laser promotes faster cell recovery by stimulating cell regeneration at the molecular level, accelerating recovery and minimizing rest time.",
+            "circulation": "Enhanced circulation: Improves blood flow and oxygen to affected areas, creating conditions for nutrient supply and waste removal."
+          },
+          "wavelengths": "Depending on different wavelengths: 810nm, 650nm, 915nm, they bring different effects. Laser is precisely adjusted by doctors to suit musculoskeletal pathology, condition and response of each customer."
+        },
+        "radioFrequency": {
+          "title": "Radio Frequency (RF waves):",
+          "description1": "This method uses radio frequency (RF) technology to create high energy, promoting muscle and joint regeneration, stimulating the body's natural self-recovery mechanism.",
+          "description2": "The treatment method is applied in acute and semi-acute injuries, chronic musculoskeletal pathology, functional recovery, and pain control.",
+          "effects": {
+            "title": "Effects of radio frequency in treatment:",
+            "painElimination": "Pain elimination: RF wave energy blocks nerve impulses related to pain, providing immediate pain relief for more than 48 hours.",
+            "mobility": "Improved range of motion (6 times faster): RF wave energy entering the body converts to large thermal energy. This local heat increase forces revascularization of restricted areas and releases limited range of motion.",
+            "healing": "Accelerated healing speed (97% effective): Energy promotes metabolic processes inside and outside cells, thus helping tissue heal faster."
+          }
+        },
+        "shockwave": {
+          "title": "Shockwave Therapy:",
+          "description": "Shockwave is a form of high-energy sound wave, widely used in medicine, especially in physical therapy and treatment of musculoskeletal disorders. Shockwave machines create high-energy electrical pulses, converting them into sound waves of different frequencies and intensities.",
+          "effects": {
+            "title": "Effects of Shockwave Therapy in treating musculoskeletal disorders:",
+            "recovery": "Stimulate recovery: Shockwaves stimulate the body's natural healing process, promoting tissue regeneration, reducing inflammation and pain.",
+            "painRelief": "Pain relief: Shockwaves act on nerves, inhibiting pain signals and reducing discomfort.",
+            "circulation": "Enhanced blood circulation: Shockwaves stimulate new blood vessel formation, improving blood flow to injured areas, helping tissues receive adequate oxygen and nutrients for recovery.",
+            "calciumDeposits": "Dispersing calcium deposits: Shockwaves can break down calcium deposits accumulated in joints and tendons, helping reduce pain and improve movement."
+          }
+        }
+      },
+      "functionalRehabilitation": {
+        "title": "FUNCTIONAL REHABILITATION: SPECIALIZED DIAGNOSIS AND TREATMENT",
+        "subtitle": "At Healthcare Therapy Center, customers will be examined, consulted directly by a team of doctors who are fully trained, have sufficient professional qualifications and experience.",
+        "examination": {
+          "title": "Examination, consultation and diagnosis of musculoskeletal disorders",
+          "description": "Customers will be examined and consulted directly by a team of doctors who are fully trained, have sufficient professional qualifications and experience in the field of Musculoskeletal - Functional Rehabilitation. Diagnosis is based on disease symptoms and necessary paraclinical results, then provide personalized treatment regimens suitable for the customer's pathological condition."
+        },
+        "equipment": {
+          "title": "Using physical therapy machines and equipment",
+          "description": "HTC uses modern physical therapy machines and equipment, coordinated and adjusted appropriately for each treatment regimen, acting deep on muscle, tendon and joint layers, aiming for optimal treatment results. Methods such as:",
+          "methods": [
+            "Electrical stimulation therapy",
+            "Ultrasound therapy",
+            "High-power laser",
+            "High-frequency waves",
+            "Shockwave"
+          ]
+        },
+        "technicians": {
+          "title": "Skilled and highly specialized technicians",
+          "description": "The team of experienced technicians, professionally trained in manual techniques: Soft tissue manipulation, muscle stretching, passive-active joint exercises, muscle strengthening techniques,... help effectively treat musculoskeletal disorders."
+        },
+        "treatment": {
+          "title": "Treatment of disorders",
+          "spineDisorders": "Spinal disorders such as: Neck-back pain, sciatica, herniated disc,...",
+          "jointDisorders": "Tendon-joint disorders such as: rotator cuff inflammation, knee joint pain, wrist joint pain, heel spurs; carpal tunnel syndrome, thumb extensor tendonitis, tennis elbow...",
+          "muscleStrain": "Acute - chronic muscle strain conditions"
+        }
+      },
+      "transport": {
+        "title": "HEALTHCARE THERAPY CENTER: PERFECT TREATMENT, SMOOTH JOURNEY",
+        "subtitle": "Enjoy the complete relaxation after treatment at Healthcare Therapy Center without worrying about transportation.",
+        "intro": "We understand that after wonderful moments of healthcare and relaxation, what you need is a really comfortable and peaceful journey home. Therefore, Healthcare Therapy Center is proud to provide home delivery service with modern, convenient vehicles.",
+        "description1": "Imagine, you have just finished a wonderful therapy session, your body and mind are in perfect balance. Instead of waiting for public transport or worrying about driving, now HTC and our dynamic team are ready to accompany you on every road home.",
+        "description2": "With spacious interior, modern design, fully equipped amenities. Our car service will bring you a smooth, relaxing and stylish trip. Let us take care of the entire journey, so you can completely relax and enjoy the wonderful benefits that the treatment has brought.",
+        "slogan": "HEALTHCARE THERAPY CENTER - Nurturing health, complete peace of mind on every journey."
+      }
     }
   },
   "metadata": {

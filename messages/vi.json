@@ -48,9 +48,18 @@
     "appointmentButton": "Đặt lịch trải nghiệm"
   },
   "services": {
+    "title": "DỊCH VỤ",
+    "metadata": {
+      "title": "Dịch vụ chăm sóc sức khỏe | Healthcare Therapy Center",
+      "description": "Các dịch vụ chăm sóc sức khỏe chuyên nghiệp bao gồm y học cổ truyền, vật lý trị liệu, phục hồi chức năng và dịch vụ đưa đón."
+    },
+    "intro": {
+      "description": "Không chỉ nhằm mục đích điều trị sau khi các triệu chứng xuất hiện, mà là phòng ngừa ngay từ ban đầu để duy trì và nâng cao chất lượng cuộc sống của bạn. Thông qua các chương trình tư vấn, kiểm tra và chăm sóc được cá nhân hóa, chúng tôi đồng hành cùng bạn trên hành trình chăm sóc sức khỏe."
+    },
     "breadcrumb": {
       "services": "Dịch vụ"
     },
+    "viewDetails": "Xem chi tiết",
     "cta": {
       "heading": "Sẵn sàng trải nghiệm sự khác biệt",
       "subheading": "Hãy để Healthcare Therapy Center trở thành điểm tựa vững chắc trong hành trình chăm sóc sức khỏe của bạn.",
@@ -59,6 +68,102 @@
     "notFound": {
       "title": "Dịch vụ không tìm thấy",
       "description": "Dịch vụ bạn đang tìm kiếm không tồn tại hoặc đã bị xóa."
+    },
+    "individual": {
+      "traditionalMedicine": {
+        "title": "Y HỌC CỔ TRUYỀN",
+        "subtitle": "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc",
+        "intro1": "Kể từ thời Văn Lang và Đại Việt, nền y học Việt Nam đã kết hợp lý luận y học từ phương Đông cùng với những kiến thức chữa bệnh tích góp từ 54 dân tộc khác nhau. Họ đã sử dụng đặc quyền am hiểu về các nguyên liệu thảo dược, dược liệu từ thiên nhiên của vùng nhiệt đới gió mùa và cuối cùng tích góp tạo ra nền y học cổ truyền của Việt Nam.",
+        "intro2": "Điểm tạo nên sự đặc biệt của phương pháp này chính là những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau. Các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể cũng đã được ghi nhận về tính hiệu quả và an toàn.",
+        "acupuncture": {
+          "title": "Châm cứu:",
+          "description": "Các bác sĩ sẽ sử dụng các chiếc kim bằng kim loại nhỏ để châm xuyên qua lớp da, sau đó chuyển động bằng tay hoặc sử dụng biện pháp kích điện để tác động đến hệ thần kinh trung ương. Cơ chế này giúp giải phóng các chất hóa học vào trong cơ, tủy sống hay não và thúc đẩy khả năng tự chữa bệnh một cách tự nhiên của cơ thể."
+        },
+        "massage": {
+          "title": "Xoa bóp, bấm huyệt:",
+          "description": "Đây không những là một phương pháp chữa trị các căn bệnh mãn tính mà còn giúp cho việc phòng bệnh rất hiệu quả. Cách thức hoạt động chính là sử dụng bàn tay và ngón tay để tác động lực lên các huyệt trên cơ thể bệnh nhân."
+        },
+        "herbalMedicine": {
+          "title": "Thuốc thang:",
+          "description": "Thuốc ngành y học cổ truyền đều có thành phần từ nguyên liệu của thiên nhiên bao gồm cả thực vật và động vật. Mỗi vị thuốc sẽ được kết hợp với các dược liệu khác nhau tùy theo chứng bệnh. Đặc trưng của thuốc y học cổ truyền đó là có thể sử dụng được trong thời gian dài, phù hợp trong việc chữa trị các căn bệnh mãn tính."
+        }
+      },
+      "physicalTherapy": {
+        "title": "ĐIỀU TRỊ VẬT LÝ TRỊ LIỆU CÔNG NGHỆ CAO",
+        "subtitle": "Tối đa hóa khả năng điều trị, phục hồi với công nghệ tiên tiến",
+        "intro1": "Healthcare Therapy Center áp dụng những công nghệ vật lý trị liệu tiên tiến, hiện đại nhằm tối đa hóa khả năng điều trị, phục hồi của khách hàng.",
+        "intro2": "Các công nghệ Laser công suất cao, Sóng cao tần Radio Frequency (RF), Sóng xung kích Shockwave được chứng minh qua nhiều nghiên cứu khoa học trên thế giới là hiệu quả cao trong việc điều trị các bệnh lý cơ xương khớp, giảm đau, đẩy nhanh tốc độ tái tạo và phục hồi.",
+        "laser": {
+          "title": "Laser công suất cao:",
+          "description": "Healthcare Therapy center sử dụng dòng máy Laser mới nhất hiện nay, công suất cao cung cấp năng lượng mạnh mẽ tác động đến cấp độ mô – tế bào ở sâu cần phục hồi, tái tạo.",
+          "effects": {
+            "title": "Tác dụng Laser công suất cao trong điều trị các bệnh lý cơ xương khớp:",
+            "painRelief": "Giảm đau: Giúp giảm đau nhanh chóng cho những bệnh nhân bị đau cấp tính hoặc mãn tính, giúp lấy lại khả năng vận động và cải thiện chất lượng cuộc sống.",
+            "cellRecovery": "Phục hồi cho tế bào nhanh hơn: Laser thúc đẩy quá trình phục hồi tế bào nhanh hơn bằng cách kích thích tái tạo tế bào ở cấp độ phân tử, đẩy nhanh quá trình phục hồi và giảm thiểu thời gian nghỉ dưỡng.",
+            "circulation": "Tăng cường lưu thông: Cải thiện lưu lượng máu và oxy đến các vùng bị ảnh hưởng, tạo điều kiện cung cấp chất dinh dưỡng và loại bỏ chất thải."
+          },
+          "wavelengths": "Tùy vào các bước sóng khác nhau: 810nm, 650nm, 915nm mà mang đến các tác dụng khác nhau, Laser được bác sĩ tinh chỉnh ứng dụng phù hợp với bệnh lý cơ xương khớp, tình trạng và đáp ứng của từng khách hàng."
+        },
+        "radioFrequency": {
+          "title": "Radio Frequency (Sóng RF):",
+          "description1": "Phương pháp này sử dụng công nghệ sóng cao tần (RF) tạo ra năng lượng cao, thúc đẩy quá trình tái tạo cơ và khớp, kích thích cơ chế tự phục hồi tự nhiên của cơ thể con người.",
+          "description2": "Phương pháp trị liệu ứng dụng trong chấn thương cấp tính và bán cấp tính, bệnh lý cơ xương khớp mãn tính, phục hồi chức năng, kiểm soát cơn đau.",
+          "effects": {
+            "title": "Tác dụng của sóng cao tần trong điều trị:",
+            "painElimination": "Loại bỏ cơn đau: Năng lượng sóng RF ngăn chặn các xung thần kinh liên quan đến cơn đau, giảm đau ngay lập tức trong hơn 48 giờ.",
+            "mobility": "Cải thiện biên độ vận động (nhanh hơn 6 lần): Năng lượng sóng RF vào cơ thể chuyển thành năng lượng nhiệt lớn. Sự gia tăng nhiệt cục bộ này buộc phải tái thông mạch các vùng bị hạn chế và giải phóng biên vận động giới hạn.",
+            "healing": "Tăng tốc độ chữa lành (hiệu quả 97%): Năng lượng thúc đẩy quá trình trao đổi bên trong và bên ngoài tế bào, do đó giúp chữa lành mô nhanh hơn."
+          }
+        },
+        "shockwave": {
+          "title": "Shockwave Therapy (Sóng xung kích):",
+          "description": "Sóng xung kích là một dạng sóng âm có năng lượng cao, được sử dụng rộng rãi trong y học, đặc biệt là trong lĩnh vực vật lý trị liệu và điều trị các bệnh lý về cơ xương khớp. Máy sóng xung kích tạo ra những xung điện năng lượng cao, chuyển đổi thành sóng âm có tần số và cường độ khác nhau.",
+          "effects": {
+            "title": "Tác dụng của Shockwave Therapy trong điều trị các bệnh lý Cơ xương khớp:",
+            "recovery": "Kích thích phục hồi: Sóng xung kích kích thích quá trình chữa lành tự nhiên của cơ thể, thúc đẩy quá trình tái tạo mô, giảm viêm và giảm đau.",
+            "painRelief": "Giảm đau: Sóng xung kích tác động lên các dây thần kinh, ức chế tín hiệu đau và giảm cảm giác khó chịu.",
+            "circulation": "Tăng cường tuần hoàn máu: Sóng xung kích kích thích sự hình thành mạch máu mới, cải thiện lưu thông máu đến vùng tổn thương, giúp các mô được cung cấp đầy đủ oxy và chất dinh dưỡng để phục hồi.",
+            "calciumDeposits": "Phân tán các cặn canxi: Sóng xung kích có khả năng phá vỡ các cặn canxi lắng đọng tại các khớp, gân, giúp giảm đau và cải thiện vận động."
+          }
+        }
+      },
+      "functionalRehabilitation": {
+        "title": "PHỤC HỒI CHỨC NĂNG: CHẨN ĐOÁN VÀ ĐIỀU TRỊ CHUYÊN SÂU",
+        "subtitle": "Tại Healthcare Therapy Center, khách hàng sẽ được thăm - khám, tư vấn trực tiếp bởi đội ngũ bác sĩ được đào tạo đầy đủ, có đủ bằng cấp chuyên môn, kinh nghiệm.",
+        "examination": {
+          "title": "Thăm khám, tư vấn và chẩn đoán các bệnh lý cơ xương khớp",
+          "description": "Khách hàng sẽ được thăm - khám, tư vấn trực tiếp bởi đội ngũ bác sĩ được đào tạo đầy đủ, có đủ bằng cấp chuyên môn, kinh nghiệm trong lĩnh vực Cơ xương khớp – Phục hồi chức năng. Chẩn đoán dựa trên triệu chứng bệnh và các kết quả cận lâm sàng cần thiết, sau đó đưa ra phác đồ điều trị cá nhân hóa phù hợp với tình trạng bệnh lý của khách hàng."
+        },
+        "equipment": {
+          "title": "Sử dụng các máy móc thiết bị vật lý trị liệu",
+          "description": "HTC sử dụng các máy móc, thiết bị vật lý trị liệu hiện đại, phối hợp tinh chỉnh phù hợp với từng phác đồ điều trị, tác động sâu đến các lớp cơ, gân, khớp, hướng tới kết quả điều trị tối ưu. Các phương pháp như:",
+          "methods": [
+            "Điện xung trị liệu",
+            "Siêu âm trị liệu",
+            "Laser công suất cao",
+            "Sóng cao tần",
+            "Sóng xung kích"
+          ]
+        },
+        "technicians": {
+          "title": "Kĩ thuật viên có tay nghề, chuyên môn cao",
+          "description": "Đội ngũ kĩ thuật viên có kinh nghiệm, được đào tạo bài bản về các kĩ thuật bằng tay: Tác động mô mềm, kéo giãn cơ, tập vận động thụ động – chủ động các khớp, các kĩ thuật tập mạnh cơ,... giúp điều trị hiệu quả các bệnh lý cơ xương khớp."
+        },
+        "treatment": {
+          "title": "Điều trị các bệnh lý",
+          "spineDisorders": "Các bệnh về cột sống như: Đau cổ-lưng, đau thần kinh tọa, thoát vị đĩa đệm,...",
+          "jointDisorders": "Các bệnh lý về gân - khớp như: viêm chop xoay, đau khớp gối, khớp cổ tay, gai gót chân; hội chứng ống cổ tay, viêm gân duỗi ngón cái, tenis elbow…",
+          "muscleStrain": "Các tình trạng căng mỏi cơ cấp - mạn"
+        }
+      },
+      "transport": {
+        "title": "HEALTHCARE THERAPY CENTER: LIỆU TRÌNH HOÀN HẢO, HÀNH TRÌNH ÊM ÁI",
+        "subtitle": "Tận hưởng trọn vẹn sự thư thái sau liệu trình tại Healthcare Therapy Center mà không cần lo lắng về việc di chuyển.",
+        "intro": "Chúng tôi hiểu rằng sau những giây phút chăm sóc sức khỏe và thư giãn tuyệt vời, điều bạn cần là một hành trình về nhà thật thoải mái và an tâm. Vì thế, Healthcare Therapy Center hân hạnh mang đến dịch vụ đưa khách về tận nhà với dòng xe hiện đại, tiện nghi.",
+        "description1": "Hình dung nhé, bạn vừa kết thúc một buổi trị liệu tuyệt vời, cơ thể và tâm trí đang trong trạng thái cân bằng hoàn hảo. Thay vì phải chờ đợi xe công cộng hay lo lắng về việc lái xe, giờ đây đã có HTC cùng đội ngũ năng động của chúng tôi sẵn sàng đồng hành cùng bạn trên mọi nẻo đường về nhà.",
+        "description2": "Với không gian nội thất rộng rãi, thiết kế hiện đại, trang bị tiện nghi đầy đủ. Dịch vụ xe của chúng tôi sẽ mang đến cho bạn một chuyến đi êm ái, thư thái và đầy phong cách. Hãy để chúng tôi chăm sóc suốt hành trình, để bạn có thể hoàn toàn thả lỏng và tận hưởng những lợi ích tuyệt vời mà liệu trình đã mang lại.",
+        "slogan": "HEALTHCARE THERAPY CENTER - Nâng niu sức khỏe, trọn vẹn an tâm trên từng hành trình."
+      }
     }
   },
   "metadata": {
