@@ -331,34 +331,122 @@
       "title": "Tin tức sức khoẻ | Healthcare Therapy Center",
       "description": "Cập nhật những kiến thức hữu ích về sức khoẻ, phương pháp điều trị và lối sống lành mạnh từ Healthcare Therapy Center."
     },
+    "hero": {
+      "title": "TIN TỨC",
+      "subtitle": "Cập Nhật Và Thông Tin Sức Khỏe Mới Nhất",
+      "imageAlt": "Hình ảnh tin tức"
+    },
+    "sections": {
+      "trending": {
+        "title": "Tin Tức Nổi Bật",
+        "featured": "Nổi Bật",
+        "showMoreButton": "Xem Tất Cả Tin Nổi Bật"
+      },
+      "allPosts": {
+        "title": "Tất cả bài viết",
+        "showTitle": false,
+        "loadMore": "Tải Thêm Bài Viết"
+      },
+      "categories": {
+        "title": "Danh Mục",
+        "all": "Tất Cả Danh Mục",
+        "health": "Mẹo Sức Khỏe",
+        "treatment": "Phương Pháp Điều Trị",
+        "lifestyle": "Lối Sống Lành Mạnh",
+        "technology": "Công Nghệ Y Tế"
+      }
+    },
+    "article": {
+      "readMore": "Đọc Thêm",
+      "readTime": "phút đọc",
+      "publishedOn": "Xuất bản vào",
+      "byAuthor": "Bởi",
+      "category": "Danh mục",
+      "tags": "Thẻ",
+      "shareArticle": "Chia Sẻ Bài Viết"
+    },
     "emptyState": {
       "title": "Hiện tại chưa có bài viết nào được xuất bản",
-      "description": "Vui lòng quay lại sau để xem nội dung mới."
+      "description": "Vui lòng quay lại sau để xem nội dung mới.",
+      "button": "Đăng Ký Nhận Cập Nhật",
+      "image": "Không tìm thấy bài viết"
     },
-    "trending": {
-      "title": "Tin Tức Nổi Bật",
-      "featured": "Nổi Bật"
+    "search": {
+      "placeholder": "Tìm kiếm bài viết...",
+      "button": "Tìm kiếm",
+      "results": "Kết Quả Tìm Kiếm",
+      "noResults": "Không tìm thấy bài viết phù hợp với tìm kiếm của bạn.",
+      "clear": "Xóa Tìm Kiếm"
     },
-    "allPosts": {
-      "title": "Tất cả bài viết"
+    "filters": {
+      "title": "Lọc Bài Viết",
+      "byDate": "Theo Ngày",
+      "byCategory": "Theo Danh Mục",
+      "sortBy": "Sắp Xếp Theo",
+      "newest": "Mới Nhất Trước",
+      "oldest": "Cũ Nhất Trước",
+      "popular": "Phổ Biến Nhất",
+      "reset": "Đặt Lại Bộ Lọc"
     },
     "pagination": {
       "previous": "Trước",
       "next": "Tiếp theo",
-      "page": "Trang"
+      "page": "Trang",
+      "previousPage": "Trang Trước",
+      "nextPage": "Trang Tiếp",
+      "firstPage": "Trang Đầu",
+      "lastPage": "Trang Cuối",
+      "of": "của",
+      "pages": "trang",
+      "showing": "Hiển thị",
+      "to": "đến",
+      "results": "kết quả",
+      "goToPage": "Đi đến trang"
+    },
+    "loading": {
+      "articles": "Đang tải bài viết...",
+      "more": "Đang tải thêm...",
+      "search": "Đang tìm kiếm..."
+    },
+    "errors": {
+      "loadFailed": "Tải bài viết thất bại. Vui lòng thử lại.",
+      "searchFailed": "Tìm kiếm thất bại. Vui lòng thử lại.",
+      "networkError": "Lỗi mạng. Vui lòng kiểm tra kết nối của bạn."
     },
     "cta": {
       "heading": "Sẵn sàng trải nghiệm sự khác biệt",
       "subheading": "Hãy để Healthcare Therapy Center trở thành điểm tựa vững chắc trong hành trình chăm sóc sức khỏe của bạn.",
-      "button": "Đặt lịch trải nghiệm"
+      "button": "Đặt lịch trải nghiệm",
+      "newsletter": {
+        "title": "Cập Nhật Thường Xuyên",
+        "description": "Đăng ký nhận bản tin để cập nhật những mẹo sức khỏe và tin tức mới nhất.",
+        "placeholder": "Nhập email của bạn",
+        "subscribe": "Đăng Ký",
+        "success": "Đăng ký thành công!",
+        "error": "Đăng ký thất bại. Vui lòng thử lại."
+      }
     },
     "detail": {
       "breadcrumb": "Tin tức",
+      "backToNews": "Quay Lại Tin Tức",
       "relatedPosts": "Có thể bạn quan tâm",
+      "shareOn": "Chia sẻ trên",
+      "copyLink": "Sao Chép Liên Kết",
+      "linkCopied": "Đã sao chép liên kết!",
+      "navigation": {
+        "previous": "Bài Viết Trước",
+        "next": "Bài Viết Tiếp"
+      },
       "notFound": {
         "title": "Bài viết không tìm thấy | Healthcare Therapy Center",
-        "description": "Bài viết bạn đang tìm kiếm không tồn tại hoặc đã bị xóa."
+        "description": "Bài viết bạn đang tìm kiếm không tồn tại hoặc đã bị xóa.",
+        "button": "Quay Lại Tin Tức"
       }
+    },
+    "seo": {
+      "defaultTitle": "Tin Tức & Cập Nhật Sức Khỏe",
+      "defaultDescription": "Tin tức sức khỏe mới nhất, cập nhật điều trị và mẹo chăm sóc sức khỏe từ Healthcare Therapy Center.",
+      "keywords": "tin tức sức khỏe, cập nhật y tế, mẹo chăm sóc sức khỏe, healthcare, trị liệu"
     }
   },
   "contact": {

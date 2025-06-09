@@ -331,34 +331,122 @@
       "title": "Health News | Healthcare Therapy Center",
       "description": "Stay updated with useful health knowledge, treatment methods and healthy lifestyle tips from Healthcare Therapy Center."
     },
+    "hero": {
+      "title": "NEWS",
+      "subtitle": "Latest Health Updates & Insights",
+      "imageAlt": "News Hero"
+    },
+    "sections": {
+      "trending": {
+        "title": "Trending News",
+        "featured": "Featured",
+        "showMoreButton": "View All Trending"
+      },
+      "allPosts": {
+        "title": "All Articles",
+        "showTitle": false,
+        "loadMore": "Load More Articles"
+      },
+      "categories": {
+        "title": "Categories",
+        "all": "All Categories",
+        "health": "Health Tips",
+        "treatment": "Treatment Methods",
+        "lifestyle": "Healthy Lifestyle",
+        "technology": "Medical Technology"
+      }
+    },
+    "article": {
+      "readMore": "Read More",
+      "readTime": "min read",
+      "publishedOn": "Published on",
+      "byAuthor": "By",
+      "category": "Category",
+      "tags": "Tags",
+      "shareArticle": "Share Article"
+    },
     "emptyState": {
       "title": "No articles published yet",
-      "description": "Please check back later for new content."
+      "description": "Please check back later for new content.",
+      "button": "Subscribe for Updates",
+      "image": "No articles found"
     },
-    "trending": {
-      "title": "Trending News",
-      "featured": "Featured"
+    "search": {
+      "placeholder": "Search articles...",
+      "button": "Search",
+      "results": "Search Results",
+      "noResults": "No articles found matching your search.",
+      "clear": "Clear Search"
     },
-    "allPosts": {
-      "title": "All Articles"
+    "filters": {
+      "title": "Filter Articles",
+      "byDate": "By Date",
+      "byCategory": "By Category",
+      "sortBy": "Sort By",
+      "newest": "Newest First",
+      "oldest": "Oldest First",
+      "popular": "Most Popular",
+      "reset": "Reset Filters"
     },
     "pagination": {
       "previous": "Previous",
       "next": "Next",
-      "page": "Page"
+      "page": "Page",
+      "previousPage": "Previous Page",
+      "nextPage": "Next Page",
+      "firstPage": "First Page",
+      "lastPage": "Last Page",
+      "of": "of",
+      "pages": "pages",
+      "showing": "Showing",
+      "to": "to",
+      "results": "results",
+      "goToPage": "Go to page"
+    },
+    "loading": {
+      "articles": "Loading articles...",
+      "more": "Loading more...",
+      "search": "Searching..."
+    },
+    "errors": {
+      "loadFailed": "Failed to load articles. Please try again.",
+      "searchFailed": "Search failed. Please try again.",
+      "networkError": "Network error. Please check your connection."
     },
     "cta": {
       "heading": "Ready to experience the difference",
       "subheading": "Let Healthcare Therapy Center become your reliable support in your healthcare journey.",
-      "button": "Book an experience"
+      "button": "Book an experience",
+      "newsletter": {
+        "title": "Stay Updated",
+        "description": "Subscribe to our newsletter for the latest health tips and news.",
+        "placeholder": "Enter your email",
+        "subscribe": "Subscribe",
+        "success": "Successfully subscribed!",
+        "error": "Subscription failed. Please try again."
+      }
     },
     "detail": {
       "breadcrumb": "News",
+      "backToNews": "Back to News",
       "relatedPosts": "You might also be interested",
+      "shareOn": "Share on",
+      "copyLink": "Copy Link",
+      "linkCopied": "Link copied to clipboard!",
+      "navigation": {
+        "previous": "Previous Article",
+        "next": "Next Article"
+      },
       "notFound": {
         "title": "Article not found | Healthcare Therapy Center",
-        "description": "The article you are looking for does not exist or has been deleted."
+        "description": "The article you are looking for does not exist or has been deleted.",
+        "button": "Back to News"
       }
+    },
+    "seo": {
+      "defaultTitle": "Health News & Updates",
+      "defaultDescription": "Latest health news, treatment updates, and wellness tips from Healthcare Therapy Center.",
+      "keywords": "health news, medical updates, wellness tips, healthcare, therapy"
     }
   },
   "contact": {
