@@ -19,6 +19,14 @@
       "heading": "Sẵn sàng trải nghiệm sự khác biệt",
       "subheading": "Hãy để Healthcare Therapy Center trở thành điểm tựa vững chắc trong hành trình chăm sóc sức khỏe của bạn.",
       "button": "Đặt lịch trải nghiệm"
+    },
+    "detail": {
+      "breadcrumb": "Tin tức",
+      "relatedPosts": "Có thể bạn quan tâm",
+      "notFound": {
+        "title": "Bài viết không tìm thấy | Healthcare Therapy Center",
+        "description": "Bài viết bạn đang tìm kiếm không tồn tại hoặc đã bị xóa."
+      }
     }
   },
   "contact": {

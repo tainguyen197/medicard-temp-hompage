@@ -19,6 +19,14 @@
       "heading": "Ready to experience the difference",
       "subheading": "Let Healthcare Therapy Center become your reliable support in your healthcare journey.",
       "button": "Book an experience"
+    },
+    "detail": {
+      "breadcrumb": "News",
+      "relatedPosts": "You might also be interested",
+      "notFound": {
+        "title": "Article not found | Healthcare Therapy Center",
+        "description": "The article you are looking for does not exist or has been deleted."
+      }
     }
   },
   "contact": {
