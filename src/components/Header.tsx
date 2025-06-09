@@ -5,20 +5,23 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { ROUTES } from "@/lib/router";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const t = useTranslations("navigation");
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const navItems = [
-    { name: "DỊCH VỤ", href: ROUTES.SERVICES },
-    { name: "VỀ CHÚNG TÔI", href: ROUTES.ABOUT },
-    { name: "TIN TỨC", href: ROUTES.NEWS },
-    { name: "LIÊN HỆ", href: ROUTES.CONTACT },
+    { name: t("services"), href: ROUTES.SERVICES },
+    { name: t("about"), href: ROUTES.ABOUT },
+    { name: t("news"), href: ROUTES.NEWS },
+    { name: t("contact"), href: ROUTES.CONTACT },
   ];
 
   const handleNavigation = (
@@ -93,11 +96,7 @@ const Header = () => {
               </div>
             </a>
 
-            <div className="hidden md:flex items-center justify-center w-10 h-10 rounded-full border-2 border-amber-50">
-              <span className="font-cormorant font-bold text-sm text-amber-50">
-                VIE
-              </span>
-            </div>
+            <LanguageSwitcher />
           </div>
           {/* Hamburger Button for Mobile */}
           <button

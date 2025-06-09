@@ -1,4 +1,11 @@
 {
+  "navigation": {
+    "services": "DỊCH VỤ",
+    "about": "VỀ CHÚNG TÔI", 
+    "news": "TIN TỨC",
+    "contact": "LIÊN HỆ",
+    "language": "VIE"
+  },
   "about": {
     "title": "VỀ HEALTHCARE THERAPY CENTER",
     "metadata": {

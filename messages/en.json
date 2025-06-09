@@ -1,4 +1,11 @@
 {
+  "navigation": {
+    "services": "SERVICES",
+    "about": "ABOUT US",
+    "news": "NEWS", 
+    "contact": "CONTACT",
+    "language": "ENG"
+  },
   "about": {
     "title": "ABOUT HEALTHCARE THERAPY CENTER",
     "metadata": {
