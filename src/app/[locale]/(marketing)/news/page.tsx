@@ -304,7 +304,7 @@ export default async function BlogPage({
       {/* 4. Topic Listing */}
       <section className="container mx-auto px-4 max-w-[1040px]">
         <h2 className="text-2xl md:text-3xl font-medium mb-8 text-[#222222] hidden">
-          {t.allPosts}
+          {t.allPosts.title}
         </h2>
         {blogPosts.map((post, index) => (
           <article key={post.id}>

@@ -9,8 +9,11 @@ import { createSlug } from "../../../../lib/utils";
 // Schema for post update
 const postUpdateSchema = z.object({
   title: z.string().min(1, "Title is required").optional(),
+  titleEn: z.string().optional(),
   content: z.string().min(1, "Content is required").optional(),
+  contentEn: z.string().optional(),
   excerpt: z.string().optional(),
+  excerptEn: z.string().optional(),
   featuredImage: z.string().optional(),
   status: z
     .enum(["DRAFT", "PENDING_REVIEW", "PUBLISHED", "SCHEDULED"])
@@ -96,10 +99,20 @@ export async function PUT(
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
-    // Only allow the author or an admin to update the post
+    // Debug logging for authorization
+    console.log("Authorization Debug:", {
+      postId: id,
+      existingPostAuthorId: existingPost.authorId,
+      sessionUserId: session.user.id,
+      sessionUserRole: session.user.role,
+      isAuthor: existingPost.authorId === session.user.id,
+      isAdmin: session.user.role === "ADMIN",
+    });
+
+    // Only allow the author or an admin/editor to update the post
     if (
       existingPost.authorId !== session.user.id &&
-      session.user.role !== "ADMIN"
+      !["ADMIN", "EDITOR"].includes(session.user.role)
     ) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
@@ -113,8 +126,9 @@ export async function PUT(
       slug = createSlug(validatedData.title);
     }
 
-    // Extract categories and tags
-    const { categories, tags, ...postData } = validatedData;
+    // Extract categories, tags, and translation fields
+    const { categories, tags, titleEn, contentEn, excerptEn, ...postData } =
+      validatedData;
 
     // Update the post
     const updatedPost = await prisma.post.update({
@@ -122,6 +136,9 @@ export async function PUT(
       data: {
         ...postData,
         ...(slug ? { slug } : {}),
+        ...(titleEn !== undefined && { titleEn }),
+        ...(contentEn !== undefined && { contentEn }),
+        ...(excerptEn !== undefined && { excerptEn }),
         ...(categories
           ? {
               categories: {
@@ -208,10 +225,10 @@ export async function DELETE(
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
-    // Only allow the author or an admin to delete the post
+    // Only allow the author or an admin/editor to delete the post
     if (
       existingPost.authorId !== session.user.id &&
-      session.user.role !== "ADMIN"
+      !["ADMIN", "EDITOR"].includes(session.user.role)
     ) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }

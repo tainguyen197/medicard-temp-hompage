@@ -26,13 +26,16 @@ const CKEditorComponent = dynamic(
 export default function NewPostPage() {
   const router = useRouter();
   const [title, setTitle] = useState("");
+  const [titleEn, setTitleEn] = useState("");
   const [status, setStatus] = useState("DRAFT");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [content, setContent] = useState("");
+  const [contentEn, setContentEn] = useState("");
   const [categories, setCategories] = useState<any[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [slug, setSlug] = useState("");
   const [excerpt, setExcerpt] = useState("");
+  const [excerptEn, setExcerptEn] = useState("");
   const [metaTitle, setMetaTitle] = useState("");
   const [metaDescription, setMetaDescription] = useState("");
   const [featuredImage, setFeaturedImage] = useState("");
@@ -95,6 +98,11 @@ export default function NewPostPage() {
     setContent(data);
   }, []);
 
+  const handleEditorChangeEn = useCallback((event: any, editor: any) => {
+    const data = editor.getData();
+    setContentEn(data);
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -118,10 +126,13 @@ export default function NewPostPage() {
         },
         body: JSON.stringify({
           title,
+          titleEn: titleEn || undefined,
           content,
+          contentEn: contentEn || undefined,
           status,
           slug,
           excerpt,
+          excerptEn: excerptEn || undefined,
           // metaTitle,
           // metaDescription,
           featuredImage,
@@ -161,130 +172,166 @@ export default function NewPostPage() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-          <div className="md:col-span-2 space-y-2">
-            <Label htmlFor="title">Title</Label>
+        {/* Vietnamese Content Section */}
+        <fieldset className="p-4 border border-gray-200 rounded-lg">
+          <legend className="text-lg font-semibold mb-4 px-2">
+            Vietnamese Content (Default)
+          </legend>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+            <div className="md:col-span-2 space-y-2">
+              <Label htmlFor="title">Title (Vietnamese)</Label>
+              <Input
+                id="title"
+                value={title}
+                onChange={handleTitleChange}
+                placeholder="Enter post title in Vietnamese"
+                className="w-full"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="featuredImage">Featured Image</Label>
+              <ImageUpload
+                value={featuredImage}
+                onChange={setFeaturedImage}
+                onImageUploading={setIsImageUploading}
+                aspectRatio={1}
+                aspectRatioText="1:1"
+              />
+              <p className="text-xs text-gray-500">
+                Recommended aspect ratio: 1:1 (square)
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-2 mt-4">
+            <Label htmlFor="excerpt">Excerpt (Vietnamese)</Label>
             <Input
-              id="title"
-              value={title}
-              onChange={handleTitleChange}
-              placeholder="Enter post title"
+              id="excerpt"
+              value={excerpt}
+              onChange={(e) => setExcerpt(e.target.value)}
+              placeholder="Brief summary of the post in Vietnamese"
               className="w-full"
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="featuredImage">Featured Image</Label>
-            <ImageUpload
-              value={featuredImage}
-              onChange={setFeaturedImage}
-              onImageUploading={setIsImageUploading}
-              aspectRatio={1}
-              aspectRatioText="1:1"
-            />
-            <p className="text-xs text-gray-500">
-              Recommended aspect ratio: 1:1 (square)
-            </p>
+          <div className="space-y-2 mt-4">
+            <Label>Content (Vietnamese)</Label>
+            <div>
+              {typeof window !== "undefined" && (
+                <CKEditorComponent
+                  data={content}
+                  onChange={handleEditorChange}
+                />
+              )}
+            </div>
           </div>
-        </div>
+        </fieldset>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* English Content Section */}
+        <fieldset className="p-4 border border-blue-200 rounded-lg bg-blue-50">
+          <legend className="text-lg font-semibold mb-4 px-2 text-blue-800">
+            English Content (Optional)
+          </legend>
+
           <div className="space-y-2">
-            <Label htmlFor="status">Status</Label>
+            <Label htmlFor="titleEn">Title (English)</Label>
+            <Input
+              id="titleEn"
+              value={titleEn}
+              onChange={(e) => setTitleEn(e.target.value)}
+              placeholder="Enter post title in English"
+              className="w-full"
+            />
+          </div>
+
+          <div className="space-y-2 mt-4">
+            <Label htmlFor="excerptEn">Excerpt (English)</Label>
+            <Input
+              id="excerptEn"
+              value={excerptEn}
+              onChange={(e) => setExcerptEn(e.target.value)}
+              placeholder="Brief summary of the post in English"
+              className="w-full"
+            />
+          </div>
+
+          <div className="space-y-2 mt-4">
+            <Label>Content (English)</Label>
+            <div>
+              {typeof window !== "undefined" && (
+                <CKEditorComponent
+                  data={contentEn}
+                  onChange={handleEditorChangeEn}
+                />
+              )}
+            </div>
+          </div>
+        </fieldset>
+
+        {/* Settings Section */}
+        <fieldset className="p-4 border border-gray-200 rounded-lg">
+          <legend className="text-lg font-semibold mb-4 px-2">
+            Post Settings
+          </legend>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="status">Status</Label>
+              <Select
+                value={status}
+                onValueChange={(value: string) => setStatus(value)}
+              >
+                <SelectTrigger id="status">
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="DRAFT">Draft</SelectItem>
+                  <SelectItem value="PUBLISHED">Published</SelectItem>
+                  <SelectItem value="PENDING_REVIEW">Pending Review</SelectItem>
+                  <SelectItem value="SCHEDULED">Scheduled</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="slug">Slug</Label>
+              <Input
+                id="slug"
+                value={slug}
+                onChange={handleSlugChange}
+                placeholder="post-url-slug"
+                className="w-full"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2 mt-4">
+            <Label htmlFor="categories">Categories</Label>
             <Select
-              value={status}
-              onValueChange={(value: string) => setStatus(value)}
+              value={
+                selectedCategories.length > 0
+                  ? selectedCategories[0]
+                  : undefined
+              }
+              onValueChange={(value: string) => setSelectedCategories([value])}
             >
-              <SelectTrigger id="status">
-                <SelectValue placeholder="Select status" />
+              <SelectTrigger id="categories">
+                <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="DRAFT">Draft</SelectItem>
-                <SelectItem value="PUBLISHED">Published</SelectItem>
-                <SelectItem value="PENDING_REVIEW">Pending Review</SelectItem>
-                <SelectItem value="SCHEDULED">Scheduled</SelectItem>
+                {categories.map((category: any) => {
+                  return (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.name}
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
           </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="slug">Slug</Label>
-            <Input
-              id="slug"
-              value={slug}
-              onChange={handleSlugChange}
-              placeholder="post-url-slug"
-              className="w-full"
-            />
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="excerpt">Excerpt</Label>
-          <Input
-            id="excerpt"
-            value={excerpt}
-            onChange={(e) => setExcerpt(e.target.value)}
-            placeholder="Brief summary of the post"
-            className="w-full"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="categories">Categories</Label>
-          <Select
-            value={
-              selectedCategories.length > 0 ? selectedCategories[0] : undefined
-            }
-            onValueChange={(value: string) => setSelectedCategories([value])}
-          >
-            <SelectTrigger id="categories">
-              <SelectValue placeholder="Select category" />
-            </SelectTrigger>
-            <SelectContent>
-              {categories.map((category: any) => {
-                return (
-                  <SelectItem key={category.id} value={category.id}>
-                    {category.name}
-                  </SelectItem>
-                );
-              })}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <Label>Content</Label>
-          <div>
-            {typeof window !== "undefined" && (
-              <CKEditorComponent data={content} onChange={handleEditorChange} />
-            )}
-          </div>
-        </div>
-
-        {/* <div className="bg-gray-50 p-4 rounded-md space-y-4">
-          <h3 className="text-lg font-medium">SEO Settings</h3>
-          <div className="space-y-2">
-            <Label htmlFor="metaTitle">Meta Title</Label>
-            <Input
-              id="metaTitle"
-              value={metaTitle}
-              onChange={(e) => setMetaTitle(e.target.value)}
-              placeholder="SEO Title (optional)"
-              className="w-full"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="metaDescription">Meta Description</Label>
-            <Input
-              id="metaDescription"
-              value={metaDescription}
-              onChange={(e) => setMetaDescription(e.target.value)}
-              placeholder="SEO Description (optional)"
-              className="w-full"
-            />
-          </div>
-        </div> */}
+        </fieldset>
 
         <div className="flex justify-end space-x-4 pt-4">
           <Button

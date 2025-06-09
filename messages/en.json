@@ -335,10 +335,16 @@
       "title": "No articles published yet",
       "description": "Please check back later for new content."
     },
-    "allPosts": "All Articles",
+    "trending": {
+      "title": "Trending News",
+      "featured": "Featured"
+    },
+    "allPosts": {
+      "title": "All Articles"
+    },
     "pagination": {
-      "previousPage": "Previous page",
-      "nextPage": "Next page",
+      "previous": "Previous",
+      "next": "Next",
       "page": "Page"
     },
     "cta": {

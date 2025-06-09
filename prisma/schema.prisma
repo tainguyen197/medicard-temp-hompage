@@ -22,9 +22,12 @@ model User {
 model Post {
   id            String         @id @default(cuid())
   title         String
+  titleEn       String?
   slug          String         @unique
   content       String
+  contentEn     String?
   excerpt       String?
+  excerptEn     String?
   featuredImage String?
   featured      Boolean        @default(false)
   status        String         @default("DRAFT")
@@ -58,21 +61,16 @@ model PostCategory {
 }
 
 model Service {
-  id                   String   @id @default(cuid())
-  slug                 String   @unique
-  title                String
-  description          String?
-  shortDescription     String?
-  content              String?
-  status               String   @default("DRAFT")
-  featureImageId       String?  @unique
-  titleEn              String?
-  descriptionEn        String?
-  shortDescriptionEn   String?
-  contentEn            String?
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
-  featureImage         Media?   @relation("ServiceFeatureImage", fields: [featureImageId], references: [id])
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  title            String
+  description      String?
+  shortDescription String?
+  status           String   @default("DRAFT")
+  featureImageId   String?  @unique
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  featureImage     Media?   @relation("ServiceFeatureImage", fields: [featureImageId], references: [id])
 }
 
 model Media {

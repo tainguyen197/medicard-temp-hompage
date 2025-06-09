@@ -5,9 +5,9 @@ import { Suspense } from "react";
 import prisma from "@/lib/prisma";
 import { Post } from "@/types/post";
 import { getMessages } from "next-intl/server";
-import { notFound } from "next/navigation";
+import { getLocalized } from "@/lib/i18n-utils";
 
-type Params = Promise<{ slug: string }>;
+type Params = Promise<{ slug: string; locale: string }>;
 
 // Category item type definition
 interface CategoryItem {
@@ -28,7 +28,7 @@ export async function generateMetadata({
 }: {
   params: Params;
 }): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const messages = await getMessages();
   const t = messages.news.detail.notFound;
 
@@ -45,9 +45,13 @@ export async function generateMetadata({
       };
     }
 
+    const title = getLocalized(post, "title", locale);
+    const excerpt = getLocalized(post, "excerpt", locale);
+    const content = getLocalized(post, "content", locale);
+
     return {
-      title: `${post.title} | Healthcare Therapy Center`,
-      description: post.excerpt || `${post.content.substring(0, 200)}...`,
+      title: `${title} | Healthcare Therapy Center`,
+      description: excerpt || `${content.substring(0, 200)}...`,
     };
   } catch (error) {
     return {
@@ -58,7 +62,7 @@ export async function generateMetadata({
 }
 
 export default async function BlogDetailPage({ params }: { params: Params }) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const messages = await getMessages();
   const t = messages.news;
 
@@ -148,6 +152,11 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
     notFound();
   }
 
+  // Get localized content
+  const localizedTitle = getLocalized(post, "title", locale);
+  const localizedExcerpt = getLocalized(post, "excerpt", locale);
+  const localizedContent = getLocalized(post, "content", locale);
+
   return (
     <div>
       <div className="pt-16 md:pt-24">
@@ -187,7 +196,7 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
               />
             </svg>
             <span className="text-sm md:text-base text-gray-900">
-              {post.title}
+              {localizedTitle}
             </span>
           </div>
         </div>
@@ -195,67 +204,180 @@ export default async function BlogDetailPage({ params }: { params: Params }) {
         {/* Title & Metadata */}
         <div className="container mx-auto px-4 py-4 md:py-8 max-w-7xl">
           <h1 className="text-2xl md:text-[42px] text-[#222222] font-semibold leading-tight mb-6">
-            {post.title}
+            {localizedTitle}
           </h1>
 
           {/* Post metadata */}
+          <div className="flex flex-wrap items-center gap-4 text-gray-600 text-sm md:text-base mb-8">
+            <div className="flex items-center gap-2">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                />
+                <polyline
+                  points="12,6 12,12 16,14"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <span>
+                {new Date(post.createdAt).toLocaleDateString(
+                  locale === "en" ? "en-US" : "vi-VN",
+                  {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  }
+                )}
+              </span>
+            </div>
+            {post.author && (
+              <div className="flex items-center gap-2">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20 21V19A4 4 0 0 0 16 15H8A4 4 0 0 0 4 19V21"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <circle
+                    cx="12"
+                    cy="7"
+                    r="4"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
+                </svg>
+                <span>{post.author.name || post.author.email}</span>
+              </div>
+            )}
+            {post.categories && post.categories.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {post.categories.map((categoryItem: CategoryItem) => (
+                  <span
+                    key={categoryItem.category.id}
+                    className="px-3 py-1 bg-[#B1873F] text-white text-xs rounded-full"
+                  >
+                    {categoryItem.category.name}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
 
-          {post.excerpt && (
-            <h2 className="text-md md:text-[20px] text-black font-semibold mb-10">
-              {post.excerpt}
-            </h2>
+          {/* Featured Image */}
+          {post.featuredImage && (
+            <div className="mb-8">
+              <Image
+                src={post.featuredImage}
+                alt={localizedTitle}
+                width={800}
+                height={400}
+                className="w-full h-auto rounded-lg object-cover"
+              />
+            </div>
           )}
-        </div>
 
-        {/* Article Content */}
-        <div className="container mx-auto px-4 mb-16 max-w-7xl">
-          <div className="mx-auto">
+          {/* Excerpt */}
+          {localizedExcerpt && (
+            <div className="mb-8">
+              <p className="text-lg md:text-xl text-gray-700 font-medium leading-relaxed">
+                {localizedExcerpt}
+              </p>
+            </div>
+          )}
+
+          {/* Content */}
+          <div className="mb-12">
             <div className="prose prose-lg max-w-none">
               <div
                 className="text-base md:text-lg text-gray-800 leading-relaxed space-y-6 [&_p]:mb-6 [&_p]:leading-relaxed [&_figcaption]:text-center [&_figcaption]:italic [&_figcaption]:text-gray-600 [&_figcaption]:mt-2 [&_figcaption]:text-sm [&_img]:mx-auto [&_img]:block [&_img]:rounded-lg [&_img]:shadow-md [&_figure]:text-center [&_figure]:mx-auto [&_figure]:mb-8 [&_h1]:text-3xl [&_h1]:md:text-4xl [&_h1]:font-bold [&_h1]:text-[#222222] [&_h1]:mb-6 [&_h1]:mt-12 [&_h1]:leading-tight [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-semibold [&_h2]:text-[#222222] [&_h2]:mb-4 [&_h2]:mt-10 [&_h2]:leading-tight [&_h3]:text-xl [&_h3]:md:text-2xl [&_h3]:font-medium [&_h3]:text-[#222222] [&_h3]:mb-3 [&_h3]:mt-8 [&_h3]:leading-tight [&_.image-style-side]:float-right [&_.image-style-side]:ml-6 [&_.image-style-side]:mb-4 [&_.image-style-side]:max-w-[50%] [&_.image-style-side]:md:max-w-[40%] [&_.image-style-side_img]:mx-0 [&_.image-style-side_img]:rounded-lg [&_.image]:mb-8 [&_.image]:clear-both [&_strong]:font-semibold [&_strong]:text-[#222222] [&_em]:italic [&_em]:text-gray-700 [&_i]:italic [&_i]:text-gray-700 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-6 [&_li]:mb-2 [&_blockquote]:border-l-4 [&_blockquote]:border-[#B1873F] [&_blockquote]:pl-6 [&_blockquote]:italic [&_blockquote]:text-gray-700 [&_blockquote]:my-8"
-                dangerouslySetInnerHTML={{ __html: post.content }}
+                dangerouslySetInnerHTML={{ __html: localizedContent }}
               />
             </div>
-            <hr className="my-12 border-gray-300" />
           </div>
-        </div>
 
-        {/* Related Posts */}
-        {relatedPosts.length > 0 && (
-          <div className="container mx-auto md:px-20 md:py-14 bg-[#FEF6EA] rounded-4xl max-w-7xl">
-            <div className="mx-auto px-4">
-              <h2 className="text-2xl font-semibold text-[#222222] mb-10">
+          {/* Related Posts */}
+          {relatedPosts.length > 0 && (
+            <div className="border-t pt-12">
+              <h3 className="text-2xl md:text-3xl font-semibold text-[#222222] mb-8">
                 {t.detail.relatedPosts}
-              </h2>
-              <div className="space-y-6">
-                {relatedPosts.map((relatedPost) => (
-                  <div
-                    key={relatedPost.id}
-                    className="flex flex-col md:flex-row gap-6 pb-6 border-b border-gray-200 last:border-b-0"
-                  >
-                    <div className="rounded-lg overflow-hidden">
-                      <div className="block relative rounded-xl overflow-hidden aspect-square md:h-44">
-                        <Image
-                          src={relatedPost.featuredImage || DEFAULT_IMAGE}
-                          alt={relatedPost.title}
-                          fill
-                          className="object-cover hover:scale-105 transition-transform duration-300"
-                        />
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {relatedPosts.map((relatedPost) => {
+                  const relatedTitle = getLocalized(
+                    relatedPost,
+                    "title",
+                    locale
+                  );
+                  const relatedExcerpt = getLocalized(
+                    relatedPost,
+                    "excerpt",
+                    locale
+                  );
+
+                  return (
+                    <Link
+                      key={relatedPost.id}
+                      href={`/news/${relatedPost.slug}`}
+                      className="group block"
+                    >
+                      <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 group-hover:transform group-hover:scale-105">
+                        <div className="relative h-48">
+                          <Image
+                            src={relatedPost.featuredImage || DEFAULT_IMAGE}
+                            alt={relatedTitle}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
+                        <div className="p-6">
+                          <h4 className="text-lg font-semibold text-[#222222] mb-2 group-hover:text-[#B1873F] transition-colors duration-300">
+                            {relatedTitle}
+                          </h4>
+                          {relatedExcerpt && (
+                            <p className="text-gray-600 text-sm line-clamp-3">
+                              {relatedExcerpt}
+                            </p>
+                          )}
+                          <div className="mt-4 text-sm text-gray-500">
+                            {new Date(relatedPost.createdAt).toLocaleDateString(
+                              locale === "en" ? "en-US" : "vi-VN",
+                              {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              }
+                            )}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div className="md:w-3/4 my-auto">
-                      <h3 className="text-md md:text-[20px] font-medium text-[#222222] hover:text-[#B1873F] transition-colors">
-                        <Link href={`/news/${relatedPost.slug}`}>
-                          {relatedPost.title}
-                        </Link>
-                      </h3>
-                    </div>
-                  </div>
-                ))}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       <section className="bg-white py-16 md:py-20">

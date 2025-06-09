@@ -335,10 +335,16 @@
       "title": "Hiện tại chưa có bài viết nào được xuất bản",
       "description": "Vui lòng quay lại sau để xem nội dung mới."
     },
-    "allPosts": "Tất cả bài viết",
+    "trending": {
+      "title": "Tin Tức Nổi Bật",
+      "featured": "Nổi Bật"
+    },
+    "allPosts": {
+      "title": "Tất cả bài viết"
+    },
     "pagination": {
-      "previousPage": "Trang trước",
-      "nextPage": "Trang tiếp theo",
+      "previous": "Trước",
+      "next": "Tiếp theo",
       "page": "Trang"
     },
     "cta": {

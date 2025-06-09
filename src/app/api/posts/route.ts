@@ -9,8 +9,11 @@ import { createSlug, extractImagesFromContentServer } from "../../../lib/utils";
 // Schema for post creation/update
 const postSchema = z.object({
   title: z.string().min(1, "Title is required"),
+  titleEn: z.string().optional(),
   content: z.string().min(1, "Content is required"),
+  contentEn: z.string().optional(),
   excerpt: z.string().optional(),
+  excerptEn: z.string().optional(),
   featuredImage: z.string().optional(),
   status: z.enum(["DRAFT", "PENDING_REVIEW", "PUBLISHED", "SCHEDULED"]),
   publishedAt: z.string().optional(),
@@ -147,8 +150,9 @@ export async function POST(request: Request) {
     // Generate slug if not provided
     const slug = validatedData.slug || createSlug(validatedData.title);
 
-    // Extract categories
-    const { categories, ...postData } = validatedData;
+    // Extract categories and translation fields
+    const { categories, titleEn, contentEn, excerptEn, ...postData } =
+      validatedData;
 
     // Extract image URLs from content using server-side function
     const imageUrls = extractImagesFromContentServer(postData.content);
@@ -158,6 +162,9 @@ export async function POST(request: Request) {
       data: {
         ...postData,
         slug,
+        ...(titleEn && { titleEn }),
+        ...(contentEn && { contentEn }),
+        ...(excerptEn && { excerptEn }),
         author: {
           connect: { id: session.user.id },
         },
