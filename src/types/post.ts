@@ -1,9 +1,12 @@
 export interface Post {
   id: string;
   title: string;
+  titleEn?: string;
   slug: string;
   content: string;
+  contentEn?: string;
   excerpt?: string;
+  excerptEn?: string;
   featuredImage?: string;
   featured: boolean;
   status: string;

@@ -20,13 +20,26 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const DEFAULT_IMAGE = "/images/hero-section.png";
 
+// Helper function to get localized content
+const getLocalizedContent = (post: any, locale: string) => {
+  const isEnglish = locale === "en";
+  return {
+    title: isEnglish ? post.titleEn || post.title : post.title,
+    content: isEnglish ? post.contentEn || post.content : post.content,
+    excerpt: isEnglish ? post.excerptEn || post.excerpt : post.excerpt,
+  };
+};
+
 export default async function BlogPage({
   searchParams,
+  params,
 }: {
   searchParams: Promise<{ page?: string }>;
+  params: Promise<{ locale: string }>;
 }) {
   const messages = await getMessages();
   const t = messages.news;
+  const { locale } = await params;
 
   // Get the current page from search params or default to 1
   const { page = "1" } = await searchParams;
@@ -50,13 +63,28 @@ export default async function BlogPage({
       where,
     });
 
-    // Get posts with pagination
+    // Get posts with pagination - now including titleEn, contentEn, excerptEn
     const posts = await prisma.post.findMany({
       where,
       orderBy: { createdAt: "desc" },
       take: postsPerPage,
       skip: (currentPage - 1) * postsPerPage,
-      include: {
+      select: {
+        id: true,
+        title: true,
+        titleEn: true,
+        slug: true,
+        content: true,
+        contentEn: true,
+        excerpt: true,
+        excerptEn: true,
+        featuredImage: true,
+        featured: true,
+        status: true,
+        publishedAt: true,
+        createdAt: true,
+        updatedAt: true,
+        authorId: true,
         author: {
           select: {
             id: true,
@@ -72,13 +100,19 @@ export default async function BlogPage({
       },
     });
 
-    // Convert Prisma results to Post type
-    blogPosts = posts.map((post: any) => ({
-      ...post,
-      createdAt: post.createdAt.toISOString(),
-      updatedAt: post.updatedAt.toISOString(),
-      publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
-    })) as Post[];
+    // Convert Prisma results to Post type with localized content
+    blogPosts = posts.map((post: any) => {
+      const localizedContent = getLocalizedContent(post, locale);
+      return {
+        ...post,
+        title: localizedContent.title,
+        content: localizedContent.content,
+        excerpt: localizedContent.excerpt,
+        createdAt: post.createdAt.toISOString(),
+        updatedAt: post.updatedAt.toISOString(),
+        publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
+      };
+    }) as Post[];
 
     console.log(`Found ${blogPosts.length} posts on page ${currentPage}`);
 
@@ -139,7 +173,22 @@ export default async function BlogPage({
       },
       orderBy: { createdAt: "desc" },
       take: 5,
-      include: {
+      select: {
+        id: true,
+        title: true,
+        titleEn: true,
+        slug: true,
+        content: true,
+        contentEn: true,
+        excerpt: true,
+        excerptEn: true,
+        featuredImage: true,
+        featured: true,
+        status: true,
+        publishedAt: true,
+        createdAt: true,
+        updatedAt: true,
+        authorId: true,
         author: {
           select: {
             id: true,
@@ -155,12 +204,18 @@ export default async function BlogPage({
       },
     });
 
-    trendingPosts = featuredPostsData.map((post: any) => ({
-      ...post,
-      createdAt: post.createdAt.toISOString(),
-      updatedAt: post.updatedAt.toISOString(),
-      publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
-    })) as Post[];
+    trendingPosts = featuredPostsData.map((post: any) => {
+      const localizedContent = getLocalizedContent(post, locale);
+      return {
+        ...post,
+        title: localizedContent.title,
+        content: localizedContent.content,
+        excerpt: localizedContent.excerpt,
+        createdAt: post.createdAt.toISOString(),
+        updatedAt: post.updatedAt.toISOString(),
+        publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
+      };
+    }) as Post[];
 
     console.log(`Found ${trendingPosts.length} featured posts`);
   } catch (error) {
