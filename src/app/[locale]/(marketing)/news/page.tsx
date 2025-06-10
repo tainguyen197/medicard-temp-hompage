@@ -30,19 +30,19 @@ const getLocalizedContent = (post: any, locale: string) => {
   };
 };
 
-export default async function BlogPage({
+// Extract data fetching into a separate component
+async function NewsDataComponent({
   searchParams,
-  params,
+  locale,
 }: {
-  searchParams: Promise<{ page?: string }>;
-  params: Promise<{ locale: string }>;
+  searchParams: { page?: string };
+  locale: string;
 }) {
   const messages = await getMessages();
   const t = messages.news;
-  const { locale } = await params;
 
   // Get the current page from search params or default to 1
-  const { page = "1" } = await searchParams;
+  const { page = "1" } = searchParams;
   const currentPage = Number(page);
   const postsPerPage = 10;
 
@@ -129,35 +129,10 @@ export default async function BlogPage({
   if (blogPosts.length === 0) {
     console.log("No posts found, showing empty state");
     return (
-      <div className="min-h-screen pt-[72px] md:pt-[96px]">
-        {/* Hero Section */}
-        <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
-          <div className="absolute inset-0">
-            <Image
-              src="/images/hero-section.png"
-              alt="News Hero"
-              fill
-              className="object-cover"
-              priority
-            />
-          </div>
-        </section>
-
-        {/* Introduction */}
-        <AnimatedSection animation="zoomIn" delay={0.1} duration={0.8}>
-          <section className="py-16 text-center">
-            <h1 className="font-cormorant text-4xl md:text-5xl lg:text-6xl font-bold text-[#B1873F] mb-4">
-              {t.title}
-            </h1>
-          </section>
-        </AnimatedSection>
-
-        {/* No posts message */}
-        <section className="container mx-auto px-4 mb-16 md:mb-20 max-w-[1040px] text-center py-20">
-          <h2 className="text-2xl text-gray-600 mb-4">{t.emptyState.title}</h2>
-          <p className="text-gray-500">{t.emptyState.description}</p>
-        </section>
-      </div>
+      <section className="container mx-auto px-4 mb-16 md:mb-20 max-w-[1040px] text-center py-20">
+        <h2 className="text-2xl text-gray-600 mb-4">{t.emptyState.title}</h2>
+        <p className="text-gray-500">{t.emptyState.description}</p>
+      </section>
     );
   }
 
@@ -273,29 +248,7 @@ export default async function BlogPage({
   const pageNumbers = getPageNumbers();
 
   return (
-    <div className="min-h-screen pt-[72px] md:pt-[96px]">
-      {/* 1. Hero Section */}
-      <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
-        <div className="absolute inset-0">
-          <Image
-            src="/images/hero-section.png"
-            alt="News Hero"
-            fill
-            className="object-cover"
-            priority
-          />
-        </div>
-      </section>
-
-      {/* 2. Introduction */}
-      <AnimatedSection animation="zoomIn" delay={0.1} duration={0.8}>
-        <section className="py-16 text-center">
-          <h1 className="font-cormorant text-4xl md:text-5xl lg:text-6xl font-bold text-[#B1873F] mb-4">
-            {t.title}
-          </h1>
-        </section>
-      </AnimatedSection>
-
+    <>
       {/* 3. Trending Topics - Only show if we have enough posts */}
       {trendingPosts.length >= 5 && (
         <section className="container mx-auto px-4 mb-16 md:mb-20 max-w-[1040px]">
@@ -358,9 +311,6 @@ export default async function BlogPage({
 
       {/* 4. Topic Listing */}
       <section className="container mx-auto px-4 max-w-[1040px]">
-        <h2 className="text-2xl md:text-3xl font-medium mb-8 text-[#222222] hidden">
-          {t.sections.allPosts.title}
-        </h2>
         {blogPosts.map((post, index) => (
           <article key={post.id}>
             <div className="relative flex flex-col md:flex-row items-center mb-4 md:mb-12 group justify-between">
@@ -514,6 +464,53 @@ export default async function BlogPage({
           </Link>
         </div>
       </section>
+    </>
+  );
+}
+
+export default async function BlogPage({
+  searchParams,
+  params,
+}: {
+  searchParams: Promise<{ page?: string }>;
+  params: Promise<{ locale: string }>;
+}) {
+  const messages = await getMessages();
+  const t = messages.news;
+  const { locale } = await params;
+  const resolvedSearchParams = await searchParams;
+
+  return (
+    <div className="min-h-screen pt-[72px] md:pt-[96px]">
+      {/* 1. Hero Section */}
+      <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
+        <div className="absolute inset-0">
+          <Image
+            src="/images/hero-section.png"
+            alt="News Hero"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+      </section>
+
+      {/* 2. Introduction */}
+      <AnimatedSection animation="zoomIn" delay={0.1} duration={0.8}>
+        <section className="py-16 text-center">
+          <h1 className="font-cormorant text-4xl md:text-5xl lg:text-6xl font-bold text-[#B1873F] mb-4">
+            {t.title}
+          </h1>
+        </section>
+      </AnimatedSection>
+
+      {/* 3. Data-dependent content wrapped in Suspense */}
+      <Suspense fallback={<NewsLoading />}>
+        <NewsDataComponent
+          searchParams={resolvedSearchParams}
+          locale={locale}
+        />
+      </Suspense>
     </div>
   );
 }

@@ -52,14 +52,10 @@ const getLocalizedServiceContent = (service: any, locale: string) => {
   };
 };
 
-export default async function ServicesPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+// Extract data fetching into a separate component
+async function ServicesDataComponent({ locale }: { locale: string }) {
   const messages = await getMessages();
   const t = messages.services;
-  const { locale } = await params;
 
   let services: Service[] = [];
 
@@ -177,7 +173,25 @@ export default async function ServicesPage({
   );
 
   return (
+    <ServicesContent
+      services={displayServices}
+      viewDetailsText={t.viewDetails}
+    />
+  );
+}
+
+export default async function ServicesPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const messages = await getMessages();
+  const t = messages.services;
+  const { locale } = await params;
+
+  return (
     <div className="pt-[72px] md:pt-[96px]">
+      {/* Hero Section */}
       <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
         <Image
           src="/images/hero-section.png"
@@ -187,6 +201,7 @@ export default async function ServicesPage({
           fill
         />
       </section>
+
       {/* Introduction Section */}
       <AnimatedSection animation="zoomIn" delay={0.1} duration={0.8}>
         <section className="container mx-auto px-4 pt-10 md:pt-16 pb-12 md:pb-20">
@@ -198,13 +213,13 @@ export default async function ServicesPage({
           </p>
         </section>
       </AnimatedSection>
-      {/* Services Detail Section */}
+
+      {/* Services Detail Section wrapped in Suspense */}
       <Suspense fallback={<ServicesLoading />}>
-        <ServicesContent
-          services={displayServices}
-          viewDetailsText={t.viewDetails}
-        />
+        <ServicesDataComponent locale={locale} />
       </Suspense>
+
+      {/* CTA Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-[#1F1F1F] mb-6">
@@ -242,7 +257,7 @@ export default async function ServicesPage({
 
 function ServicesLoading() {
   return (
-    <div className="pt-[72px] md:pt-[96px]">
+    <>
       {/* Services Detail Section Skeleton */}
       <section className="bg-[#FEF6EA] py-14 md:py-16">
         <div className="container mx-auto px-4 max-w-6xl">
@@ -264,15 +279,6 @@ function ServicesLoading() {
           ))}
         </div>
       </section>
-
-      {/* CTA Section Skeleton */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4 text-center">
-          <div className="h-10 bg-gray-200 animate-pulse max-w-2xl mx-auto mb-6"></div>
-          <div className="h-16 bg-gray-200 animate-pulse max-w-3xl mx-auto mb-8"></div>
-          <div className="h-12 w-48 bg-gray-200 animate-pulse mx-auto"></div>
-        </div>
-      </section>
-    </div>
+    </>
   );
 }
