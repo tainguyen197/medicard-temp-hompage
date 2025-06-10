@@ -113,7 +113,7 @@ export default async function AdminLayout({
       <div>
         <Link href={ROUTES.ADMIN_DASHBOARD}>Home</Link>
       </div>
-      <div className="flex h-screen">
+      <div className="flex">
         {/* Sidebar */}
         <aside className="admin-sidebar hidden md:flex flex-col w-64">
           <div className="admin-sidebar-logo">
