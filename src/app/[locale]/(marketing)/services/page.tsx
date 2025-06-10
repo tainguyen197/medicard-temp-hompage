@@ -21,8 +21,11 @@ interface Service {
   id: string;
   slug: string;
   title: string;
+  titleEn?: string | null;
   description?: string | null;
+  descriptionEn?: string | null;
   shortDescription?: string | null;
+  shortDescriptionEn?: string | null;
   status: string;
   featureImageId?: string | null;
   createdAt: Date;
@@ -35,9 +38,28 @@ interface Service {
   } | null;
 }
 
-export default async function ServicesPage() {
+// Helper function to get localized content
+const getLocalizedServiceContent = (service: any, locale: string) => {
+  const isEnglish = locale === "en";
+  return {
+    title: isEnglish ? service.titleEn || service.title : service.title,
+    description: isEnglish
+      ? service.descriptionEn || service.description
+      : service.description,
+    shortDescription: isEnglish
+      ? service.shortDescriptionEn || service.shortDescription
+      : service.shortDescription,
+  };
+};
+
+export default async function ServicesPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
   const messages = await getMessages();
   const t = messages.services;
+  const { locale } = await params;
 
   let services: Service[] = [];
 
@@ -45,7 +67,7 @@ export default async function ServicesPage() {
     // Fetch services directly from the database with Prisma (like posts page does)
     console.log("Fetching services from database...");
 
-    // Get services (only show published services for public page)
+    // Get services (only show published services for public page) - now including translation fields
     const servicesData = await prisma.service.findMany({
       where: {
         status: "PUBLISHED",
@@ -55,24 +77,35 @@ export default async function ServicesPage() {
         id: true,
         slug: true,
         title: true,
+        titleEn: true,
         shortDescription: true,
+        shortDescriptionEn: true,
+        description: true,
+        descriptionEn: true,
+        status: true,
+        createdAt: true,
+        updatedAt: true,
         featureImage: {
           select: {
+            id: true,
             url: true,
+            fileName: true,
+            originalName: true,
           },
         },
       },
     });
 
-    services = servicesData.map((service) => ({
-      ...service,
-      status: "PUBLISHED", // Manually add status as it's not selected
-      createdAt: new Date(), // Add dummy date
-      updatedAt: new Date(), // Add dummy date
-      featureImage: service.featureImage
-        ? { ...service.featureImage, id: "" }
-        : null,
-    }));
+    // Convert Prisma results to Service type with localized content
+    services = servicesData.map((service: any) => {
+      const localizedContent = getLocalizedServiceContent(service, locale);
+      return {
+        ...service,
+        title: localizedContent.title,
+        description: localizedContent.description,
+        shortDescription: localizedContent.shortDescription,
+      };
+    }) as Service[];
 
     console.log(`Found ${services.length} published services`);
 

@@ -8,15 +8,18 @@ import { getMessages } from "next-intl/server";
 import ServiceDetailContent from "./ServiceDetailContent";
 
 interface ServiceDetailProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: string }>;
 }
 
 interface Service {
   id: string;
   slug: string;
   title: string;
+  titleEn?: string | null;
   description?: string | null;
+  descriptionEn?: string | null;
   shortDescription?: string | null;
+  shortDescriptionEn?: string | null;
   content?: string | null;
   status: string;
   featureImageId?: string | null;
@@ -41,16 +44,25 @@ interface ContentSection {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug?: string }>;
+  params: Promise<{ slug?: string; locale: string }>;
 }): Promise<Metadata> {
+  const { slug, locale } = await params;
   const messages = await getMessages();
   const t = messages.services.notFound;
 
   try {
     const service = await prisma.service.findFirst({
       where: {
-        slug: (await params).slug,
+        slug: slug,
         status: "PUBLISHED",
+      },
+      select: {
+        title: true,
+        titleEn: true,
+        shortDescription: true,
+        shortDescriptionEn: true,
+        description: true,
+        descriptionEn: true,
       },
     });
 
@@ -61,9 +73,19 @@ export async function generateMetadata({
       };
     }
 
+    const title =
+      locale === "en" ? service.titleEn || service.title : service.title;
+    const description =
+      locale === "en"
+        ? service.shortDescriptionEn ||
+          service.shortDescription ||
+          service.descriptionEn ||
+          service.description
+        : service.shortDescription || service.description;
+
     return {
-      title: `${service.title} | Healthcare Therapy Center`,
-      description: service.shortDescription || service.description || "",
+      title: `${title} | Healthcare Therapy Center`,
+      description: description || "",
     };
   } catch (error) {
     return {
@@ -76,13 +98,13 @@ export async function generateMetadata({
 export default async function ServiceDetailPage({
   params,
 }: {
-  params: Promise<{ slug?: string }>;
+  params: Promise<{ slug?: string; locale: string }>;
 }) {
+  const { slug, locale } = await params;
   const messages = await getMessages();
   const t = messages.services;
 
   let service: Service | null = null;
-  const slug = (await params).slug;
   console.log("slug", slug);
 
   try {
@@ -142,26 +164,24 @@ export default async function ServiceDetailPage({
 
       {/* Dynamic Content with Suspense */}
       <Suspense fallback={<ServiceDetailLoading />}>
-        <ServiceDetailContent slug={slug || ""} />
+        <ServiceDetailContent slug={slug || ""} locale={locale} />
       </Suspense>
 
       {/* CTA Section */}
       <section className="bg-white py-16 md:py-24">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-5xl font-semibold text-[#1F1F1F] mb-4 md:mb-6">
-            Sẵn sàng trải nghiệm sự khác biệt
+            {t.cta.heading}
           </h2>
           <p className="text-lg md:text-2xl text-black mb-10 max-w-4xl mx-auto">
-            Hãy để Healthcare Therapy Center trở thành điểm tựa vững chắc
-            <br />
-            trong hành trình chăm sóc sức khỏe của bạn.
+            {t.cta.subheading}
           </p>
           <a
             href="https://forms.gle/GJETkvXcnZ7hZwBr8"
             target="_blank"
             className="inline-flex items-center justify-center px-8 py-3 bg-[#B1873F] text-white rounded-full text-base md:text-lg font-semibold transition-all hover:bg-[#9A7435]"
           >
-            Đặt lịch trải nghiệm
+            {t.cta.button}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 ml-2"
@@ -284,7 +304,7 @@ export async function generateStaticParams() {
       },
     });
 
-    return services.map((service) => ({
+    return services.map((service: { slug: string }) => ({
       slug: service.slug,
     }));
   } catch (error) {
