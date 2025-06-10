@@ -9,15 +9,15 @@ import { getMessages } from "next-intl/server";
 import NewsContent from "./NewsContent";
 import NewsLoading from "./NewsLoading";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const messages = await getMessages();
-  const t = messages.news.metadata;
+// export async function generateMetadata(): Promise<Metadata> {
+//   const messages = await getMessages();
+//   const t = messages.news.metadata;
 
-  return {
-    title: t.title,
-    description: t.description,
-  };
-}
+//   return {
+//     title: t.title,
+//     description: t.description,
+//   };
+// }
 
 const DEFAULT_IMAGE = "/images/hero-section.png";
 
