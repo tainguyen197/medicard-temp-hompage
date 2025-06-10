@@ -7,6 +7,12 @@ import prisma from "@/lib/prisma";
 import { getMessages } from "next-intl/server";
 import ServicesContent from "./ServicesContent";
 
+// Force dynamic rendering to avoid DYNAMIC_SERVER_USAGE error
+export const dynamic = "force-dynamic";
+
+// Alternative: Use revalidate for some caching (uncomment if needed)
+// export const revalidate = 60; // Revalidate every 60 seconds
+
 export async function generateMetadata(): Promise<Metadata> {
   const messages = await getMessages();
   const t = messages.services.metadata;

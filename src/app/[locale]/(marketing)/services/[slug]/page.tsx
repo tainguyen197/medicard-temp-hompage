@@ -7,6 +7,9 @@ import prisma from "@/lib/prisma";
 import { getMessages } from "next-intl/server";
 import ServiceDetailContent from "./ServiceDetailContent";
 
+// Force dynamic rendering to avoid DYNAMIC_SERVER_USAGE error
+export const dynamic = "force-dynamic";
+
 interface ServiceDetailProps {
   params: Promise<{ slug: string; locale: string }>;
 }

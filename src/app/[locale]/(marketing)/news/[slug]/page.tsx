@@ -7,6 +7,9 @@ import NewsDetailContent from "./NewsDetailContent";
 import { getTranslations } from "next-intl/server";
 import { useLocale } from "next-intl";
 
+// Force dynamic rendering to avoid DYNAMIC_SERVER_USAGE error
+export const dynamic = "force-dynamic";
+
 type Params = {
   slug: string;
   locale: string;

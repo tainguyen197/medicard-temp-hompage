@@ -9,6 +9,9 @@ import { getMessages } from "next-intl/server";
 import NewsContent from "./NewsContent";
 import NewsLoading from "./NewsLoading";
 
+// Force dynamic rendering to avoid DYNAMIC_SERVER_USAGE error
+export const dynamic = "force-dynamic";
+
 // export async function generateMetadata(): Promise<Metadata> {
 //   const messages = await getMessages();
 //   const t = messages.news.metadata;
