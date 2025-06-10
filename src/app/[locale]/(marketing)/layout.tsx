@@ -5,6 +5,8 @@ import "slick-carousel/slick/slick-theme.css";
 import LayoutWithHeader from "@/app/_layouts/LayoutWithHeader";
 import { NextIntlClientProvider } from "next-intl";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { getMessages } from "next-intl/server";
 
 const manrope = Manrope({
   subsets: ["latin", "vietnamese"],
@@ -33,14 +35,13 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
+
   return (
     <html lang={locale} className="scroll-smooth">
       <body
         className={`${manrope.variable} ${cormorant.variable} font-sans antialiased`}
       >
-        <NextIntlClientProvider>
-          <LayoutWithHeader>{children}</LayoutWithHeader>
-        </NextIntlClientProvider>
+        <LayoutWithHeader>{children}</LayoutWithHeader>
       </body>
     </html>
   );

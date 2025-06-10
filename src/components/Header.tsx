@@ -1,27 +1,29 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
 import { ROUTES } from "@/lib/router";
 import LanguageSwitcher from "./LanguageSwitcher";
 
-const Header = () => {
+type Props = {
+  texts: Record<string, string>;
+};
+
+const Header = ({ texts }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const t = useTranslations("navigation");
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const navItems = [
-    { name: t("services"), href: ROUTES.SERVICES },
-    { name: t("about"), href: ROUTES.ABOUT },
-    { name: t("news"), href: ROUTES.NEWS },
-    { name: t("contact"), href: ROUTES.CONTACT },
+    { name: texts.services, href: ROUTES.SERVICES },
+    { name: texts.about, href: ROUTES.ABOUT },
+    { name: texts.news, href: ROUTES.NEWS },
+    { name: texts.contact, href: ROUTES.CONTACT },
   ];
 
   const handleNavigation = (
