@@ -7,6 +7,13 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import ImageUpload from "@/components/ImageUpload";
 import { ROUTES } from "@/lib/router";
 import dynamic from "next/dynamic";
@@ -19,9 +26,13 @@ const CKEditorComponent = dynamic(
 export default function NewServicePage() {
   const router = useRouter();
   const [title, setTitle] = useState("");
+  const [titleEn, setTitleEn] = useState("");
+  const [status, setStatus] = useState("DRAFT");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [description, setDescription] = useState("");
+  const [descriptionEn, setDescriptionEn] = useState("");
   const [shortDescription, setShortDescription] = useState("");
+  const [shortDescriptionEn, setShortDescriptionEn] = useState("");
   const [slug, setSlug] = useState("");
   const [featuredImage, setFeaturedImage] = useState("");
   const [featureImageId, setFeatureImageId] = useState("");
@@ -66,6 +77,14 @@ export default function NewServicePage() {
     []
   );
 
+  const handleEditorChangeEn = useCallback(
+    (event: unknown, editor: { getData: () => string }) => {
+      const data = editor.getData();
+      setDescriptionEn(data);
+    },
+    []
+  );
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -89,8 +108,12 @@ export default function NewServicePage() {
         },
         body: JSON.stringify({
           title,
+          titleEn: titleEn || undefined,
           description,
+          descriptionEn: descriptionEn || undefined,
           shortDescription,
+          shortDescriptionEn: shortDescriptionEn || undefined,
+          status,
           slug,
           featuredImage, // Send the image URL
           featureImageId, // Send the media ID if available
@@ -129,76 +152,149 @@ export default function NewServicePage() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-          <div className="md:col-span-2 space-y-2">
-            <Label htmlFor="title">Service Title</Label>
+        {/* Vietnamese Content Section */}
+        <fieldset className="p-4 border border-gray-200 rounded-lg">
+          <legend className="text-lg font-semibold mb-4 px-2">
+            Vietnamese Content (Default)
+          </legend>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+            <div className="md:col-span-2 space-y-2">
+              <Label htmlFor="title">Service Title (Vietnamese)</Label>
+              <Input
+                id="title"
+                value={title}
+                onChange={handleTitleChange}
+                placeholder="Enter service title in Vietnamese"
+                className="w-full"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="featuredImage">Feature Image</Label>
+              <ImageUpload
+                value={featuredImage}
+                onChange={setFeaturedImage}
+                onImageUploading={setIsImageUploading}
+                onMediaIdChange={setFeatureImageId}
+                aspectRatio={270 / 200}
+                aspectRatioText="270:200"
+              />
+              <p className="text-xs text-gray-500">
+                Recommended aspect ratio: 270:200
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-2 mt-4">
+            <Label htmlFor="shortDescription">
+              Short Description (Vietnamese)
+            </Label>
             <Input
-              id="title"
-              value={title}
-              onChange={handleTitleChange}
-              placeholder="Enter service title"
+              id="shortDescription"
+              value={shortDescription}
+              onChange={(e) => setShortDescription(e.target.value)}
+              placeholder="Brief summary of the service in Vietnamese"
               className="w-full"
             />
           </div>
 
+          <div className="space-y-2 mt-4">
+            <Label>Service Description (Vietnamese)</Label>
+            <div>
+              {typeof window !== "undefined" && (
+                <CKEditorComponent
+                  data={description}
+                  onChange={handleEditorChange}
+                />
+              )}
+            </div>
+          </div>
+        </fieldset>
+
+        {/* English Content Section */}
+        <fieldset className="p-4 border border-blue-200 rounded-lg bg-blue-50">
+          <legend className="text-lg font-semibold mb-4 px-2 text-blue-800">
+            English Content (Optional)
+          </legend>
+
           <div className="space-y-2">
-            <Label htmlFor="featuredImage">Feature Image</Label>
-            <ImageUpload
-              value={featuredImage}
-              onChange={setFeaturedImage}
-              onImageUploading={setIsImageUploading}
-              onMediaIdChange={setFeatureImageId}
+            <Label htmlFor="titleEn">Service Title (English)</Label>
+            <Input
+              id="titleEn"
+              value={titleEn}
+              onChange={(e) => setTitleEn(e.target.value)}
+              placeholder="Enter service title in English"
+              className="w-full"
             />
-            <p className="text-xs text-gray-500">
-              Recommended aspect ratio: 270:200
-            </p>
           </div>
-        </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="slug">URL Slug</Label>
-          <Input
-            id="slug"
-            value={slug}
-            onChange={handleSlugChange}
-            placeholder="service-url-slug"
-            className="w-full"
-          />
-          <p className="text-xs text-gray-500">
-            This will be used in the URL: /services/{slug}
-          </p>
-        </div>
+          <div className="space-y-2 mt-4">
+            <Label htmlFor="shortDescriptionEn">
+              Short Description (English)
+            </Label>
+            <Input
+              id="shortDescriptionEn"
+              value={shortDescriptionEn}
+              onChange={(e) => setShortDescriptionEn(e.target.value)}
+              placeholder="Brief summary of the service in English"
+              className="w-full"
+            />
+          </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="shortDescription">Short Description</Label>
-          <Input
-            id="shortDescription"
-            value={shortDescription}
-            onChange={(e) => setShortDescription(e.target.value)}
-            placeholder="Brief summary of the service"
-            className="w-full"
-          />
-          <p className="text-xs text-gray-500">
-            A brief summary that will be displayed in service listings and
-            previews.
-          </p>
-        </div>
+          <div className="space-y-2 mt-4">
+            <Label>Service Description (English)</Label>
+            <div>
+              {typeof window !== "undefined" && (
+                <CKEditorComponent
+                  data={descriptionEn}
+                  onChange={handleEditorChangeEn}
+                />
+              )}
+            </div>
+          </div>
+        </fieldset>
 
-        <div className="space-y-2">
-          <Label>Service Description</Label>
-          <div>
-            {typeof window !== "undefined" && (
-              <CKEditorComponent
-                data={description}
-                onChange={handleEditorChange}
+        {/* Settings Section */}
+        <fieldset className="p-4 border border-gray-200 rounded-lg">
+          <legend className="text-lg font-semibold mb-4 px-2">
+            Service Settings
+          </legend>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="status">Status</Label>
+              <Select
+                value={status}
+                onValueChange={(value: string) => setStatus(value)}
+              >
+                <SelectTrigger id="status">
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="DRAFT">Draft</SelectItem>
+                  <SelectItem value="PUBLISHED">Published</SelectItem>
+                  <SelectItem value="PENDING_REVIEW">Pending Review</SelectItem>
+                  <SelectItem value="SCHEDULED">Scheduled</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="slug">URL Slug</Label>
+              <Input
+                id="slug"
+                value={slug}
+                onChange={handleSlugChange}
+                placeholder="service-url-slug"
+                className="w-full"
               />
-            )}
+              <p className="text-xs text-gray-500">
+                This will be used in the URL: /services/{slug}
+              </p>
+            </div>
           </div>
-          <p className="text-xs text-gray-500">
-            Describe your healthcare service in detail. You can include
-            formatting, images, and links.
-          </p>
-        </div>
+        </fieldset>
 
         <div className="flex justify-end space-x-4 pt-4">
           <Button

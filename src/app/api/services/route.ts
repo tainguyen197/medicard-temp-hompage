@@ -9,8 +9,11 @@ import { createSlug } from "../../../lib/utils";
 // Schema for service creation/update
 const serviceSchema = z.object({
   title: z.string().min(1, "Title is required"),
+  titleEn: z.string().optional(),
   description: z.string().optional(),
+  descriptionEn: z.string().optional(),
   shortDescription: z.string().optional(),
+  shortDescriptionEn: z.string().optional(),
   status: z.string().optional().default("DRAFT"),
   slug: z.string().optional(),
   featuredImage: z.string().optional(), // Accept the image URL
@@ -30,14 +33,18 @@ export async function GET(request: Request) {
   const where: {
     OR?: Array<{
       title?: { contains: string; mode: "insensitive" };
+      titleEn?: { contains: string; mode: "insensitive" };
       description?: { contains: string; mode: "insensitive" };
+      descriptionEn?: { contains: string; mode: "insensitive" };
     }>;
   } = {};
 
   if (search) {
     where.OR = [
       { title: { contains: search, mode: "insensitive" } },
+      { titleEn: { contains: search, mode: "insensitive" } },
       { description: { contains: search, mode: "insensitive" } },
+      { descriptionEn: { contains: search, mode: "insensitive" } },
     ];
   }
 
@@ -120,8 +127,11 @@ export async function POST(request: Request) {
     const service = await prisma.service.create({
       data: {
         title: validatedData.title,
+        titleEn: validatedData.titleEn,
         description: validatedData.description,
+        descriptionEn: validatedData.descriptionEn,
         shortDescription: validatedData.shortDescription,
+        shortDescriptionEn: validatedData.shortDescriptionEn,
         status: validatedData.status,
         slug,
         ...(featureImageId && { featureImageId }), // Only add if we have an image ID

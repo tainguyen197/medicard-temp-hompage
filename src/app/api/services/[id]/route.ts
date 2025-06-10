@@ -10,10 +10,13 @@ import { use } from "react";
 // Schema for service update
 const serviceUpdateSchema = z.object({
   title: z.string().min(1, "Title is required"),
+  titleEn: z.string().optional(),
   status: z.string().optional(),
   slug: z.string().optional(),
   description: z.string().optional(),
+  descriptionEn: z.string().optional(),
   shortDescription: z.string().optional(),
+  shortDescriptionEn: z.string().optional(),
   featuredImage: z.string().optional(), // Accept the image URL
   featureImageId: z.string().optional(),
 });
@@ -122,8 +125,11 @@ export async function PUT(
       where: { id },
       data: {
         title: validatedData.title,
+        titleEn: validatedData.titleEn,
         description: validatedData.description,
+        descriptionEn: validatedData.descriptionEn,
         shortDescription: validatedData.shortDescription,
+        shortDescriptionEn: validatedData.shortDescriptionEn,
         status: validatedData.status,
         slug,
         ...(featureImageId && { featureImageId }), // Only add if we have an image ID
