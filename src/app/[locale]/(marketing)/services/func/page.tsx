@@ -82,7 +82,7 @@ export default async function RehabilitationPage() {
                 {t.equipment.description}
               </p>
               <ul className="list-disc pl-5 mt-4 space-y-2 text-base md:text-lg text-black">
-                {t.equipment.methods.map((method, index) => (
+                {t.equipment.methods.map((method: string, index: number) => (
                   <li key={index}>{method}</li>
                 ))}
               </ul>

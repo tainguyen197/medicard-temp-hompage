@@ -29,9 +29,11 @@ const DEFAULT_IMAGE = "/images/news/news-image-1.jpg";
 export async function generateMetadata({
   params,
 }: {
-  params: Params;
+  params: Promise<Params>;
 }): Promise<Metadata> {
-  const { slug, locale } = params;
+  const { slug, locale } = await params;
+
+  console.log(locale, slug);
   const t = await getTranslations({ locale, namespace: "newsDetail.metadata" });
 
   try {
@@ -65,8 +67,12 @@ export async function generateMetadata({
   }
 }
 
-export default async function BlogDetailPage({ params }: { params: Params }) {
-  const { slug, locale } = params;
+export default async function BlogDetailPage({
+  params,
+}: {
+  params: Promise<Params>;
+}) {
+  const { slug, locale } = await params;
   const t = await getTranslations({ locale, namespace: "newsDetail.cta" });
 
   return (
