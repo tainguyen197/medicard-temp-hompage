@@ -589,5 +589,22 @@
   "metadata": {
     "serviceNotFound": "Dịch vụ không tìm thấy",
     "service": "Dịch vụ"
+  },
+  "newsDetail": {
+    "metadata": {
+      "notFoundTitle": "Bài viết không tìm thấy | Healthcare Therapy Center",
+      "notFoundDescription": "Bài viết bạn đang tìm kiếm không tồn tại hoặc đã bị xóa."
+    },
+    "breadcrumb": {
+      "news": "Tin tức"
+    },
+    "relatedPosts": {
+      "title": "Bạn có thể quan tâm"
+    },
+    "cta": {
+      "heading": "Sẵn sàng trải nghiệm sự khác biệt",
+      "subheading": "Hãy để Healthcare Therapy Center trở thành điểm tựa vững chắc trong hành trình chăm sóc sức khỏe của bạn.",
+      "button": "Đặt lịch trải nghiệm"
+    }
   }
 }

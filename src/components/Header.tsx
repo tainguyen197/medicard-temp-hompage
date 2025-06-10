@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 import { ROUTES } from "@/lib/router";
 import LanguageSwitcher from "./LanguageSwitcher";
 
@@ -16,8 +17,33 @@ const Header = ({ texts }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const locale = useLocale();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  // Helper function to check if a route is active considering locale
+  const isRouteActive = (routeHref: string) => {
+    // Remove locale prefix from pathname for comparison
+    const pathWithoutLocale =
+      pathname.replace(new RegExp(`^/${locale}`), "") || "/";
+
+    // For exact home route match
+    if (routeHref === "/" && pathWithoutLocale === "/") {
+      return true;
+    }
+
+    // For other routes, check if the path starts with the route
+    if (routeHref !== "/") {
+      return pathWithoutLocale.startsWith(routeHref);
+    }
+
+    return false;
+  };
+
+  // Helper function to create locale-aware href
+  const createLocaleHref = (href: string) => {
+    return `/${locale}${href}`;
+  };
 
   const navItems = [
     { name: texts.services, href: ROUTES.SERVICES },
@@ -37,15 +63,16 @@ const Header = ({ texts }: Props) => {
       setIsMenuOpen(false);
     }
 
-    // Use router.push for client-side navigation without hash scrolling
-    router.push(href);
+    // Create locale-aware route and navigate
+    const localeAwareHref = createLocaleHref(href);
+    router.push(localeAwareHref);
   };
 
   return (
     <header className="bg-[#182134] py-4 fixed top-0 left-0 right-0 z-50 min-h-[72px] md:min-h-[96px]">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link
-          href={ROUTES.HOME}
+          href={createLocaleHref(ROUTES.HOME)}
           onClick={(e) => handleNavigation(e, ROUTES.HOME)}
           className="relative w-32 h-10 md:w-36 md:h-16"
         >
@@ -61,7 +88,7 @@ const Header = ({ texts }: Props) => {
             {navItems.map((item) => (
               <Link
                 key={item.href}
-                href={item.href}
+                href={createLocaleHref(item.href)}
                 onClick={(e) => handleNavigation(e, item.href)}
                 className="font-cormorant font-bold uppercase text-amber-50 hover:text-white transition-colors relative group"
               >
@@ -69,7 +96,7 @@ const Header = ({ texts }: Props) => {
                 <span
                   className={`absolute left-0 bottom-0 h-0.5 bg-[#B1873F] transition-all duration-300 
                     ${
-                      pathname === item.href
+                      isRouteActive(item.href)
                         ? "w-full"
                         : "w-0 group-hover:w-full"
                     }`}
@@ -136,7 +163,7 @@ const Header = ({ texts }: Props) => {
             {navItems.map((item) => (
               <Link
                 key={item.name}
-                href={item.href}
+                href={createLocaleHref(item.href)}
                 onClick={(e) => handleNavigation(e, item.href)}
                 className="font-cormorant font-bold text-xl uppercase text-white hover:text-amber-200 transition-colors relative group"
               >
@@ -144,7 +171,7 @@ const Header = ({ texts }: Props) => {
                 <span
                   className={`absolute left-0 bottom-0 h-0.5 bg-amber-200 transition-all duration-300 
                     ${
-                      pathname === item.href
+                      isRouteActive(item.href)
                         ? "w-full"
                         : "w-0 group-hover:w-full"
                     }`}
