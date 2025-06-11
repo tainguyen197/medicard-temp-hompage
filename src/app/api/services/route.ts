@@ -28,9 +28,11 @@ export async function GET(request: Request) {
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "10");
   const search = searchParams.get("search");
+  const status = searchParams.get("status");
 
   // Build filter object
   const where: {
+    status?: string;
     OR?: Array<{
       title?: { contains: string; mode: "insensitive" };
       titleEn?: { contains: string; mode: "insensitive" };
@@ -38,6 +40,10 @@ export async function GET(request: Request) {
       descriptionEn?: { contains: string; mode: "insensitive" };
     }>;
   } = {};
+
+  if (status) {
+    where.status = status;
+  }
 
   if (search) {
     where.OR = [
