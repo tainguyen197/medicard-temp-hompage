@@ -65,6 +65,7 @@ const Header = ({ texts }: Props) => {
 
     // Create locale-aware route and navigate
     const localeAwareHref = createLocaleHref(href);
+    console.log("localeAwareHref", localeAwareHref, href);
     router.push(localeAwareHref);
   };
 
@@ -89,7 +90,6 @@ const Header = ({ texts }: Props) => {
               <Link
                 key={item.href}
                 href={createLocaleHref(item.href)}
-                onClick={(e) => handleNavigation(e, item.href)}
                 className="font-cormorant font-bold uppercase text-amber-50 hover:text-white transition-colors relative group"
               >
                 {item.name}
@@ -162,6 +162,7 @@ const Header = ({ texts }: Props) => {
           <nav className="flex flex-col space-y-6">
             {navItems.map((item) => (
               <Link
+                prefetch
                 key={item.name}
                 href={createLocaleHref(item.href)}
                 onClick={(e) => handleNavigation(e, item.href)}

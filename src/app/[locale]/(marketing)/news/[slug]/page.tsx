@@ -227,3 +227,9 @@ async function NewsDetailSkeletonContent({ locale }: { locale: string }) {
     </>
   );
 }
+
+// in src/app/[locale]/(marketing)/news/[slug]/page.tsx
+export async function generateStaticParams() {
+  const news = await prisma.post.findMany({ select: { slug: true } });
+  return news.map((n) => ({ slug: n.slug }));
+}
