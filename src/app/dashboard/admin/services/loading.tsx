@@ -5,29 +5,6 @@ import { ROUTES } from "@/lib/router";
 export default function ServicesLoading() {
   return (
     <div className="container mx-auto py-10">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Services</h1>
-
-        <Link
-          href={ROUTES.ADMIN_SERVICES + "/new"}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
-        >
-          <PlusIcon size={16} />
-          New Service
-        </Link>
-      </div>
-
-      {/* Info Banner */}
-      <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-6">
-        <div>
-          <h2 className="font-medium text-blue-800">Service Management</h2>
-          <p className="text-sm text-blue-700 mt-1">
-            Manage your healthcare services. Services are displayed on the
-            services page of your website.
-          </p>
-        </div>
-      </div>
-
       {/* Table Skeleton */}
       <div className="bg-white rounded-md shadow overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
