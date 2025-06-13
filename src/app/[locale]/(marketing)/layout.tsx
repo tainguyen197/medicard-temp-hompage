@@ -1,3 +1,5 @@
+export const experimental_ppr = true;
+
 import { Cormorant_SC, Manrope } from "next/font/google";
 import "@/app/globals.css";
 import "slick-carousel/slick/slick.css";
