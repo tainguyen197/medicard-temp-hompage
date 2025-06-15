@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import "@/app/globals.css";
-import LayoutWithHeader from "./_layouts/LayoutWithHeader";
 
 function MarketingNotFound() {
   return (
@@ -41,9 +40,5 @@ function MarketingNotFound() {
 }
 
 export default function NotFound() {
-  return (
-    <LayoutWithHeader>
-      <MarketingNotFound />
-    </LayoutWithHeader>
-  );
+  return <MarketingNotFound />;
 }
