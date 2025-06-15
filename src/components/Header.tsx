@@ -35,11 +35,6 @@ const Header = () => {
     return false;
   };
 
-  // Helper function to create locale-aware href
-  const createLocaleHref = (href: string) => {
-    return `/${locale}${href}`;
-  };
-
   const navItems = [
     { name: t("services"), href: ROUTES.SERVICES },
     { name: t("about"), href: ROUTES.ABOUT },
@@ -59,16 +54,14 @@ const Header = () => {
     }
 
     // Create locale-aware route and navigate
-    const localeAwareHref = createLocaleHref(href);
-    console.log("localeAwareHref", localeAwareHref, href);
-    router.push(localeAwareHref);
+    router.push(href);
   };
 
   return (
     <header className="bg-[#182134] py-4 fixed top-0 left-0 right-0 z-50 min-h-[72px] md:min-h-[96px]">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link
-          href={createLocaleHref(ROUTES.HOME)}
+          href={ROUTES.HOME}
           onClick={(e) => handleNavigation(e, ROUTES.HOME)}
           className="relative w-32 h-10 md:w-36 md:h-16"
         >
@@ -84,7 +77,7 @@ const Header = () => {
             {navItems.map((item) => (
               <Link
                 key={item.href}
-                href={createLocaleHref(item.href)}
+                href={item.href}
                 className="font-cormorant font-bold uppercase text-amber-50 hover:text-white transition-colors relative group"
               >
                 {item.name}
@@ -159,7 +152,7 @@ const Header = () => {
               <Link
                 prefetch
                 key={item.name}
-                href={createLocaleHref(item.href)}
+                href={item.href}
                 onClick={(e) => handleNavigation(e, item.href)}
                 className="font-cormorant font-bold text-xl uppercase text-white hover:text-amber-200 transition-colors relative group"
               >
