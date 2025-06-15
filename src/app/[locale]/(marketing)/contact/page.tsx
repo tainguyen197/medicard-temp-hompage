@@ -3,6 +3,10 @@ import Image from "next/image";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getMessages } from "next-intl/server";
 
+export const generateStaticParams = async () => {
+  return [{ locale: "en" }, { locale: "vi" }];
+};
+
 export default async function ContactPage() {
   const messages = await getMessages();
   const t = messages.contact;

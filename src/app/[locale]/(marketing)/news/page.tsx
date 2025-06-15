@@ -12,15 +12,9 @@ import NewsLoading from "./NewsLoading";
 // Force dynamic rendering to avoid DYNAMIC_SERVER_USAGE error
 export const dynamic = "force-dynamic";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const messages = await getMessages();
-  const t = messages.news.metadata;
-
-  return {
-    title: t.title,
-    description: t.description,
-  };
-}
+export const generateStaticParams = async () => {
+  return [{ locale: "en" }, { locale: "vi" }];
+};
 
 const DEFAULT_IMAGE = "/images/hero-section.png";
 

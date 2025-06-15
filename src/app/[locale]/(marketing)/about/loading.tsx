@@ -1,13 +1,22 @@
 import React from "react";
 import ServicesDetailSectionSkeleton from "@/components/ServicesDetailSectionSkeleton";
 import TestimonialSectionSkeleton from "@/components/TestimonialSectionSkeleton";
+import Image from "next/image";
 
 export default function AboutLoading() {
   return (
     <div className="pt-[72px] md:pt-[96px]">
       {/* Hero Section Skeleton */}
       <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
-        <div className="w-full h-full bg-gray-200 animate-pulse"></div>
+        <div className="absolute inset-0">
+          <Image
+            src="/images/hero-section.png"
+            alt="Hero Section"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
       </section>
 
       {/* Healthcare Center Introduction Section Skeleton */}

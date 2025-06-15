@@ -1,7 +1,5 @@
 import React, { Suspense } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { Metadata } from "next";
 import { getMessages } from "next-intl/server";
 import AnimatedSection from "@/components/AnimatedSection";
 import ServicesDetailSection from "@/components/ServicesDetailSection";
@@ -9,30 +7,9 @@ import TestimonialSection from "@/components/TestimonialSection";
 import ServicesDetailSectionSkeleton from "@/components/ServicesDetailSectionSkeleton";
 import TestimonialSectionSkeleton from "@/components/TestimonialSectionSkeleton";
 
-// Mission/Value Item component
-const ValueItem = ({
-  number,
-  title,
-  description,
-}: {
-  number: string;
-  title: string;
-  description: string;
-}) => (
-  <div className="flex items-start mb-8">
-    <div className="w-12 h-12 flex-shrink-0 rounded-full bg-[#79C5E7] flex items-center justify-center mr-4 font-bold text-white">
-      {number}
-    </div>
-    <div>
-      <h3 className="font-bold text-md md:text-xl text-[#002447] mb-2">
-        {title}
-      </h3>
-      <p className="text-[#909090] text-justify text-sm md:text-base">
-        {description}
-      </p>
-    </div>
-  </div>
-);
+export const generateStaticParams = async () => {
+  return [{ locale: "en" }, { locale: "vi" }];
+};
 
 // Certificate Item component
 const CertificateItem = ({

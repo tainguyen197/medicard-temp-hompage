@@ -12,6 +12,10 @@ import {
   ContactSectionWithAnimation,
 } from "@/components/sections";
 
+export const generateStaticParams = async () => {
+  return [{ locale: "en" }, { locale: "vi" }];
+};
+
 export default async function Home() {
   const messages = await getMessages();
   const t = messages.home;

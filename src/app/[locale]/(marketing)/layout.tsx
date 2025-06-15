@@ -5,10 +5,11 @@ import "@/app/globals.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import LayoutWithHeader from "@/app/_layouts/LayoutWithHeader";
-import { NextIntlClientProvider } from "next-intl";
+import { hasLocale, NextIntlClientProvider } from "next-intl";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getMessages } from "next-intl/server";
+import { routing } from "@/routing";
 
 const manrope = Manrope({
   subsets: ["latin", "vietnamese"],
@@ -29,6 +30,10 @@ export const metadata: Metadata = {
     "Healthcare Therapy Center cung cấp dịch vụ Y Học Cổ Truyền kết hợp Phục Hồi Chức Năng theo hướng hiện đại, an toàn và khoa học.",
 };
 
+export const generateStaticParams = async () => {
+  return [{ locale: "en" }, { locale: "vi" }];
+};
+
 export default async function RootLayout({
   children,
   params,
@@ -37,13 +42,17 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
-
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
   return (
     <html lang={locale} className="scroll-smooth">
       <body
         className={`${manrope.variable} ${cormorant.variable} font-sans antialiased`}
       >
-        <LayoutWithHeader>{children}</LayoutWithHeader>
+        <NextIntlClientProvider>
+          <LayoutWithHeader>{children}</LayoutWithHeader>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
