@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -115,7 +113,12 @@ export default function ServicesContent({
 }
 
 // Extract data fetching into a separate component
-export async function ServicesDataComponent({ locale }: { locale: string }) {
+export async function ServicesDataComponent({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
   const messages = await getMessages();
   const t = messages.services;
 
