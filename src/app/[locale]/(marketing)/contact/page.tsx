@@ -7,6 +7,8 @@ export const generateStaticParams = async () => {
   return [{ locale: "en" }, { locale: "vi" }];
 };
 
+export const revalidate = 300; // Revalidate every 5 minutes
+
 export default async function ContactPage() {
   const messages = await getMessages();
   const t = messages.contact;

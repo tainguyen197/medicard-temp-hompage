@@ -3,15 +3,32 @@ import Image from "next/image";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { Post } from "@/types/post";
+import { getMessages } from "next-intl/server";
 
 // Default image fallback if no featured image
 const DEFAULT_IMAGE = "/images/news/news-image-1.jpg";
 
-export default async function NewsContent({
+const getLocalizedContent = (post: any, locale: string) => {
+  const isEnglish = locale === "en";
+  return {
+    title: isEnglish ? post.titleEn || post.title : post.title,
+    content: isEnglish ? post.contentEn || post.content : post.content,
+    excerpt: isEnglish ? post.excerptEn || post.excerpt : post.excerpt,
+  };
+};
+
+// Extract data fetching into a separate component
+export async function NewsDataComponent({
   searchParams,
+  params,
 }: {
   searchParams: Promise<{ page?: string }>;
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
+  const messages = await getMessages();
+  const t = messages.news;
+
   // Get the current page from search params or default to 1
   const { page = "1" } = await searchParams;
   const currentPage = Number(page);
@@ -34,13 +51,28 @@ export default async function NewsContent({
       where,
     });
 
-    // Get posts with pagination
+    // Get posts with pagination - now including titleEn, contentEn, excerptEn
     const posts = await prisma.post.findMany({
       where,
       orderBy: { createdAt: "desc" },
       take: postsPerPage,
       skip: (currentPage - 1) * postsPerPage,
-      include: {
+      select: {
+        id: true,
+        title: true,
+        titleEn: true,
+        slug: true,
+        content: true,
+        contentEn: true,
+        excerpt: true,
+        excerptEn: true,
+        featuredImage: true,
+        featured: true,
+        status: true,
+        publishedAt: true,
+        createdAt: true,
+        updatedAt: true,
+        authorId: true,
         author: {
           select: {
             id: true,
@@ -56,13 +88,19 @@ export default async function NewsContent({
       },
     });
 
-    // Convert Prisma results to Post type
-    blogPosts = posts.map((post) => ({
-      ...post,
-      createdAt: post.createdAt.toISOString(),
-      updatedAt: post.updatedAt.toISOString(),
-      publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
-    })) as Post[];
+    // Convert Prisma results to Post type with localized content
+    blogPosts = posts.map((post: any) => {
+      const localizedContent = getLocalizedContent(post, locale);
+      return {
+        ...post,
+        title: localizedContent.title,
+        content: localizedContent.content,
+        excerpt: localizedContent.excerpt,
+        createdAt: post.createdAt.toISOString(),
+        updatedAt: post.updatedAt.toISOString(),
+        publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
+      };
+    }) as Post[];
 
     console.log(`Found ${blogPosts.length} posts on page ${currentPage}`);
 
@@ -80,12 +118,8 @@ export default async function NewsContent({
     console.log("No posts found, showing empty state");
     return (
       <section className="container mx-auto px-4 mb-16 md:mb-20 max-w-[1040px] text-center py-20">
-        <h2 className="text-2xl text-gray-600 mb-4">
-          Hiện tại chưa có bài viết nào được xuất bản
-        </h2>
-        <p className="text-gray-500">
-          Vui lòng quay lại sau để xem nội dung mới.
-        </p>
+        <h2 className="text-2xl text-gray-600 mb-4">{t.emptyState.title}</h2>
+        <p className="text-gray-500">{t.emptyState.description}</p>
       </section>
     );
   }
@@ -102,7 +136,22 @@ export default async function NewsContent({
       },
       orderBy: { createdAt: "desc" },
       take: 5,
-      include: {
+      select: {
+        id: true,
+        title: true,
+        titleEn: true,
+        slug: true,
+        content: true,
+        contentEn: true,
+        excerpt: true,
+        excerptEn: true,
+        featuredImage: true,
+        featured: true,
+        status: true,
+        publishedAt: true,
+        createdAt: true,
+        updatedAt: true,
+        authorId: true,
         author: {
           select: {
             id: true,
@@ -118,12 +167,18 @@ export default async function NewsContent({
       },
     });
 
-    trendingPosts = featuredPostsData.map((post) => ({
-      ...post,
-      createdAt: post.createdAt.toISOString(),
-      updatedAt: post.updatedAt.toISOString(),
-      publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
-    })) as Post[];
+    trendingPosts = featuredPostsData.map((post: any) => {
+      const localizedContent = getLocalizedContent(post, locale);
+      return {
+        ...post,
+        title: localizedContent.title,
+        content: localizedContent.content,
+        excerpt: localizedContent.excerpt,
+        createdAt: post.createdAt.toISOString(),
+        updatedAt: post.updatedAt.toISOString(),
+        publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
+      };
+    }) as Post[];
 
     console.log(`Found ${trendingPosts.length} featured posts`);
   } catch (error) {
@@ -244,10 +299,7 @@ export default async function NewsContent({
 
       {/* 4. Topic Listing */}
       <section className="container mx-auto px-4 max-w-[1040px]">
-        <h2 className="text-2xl md:text-3xl font-medium mb-8 text-[#222222] hidden">
-          Tất cả bài viết
-        </h2>
-        {blogPosts.map((post, index) => (
+        {blogPosts.map((post) => (
           <article key={post.id}>
             <div className="relative flex flex-col md:flex-row items-center mb-4 md:mb-12 group justify-between">
               <Link
@@ -294,7 +346,7 @@ export default async function NewsContent({
                 ? "text-gray-300 cursor-not-allowed"
                 : "hover:text-[#B1873F] cursor-pointer"
             }`}
-            aria-label="Previous page"
+            aria-label={t.pagination.previousPage}
           >
             <svg
               width="24"
@@ -328,7 +380,7 @@ export default async function NewsContent({
                       ? "border-[#B1873F] text-[#B1873F]"
                       : "border-gray-300 bg-white text-gray-600"
                   } font-bold cursor-pointer`}
-                  aria-label={`Page ${pageNumber}`}
+                  aria-label={`${t.pagination.page} ${pageNumber}`}
                   aria-current={currentPage === pageNumber ? "page" : undefined}
                 >
                   {pageNumber}
@@ -347,7 +399,7 @@ export default async function NewsContent({
                 ? "text-gray-300 cursor-not-allowed"
                 : "hover:text-[#B1873F] cursor-pointer"
             }`}
-            aria-label="Next page"
+            aria-label={t.pagination.nextPage}
           >
             <svg
               width="24"
@@ -358,6 +410,39 @@ export default async function NewsContent({
             >
               <path
                 d="M9 18L15 12L9 6"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </Link>
+        </div>
+      </section>
+
+      {/* 4. Newsletter */}
+      <section className="py-16 bg-white max-w-[1040px] mx-auto">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl max-text-[51px] font-semibold text-[#1F1F1F] mb-6">
+            {t.cta.heading}
+          </h2>
+          <p className="text-lg md:text-xl px-4 md:px-16 text-black max-w-3xl mx-auto mb-8">
+            {t.cta.subheading}
+          </p>
+          <Link
+            href="https://forms.gle/GJETkvXcnZ7hZwBr8"
+            target="_blank"
+            className="inline-flex items-center px-8 py-4 bg-[#B1873F] text-white rounded-full font-semibold hover:bg-[#c09857] transition-colors"
+          >
+            {t.cta.button}
+            <svg
+              className="ml-2 w-5 h-5"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M5 12H19M19 12L12 5M19 12L12 19"
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
