@@ -1,178 +1,14 @@
 import React, { Suspense } from "react";
 import Image from "next/image";
-import Link from "next/link";
-import { Metadata } from "next";
 import AnimatedSection from "@/components/AnimatedSection";
-import prisma from "@/lib/prisma";
 import { getMessages } from "next-intl/server";
-import ServicesContent from "./ServicesContent";
+import { ServicesDataComponent } from "./ServicesContent";
 
 export const generateStaticParams = async () => {
   return [{ locale: "en" }, { locale: "vi" }];
 };
 
-interface Service {
-  id: string;
-  slug: string;
-  title: string;
-  titleEn?: string | null;
-  description?: string | null;
-  descriptionEn?: string | null;
-  shortDescription?: string | null;
-  shortDescriptionEn?: string | null;
-  status: string;
-  featureImageId?: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  featureImage?: {
-    id: string;
-    url: string;
-    fileName?: string | null;
-    originalName?: string | null;
-  } | null;
-}
-
-// Helper function to get localized content
-const getLocalizedServiceContent = (service: any, locale: string) => {
-  const isEnglish = locale === "en";
-  return {
-    title: isEnglish ? service.titleEn || service.title : service.title,
-    description: isEnglish
-      ? service.descriptionEn || service.description
-      : service.description,
-    shortDescription: isEnglish
-      ? service.shortDescriptionEn || service.shortDescription
-      : service.shortDescription,
-  };
-};
-
-// Extract data fetching into a separate component
-async function ServicesDataComponent({ locale }: { locale: string }) {
-  const messages = await getMessages();
-  const t = messages.services;
-
-  let services: Service[] = [];
-
-  try {
-    // Fetch services directly from the database with Prisma (like posts page does)
-    console.log("Fetching services from database...");
-
-    // Get services (only show published services for public page) - now including translation fields
-    const servicesData = await prisma.service.findMany({
-      where: {
-        status: "PUBLISHED",
-      },
-      orderBy: { createdAt: "desc" },
-      select: {
-        id: true,
-        slug: true,
-        title: true,
-        titleEn: true,
-        shortDescription: true,
-        shortDescriptionEn: true,
-        description: true,
-        descriptionEn: true,
-        status: true,
-        createdAt: true,
-        updatedAt: true,
-        featureImage: {
-          select: {
-            id: true,
-            url: true,
-            fileName: true,
-            originalName: true,
-          },
-        },
-      },
-    });
-
-    // Convert Prisma results to Service type with localized content
-    services = servicesData.map((service: any) => {
-      const localizedContent = getLocalizedServiceContent(service, locale);
-      return {
-        ...service,
-        title: localizedContent.title,
-        description: localizedContent.description,
-        shortDescription: localizedContent.shortDescription,
-      };
-    }) as Service[];
-
-    console.log(`Found ${services.length} published services`);
-
-    if (services.length > 0) {
-      console.log("First service title:", services[0]?.title);
-      console.log("First service status:", services[0]?.status);
-    }
-  } catch (error) {
-    console.error("Failed to fetch services:", error);
-    services = [];
-  }
-
-  // Map services to the format expected by the UI
-  const displayServices =
-    services.length > 0
-      ? services.map((service) => ({
-          id: service.slug || service.id, // Use slug for URL, fallback to id
-          title: service.title,
-          shortDescription: service.shortDescription || "",
-          image: service.featureImage?.url || "/images/service_1.png", // Fallback to existing service image
-        }))
-      : [
-          // Fallback to hardcoded data if no services from database
-          {
-            id: "ortho",
-            title: t.individual.traditionalMedicine.title,
-            shortDescription:
-              t.individual.traditionalMedicine.subtitle +
-              ": " +
-              t.individual.traditionalMedicine.intro2.substring(0, 200) +
-              "...",
-            image: "/images/service_1.png",
-          },
-          {
-            id: "rehab",
-            title: t.individual.physicalTherapy.title,
-            shortDescription:
-              t.individual.physicalTherapy.subtitle +
-              ". " +
-              t.individual.physicalTherapy.intro2.substring(0, 150) +
-              "...",
-            image: "/images/service_2.png",
-          },
-          {
-            id: "func",
-            title: t.individual.functionalRehabilitation.title,
-            shortDescription:
-              t.individual.functionalRehabilitation.treatment.spineDisorders +
-              "; " +
-              t.individual.functionalRehabilitation.treatment.jointDisorders.substring(
-                0,
-                100
-              ) +
-              "...",
-            image: "/images/service_3.png",
-          },
-          {
-            id: "transport",
-            title: t.individual.transport.title,
-            shortDescription: t.individual.transport.subtitle,
-            image: "/images/service_4.png",
-          },
-        ];
-
-  console.log(
-    `Using ${
-      services.length > 0 ? "database" : "fallback"
-    } services for display`
-  );
-
-  return (
-    <ServicesContent
-      services={displayServices}
-      viewDetailsText={t.viewDetails}
-    />
-  );
-}
+export const revalidate = 300; // Revalidate every 5 minutes
 
 export default async function ServicesPage({
   params,
@@ -181,7 +17,6 @@ export default async function ServicesPage({
 }) {
   const messages = await getMessages();
   const t = messages.services;
-  const { locale } = await params;
 
   return (
     <div className="pt-[72px] md:pt-[96px]">
@@ -210,7 +45,7 @@ export default async function ServicesPage({
 
       {/* Services Detail Section wrapped in Suspense */}
       <Suspense fallback={<ServicesLoading />}>
-        <ServicesDataComponent locale={locale} />
+        <ServicesDataComponent params={params} />
       </Suspense>
 
       {/* CTA Section */}
