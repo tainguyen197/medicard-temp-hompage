@@ -69,6 +69,8 @@ model Service {
   descriptionEn        String?
   shortDescription     String?
   shortDescriptionEn   String?
+  keywords             String?
+  enKeywords           String?
   status               String   @default("DRAFT")
   featureImageId       String?  @unique
   createdAt            DateTime @default(now())

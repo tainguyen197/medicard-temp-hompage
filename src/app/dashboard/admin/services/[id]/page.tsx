@@ -39,6 +39,8 @@ export default function EditServicePage({
   const [descriptionEn, setDescriptionEn] = useState("");
   const [shortDescription, setShortDescription] = useState("");
   const [shortDescriptionEn, setShortDescriptionEn] = useState("");
+  const [keywords, setKeywords] = useState("");
+  const [enKeywords, setEnKeywords] = useState("");
   const [featuredImageUrl, setFeaturedImageUrl] = useState("");
   const [featureImageId, setFeatureImageId] = useState("");
   const [isImageUploading, setIsImageUploading] = useState(false);
@@ -65,6 +67,8 @@ export default function EditServicePage({
         setDescriptionEn(service.descriptionEn || "");
         setShortDescription(service.shortDescription || "");
         setShortDescriptionEn(service.shortDescriptionEn || "");
+        setKeywords(service.keywords || "");
+        setEnKeywords(service.enKeywords || "");
         setFeaturedImageUrl(service.featureImage?.url || "");
         setFeatureImageId(service.featureImageId || "");
 
@@ -150,6 +154,8 @@ export default function EditServicePage({
           descriptionEn: descriptionEn || undefined,
           shortDescription,
           shortDescriptionEn: shortDescriptionEn || undefined,
+          keywords,
+          enKeywords: enKeywords || undefined,
           featuredImage: featuredImageUrl,
           featureImageId,
         }),
@@ -250,6 +256,20 @@ export default function EditServicePage({
           </div>
 
           <div className="space-y-2 mt-4">
+            <Label htmlFor="keywords">Keywords (Vietnamese)</Label>
+            <Input
+              id="keywords"
+              value={keywords}
+              onChange={(e) => setKeywords(e.target.value)}
+              placeholder="Thăm khám, tư vấn, chẩn đoán và điều trị các bệnh lý cơ xương khớp, Sử dụng các máy móc vật lý trị liệu, Kỹ thuật viên có tay nghề chuyên môn cao"
+              className="w-full"
+            />
+            <p className="text-xs text-gray-500">
+              Separate keywords with commas for better SEO
+            </p>
+          </div>
+
+          <div className="space-y-2 mt-4">
             <Label>Service Description (Vietnamese)</Label>
             <div>
               {typeof window !== "undefined" && (
@@ -290,6 +310,20 @@ export default function EditServicePage({
               placeholder="Brief summary of the service in English"
               className="w-full"
             />
+          </div>
+
+          <div className="space-y-2 mt-4">
+            <Label htmlFor="enKeywords">Keywords (English)</Label>
+            <Input
+              id="enKeywords"
+              value={enKeywords}
+              onChange={(e) => setEnKeywords(e.target.value)}
+              placeholder="Medical examination, consultation, diagnosis, treatment, physical therapy equipment, professional expertise"
+              className="w-full"
+            />
+            <p className="text-xs text-gray-500">
+              Separate keywords with commas for better SEO
+            </p>
           </div>
 
           <div className="space-y-2 mt-4">

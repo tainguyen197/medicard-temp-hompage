@@ -105,9 +105,7 @@ export default function FilterForm({
           >
             <option value="">All Status</option>
             <option value="DRAFT">Draft</option>
-            <option value="PENDING_REVIEW">Pending Review</option>
             <option value="PUBLISHED">Published</option>
-            <option value="SCHEDULED">Scheduled</option>
           </select>
 
           <select

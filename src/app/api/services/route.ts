@@ -14,6 +14,8 @@ const serviceSchema = z.object({
   descriptionEn: z.string().optional(),
   shortDescription: z.string().optional(),
   shortDescriptionEn: z.string().optional(),
+  keywords: z.string().optional(),
+  enKeywords: z.string().optional(),
   status: z.string().optional().default("DRAFT"),
   slug: z.string().optional(),
   featuredImage: z.string().optional(), // Accept the image URL
@@ -51,6 +53,8 @@ export async function GET(request: Request) {
       { titleEn: { contains: search, mode: "insensitive" } },
       { description: { contains: search, mode: "insensitive" } },
       { descriptionEn: { contains: search, mode: "insensitive" } },
+      { keywords: { contains: search, mode: "insensitive" } },
+      { enKeywords: { contains: search, mode: "insensitive" } },
     ];
   }
 
@@ -138,6 +142,8 @@ export async function POST(request: Request) {
         descriptionEn: validatedData.descriptionEn,
         shortDescription: validatedData.shortDescription,
         shortDescriptionEn: validatedData.shortDescriptionEn,
+        keywords: validatedData.keywords,
+        enKeywords: validatedData.enKeywords,
         status: validatedData.status,
         slug,
         ...(featureImageId && { featureImageId }), // Only add if we have an image ID

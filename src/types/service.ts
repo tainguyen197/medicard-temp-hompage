@@ -7,6 +7,8 @@ export interface Service {
   descriptionEn?: string | null;
   shortDescription?: string | null;
   shortDescriptionEn?: string | null;
+  keywords?: string | null;
+  enKeywords?: string | null;
   status: string;
   featureImageId?: string | null;
   createdAt: Date | string;
