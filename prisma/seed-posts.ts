@@ -32,20 +32,24 @@ async function main() {
   });
 
   if (!user) {
-    console.error("No editor user found. Please run the main seed script first.");
+    console.error(
+      "No editor user found. Please run the main seed script first."
+    );
     return;
   }
 
   // Get all categories
   const categories = await prisma.category.findMany();
   if (categories.length === 0) {
-    console.error("No categories found. Please run the main seed script first.");
+    console.error(
+      "No categories found. Please run the main seed script first."
+    );
     return;
   }
 
   // Define post statuses
-  const statuses = ["DRAFT", "PUBLISHED", "PENDING_REVIEW", "SCHEDULED"];
-  
+  const statuses = ["DRAFT", "PUBLISHED"];
+
   // Example image URLs
   const imageUrls = [
     "https://source.unsplash.com/random/800x600/?health",
@@ -66,30 +70,33 @@ async function main() {
     const content = faker.lorem.paragraphs(5);
     const excerpt = faker.lorem.paragraph();
     const status = statuses[Math.floor(Math.random() * statuses.length)];
-    
+
     // Randomly assign 1-2 categories
     const categoryCount = Math.floor(Math.random() * 2) + 1;
     const postCategories: { categoryId: string }[] = [];
-    
+
     for (let j = 0; j < categoryCount; j++) {
-      const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+      const randomCategory =
+        categories[Math.floor(Math.random() * categories.length)];
       // Prevent duplicate categories
-      if (!postCategories.some(c => c.categoryId === randomCategory.id)) {
+      if (!postCategories.some((c) => c.categoryId === randomCategory.id)) {
         postCategories.push({ categoryId: randomCategory.id });
       }
     }
-    
+
     // Set publishedAt date based on status
     let publishedAt: Date | null = null;
     if (status === "PUBLISHED") {
-      publishedAt = randomDate(new Date(new Date().setFullYear(new Date().getFullYear() - 1)), new Date());
-    } else if (status === "SCHEDULED") {
-      publishedAt = randomDate(new Date(), new Date(new Date().setMonth(new Date().getMonth() + 3)));
+      publishedAt = randomDate(
+        new Date(new Date().setFullYear(new Date().getFullYear() - 1)),
+        new Date()
+      );
     }
 
     // Randomly select a featured image (or null)
-    const featuredImage = imageUrls[Math.floor(Math.random() * imageUrls.length)];
-    
+    const featuredImage =
+      imageUrls[Math.floor(Math.random() * imageUrls.length)];
+
     const post = await prisma.post.create({
       data: {
         title,
@@ -105,7 +112,7 @@ async function main() {
         },
       },
     });
-    
+
     console.log(`Created post with id: ${post.id} and title: ${post.title}`);
   }
 
@@ -119,4 +126,4 @@ main()
   })
   .finally(async () => {
     await prisma.$disconnect();
-  }); 
+  });

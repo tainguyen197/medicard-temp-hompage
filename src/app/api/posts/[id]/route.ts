@@ -15,9 +15,7 @@ const postUpdateSchema = z.object({
   excerpt: z.string().optional(),
   excerptEn: z.string().optional(),
   featuredImage: z.string().optional(),
-  status: z
-    .enum(["DRAFT", "PENDING_REVIEW", "PUBLISHED", "SCHEDULED"])
-    .optional(),
+  status: z.enum(["DRAFT", "PUBLISHED"]).optional(),
   publishedAt: z.string().optional(),
   categories: z.array(z.string()).optional(),
   tags: z.array(z.string()).optional(),

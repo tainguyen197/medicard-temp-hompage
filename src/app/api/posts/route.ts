@@ -15,7 +15,7 @@ const postSchema = z.object({
   excerpt: z.string().optional(),
   excerptEn: z.string().optional(),
   featuredImage: z.string().optional(),
-  status: z.enum(["DRAFT", "PENDING_REVIEW", "PUBLISHED", "SCHEDULED"]),
+  status: z.enum(["DRAFT", "PUBLISHED"]),
   publishedAt: z.string().optional(),
   categories: z.array(z.string()).optional(),
   metaTitle: z.string().optional(),

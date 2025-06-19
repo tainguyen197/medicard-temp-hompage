@@ -358,8 +358,6 @@ export default function EditServicePage({
                 <SelectContent>
                   <SelectItem value="DRAFT">Draft</SelectItem>
                   <SelectItem value="PUBLISHED">Published</SelectItem>
-                  <SelectItem value="PENDING_REVIEW">Pending Review</SelectItem>
-                  <SelectItem value="SCHEDULED">Scheduled</SelectItem>
                 </SelectContent>
               </Select>
             </div>

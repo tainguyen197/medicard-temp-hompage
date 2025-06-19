@@ -76,11 +76,7 @@ export default function PostTableRow({
           className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
             post.status === "PUBLISHED"
               ? "bg-green-100 text-green-800"
-              : post.status === "DRAFT"
-              ? "bg-gray-100 text-gray-800"
-              : post.status === "PENDING_REVIEW"
-              ? "bg-yellow-100 text-yellow-800"
-              : "bg-blue-100 text-blue-800"
+              : "bg-gray-100 text-gray-800"
           }`}
         >
           {post.status.replace("_", " ")}
