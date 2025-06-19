@@ -11,9 +11,16 @@ export interface Service {
   enKeywords?: string | null;
   status: string;
   featureImageId?: string | null;
+  featureImageEnId?: string | null;
   createdAt: Date | string;
   updatedAt: Date | string;
   featureImage?: {
+    id: string;
+    url: string;
+    fileName?: string | null;
+    originalName?: string | null;
+  } | null;
+  featureImageEn?: {
     id: string;
     url: string;
     fileName?: string | null;

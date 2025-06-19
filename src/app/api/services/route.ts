@@ -20,6 +20,8 @@ const serviceSchema = z.object({
   slug: z.string().optional(),
   featuredImage: z.string().optional(), // Accept the image URL
   featureImageId: z.string().optional(),
+  featuredImageEn: z.string().optional(), // Accept the English image URL
+  featureImageEnId: z.string().optional(),
 });
 
 // GET /api/services - Get all services with pagination
@@ -53,8 +55,6 @@ export async function GET(request: Request) {
       { titleEn: { contains: search, mode: "insensitive" } },
       { description: { contains: search, mode: "insensitive" } },
       { descriptionEn: { contains: search, mode: "insensitive" } },
-      { keywords: { contains: search, mode: "insensitive" } },
-      { enKeywords: { contains: search, mode: "insensitive" } },
     ];
   }
 
@@ -121,6 +121,7 @@ export async function POST(request: Request) {
 
     // Find the media record if featuredImage URL is provided
     let featureImageId = validatedData.featureImageId;
+    let featureImageEnId = validatedData.featureImageEnId;
 
     if (validatedData.featuredImage && !featureImageId) {
       // Try to find the media record by URL
@@ -133,6 +134,17 @@ export async function POST(request: Request) {
       }
     }
 
+    if (validatedData.featuredImageEn && !featureImageEnId) {
+      // Try to find the media record by URL for English image
+      const mediaEn = await prisma.media.findFirst({
+        where: { url: validatedData.featuredImageEn },
+      });
+
+      if (mediaEn) {
+        featureImageEnId = mediaEn.id;
+      }
+    }
+
     // Create the service
     const service = await prisma.service.create({
       data: {
@@ -142,11 +154,11 @@ export async function POST(request: Request) {
         descriptionEn: validatedData.descriptionEn,
         shortDescription: validatedData.shortDescription,
         shortDescriptionEn: validatedData.shortDescriptionEn,
-        keywords: validatedData.keywords,
-        enKeywords: validatedData.enKeywords,
+
         status: validatedData.status,
         slug,
         ...(featureImageId && { featureImageId }), // Only add if we have an image ID
+        ...(featureImageEnId && { featureImageEnId }), // Only add if we have an English image ID
       },
       include: {
         featureImage: true,

@@ -38,7 +38,10 @@ export default function NewServicePage() {
   const [slug, setSlug] = useState("");
   const [featuredImage, setFeaturedImage] = useState("");
   const [featureImageId, setFeatureImageId] = useState("");
+  const [featuredImageEn, setFeaturedImageEn] = useState("");
+  const [featureImageEnId, setFeatureImageEnId] = useState("");
   const [isImageUploading, setIsImageUploading] = useState(false);
+  const [isImageEnUploading, setIsImageEnUploading] = useState(false);
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
 
   // Generate slug from title
@@ -121,6 +124,8 @@ export default function NewServicePage() {
           slug,
           featuredImage, // Send the image URL
           featureImageId, // Send the media ID if available
+          featuredImageEn, // Send the English image URL
+          featureImageEnId, // Send the English media ID if available
         }),
       });
 
@@ -236,15 +241,32 @@ export default function NewServicePage() {
             English Content (Optional)
           </legend>
 
-          <div className="space-y-2">
-            <Label htmlFor="titleEn">Service Title (English)</Label>
-            <Input
-              id="titleEn"
-              value={titleEn}
-              onChange={(e) => setTitleEn(e.target.value)}
-              placeholder="Enter service title in English"
-              className="w-full"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+            <div className="md:col-span-2 space-y-2">
+              <Label htmlFor="titleEn">Service Title (English)</Label>
+              <Input
+                id="titleEn"
+                value={titleEn}
+                onChange={(e) => setTitleEn(e.target.value)}
+                placeholder="Enter service title in English"
+                className="w-full"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="featuredImageEn">Feature Image (English)</Label>
+              <ImageUpload
+                value={featuredImageEn}
+                onChange={setFeaturedImageEn}
+                onImageUploading={setIsImageEnUploading}
+                onMediaIdChange={setFeatureImageEnId}
+                aspectRatio={270 / 200}
+                aspectRatioText="270:200"
+              />
+              <p className="text-xs text-gray-500">
+                Optional: Different image for English version
+              </p>
+            </div>
           </div>
 
           <div className="space-y-2 mt-4">
@@ -338,7 +360,7 @@ export default function NewServicePage() {
           <Button
             className="bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-200 cursor-pointer"
             type="submit"
-            disabled={isSubmitting || isImageUploading}
+            disabled={isSubmitting || isImageUploading || isImageEnUploading}
           >
             {isSubmitting ? "Creating..." : "Create Service"}
           </Button>

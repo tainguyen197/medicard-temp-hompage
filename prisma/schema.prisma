@@ -73,24 +73,27 @@ model Service {
   enKeywords           String?
   status               String   @default("DRAFT")
   featureImageId       String?  @unique
+  featureImageEnId     String?  @unique
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
   featureImage         Media?   @relation("ServiceFeatureImage", fields: [featureImageId], references: [id])
+  featureImageEn       Media?   @relation("ServiceFeatureImageEn", fields: [featureImageEnId], references: [id])
 }
 
 model Media {
-  id           String   @id @default(cuid())
-  url          String
-  fileName     String?
-  originalName String?
-  fileType     String?
-  fileSize     Int?
-  createdAt    DateTime @default(now())
-  uploadedById String?
-  postId       String?
-  post         Post?    @relation(fields: [postId], references: [id])
-  uploadedBy   User?    @relation(fields: [uploadedById], references: [id])
-  serviceImage Service? @relation("ServiceFeatureImage")
+  id              String   @id @default(cuid())
+  url             String
+  fileName        String?
+  originalName    String?
+  fileType        String?
+  fileSize        Int?
+  createdAt       DateTime @default(now())
+  uploadedById    String?
+  postId          String?
+  post            Post?    @relation(fields: [postId], references: [id])
+  uploadedBy      User?    @relation(fields: [uploadedById], references: [id])
+  serviceImage    Service? @relation("ServiceFeatureImage")
+  serviceImageEn  Service? @relation("ServiceFeatureImageEn")
 }
 
 model AuditLog {

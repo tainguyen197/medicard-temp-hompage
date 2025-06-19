@@ -21,6 +21,8 @@ const serviceUpdateSchema = z.object({
   enKeywords: z.string().optional(),
   featuredImage: z.string().optional(), // Accept the image URL
   featureImageId: z.string().optional(),
+  featuredImageEn: z.string().optional(), // Accept the English image URL
+  featureImageEnId: z.string().optional(),
 });
 
 interface MockService {
@@ -111,6 +113,7 @@ export async function PUT(
 
     // Find the media record if featuredImage URL is provided
     let featureImageId = validatedData.featureImageId;
+    let featureImageEnId = validatedData.featureImageEnId;
 
     if (validatedData.featuredImage && !featureImageId) {
       // Try to find the media record by URL
@@ -123,6 +126,17 @@ export async function PUT(
       }
     }
 
+    if (validatedData.featuredImageEn && !featureImageEnId) {
+      // Try to find the media record by URL for English image
+      const mediaEn = await prisma.media.findFirst({
+        where: { url: validatedData.featuredImageEn },
+      });
+
+      if (mediaEn) {
+        featureImageEnId = mediaEn.id;
+      }
+    }
+
     const service = await prisma.service.update({
       where: { id },
       data: {
@@ -132,11 +146,10 @@ export async function PUT(
         descriptionEn: validatedData.descriptionEn,
         shortDescription: validatedData.shortDescription,
         shortDescriptionEn: validatedData.shortDescriptionEn,
-        keywords: validatedData.keywords,
-        enKeywords: validatedData.enKeywords,
         status: validatedData.status,
         slug,
         ...(featureImageId && { featureImageId }), // Only add if we have an image ID
+        ...(featureImageEnId && { featureImageEnId }), // Only add if we have an English image ID
       },
       include: {
         featureImage: true,

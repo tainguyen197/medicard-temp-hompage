@@ -181,6 +181,11 @@ export async function POST(request: Request) {
 
     // Save media info to database
     try {
+      // Check if the user exists in the database
+      const userExists = await prisma.user.findUnique({
+        where: { id: session.user.id },
+      });
+
       const media = await prisma.media.create({
         data: {
           url: publicUrl,
@@ -188,7 +193,8 @@ export async function POST(request: Request) {
           originalName: file.name,
           fileType: file.type,
           fileSize: file.size,
-          uploadedById: session.user.id,
+          // Only set uploadedById if the user exists in the database
+          ...(userExists && { uploadedById: session.user.id }),
         },
       });
 

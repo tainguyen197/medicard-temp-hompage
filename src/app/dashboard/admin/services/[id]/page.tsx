@@ -43,7 +43,10 @@ export default function EditServicePage({
   const [enKeywords, setEnKeywords] = useState("");
   const [featuredImageUrl, setFeaturedImageUrl] = useState("");
   const [featureImageId, setFeatureImageId] = useState("");
+  const [featuredImageEnUrl, setFeaturedImageEnUrl] = useState("");
+  const [featureImageEnId, setFeatureImageEnId] = useState("");
   const [isImageUploading, setIsImageUploading] = useState(false);
+  const [isImageEnUploading, setIsImageEnUploading] = useState(false);
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
 
   // Fetch service data
@@ -71,6 +74,8 @@ export default function EditServicePage({
         setEnKeywords(service.enKeywords || "");
         setFeaturedImageUrl(service.featureImage?.url || "");
         setFeatureImageId(service.featureImageId || "");
+        setFeaturedImageEnUrl(service.featureImageEn?.url || "");
+        setFeatureImageEnId(service.featureImageEnId || "");
 
         setIsLoading(false);
       } catch (error) {
@@ -158,6 +163,8 @@ export default function EditServicePage({
           enKeywords: enKeywords || undefined,
           featuredImage: featuredImageUrl,
           featureImageId,
+          featuredImageEn: featuredImageEnUrl,
+          featureImageEnId,
         }),
       });
 
@@ -288,15 +295,32 @@ export default function EditServicePage({
             English Content (Optional)
           </legend>
 
-          <div className="space-y-2">
-            <Label htmlFor="titleEn">Service Title (English)</Label>
-            <Input
-              id="titleEn"
-              value={titleEn}
-              onChange={(e) => setTitleEn(e.target.value)}
-              placeholder="Enter service title in English"
-              className="w-full"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+            <div className="md:col-span-2 space-y-2">
+              <Label htmlFor="titleEn">Service Title (English)</Label>
+              <Input
+                id="titleEn"
+                value={titleEn}
+                onChange={(e) => setTitleEn(e.target.value)}
+                placeholder="Enter service title in English"
+                className="w-full"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="featuredImageEn">Feature Image (English)</Label>
+              <ImageUpload
+                value={featuredImageEnUrl}
+                onChange={setFeaturedImageEnUrl}
+                onImageUploading={setIsImageEnUploading}
+                onMediaIdChange={setFeatureImageEnId}
+                aspectRatio={270 / 200}
+                aspectRatioText="270:200"
+              />
+              <p className="text-xs text-gray-500">
+                Optional: Different image for English version
+              </p>
+            </div>
           </div>
 
           <div className="space-y-2 mt-4">
@@ -390,7 +414,7 @@ export default function EditServicePage({
           <Button
             className="bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-200 cursor-pointer"
             type="submit"
-            disabled={isSubmitting || isImageUploading}
+            disabled={isSubmitting || isImageUploading || isImageEnUploading}
           >
             {isSubmitting ? "Updating..." : "Update Service"}
           </Button>
