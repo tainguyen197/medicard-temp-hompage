@@ -73,6 +73,11 @@ export default async function AdminLayout({
       icon: <Users className="h-5 w-5" />,
       // adminOnly: true,
     },
+    {
+      label: "Banners",
+      href: ROUTES.ADMIN_BANNERS,
+      icon: <Image className="h-5 w-5" />,
+    },
     // {
     //   label: "Media Library",
     //   href: ROUTES.ADMIN_MEDIA,

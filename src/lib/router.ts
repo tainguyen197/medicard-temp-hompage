@@ -99,6 +99,12 @@ export const adminRoutes: Record<string, AdminRoute> = {
     protected: true,
     adminOnly: true,
   },
+  banners: {
+    name: "Banners",
+    href: "/admin/banners",
+    description: "Quản lý banner trang chủ, dịch vụ, tin tức",
+    protected: true,
+  },
   media: {
     name: "Media Library",
     href: "/admin/media",
@@ -174,6 +180,11 @@ export const adminNavigationItems: RouteItem[] = [
     href: adminRoutes.team.href,
     description: adminRoutes.team.description,
     adminOnly: true,
+  },
+  {
+    name: adminRoutes.banners.name,
+    href: adminRoutes.banners.href,
+    description: adminRoutes.banners.description,
   },
   {
     name: adminRoutes.media.name,
@@ -348,6 +359,7 @@ export const ROUTES = {
   ADMIN_POSTS_NEW: adminRoutes.posts.href + "/new",
   ADMIN_SERVICES: adminRoutes.services.href,
   ADMIN_TEAM: adminRoutes.team.href,
+  ADMIN_BANNERS: adminRoutes.banners.href,
   ADMIN_MEDIA: adminRoutes.media.href,
   ADMIN_SETTINGS: adminRoutes.settings.href,
 
