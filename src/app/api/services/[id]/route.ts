@@ -23,6 +23,24 @@ const serviceUpdateSchema = z.object({
   featureImageId: z.string().optional(),
   featuredImageEn: z.string().optional(), // Accept the English image URL
   featureImageEnId: z.string().optional(),
+  metaTitle: z
+    .string()
+    .max(65, "Meta title must be 65 characters or less")
+    .optional(),
+  metaTitleEn: z
+    .string()
+    .max(65, "Meta title (English) must be 65 characters or less")
+    .optional(),
+  metaDescription: z
+    .string()
+    .max(155, "Meta description must be 155 characters or less")
+    .optional(),
+  metaDescriptionEn: z
+    .string()
+    .max(155, "Meta description (English) must be 155 characters or less")
+    .optional(),
+  metaKeywords: z.string().optional(),
+  metaKeywordsEn: z.string().optional(),
 });
 
 interface MockService {
@@ -146,13 +164,22 @@ export async function PUT(
         descriptionEn: validatedData.descriptionEn,
         shortDescription: validatedData.shortDescription,
         shortDescriptionEn: validatedData.shortDescriptionEn,
+        keywords: validatedData.keywords,
+        enKeywords: validatedData.enKeywords,
         status: validatedData.status,
         slug,
+        metaTitle: validatedData.metaTitle,
+        metaTitleEn: validatedData.metaTitleEn,
+        metaDescription: validatedData.metaDescription,
+        metaDescriptionEn: validatedData.metaDescriptionEn,
+        metaKeywords: validatedData.metaKeywords,
+        metaKeywordsEn: validatedData.metaKeywordsEn,
         ...(featureImageId && { featureImageId }), // Only add if we have an image ID
         ...(featureImageEnId && { featureImageEnId }), // Only add if we have an English image ID
       },
       include: {
         featureImage: true,
+        featureImageEn: true,
       },
     });
 

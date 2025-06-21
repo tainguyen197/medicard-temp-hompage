@@ -12,6 +12,12 @@ export interface Service {
   status: string;
   featureImageId?: string | null;
   featureImageEnId?: string | null;
+  metaTitle?: string | null;
+  metaTitleEn?: string | null;
+  metaDescription?: string | null;
+  metaDescriptionEn?: string | null;
+  metaKeywords?: string | null;
+  metaKeywordsEn?: string | null;
   createdAt: Date | string;
   updatedAt: Date | string;
   featureImage?: {

@@ -20,24 +20,34 @@ model User {
 }
 
 model Post {
-  id            String         @id @default(cuid())
-  title         String
-  titleEn       String?
-  slug          String         @unique
-  content       String
-  contentEn     String?
-  excerpt       String?
-  excerptEn     String?
-  featuredImage String?
-  featured      Boolean        @default(false)
-  status        String         @default("DRAFT")
-  publishedAt   DateTime?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  authorId      String
-  media         Media[]
-  author        User           @relation(fields: [authorId], references: [id])
-  categories    PostCategory[]
+  id                String         @id @default(cuid())
+  title             String
+  titleEn           String?
+  slug              String         @unique
+  content           String
+  contentEn         String?
+  excerpt           String?
+  excerptEn         String?
+  featuredImage     String?        // Keep for backward compatibility
+  featuredImageId   String?        @unique
+  featuredImageEnId String?        @unique
+  featured          Boolean        @default(false)
+  status            String         @default("DRAFT")
+  publishedAt       DateTime?
+  metaTitle         String?
+  metaTitleEn       String?
+  metaDescription   String?
+  metaDescriptionEn String?
+  metaKeywords      String?
+  metaKeywordsEn    String?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  authorId          String
+  media             Media[]
+  author            User           @relation(fields: [authorId], references: [id])
+  categories        PostCategory[]
+  featureImage      Media?         @relation("PostFeatureImage", fields: [featuredImageId], references: [id])
+  featureImageEn    Media?         @relation("PostFeatureImageEn", fields: [featuredImageEnId], references: [id])
 }
 
 model Category {
@@ -74,6 +84,12 @@ model Service {
   status               String   @default("DRAFT")
   featureImageId       String?  @unique
   featureImageEnId     String?  @unique
+  metaTitle            String?
+  metaTitleEn          String?
+  metaDescription      String?
+  metaDescriptionEn    String?
+  metaKeywords         String?
+  metaKeywordsEn       String?
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
   featureImage         Media?   @relation("ServiceFeatureImage", fields: [featureImageId], references: [id])
@@ -94,6 +110,8 @@ model Media {
   uploadedBy      User?    @relation(fields: [uploadedById], references: [id])
   serviceImage    Service? @relation("ServiceFeatureImage")
   serviceImageEn  Service? @relation("ServiceFeatureImageEn")
+  postImage       Post?    @relation("PostFeatureImage")
+  postImageEn     Post?    @relation("PostFeatureImageEn")
 }
 
 model AuditLog {

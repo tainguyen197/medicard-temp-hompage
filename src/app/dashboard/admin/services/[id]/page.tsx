@@ -48,6 +48,12 @@ export default function EditServicePage({
   const [isImageUploading, setIsImageUploading] = useState(false);
   const [isImageEnUploading, setIsImageEnUploading] = useState(false);
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
+  const [metaTitle, setMetaTitle] = useState("");
+  const [metaTitleEn, setMetaTitleEn] = useState("");
+  const [metaDescription, setMetaDescription] = useState("");
+  const [metaDescriptionEn, setMetaDescriptionEn] = useState("");
+  const [metaKeywords, setMetaKeywords] = useState("");
+  const [metaKeywordsEn, setMetaKeywordsEn] = useState("");
 
   // Fetch service data
   useEffect(() => {
@@ -72,6 +78,12 @@ export default function EditServicePage({
         setShortDescriptionEn(service.shortDescriptionEn || "");
         setKeywords(service.keywords || "");
         setEnKeywords(service.enKeywords || "");
+        setMetaTitle(service.metaTitle || "");
+        setMetaTitleEn(service.metaTitleEn || "");
+        setMetaDescription(service.metaDescription || "");
+        setMetaDescriptionEn(service.metaDescriptionEn || "");
+        setMetaKeywords(service.metaKeywords || "");
+        setMetaKeywordsEn(service.metaKeywordsEn || "");
         setFeaturedImageUrl(service.featureImage?.url || "");
         setFeatureImageId(service.featureImageId || "");
         setFeaturedImageEnUrl(service.featureImageEn?.url || "");
@@ -161,6 +173,12 @@ export default function EditServicePage({
           shortDescriptionEn: shortDescriptionEn || undefined,
           keywords,
           enKeywords: enKeywords || undefined,
+          metaTitle: metaTitle || undefined,
+          metaTitleEn: metaTitleEn || undefined,
+          metaDescription: metaDescription || undefined,
+          metaDescriptionEn: metaDescriptionEn || undefined,
+          metaKeywords: metaKeywords || undefined,
+          metaKeywordsEn: metaKeywordsEn || undefined,
           featuredImage: featuredImageUrl,
           featureImageId,
           featuredImageEn: featuredImageEnUrl,
@@ -287,6 +305,64 @@ export default function EditServicePage({
               )}
             </div>
           </div>
+
+          {/* SEO Meta Fields - Vietnamese */}
+          <div className="mt-6 pt-4 border-t border-gray-200">
+            <h3 className="text-md font-medium mb-4">
+              SEO Meta Fields (Vietnamese)
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="metaTitle">
+                  Meta Title (up to 65 characters)
+                </Label>
+                <Input
+                  id="metaTitle"
+                  value={metaTitle}
+                  onChange={(e) => setMetaTitle(e.target.value)}
+                  placeholder="SEO title for search engines"
+                  maxLength={65}
+                  className="w-full"
+                />
+                <p className="text-xs text-gray-500">
+                  {metaTitle.length}/65 characters
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="metaKeywords">Meta Keywords</Label>
+                <Input
+                  id="metaKeywords"
+                  value={metaKeywords}
+                  onChange={(e) => setMetaKeywords(e.target.value)}
+                  placeholder="keyword1, keyword2, keyword3"
+                  className="w-full"
+                />
+                <p className="text-xs text-gray-500">
+                  Separate keywords with commas
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-2 mt-4">
+              <Label htmlFor="metaDescription">
+                Meta Description (up to 155 characters)
+              </Label>
+              <textarea
+                id="metaDescription"
+                value={metaDescription}
+                onChange={(e) => setMetaDescription(e.target.value)}
+                placeholder="Brief description for search engine results"
+                maxLength={155}
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <p className="text-xs text-gray-500">
+                {metaDescription.length}/155 characters
+              </p>
+            </div>
+          </div>
         </fieldset>
 
         {/* English Content Section */}
@@ -359,6 +435,64 @@ export default function EditServicePage({
                   onChange={handleEditorChangeEn}
                 />
               )}
+            </div>
+          </div>
+
+          {/* SEO Meta Fields - English */}
+          <div className="mt-6 pt-4 border-t border-blue-300">
+            <h3 className="text-md font-medium mb-4 text-blue-800">
+              SEO Meta Fields (English)
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="metaTitleEn">
+                  Meta Title (up to 65 characters)
+                </Label>
+                <Input
+                  id="metaTitleEn"
+                  value={metaTitleEn}
+                  onChange={(e) => setMetaTitleEn(e.target.value)}
+                  placeholder="SEO title for search engines (English)"
+                  maxLength={65}
+                  className="w-full"
+                />
+                <p className="text-xs text-gray-500">
+                  {metaTitleEn.length}/65 characters
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="metaKeywordsEn">Meta Keywords</Label>
+                <Input
+                  id="metaKeywordsEn"
+                  value={metaKeywordsEn}
+                  onChange={(e) => setMetaKeywordsEn(e.target.value)}
+                  placeholder="keyword1, keyword2, keyword3"
+                  className="w-full"
+                />
+                <p className="text-xs text-gray-500">
+                  Separate keywords with commas
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-2 mt-4">
+              <Label htmlFor="metaDescriptionEn">
+                Meta Description (up to 155 characters)
+              </Label>
+              <textarea
+                id="metaDescriptionEn"
+                value={metaDescriptionEn}
+                onChange={(e) => setMetaDescriptionEn(e.target.value)}
+                placeholder="Brief description for search engine results (English)"
+                maxLength={155}
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <p className="text-xs text-gray-500">
+                {metaDescriptionEn.length}/155 characters
+              </p>
             </div>
           </div>
         </fieldset>
