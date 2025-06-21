@@ -105,6 +105,12 @@ export const adminRoutes: Record<string, AdminRoute> = {
     description: "Quản lý banner trang chủ, dịch vụ, tin tức",
     protected: true,
   },
+  contact: {
+    name: "Contact",
+    href: "/admin/contact",
+    description: "Quản lý thông tin liên hệ footer",
+    protected: true,
+  },
   media: {
     name: "Media Library",
     href: "/admin/media",
@@ -185,6 +191,11 @@ export const adminNavigationItems: RouteItem[] = [
     name: adminRoutes.banners.name,
     href: adminRoutes.banners.href,
     description: adminRoutes.banners.description,
+  },
+  {
+    name: adminRoutes.contact.name,
+    href: adminRoutes.contact.href,
+    description: adminRoutes.contact.description,
   },
   {
     name: adminRoutes.media.name,
@@ -360,6 +371,7 @@ export const ROUTES = {
   ADMIN_SERVICES: adminRoutes.services.href,
   ADMIN_TEAM: adminRoutes.team.href,
   ADMIN_BANNERS: adminRoutes.banners.href,
+  ADMIN_CONTACT: adminRoutes.contact.href,
   ADMIN_MEDIA: adminRoutes.media.href,
   ADMIN_SETTINGS: adminRoutes.settings.href,
 

@@ -78,6 +78,11 @@ export default async function AdminLayout({
       href: ROUTES.ADMIN_BANNERS,
       icon: <Image className="h-5 w-5" />,
     },
+    {
+      label: "Contact",
+      href: ROUTES.ADMIN_CONTACT,
+      icon: <Settings className="h-5 w-5" />,
+    },
     // {
     //   label: "Media Library",
     //   href: ROUTES.ADMIN_MEDIA,

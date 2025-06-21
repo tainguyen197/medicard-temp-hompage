@@ -155,3 +155,18 @@ model AuditLog {
   details   String?
   createdAt DateTime @default(now())
 }
+
+model Contact {
+  id              String   @id @default(cuid())
+  phone           String?
+  address         String?
+  addressEn       String?
+  businessHours   String?
+  businessHoursEn String?
+  facebookUrl     String?
+  zaloUrl         String?
+  instagramUrl    String?
+  status          String   @default("ACTIVE") // "ACTIVE", "INACTIVE"
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
