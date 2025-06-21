@@ -97,21 +97,41 @@ model Service {
 }
 
 model Media {
-  id              String   @id @default(cuid())
+  id              String      @id @default(cuid())
   url             String
   fileName        String?
   originalName    String?
   fileType        String?
   fileSize        Int?
-  createdAt       DateTime @default(now())
+  createdAt       DateTime    @default(now())
   uploadedById    String?
   postId          String?
-  post            Post?    @relation(fields: [postId], references: [id])
-  uploadedBy      User?    @relation(fields: [uploadedById], references: [id])
-  serviceImage    Service? @relation("ServiceFeatureImage")
-  serviceImageEn  Service? @relation("ServiceFeatureImageEn")
-  postImage       Post?    @relation("PostFeatureImage")
-  postImageEn     Post?    @relation("PostFeatureImageEn")
+  post            Post?       @relation(fields: [postId], references: [id])
+  uploadedBy      User?       @relation(fields: [uploadedById], references: [id])
+  serviceImage    Service?    @relation("ServiceFeatureImage")
+  serviceImageEn  Service?    @relation("ServiceFeatureImageEn")
+  postImage       Post?       @relation("PostFeatureImage")
+  postImageEn     Post?       @relation("PostFeatureImageEn")
+  teamMemberImage TeamMember? @relation("TeamMemberImage")
+  teamMemberImageEn TeamMember? @relation("TeamMemberImageEn")
+}
+
+model TeamMember {
+  id               String   @id @default(cuid())
+  name             String
+  nameEn           String?
+  title            String
+  titleEn          String?
+  description      String
+  descriptionEn    String?
+  imageId          String?  @unique
+  imageEnId        String?  @unique
+  order            Int      @default(0)
+  status           String   @default("ACTIVE") // "ACTIVE", "INACTIVE"
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  image            Media?   @relation("TeamMemberImage", fields: [imageId], references: [id])
+  imageEn          Media?   @relation("TeamMemberImageEn", fields: [imageEnId], references: [id])
 }
 
 model AuditLog {

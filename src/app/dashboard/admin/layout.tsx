@@ -67,12 +67,12 @@ export default async function AdminLayout({
       href: ROUTES.ADMIN_SERVICES,
       icon: <Flag className="h-5 w-5" />,
     },
-    // {
-    //   label: "Team Members",
-    //   href: ROUTES.ADMIN_TEAM,
-    //   icon: <Users className="h-5 w-5" />,
-    //   adminOnly: true,
-    // },
+    {
+      label: "Team Members",
+      href: ROUTES.ADMIN_TEAM,
+      icon: <Users className="h-5 w-5" />,
+      // adminOnly: true,
+    },
     // {
     //   label: "Media Library",
     //   href: ROUTES.ADMIN_MEDIA,
