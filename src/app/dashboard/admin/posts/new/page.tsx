@@ -36,11 +36,19 @@ export default function NewPostPage() {
   const [slug, setSlug] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [excerptEn, setExcerptEn] = useState("");
-  const [metaTitle, setMetaTitle] = useState("");
-  const [metaDescription, setMetaDescription] = useState("");
   const [featuredImage, setFeaturedImage] = useState("");
+  const [featuredImageEn, setFeaturedImageEn] = useState("");
+  const [featureImageId, setFeatureImageId] = useState("");
+  const [featureImageEnId, setFeatureImageEnId] = useState("");
   const [isImageUploading, setIsImageUploading] = useState(false);
+  const [isImageEnUploading, setIsImageEnUploading] = useState(false);
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
+  const [metaTitle, setMetaTitle] = useState("");
+  const [metaTitleEn, setMetaTitleEn] = useState("");
+  const [metaDescription, setMetaDescription] = useState("");
+  const [metaDescriptionEn, setMetaDescriptionEn] = useState("");
+  const [metaKeywords, setMetaKeywords] = useState("");
+  const [metaKeywordsEn, setMetaKeywordsEn] = useState("");
 
   // Fetch categories on component mount
   useEffect(() => {
@@ -133,9 +141,16 @@ export default function NewPostPage() {
           slug,
           excerpt,
           excerptEn: excerptEn || undefined,
-          // metaTitle,
-          // metaDescription,
+          metaTitle: metaTitle || undefined,
+          metaTitleEn: metaTitleEn || undefined,
+          metaDescription: metaDescription || undefined,
+          metaDescriptionEn: metaDescriptionEn || undefined,
+          metaKeywords: metaKeywords || undefined,
+          metaKeywordsEn: metaKeywordsEn || undefined,
           featuredImage,
+          featuredImageEn,
+          featureImageId,
+          featureImageEnId,
           categories: selectedCategories,
         }),
       });
@@ -227,6 +242,64 @@ export default function NewPostPage() {
               )}
             </div>
           </div>
+
+          {/* SEO Meta Fields - Vietnamese */}
+          <div className="mt-6 pt-4 border-t border-gray-200">
+            <h3 className="text-md font-medium mb-4">
+              SEO Meta Fields (Vietnamese)
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="metaTitle">
+                  Meta Title (up to 65 characters)
+                </Label>
+                <Input
+                  id="metaTitle"
+                  value={metaTitle}
+                  onChange={(e) => setMetaTitle(e.target.value)}
+                  placeholder="SEO title for search engines"
+                  maxLength={65}
+                  className="w-full"
+                />
+                <p className="text-xs text-gray-500">
+                  {metaTitle.length}/65 characters
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="metaKeywords">Meta Keywords</Label>
+                <Input
+                  id="metaKeywords"
+                  value={metaKeywords}
+                  onChange={(e) => setMetaKeywords(e.target.value)}
+                  placeholder="keyword1, keyword2, keyword3"
+                  className="w-full"
+                />
+                <p className="text-xs text-gray-500">
+                  Separate keywords with commas
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-2 mt-4">
+              <Label htmlFor="metaDescription">
+                Meta Description (up to 155 characters)
+              </Label>
+              <textarea
+                id="metaDescription"
+                value={metaDescription}
+                onChange={(e) => setMetaDescription(e.target.value)}
+                placeholder="Brief description for search engine results"
+                maxLength={155}
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <p className="text-xs text-gray-500">
+                {metaDescription.length}/155 characters
+              </p>
+            </div>
+          </div>
         </fieldset>
 
         {/* English Content Section */}
@@ -235,15 +308,32 @@ export default function NewPostPage() {
             English Content (Optional)
           </legend>
 
-          <div className="space-y-2">
-            <Label htmlFor="titleEn">Title (English)</Label>
-            <Input
-              id="titleEn"
-              value={titleEn}
-              onChange={(e) => setTitleEn(e.target.value)}
-              placeholder="Enter post title in English"
-              className="w-full"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+            <div className="md:col-span-2 space-y-2">
+              <Label htmlFor="titleEn">Title (English)</Label>
+              <Input
+                id="titleEn"
+                value={titleEn}
+                onChange={(e) => setTitleEn(e.target.value)}
+                placeholder="Enter post title in English"
+                className="w-full"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="featuredImageEn">Featured Image (English)</Label>
+              <ImageUpload
+                value={featuredImageEn}
+                onChange={setFeaturedImageEn}
+                onImageUploading={setIsImageEnUploading}
+                onMediaIdChange={setFeatureImageEnId}
+                aspectRatio={1}
+                aspectRatioText="1:1"
+              />
+              <p className="text-xs text-gray-500">
+                Optional: Different image for English version
+              </p>
+            </div>
           </div>
 
           <div className="space-y-2 mt-4">
@@ -268,6 +358,64 @@ export default function NewPostPage() {
               )}
             </div>
           </div>
+
+          {/* SEO Meta Fields - English */}
+          <div className="mt-6 pt-4 border-t border-blue-300">
+            <h3 className="text-md font-medium mb-4 text-blue-800">
+              SEO Meta Fields (English)
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <Label htmlFor="metaTitleEn">
+                  Meta Title (up to 65 characters)
+                </Label>
+                <Input
+                  id="metaTitleEn"
+                  value={metaTitleEn}
+                  onChange={(e) => setMetaTitleEn(e.target.value)}
+                  placeholder="SEO title for search engines (English)"
+                  maxLength={65}
+                  className="w-full"
+                />
+                <p className="text-xs text-gray-500">
+                  {metaTitleEn.length}/65 characters
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="metaKeywordsEn">Meta Keywords</Label>
+                <Input
+                  id="metaKeywordsEn"
+                  value={metaKeywordsEn}
+                  onChange={(e) => setMetaKeywordsEn(e.target.value)}
+                  placeholder="keyword1, keyword2, keyword3"
+                  className="w-full"
+                />
+                <p className="text-xs text-gray-500">
+                  Separate keywords with commas
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-2 mt-4">
+              <Label htmlFor="metaDescriptionEn">
+                Meta Description (up to 155 characters)
+              </Label>
+              <textarea
+                id="metaDescriptionEn"
+                value={metaDescriptionEn}
+                onChange={(e) => setMetaDescriptionEn(e.target.value)}
+                placeholder="Brief description for search engine results (English)"
+                maxLength={155}
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <p className="text-xs text-gray-500">
+                {metaDescriptionEn.length}/155 characters
+              </p>
+            </div>
+          </div>
         </fieldset>
 
         {/* Settings Section */}
@@ -288,7 +436,9 @@ export default function NewPostPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="DRAFT">Draft</SelectItem>
+                  <SelectItem value="PENDING_REVIEW">Pending Review</SelectItem>
                   <SelectItem value="PUBLISHED">Published</SelectItem>
+                  <SelectItem value="SCHEDULED">Scheduled</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -343,7 +493,7 @@ export default function NewPostPage() {
           <Button
             className="bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-200 cursor-pointer"
             type="submit"
-            disabled={isSubmitting || isImageUploading}
+            disabled={isSubmitting || isImageUploading || isImageEnUploading}
           >
             {isSubmitting ? "Creating..." : "Create Post"}
           </Button>

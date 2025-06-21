@@ -15,12 +15,34 @@ const postUpdateSchema = z.object({
   excerpt: z.string().optional(),
   excerptEn: z.string().optional(),
   featuredImage: z.string().optional(),
-  status: z.enum(["DRAFT", "PUBLISHED"]).optional(),
+  featuredImageId: z.string().optional(),
+  featuredImageEn: z.string().optional(),
+  featureImageId: z.string().optional(),
+  featureImageEnId: z.string().optional(),
+  status: z
+    .enum(["DRAFT", "PENDING_REVIEW", "PUBLISHED", "SCHEDULED"])
+    .optional(),
   publishedAt: z.string().optional(),
   categories: z.array(z.string()).optional(),
   tags: z.array(z.string()).optional(),
-  metaTitle: z.string().optional(),
-  metaDescription: z.string().optional(),
+  metaTitle: z
+    .string()
+    .max(65, "Meta title must be 65 characters or less")
+    .optional(),
+  metaTitleEn: z
+    .string()
+    .max(65, "Meta title (English) must be 65 characters or less")
+    .optional(),
+  metaDescription: z
+    .string()
+    .max(155, "Meta description must be 155 characters or less")
+    .optional(),
+  metaDescriptionEn: z
+    .string()
+    .max(155, "Meta description (English) must be 155 characters or less")
+    .optional(),
+  metaKeywords: z.string().optional(),
+  metaKeywordsEn: z.string().optional(),
   slug: z.string().optional(),
 });
 
@@ -124,9 +146,41 @@ export async function PUT(
       slug = createSlug(validatedData.title);
     }
 
-    // Extract categories, tags, and translation fields
-    const { categories, tags, titleEn, contentEn, excerptEn, ...postData } =
-      validatedData;
+    // Extract categories, tags, translation fields, and featured images
+    const {
+      categories,
+      tags,
+      titleEn,
+      contentEn,
+      excerptEn,
+      featuredImageId,
+      featureImageId,
+      featureImageEnId,
+      featuredImageEn,
+      ...postData
+    } = validatedData;
+
+    // Find media records for featured images if URLs are provided
+    let featuredImageIdToUse = featuredImageId || featureImageId;
+    let featuredImageEnIdToUse = featureImageEnId;
+
+    if (validatedData.featuredImage && !featuredImageIdToUse) {
+      const media = await prisma.media.findFirst({
+        where: { url: validatedData.featuredImage },
+      });
+      if (media) {
+        featuredImageIdToUse = media.id;
+      }
+    }
+
+    if (validatedData.featuredImageEn && !featuredImageEnIdToUse) {
+      const mediaEn = await prisma.media.findFirst({
+        where: { url: validatedData.featuredImageEn },
+      });
+      if (mediaEn) {
+        featuredImageEnIdToUse = mediaEn.id;
+      }
+    }
 
     // Update the post
     const updatedPost = await prisma.post.update({
@@ -137,6 +191,10 @@ export async function PUT(
         ...(titleEn !== undefined && { titleEn }),
         ...(contentEn !== undefined && { contentEn }),
         ...(excerptEn !== undefined && { excerptEn }),
+        ...(featuredImageIdToUse && { featuredImageId: featuredImageIdToUse }),
+        ...(featuredImageEnIdToUse && {
+          featuredImageEnId: featuredImageEnIdToUse,
+        }),
         ...(categories
           ? {
               categories: {
@@ -149,18 +207,6 @@ export async function PUT(
               },
             }
           : {}),
-        // ...(tags
-        //   ? {
-        //       tags: {
-        //         deleteMany: {},
-        //         create: tags.map((tagId) => ({
-        //           tag: {
-        //             connect: { id: tagId },
-        //           },
-        //         })),
-        //       },
-        //     }
-        //   : {}),
       },
       include: {
         categories: {
@@ -168,11 +214,6 @@ export async function PUT(
             category: true,
           },
         },
-        // tags: {
-        //   include: {
-        //     tag: true,
-        //   },
-        // },
       },
     });
 

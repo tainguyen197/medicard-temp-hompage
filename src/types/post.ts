@@ -8,9 +8,17 @@ export interface Post {
   excerpt?: string;
   excerptEn?: string;
   featuredImage?: string;
+  featuredImageId?: string | null;
+  featuredImageEnId?: string | null;
   featured: boolean;
   status: string;
   publishedAt?: string | null;
+  metaTitle?: string;
+  metaTitleEn?: string;
+  metaDescription?: string;
+  metaDescriptionEn?: string;
+  metaKeywords?: string;
+  metaKeywordsEn?: string;
   createdAt: string;
   updatedAt: string;
   authorId: string;
@@ -27,6 +35,18 @@ export interface Post {
       description?: string;
     };
   }[];
+  featureImage?: {
+    id: string;
+    url: string;
+    fileName?: string | null;
+    originalName?: string | null;
+  } | null;
+  featureImageEn?: {
+    id: string;
+    url: string;
+    fileName?: string | null;
+    originalName?: string | null;
+  } | null;
 }
 
 export interface PostsResponse {

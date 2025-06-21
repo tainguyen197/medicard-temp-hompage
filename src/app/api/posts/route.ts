@@ -15,11 +15,30 @@ const postSchema = z.object({
   excerpt: z.string().optional(),
   excerptEn: z.string().optional(),
   featuredImage: z.string().optional(),
-  status: z.enum(["DRAFT", "PUBLISHED"]),
+  featuredImageId: z.string().optional(),
+  featuredImageEn: z.string().optional(),
+  featuredImageEnId: z.string().optional(),
+  status: z.enum(["DRAFT", "PENDING_REVIEW", "PUBLISHED", "SCHEDULED"]),
   publishedAt: z.string().optional(),
   categories: z.array(z.string()).optional(),
-  metaTitle: z.string().optional(),
-  metaDescription: z.string().optional(),
+  metaTitle: z
+    .string()
+    .max(65, "Meta title must be 65 characters or less")
+    .optional(),
+  metaTitleEn: z
+    .string()
+    .max(65, "Meta title (English) must be 65 characters or less")
+    .optional(),
+  metaDescription: z
+    .string()
+    .max(155, "Meta description must be 155 characters or less")
+    .optional(),
+  metaDescriptionEn: z
+    .string()
+    .max(155, "Meta description (English) must be 155 characters or less")
+    .optional(),
+  metaKeywords: z.string().optional(),
+  metaKeywordsEn: z.string().optional(),
   slug: z.string().optional(),
 });
 
@@ -150,9 +169,38 @@ export async function POST(request: Request) {
     // Generate slug if not provided
     const slug = validatedData.slug || createSlug(validatedData.title);
 
-    // Extract categories and translation fields
-    const { categories, titleEn, contentEn, excerptEn, ...postData } =
-      validatedData;
+    // Extract categories, translation fields, and featured images
+    const {
+      categories,
+      titleEn,
+      contentEn,
+      excerptEn,
+      featuredImageId,
+      featuredImageEnId,
+      ...postData
+    } = validatedData;
+
+    // Find media records for featured images if URLs are provided
+    let featuredImageIdToUse = featuredImageId;
+    let featuredImageEnIdToUse = featuredImageEnId;
+
+    if (validatedData.featuredImage && !featuredImageIdToUse) {
+      const media = await prisma.media.findFirst({
+        where: { url: validatedData.featuredImage },
+      });
+      if (media) {
+        featuredImageIdToUse = media.id;
+      }
+    }
+
+    if (validatedData.featuredImageEn && !featuredImageEnIdToUse) {
+      const mediaEn = await prisma.media.findFirst({
+        where: { url: validatedData.featuredImageEn },
+      });
+      if (mediaEn) {
+        featuredImageEnIdToUse = mediaEn.id;
+      }
+    }
 
     // Extract image URLs from content using server-side function
     const imageUrls = extractImagesFromContentServer(postData.content);
@@ -165,6 +213,10 @@ export async function POST(request: Request) {
         ...(titleEn && { titleEn }),
         ...(contentEn && { contentEn }),
         ...(excerptEn && { excerptEn }),
+        ...(featuredImageIdToUse && { featuredImageId: featuredImageIdToUse }),
+        ...(featuredImageEnIdToUse && {
+          featuredImageEnId: featuredImageEnIdToUse,
+        }),
         author: {
           connect: { id: session.user.id },
         },
@@ -206,7 +258,6 @@ export async function POST(request: Request) {
 
         // Connect each media record to the post
         for (const media of mediaRecords) {
-          // Using raw query or direct prisma method based on your schema
           await prisma.$executeRaw`
             UPDATE "Media"
             SET "postId" = ${post.id}
