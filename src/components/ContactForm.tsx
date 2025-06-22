@@ -21,7 +21,7 @@ import {
   Facebook,
   Instagram,
 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 interface Contact {
   id: string;
@@ -44,7 +44,6 @@ interface ContactFormProps {
 
 export default function ContactForm({ contact }: ContactFormProps) {
   const router = useRouter();
-  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     phone: contact?.phone || "",
@@ -76,22 +75,16 @@ export default function ContactForm({ contact }: ContactFormProps) {
         throw new Error(error.error || "Failed to save contact information");
       }
 
-      toast({
-        title: "Success",
-        description: "Contact information updated successfully",
-      });
+      toast.success("Contact information updated successfully");
 
       router.refresh();
     } catch (error) {
       console.error("Error saving contact:", error);
-      toast({
-        title: "Error",
-        description:
-          error instanceof Error
-            ? error.message
-            : "Failed to save contact information",
-        variant: "destructive",
-      });
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to save contact information"
+      );
     } finally {
       setIsLoading(false);
     }

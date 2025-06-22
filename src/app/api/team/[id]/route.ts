@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { extname } from "path";
+import { S3 } from "aws-sdk";
 
 // Check if R2 environment variables are set
 const isR2Available = !!(
@@ -14,15 +14,15 @@ const isR2Available = !!(
 );
 
 // Configure S3 client for Cloudflare R2 (only if environment variables are available)
-const s3Client = isR2Available
-  ? new S3Client({
+const s3 = isR2Available
+  ? new S3({
       region: "auto",
       endpoint: `https://${process.env.CF_R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
       credentials: {
         accessKeyId: process.env.CF_R2_ACCESS_KEY_ID!,
         secretAccessKey: process.env.CF_R2_SECRET_ACCESS_KEY!,
       },
-      forcePathStyle: true, // Required for R2
+      s3ForcePathStyle: true, // Required for R2
     })
   : null;
 
@@ -41,22 +41,24 @@ const uploadFileToR2 = async (
 
   let publicUrl: string;
 
-  if (isR2Available && s3Client) {
+  if (isR2Available && s3) {
     const bucketName = process.env.CF_R2_BUCKET!;
     const destination = `images/htcwellness/${userId}/${prefix}/${fileName}`;
 
     // Upload to Cloudflare R2
-    const command = new PutObjectCommand({
-      Bucket: bucketName,
-      Key: destination,
-      Body: buffer,
-      ContentType: file.type,
-      ACL: "public-read",
-      CacheControl: "max-age=31536000",
-    });
-
-    await s3Client.send(command);
-
+    const uploadResult = await s3
+      .putObject({
+        Bucket: bucketName,
+        Key: destination,
+        Body: buffer,
+        ContentType: file.type,
+        // Setting ACL for public access
+        ACL: "public-read",
+        // Adding Cache-Control to make browser cache the image
+        CacheControl: "max-age=31536000",
+      })
+      .promise();
+    console.log("R2 Upload successful:", uploadResult);
     publicUrl = `https://${process.env.CF_R2_PUBLIC_BUCKET}/${destination}`;
   } else {
     throw new Error("R2 configuration not available");

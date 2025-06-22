@@ -4,7 +4,7 @@ import { writeFile, mkdir } from "fs/promises";
 import prisma from "@/lib/prisma"; // Using @ alias based on tsconfig
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth"; // Using @ alias based on tsconfig
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"; // For Cloudflare R2
+import { S3 } from "aws-sdk"; // For Cloudflare R2
 
 /**
  * Image Upload API
@@ -40,15 +40,15 @@ const isR2Available = !!(
 );
 
 // Configure S3 client for Cloudflare R2 (only if environment variables are available)
-const s3Client = isR2Available
-  ? new S3Client({
+const s3 = isR2Available
+  ? new S3({
       region: "auto",
       endpoint: `https://${process.env.CF_R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
       credentials: {
         accessKeyId: process.env.CF_R2_ACCESS_KEY_ID!,
         secretAccessKey: process.env.CF_R2_SECRET_ACCESS_KEY!,
       },
-      forcePathStyle: true, // Required for R2
+      s3ForcePathStyle: true, // Required for R2
     })
   : null;
 
@@ -116,7 +116,7 @@ export async function POST(request: Request) {
     let publicUrl: string;
 
     // Use Cloudflare R2 if available, otherwise fall back to local file storage
-    if (isR2Available && s3Client) {
+    if (isR2Available && s3) {
       // Extract just the bucket name from the environment variable
       const bucketName = process.env.CF_R2_BUCKET!;
       const destination = `images/htcwellness/${session.user.id}/${fileName}`;
@@ -126,18 +126,18 @@ export async function POST(request: Request) {
 
       // Upload to Cloudflare R2
       try {
-        const command = new PutObjectCommand({
-          Bucket: bucketName,
-          Key: destination,
-          Body: buffer,
-          ContentType: file.type,
-          // Setting ACL for public access
-          ACL: "public-read",
-          // Adding Cache-Control to make browser cache the image
-          CacheControl: "max-age=31536000",
-        });
-
-        const uploadResult = await s3Client.send(command);
+        const uploadResult = await s3
+          .putObject({
+            Bucket: bucketName,
+            Key: destination,
+            Body: buffer,
+            ContentType: file.type,
+            // Setting ACL for public access
+            ACL: "public-read",
+            // Adding Cache-Control to make browser cache the image
+            CacheControl: "max-age=31536000",
+          })
+          .promise();
 
         console.log("R2 Upload successful:", uploadResult);
 

@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Upload, X } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 
 interface BannerFormProps {
   initialData?: {
@@ -37,61 +37,66 @@ export default function BannerForm({
   isEditing = false,
 }: BannerFormProps) {
   const router = useRouter();
-  const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     type: initialData?.type || "",
     link: initialData?.link || "",
     status: initialData?.status || "ACTIVE",
-    imageId: initialData?.image?.id || "",
+    imageFile: null as File | null,
+    existingImageUrl: initialData?.image?.url || "",
   });
 
-  const [selectedImage, setSelectedImage] = useState<{
-    id: string;
-    url: string;
-    filename: string;
-  } | null>(initialData?.image || null);
+  const createImagePreview = (file: File): Promise<string> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target?.result as string);
+      reader.readAsDataURL(file);
+    });
+  };
 
-  const handleFileUpload = async (file: File) => {
+  const handleFileChange = async (file: File | null) => {
+    if (!file) {
+      setFormData((prev) => ({ ...prev, imageFile: null }));
+      setImagePreview(null);
+      return;
+    }
+
+    const maxFileSize = 10 * 1024 * 1024;
+    if (file.size > maxFileSize) {
+      toast.error("File size must be less than 10MB");
+      return;
+    }
+
+    const validTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp",
+      "image/gif",
+    ];
+    if (!validTypes.includes(file.type)) {
+      toast.error("File must be a valid image (JPEG, PNG, WebP, GIF)");
+      return;
+    }
+
     try {
-      setIsUploading(true);
-      const formDataUpload = new FormData();
-      formDataUpload.append("file", file);
-
-      const response = await fetch("/api/media", {
-        method: "POST",
-        body: formDataUpload,
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to upload file");
-      }
-
-      const result = await response.json();
-      setSelectedImage(result);
-      setFormData((prev) => ({ ...prev, imageId: result.id }));
-
-      toast({
-        title: "Success",
-        description: "File uploaded successfully",
-      });
+      const preview = await createImagePreview(file);
+      setFormData((prev) => ({ ...prev, imageFile: file }));
+      setImagePreview(preview);
     } catch (error) {
-      console.error("Upload error:", error);
-      toast({
-        title: "Error",
-        description: "Failed to upload file",
-        variant: "destructive",
-      });
-    } finally {
-      setIsUploading(false);
+      toast.error("Failed to process image");
     }
   };
 
   const handleRemoveImage = () => {
-    setSelectedImage(null);
-    setFormData((prev) => ({ ...prev, imageId: "" }));
+    setFormData((prev) => ({
+      ...prev,
+      imageFile: null,
+      existingImageUrl: "",
+    }));
+    setImagePreview(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -99,6 +104,16 @@ export default function BannerForm({
     setIsSubmitting(true);
 
     try {
+      const submitData = new FormData();
+
+      submitData.append("type", formData.type);
+      submitData.append("link", formData.link);
+      submitData.append("status", formData.status);
+
+      if (formData.imageFile) {
+        submitData.append("imageFile", formData.imageFile);
+      }
+
       const url = isEditing
         ? `/api/banners/${initialData?.id}`
         : "/api/banners";
@@ -106,10 +121,7 @@ export default function BannerForm({
 
       const response = await fetch(url, {
         method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+        body: submitData,
       });
 
       if (!response.ok) {
@@ -117,21 +129,15 @@ export default function BannerForm({
         throw new Error(error.error || "Failed to save banner");
       }
 
-      toast({
-        title: "Success",
-        description: `Banner ${isEditing ? "updated" : "created"} successfully`,
-      });
+      toast.success(`Banner ${isEditing ? "updated" : "created"} successfully`);
 
       router.push("/admin/banners");
       router.refresh();
     } catch (error) {
       console.error("Submit error:", error);
-      toast({
-        title: "Error",
-        description:
-          error instanceof Error ? error.message : "Failed to save banner",
-        variant: "destructive",
-      });
+      toast.error(
+        error instanceof Error ? error.message : "Failed to save banner"
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -162,6 +168,8 @@ export default function BannerForm({
         return "text-gray-600 bg-gray-50";
     }
   };
+
+  const currentImage = imagePreview || formData.existingImageUrl;
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -251,10 +259,10 @@ export default function BannerForm({
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {selectedImage ? (
+              {currentImage ? (
                 <div className="relative">
                   <Image
-                    src={selectedImage.url}
+                    src={currentImage}
                     alt="Banner image"
                     width={400}
                     height={200}
@@ -269,6 +277,17 @@ export default function BannerForm({
                   >
                     <X className="h-4 w-4" />
                   </Button>
+                  {formData.imageFile && (
+                    <div className="mt-2 text-sm text-gray-600">
+                      {formData.imageFile.name} (
+                      {(formData.imageFile.size / 1024 / 1024).toFixed(2)} MB)
+                    </div>
+                  )}
+                  {!formData.imageFile && formData.existingImageUrl && (
+                    <div className="mt-2 text-sm text-gray-600">
+                      Current image
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
@@ -290,11 +309,9 @@ export default function BannerForm({
                         accept="image/*"
                         onChange={(e) => {
                           const file = e.target.files?.[0];
-                          if (file) {
-                            handleFileUpload(file);
-                          }
+                          handleFileChange(file || null);
                         }}
-                        disabled={isUploading}
+                        disabled={isSubmitting}
                       />
                     </div>
                   </div>

@@ -12,7 +12,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: process.env.CF_R2_PUBLIC_BUCKET || "",
+        hostname:
+          process.env.CF_R2_PUBLIC_BUCKET ||
+          "pub-017806e0127347f0990a11f66629b074.r2.dev",
       },
       {
         protocol: "https",
