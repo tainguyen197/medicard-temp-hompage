@@ -2,6 +2,14 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import { useLocale } from "next-intl";
+import { fetchServices } from "@/lib/api";
+import { Service } from "@/types/service";
+import {
+  defaultServices,
+  getLocalizedService,
+  ServiceData,
+} from "@/data/services";
 
 interface ServiceItem {
   id: string;
@@ -12,59 +20,125 @@ interface ServiceItem {
   link: string;
 }
 
+// Function to get localized content from Service type
+const getLocalizedServiceContent = (service: Service, locale: string) => {
+  return {
+    title: locale === "en" && service.titleEn ? service.titleEn : service.title,
+    description:
+      locale === "en" && service.descriptionEn
+        ? service.descriptionEn
+        : service.description,
+    shortDescription:
+      locale === "en" && service.shortDescriptionEn
+        ? service.shortDescriptionEn
+        : service.shortDescription,
+  };
+};
+
+// Convert Service type to ServiceItem for backward compatibility
+const convertServiceToServiceItem = (
+  service: Service,
+  locale: string
+): ServiceItem => {
+  const localizedContent = getLocalizedServiceContent(service, locale);
+
+  return {
+    id: service.slug || service.id,
+    title: localizedContent.title || "Service Title",
+    description:
+      localizedContent.description ||
+      localizedContent.shortDescription ||
+      "Service description",
+    details: localizedContent.shortDescription || "Service details",
+    image:
+      service.featureImage?.url ||
+      service.featureImageEn?.url ||
+      "/images/service_1.png",
+    link: `/services/${service.slug || service.id}`,
+  };
+};
+
 const ServicesGallerySection: React.FC = () => {
-  const services: ServiceItem[] = [
-    {
-      id: "service1",
-      title: "Y HỌC CỔ TRUYỀN",
-      description:
-        "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể.",
-      details: "Châm cứu, Xoa bóp - Bấm huyệt, Thuốc thang",
-      image: "/images/service_1.png",
-      link: "/services/ortho",
-    },
-    {
-      id: "service2",
-      title: "ĐIỀU TRỊ VẬT LÝ TRỊ LIỆU CÔNG NGHỆ CAO",
-      description:
-        "Healthcare Therapy Center áp dụng những công nghệ vật lý trị liệu tiên tiến, hiện đại nhằm tối đa hóa khả năng điều trị, phục hồi của khách hàng. Các công nghệ Laser công suất cao, Sóng cao tần Radio Frequency (RF), Sóng xung kích Shockwave được chứng minh qua nhiều nghiên cứu khoa học trên thế giới là hiệu quả cao trong việc điều trị các bệnh lý cơ xương khớp, giảm đau, đẩy nhanh tốc độ tái tạo và phục hồi.",
-      details:
-        "Laser công suất cao, Radio Frequency (Sóng RF), Shockwave Therapy ( Sóng xung kích)",
-      image: "/images/service_2.png",
-      link: "/services/rehab",
-    },
-    {
-      id: "service3",
-      title: "PHỤC HỒI CHỨC NĂNG: CHUẨN ĐOÁN VÀ ĐIỀU TRỊ CHUYÊN SÂU ",
-      description:
-        "Điều trị các bệnh về cột sống như đau cổ-lưng, đau thần kinh tọa, thoát vị đĩa đệm...; Các bệnh lý về gân - khớp như: viêm chop xoay, đau khớp gối, khớp cổ tay, gai gót chân; hội chứng ống cổ tay, viêm gân duỗi ngón cái, tenis elbow…; Các tình trạng căng mỏi cơ cấp - mạn.",
-      details:
-        "Thăm khám, tư vấn, chẩn đoán và điều trị các bệnh lý cơ xương khớp, Sử dụng các máy móc vật lý trị liệu, Kỹ thuật viên có tay nghề chuyên môn cao",
-      image: "/images/service_3.png",
-      link: "/services/func",
-    },
-    {
-      id: "service4",
-      title: "LIỆU TRÌNH HOÀN HẢO, HÀNH TRÌNH ÊM ÁI",
-      description:
-        "Tận hưởng trọn vẹn sự thư thái sau liệu trình tại Healthcare Therapy Center mà không cần lo lắng về việc di chuyển bởi dịch vụ đưa đón tận nơi. ",
-      details: "Xe đưa đón hiện đại, tiện nghi. Dịch vụ êm áí, thư thái.",
-      image: "/images/service_4.png",
-      link: "/services/transport",
-    },
-  ];
+  const locale = useLocale();
+  const [services, setServices] = useState<ServiceItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Convert ServiceData to ServiceItem format for backward compatibility
+  const convertServiceDataToServiceItem = (
+    serviceData: ServiceData
+  ): ServiceItem => {
+    const localizedService = getLocalizedService(serviceData, locale);
+    return {
+      id: serviceData.id,
+      title: localizedService.title,
+      description: localizedService.description,
+      details: localizedService.details,
+      image: serviceData.image,
+      link: serviceData.link,
+    };
+  };
+
+  // Get fallback services from our data file
+  const fallbackServices: ServiceItem[] = defaultServices.map(
+    convertServiceDataToServiceItem
+  );
+
+  // Fetch services from API
+  useEffect(() => {
+    async function loadServices() {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await fetchServices({
+          status: "PUBLISHED",
+          limit: 20, // Get more services to have options
+        });
+
+        if (response.services && response.services.length > 0) {
+          // Convert API services to ServiceItem format
+          const convertedServices = response.services.map((service) =>
+            convertServiceToServiceItem(service, locale)
+          );
+          setServices(convertedServices);
+        } else {
+          // Use fallback data if no services found
+          setServices(fallbackServices);
+        }
+      } catch (err) {
+        console.error("Failed to fetch services:", err);
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch services"
+        );
+        // Use fallback data on error
+        setServices(fallbackServices);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadServices();
+  }, [locale]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [animate, setAnimate] = useState(true);
   const [autoAdvance, setAutoAdvance] = useState(true);
-  const activeService = services[currentIndex];
+
+  // Use fallback services while loading or if no services available
+  const displayServices = services.length > 0 ? services : fallbackServices;
+  const activeService = displayServices[currentIndex] || fallbackServices[0];
+
   const thumbnailsRef = useRef<HTMLDivElement>(null);
   const thumbnailRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // Setup thumbnail refs array
   useEffect(() => {
-    thumbnailRefs.current = thumbnailRefs.current.slice(0, services.length);
-  }, [services.length]);
+    thumbnailRefs.current = thumbnailRefs.current.slice(
+      0,
+      displayServices.length
+    );
+  }, [displayServices.length]);
 
   const scrollThumbnails = (direction: "left" | "right") => {
     if (thumbnailsRef.current) {
@@ -106,11 +180,11 @@ const ServicesGallerySection: React.FC = () => {
     if (!autoAdvance) return;
 
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % services.length);
+      setCurrentIndex((prev) => (prev + 1) % displayServices.length);
     }, 6000);
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoAdvance]);
+  }, [autoAdvance, displayServices.length]);
 
   // Trigger animation on active service change
   useEffect(() => {
@@ -129,6 +203,24 @@ const ServicesGallerySection: React.FC = () => {
     thumbnailRefs.current[index] = el;
   };
 
+  // Show loading state
+  if (loading) {
+    return (
+      <section id="services" className="py-10 md:py-16 bg-[#182134] text-white">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="flex justify-center mb-8 md:mb-16">
+            <h2 className="text-2xl md:text-[46px] xl:text-[51px] font-cormorant font-semibold text-[#FFF7EB] uppercase relative">
+              DỊCH VỤ
+            </h2>
+          </div>
+          <div className="flex justify-center items-center h-[450px]">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="services" className="py-10 md:py-16   bg-[#182134] text-white">
       <div className="container mx-auto px-4 max-w-7xl">
@@ -137,6 +229,15 @@ const ServicesGallerySection: React.FC = () => {
             DỊCH VỤ
           </h2>
         </div>
+
+        {/* Show error message if there was an error (but still show fallback data) */}
+        {error && (
+          <div className="mb-4 p-4 bg-amber-600/20 border border-amber-600/50 rounded-lg">
+            <p className="text-amber-200 text-sm">
+              {error} - Showing default services.
+            </p>
+          </div>
+        )}
 
         <div className="flex flex-col lg:flex-row gap-4 mb-8 transition-all duration-500 ease-in-out">
           {/* Featured service image and content */}
@@ -227,7 +328,7 @@ const ServicesGallerySection: React.FC = () => {
             className="flex overflow-x-auto gap-4 md:gap-12 no-scrollbar"
             style={{ scrollBehavior: "smooth", scrollbarWidth: "none" }}
           >
-            {services.map((service, index) => (
+            {displayServices.map((service, index) => (
               <div
                 key={service.id}
                 ref={setThumbnailRef(index)}

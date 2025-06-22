@@ -2,6 +2,14 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
+import { useLocale } from "next-intl";
+import { fetchTeamMembers } from "@/lib/api";
+import {
+  defaultTeamMembers,
+  getLocalizedTeamMember,
+  getActiveTeamMembers,
+  TeamMemberData,
+} from "@/data/team";
 // Import Slick components
 import Slider, { Settings } from "react-slick";
 // CSS is already imported in the layout.tsx file
@@ -27,6 +35,61 @@ interface ArrowProps {
   onClick?: () => void;
   className?: string;
 }
+
+// Database team member type (from API)
+interface ApiTeamMember {
+  id: string;
+  name: string;
+  nameEn?: string | null;
+  title: string;
+  titleEn?: string | null;
+  description: string;
+  descriptionEn?: string | null;
+  order: number;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+  image?: {
+    id: string;
+    url: string;
+    fileName?: string | null;
+    originalName?: string | null;
+  } | null;
+  imageEn?: {
+    id: string;
+    url: string;
+    fileName?: string | null;
+    originalName?: string | null;
+  } | null;
+}
+
+// Function to get localized content from API team member
+const getLocalizedApiTeamMember = (member: ApiTeamMember, locale: string) => {
+  return {
+    name: locale === "en" && member.nameEn ? member.nameEn : member.name,
+    title: locale === "en" && member.titleEn ? member.titleEn : member.title,
+    description:
+      locale === "en" && member.descriptionEn
+        ? member.descriptionEn
+        : member.description,
+  };
+};
+
+// Convert API team member to UI team member format
+const convertApiTeamMemberToTeamMember = (
+  apiMember: ApiTeamMember,
+  locale: string
+): TeamMember => {
+  const localizedContent = getLocalizedApiTeamMember(apiMember, locale);
+
+  return {
+    name: localizedContent.name,
+    title: localizedContent.title,
+    description: localizedContent.description,
+    image:
+      apiMember.image?.url || apiMember.imageEn?.url || "/images/doctor1.jpg", // fallback image
+  };
+};
 
 const TeamMember: React.FC<TeamMemberProps> = ({
   image,
@@ -64,36 +127,71 @@ const TeamMember: React.FC<TeamMemberProps> = ({
 };
 
 const TeamSection: React.FC = () => {
-  const teamMembers: TeamMember[] = [
-    {
-      image: "/images/doctor4.jpg",
-      name: "NGUYỄN THỊ HỒNG HẠNH",
-      title: "BS. CK",
-      description:
-        "Nhiều năm kinh nghiệm trong lĩnh vực Vật Lý Trị Liệu - Phục Hồi Chức Năng",
-    },
-    {
-      image: "/images/doctor3.jpg",
-      name: "NGUYỄN VĂN THỊNH",
-      title: "BS. CK",
-      description:
-        "Hơn 15 năm trong lĩnh vực Phục Hồi Chức Năng và Nội Cơ Xương Khớp, Y Học Cổ Truyền, có kinh nghiệm điều trị những trường hợp khó và phức tạp",
-    },
-    {
-      image: "/images/doctor2.jpg",
-      name: "NGUYỄN THỊ MAI LINH",
-      title: "THS. BS",
-      description:
-        "Thành viên chính thức của hiệp hội Trị liệu Cột sống Thần Kinh Chiropractic tại Úc. Thạc sĩ - Bác sĩ Mai Linh đảm nhiệm vai trò Bác sĩ lâm sàng tại nhiều quốc gia tiên tiến trên thế giới như: Úc, Singapore, Việt Nam.",
-    },
-    {
-      image: "/images/doctor1.jpg",
-      name: "ĐOÀN HẢI YẾN",
-      title: "BS. CK",
-      description:
-        "Bác sĩ Đoàn Hải Yến có kinh nghiệm chuyên sâu trong lĩnh vực Cơ Xương Khớp - Phục hồi cơ thể.",
-    },
-  ];
+  const locale = useLocale();
+  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Convert TeamMemberData to TeamMember format for backward compatibility
+  const convertTeamDataToTeamMember = (
+    teamData: TeamMemberData
+  ): TeamMember => {
+    const localizedMember = getLocalizedTeamMember(teamData, locale);
+    return {
+      name: localizedMember.name,
+      title: localizedMember.title,
+      description: localizedMember.description,
+      image: teamData.image,
+    };
+  };
+
+  // Get fallback team members from our data file
+  const fallbackTeamMembers: TeamMember[] = getActiveTeamMembers(
+    defaultTeamMembers
+  ).map(convertTeamDataToTeamMember);
+
+  // Fetch team members from API
+  useEffect(() => {
+    async function loadTeamMembers() {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const apiTeamMembers = await fetchTeamMembers();
+
+        if (apiTeamMembers && apiTeamMembers.length > 0) {
+          // Filter active members and sort by order
+          const activeMembers = apiTeamMembers
+            .filter((member) => member.status === "ACTIVE")
+            .sort((a, b) => a.order - b.order);
+
+          // Convert API team members to UI format
+          const convertedMembers = activeMembers.map((member) =>
+            convertApiTeamMemberToTeamMember(member, locale)
+          );
+          setTeamMembers(convertedMembers);
+        } else {
+          // Use fallback data if no team members found
+          setTeamMembers(fallbackTeamMembers);
+        }
+      } catch (err) {
+        console.error("Failed to fetch team members:", err);
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch team members"
+        );
+        // Use fallback data on error
+        setTeamMembers(fallbackTeamMembers);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadTeamMembers();
+  }, [locale]);
+
+  // Use fallback team members while loading or if no team members available
+  const displayTeamMembers =
+    teamMembers.length > 0 ? teamMembers : fallbackTeamMembers;
 
   const [isMobile, setIsMobile] = useState(false);
   const sliderRef = useRef<Slider | null>(null);
@@ -165,7 +263,7 @@ const TeamSection: React.FC = () => {
     } => {
       const screenWidth = window.innerWidth;
       let cardWidth: string | undefined = undefined;
-      const currentTeamSize = teamMembers.length;
+      const currentTeamSize = displayTeamMembers.length;
 
       const commonProps: Partial<Settings> = {
         dots: false,
@@ -270,7 +368,7 @@ const TeamSection: React.FC = () => {
     };
 
     const updateLayout = () => {
-      if (teamMembers.length === 0) {
+      if (displayTeamMembers.length === 0) {
         setCurrentSliderSettings({
           slidesToShow: 1,
           slidesToScroll: 1,
@@ -290,7 +388,7 @@ const TeamSection: React.FC = () => {
 
     window.addEventListener("resize", updateLayout);
     return () => window.removeEventListener("resize", updateLayout);
-  }, [teamMembers.length]);
+  }, [displayTeamMembers.length]);
 
   return (
     <section className="pt-10 md:pt-16 md:pb-20 bg-white">
@@ -301,20 +399,33 @@ const TeamSection: React.FC = () => {
           <div>
             <div className="flex items-center justify-center relative md:top-[-54px]">
               <h2 className="font-cormorant text-xl md:text-5xl max-text-[51px] font-bold text-[#002447] uppercase whitespace-nowrap bg-white px-8">
-                ĐỘI NGŨ CHUYÊN GIA
+                {locale === "en" ? "MEDICAL TEAM" : "ĐỘI NGŨ CHUYÊN GIA"}
               </h2>
             </div>
 
             {/* Team members section with React Slick */}
             <div className="pt-8 bg-white relative z-1">
               <div className="relative py-4 pb-0 bg-white z-1 px-4 md:px-10 max-w-[1300px] mx-auto">
-                {teamMembers.length > 0 ? (
+                {/* Show error message if there was an error (but still show fallback data) */}
+                {error && (
+                  <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-red-600 text-sm">
+                      {error} - Showing default team members.
+                    </p>
+                  </div>
+                )}
+
+                {loading ? (
+                  <div className="flex justify-center items-center py-8">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#002447]"></div>
+                  </div>
+                ) : displayTeamMembers.length > 0 ? (
                   <Slider
                     ref={sliderRef}
                     {...currentSliderSettings}
                     className="team-slider"
                   >
-                    {teamMembers.map((member, index) => (
+                    {displayTeamMembers.map((member, index) => (
                       <div key={index} className="px-2">
                         <TeamMember
                           {...member}
@@ -326,7 +437,9 @@ const TeamSection: React.FC = () => {
                   </Slider>
                 ) : (
                   <div className="text-center py-8 text-gray-600">
-                    Đội ngũ chuyên gia sẽ sớm được cập nhật.
+                    {locale === "en"
+                      ? "Our team of experts will be updated soon."
+                      : "Đội ngũ chuyên gia sẽ sớm được cập nhật."}
                   </div>
                 )}
               </div>

@@ -19,6 +19,32 @@ interface FetchServicesParams {
   search?: string;
 }
 
+interface TeamMember {
+  id: string;
+  name: string;
+  nameEn?: string | null;
+  title: string;
+  titleEn?: string | null;
+  description: string;
+  descriptionEn?: string | null;
+  order: number;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+  image?: {
+    id: string;
+    url: string;
+    fileName?: string | null;
+    originalName?: string | null;
+  } | null;
+  imageEn?: {
+    id: string;
+    url: string;
+    fileName?: string | null;
+    originalName?: string | null;
+  } | null;
+}
+
 export async function fetchPosts(
   params: FetchPostsParams = {}
 ): Promise<PostsResponse> {
@@ -237,6 +263,52 @@ export async function fetchService(slug: string) {
     return data;
   } catch (error) {
     console.error("Error fetching service:", error);
+    throw error;
+  }
+}
+
+export async function fetchTeamMembers(): Promise<TeamMember[]> {
+  console.log("fetchTeamMembers called");
+
+  // Add cache-busting parameter in development
+  const searchParams = new URLSearchParams();
+  if (isDev) {
+    searchParams.append("_", Date.now().toString());
+  }
+
+  // Construct the full URL properly - prepend with origin if relative
+  let apiUrl = `${API_BASE_URL}/api/team`;
+  if (!apiUrl.startsWith("http")) {
+    // In browser context, we need to prepend the origin
+    if (typeof window !== "undefined") {
+      apiUrl = `${window.location.origin}${apiUrl}`;
+    } else {
+      // In Node.js context (SSR), we need to handle relative URLs
+      apiUrl = `/api/team`;
+    }
+  }
+
+  const fullUrl = searchParams.toString()
+    ? `${apiUrl}?${searchParams.toString()}`
+    : apiUrl;
+
+  console.log("Fetching team members from URL:", fullUrl);
+
+  try {
+    const response = await fetch(fullUrl, {
+      next: isDev ? { revalidate: 0 } : { revalidate: 300 }, // No cache in dev, 5 minutes in prod
+      cache: isDev ? "no-store" : undefined,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch team members: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log(`API returned ${data?.length || 0} team members`);
+    return data;
+  } catch (error) {
+    console.error("Error fetching team members:", error);
     throw error;
   }
 }
