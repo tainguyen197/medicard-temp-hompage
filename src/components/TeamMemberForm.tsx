@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeftIcon, ImageIcon } from "lucide-react";
+import { ArrowLeftIcon, ImageIcon, XIcon } from "lucide-react";
 import Link from "next/link";
 import { ROUTES } from "@/lib/router";
 
@@ -17,6 +17,8 @@ interface TeamMemberFormData {
   status: "ACTIVE" | "INACTIVE";
   imageFile?: File;
   imageEnFile?: File;
+  existingImageUrl?: string;
+  existingImageEnUrl?: string;
 }
 
 interface TeamMemberFormProps {
@@ -26,6 +28,7 @@ interface TeamMemberFormProps {
 }
 
 const MAX_DESCRIPTION_LENGTH = 300; // Based on longest current description
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
 
 export default function TeamMemberForm({
   initialData,
@@ -34,6 +37,9 @@ export default function TeamMemberForm({
 }: TeamMemberFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageEnPreview, setImageEnPreview] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string>("");
   const [formData, setFormData] = useState<TeamMemberFormData>({
     name: initialData?.name || "",
     nameEn: initialData?.nameEn || "",
@@ -43,6 +49,8 @@ export default function TeamMemberForm({
     descriptionEn: initialData?.descriptionEn || "",
     order: initialData?.order || 0,
     status: initialData?.status || "ACTIVE",
+    existingImageUrl: initialData?.existingImageUrl || "",
+    existingImageEnUrl: initialData?.existingImageEnUrl || "",
   });
 
   const handleInputChange = (
@@ -64,14 +72,85 @@ export default function TeamMemberForm({
     }
   };
 
-  const handleFileChange = (
+  const validateFile = (file: File): string | null => {
+    if (file.size > MAX_FILE_SIZE) {
+      return "File size must be less than 10MB";
+    }
+
+    const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+    if (!validTypes.includes(file.type)) {
+      return "File must be a valid image (JPEG, PNG, WebP)";
+    }
+
+    return null;
+  };
+
+  const createImagePreview = (file: File): Promise<string> => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target?.result as string);
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleFileChange = async (
     field: "imageFile" | "imageEnFile",
     file: File | null
   ) => {
+    setUploadError("");
+
+    if (!file) {
+      setFormData((prev) => ({
+        ...prev,
+        [field]: undefined,
+      }));
+
+      if (field === "imageFile") {
+        setImagePreview(null);
+      } else {
+        setImageEnPreview(null);
+      }
+      return;
+    }
+
+    const error = validateFile(file);
+    if (error) {
+      setUploadError(error);
+      return;
+    }
+
+    try {
+      const preview = await createImagePreview(file);
+
+      setFormData((prev) => ({
+        ...prev,
+        [field]: file,
+      }));
+
+      if (field === "imageFile") {
+        setImagePreview(preview);
+      } else {
+        setImageEnPreview(preview);
+      }
+    } catch (error) {
+      setUploadError("Failed to process image");
+    }
+  };
+
+  const removeImage = (field: "imageFile" | "imageEnFile") => {
     setFormData((prev) => ({
       ...prev,
-      [field]: file || undefined,
+      [field]: undefined,
+      // Also clear existing image URL when removing
+      ...(field === "imageFile" && { existingImageUrl: "" }),
+      ...(field === "imageEnFile" && { existingImageEnUrl: "" }),
     }));
+
+    if (field === "imageFile") {
+      setImagePreview(null);
+    } else {
+      setImageEnPreview(null);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -88,11 +167,11 @@ export default function TeamMemberForm({
         }
       });
 
-      // Add files if present
-      if (formData.imageFile) {
+      // Add files if present and valid
+      if (formData.imageFile && formData.imageFile.size > 0) {
         submitData.append("imageFile", formData.imageFile);
       }
-      if (formData.imageEnFile) {
+      if (formData.imageEnFile && formData.imageEnFile.size > 0) {
         submitData.append("imageEnFile", formData.imageEnFile);
       }
 
@@ -117,6 +196,87 @@ export default function TeamMemberForm({
     }
   };
 
+  const FileUploadSection = ({
+    field,
+    label,
+    preview,
+    inputId,
+    existingImageUrl,
+  }: {
+    field: "imageFile" | "imageEnFile";
+    label: string;
+    preview: string | null;
+    inputId: string;
+    existingImageUrl?: string;
+  }) => {
+    const currentImage = preview || existingImageUrl;
+
+    return (
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-gray-700">
+          {label}
+        </label>
+
+        {currentImage ? (
+          <div className="relative">
+            <img
+              src={currentImage}
+              alt="Preview"
+              className="w-full aspect-[3/4] object-cover rounded-lg border-2 border-gray-300"
+            />
+            <button
+              type="button"
+              onClick={() => removeImage(field)}
+              className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+            >
+              <XIcon size={16} />
+            </button>
+            {formData[field] && (
+              <div className="mt-2 text-sm text-gray-600">
+                {formData[field]?.name} (
+                {((formData[field]?.size || 0) / 1024 / 1024).toFixed(2)} MB)
+              </div>
+            )}
+            {!formData[field] && existingImageUrl && (
+              <div className="mt-2 text-sm text-gray-600">Current image</div>
+            )}
+          </div>
+        ) : (
+          <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors">
+            {/* 3:4 Aspect Ratio Guide */}
+            <div className="mx-auto w-16 aspect-[3/4] bg-gray-100 rounded border-2 border-gray-300 mb-3 flex items-center justify-center">
+              <ImageIcon className="h-8 w-8 text-gray-400" />
+            </div>
+
+            <div className="mt-2">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) =>
+                  handleFileChange(field, e.target.files?.[0] || null)
+                }
+                className="hidden"
+                id={inputId}
+              />
+              <label
+                htmlFor={inputId}
+                className="cursor-pointer text-blue-600 hover:text-blue-700 font-medium"
+              >
+                Upload photo
+              </label>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              PNG, JPG, WebP up to 10MB
+            </p>
+            <p className="text-xs text-gray-600 mt-1 font-medium">
+              Recommended: 3:4 aspect ratio (portrait)
+            </p>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className="container mx-auto p-8 bg-white rounded-md">
       <div className="flex justify-between items-center mb-6">
@@ -131,6 +291,12 @@ export default function TeamMemberForm({
           Cancel
         </Link>
       </div>
+
+      {uploadError && (
+        <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-md">
+          {uploadError}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Vietnamese Content Section */}
@@ -170,34 +336,13 @@ export default function TeamMemberForm({
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Profile Photo (Vietnamese)
-              </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
-                <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
-                <div className="mt-2">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) =>
-                      handleFileChange("imageFile", e.target.files?.[0] || null)
-                    }
-                    className="hidden"
-                    id="image-upload"
-                  />
-                  <label
-                    htmlFor="image-upload"
-                    className="cursor-pointer text-blue-600 hover:text-blue-700"
-                  >
-                    Upload photo
-                  </label>
-                </div>
-                <p className="text-xs text-gray-500 mt-1">
-                  PNG, JPG up to 10MB
-                </p>
-              </div>
-            </div>
+            <FileUploadSection
+              field="imageFile"
+              label="Profile Photo (Vietnamese)"
+              preview={imagePreview}
+              inputId="image-upload"
+              existingImageUrl={formData.existingImageUrl}
+            />
           </div>
 
           <div className="space-y-2 mt-4">
@@ -256,37 +401,13 @@ export default function TeamMemberForm({
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Profile Photo (English)
-              </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
-                <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
-                <div className="mt-2">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) =>
-                      handleFileChange(
-                        "imageEnFile",
-                        e.target.files?.[0] || null
-                      )
-                    }
-                    className="hidden"
-                    id="image-en-upload"
-                  />
-                  <label
-                    htmlFor="image-en-upload"
-                    className="cursor-pointer text-blue-600 hover:text-blue-700"
-                  >
-                    Upload photo
-                  </label>
-                </div>
-                <p className="text-xs text-gray-500 mt-1">
-                  Optional: Different photo for English version
-                </p>
-              </div>
-            </div>
+            <FileUploadSection
+              field="imageEnFile"
+              label="Profile Photo (English)"
+              preview={imageEnPreview}
+              inputId="image-en-upload"
+              existingImageUrl={formData.existingImageEnUrl}
+            />
           </div>
 
           <div className="space-y-2 mt-4">

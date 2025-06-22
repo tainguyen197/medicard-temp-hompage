@@ -56,6 +56,8 @@ export default async function EditTeamMemberPage({
           descriptionEn: teamMember.descriptionEn || "",
           order: teamMember.order,
           status: teamMember.status as "ACTIVE" | "INACTIVE",
+          existingImageUrl: teamMember.image?.url || "",
+          existingImageEnUrl: teamMember.imageEn?.url || "",
         }}
         teamMemberId={teamMember.id}
         isEdit={true}

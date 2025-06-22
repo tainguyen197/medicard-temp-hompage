@@ -17,8 +17,15 @@ body {
   color: black;
 }
 
+/* Define CKEditor CSS variables globally so they're available on all pages */
+:root {
+  --ck-color-base-border: #c4c4c4;
+  --ck-color-focus-border: #005fcc;
+  --ck-color-shadow-drop: rgba(0, 0, 0, 0.15);
+  --ck-color-shadow-inner: rgba(0, 0, 0, 0.1);
+}
 
-.border{
+.border {
   border: 1px solid var(--ck-color-base-border);
 }
 /* a {
