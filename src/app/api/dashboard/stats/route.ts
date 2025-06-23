@@ -17,6 +17,7 @@ export async function GET() {
       servicesCount,
       teamMembersCount,
       mediaCount,
+      bannerCount,
       recentPosts,
     ] = await Promise.all([
       // Count total posts
@@ -30,6 +31,9 @@ export async function GET() {
 
       // Count total media files
       prisma.media.count(),
+
+      // Count total banners
+      prisma.banner.count(),
 
       // Get recent posts (last 5)
       prisma.post.findMany({
@@ -92,6 +96,7 @@ export async function GET() {
         totalServices: servicesCount,
         totalTeamMembers: teamMembersCount,
         totalMedia: mediaCount,
+        totalBanners: bannerCount,
         postsTrend,
       },
       recentPosts: recentPosts.map((post) => ({
