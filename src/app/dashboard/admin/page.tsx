@@ -1,19 +1,129 @@
+"use client";
+
 import {
-  BarChart3,
   Users,
   FileText,
   Flag,
   ArrowUp,
+  ArrowDown,
   ArrowRight,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+
+interface DashboardStats {
+  totalPosts: number;
+  totalServices: number;
+  totalTeamMembers: number;
+  totalMedia: number;
+  postsTrend: number;
+}
+
+interface RecentPost {
+  id: string;
+  title: string;
+  publishedAt: string;
+  status: string;
+}
+
+interface DashboardData {
+  stats: DashboardStats;
+  recentPosts: RecentPost[];
+}
 
 export default function AdminDashboard() {
+  const [dashboardData, setDashboardData] = useState<DashboardData | null>(
+    null
+  );
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const response = await fetch("/api/dashboard/stats");
+        if (!response.ok) {
+          throw new Error("Failed to fetch dashboard data");
+        }
+        const data = await response.json();
+        setDashboardData(data);
+      } catch (err) {
+        setError("Failed to load dashboard data");
+        console.error("Error fetching dashboard data:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInDays = Math.floor(
+      (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)
+    );
+
+    if (diffInDays === 0) {
+      return "Today";
+    } else if (diffInDays === 1) {
+      return "Yesterday";
+    } else if (diffInDays < 7) {
+      return `${diffInDays} days ago`;
+    } else if (diffInDays < 30) {
+      const weeks = Math.floor(diffInDays / 7);
+      return `${weeks} week${weeks > 1 ? "s" : ""} ago`;
+    } else {
+      const months = Math.floor(diffInDays / 30);
+      return `${months} month${months > 1 ? "s" : ""} ago`;
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className=" text-black">
+        <header className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+          <p className="text-gray-500 mt-1">Loading dashboard data...</p>
+        </header>
+        <div className="grid gap-6 mb-8 md:grid-cols-2 lg:grid-cols-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="stat-card animate-pulse">
+              <div className="flex items-center justify-between mb-4">
+                <div className="h-4 bg-gray-200 rounded w-24"></div>
+                <div className="h-8 w-8 bg-gray-200 rounded-full"></div>
+              </div>
+              <div className="h-8 bg-gray-200 rounded w-16 mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-32"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className=" text-black">
+        <header className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+          <p className="text-red-500 mt-1">{error}</p>
+        </header>
+      </div>
+    );
+  }
+
+  if (!dashboardData) return null;
+
+  const { stats, recentPosts } = dashboardData;
+
   return (
-    <div className="bg-white text-black">
+    <div className="text-black">
       <header className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
         <p className="text-gray-500 mt-1">
-          Welcome back to your Medicare admin dashboard.
+          Welcome back to your admin dashboard.
         </p>
       </header>
 
@@ -26,10 +136,28 @@ export default function AdminDashboard() {
             </span>
           </div>
           <div>
-            <div className="text-3xl font-bold text-gray-900">24</div>
-            <div className="trend-up mt-1">
-              <ArrowUp className="h-4 w-4 mr-1" />
-              <span>+2 from last month</span>
+            <div className="text-3xl font-bold text-gray-900">
+              {stats.totalPosts}
+            </div>
+            <div
+              className={`mt-1 ${
+                stats.postsTrend > 0
+                  ? "trend-up"
+                  : stats.postsTrend < 0
+                  ? "trend-down"
+                  : "trend-same"
+              }`}
+            >
+              {stats.postsTrend > 0 && <ArrowUp className="h-4 w-4 mr-1" />}
+              {stats.postsTrend < 0 && <ArrowDown className="h-4 w-4 mr-1" />}
+              <span>
+                {stats.postsTrend > 0
+                  ? `+${stats.postsTrend}`
+                  : stats.postsTrend < 0
+                  ? stats.postsTrend
+                  : "0"}{" "}
+                from last month
+              </span>
             </div>
           </div>
         </div>
@@ -42,10 +170,11 @@ export default function AdminDashboard() {
             </span>
           </div>
           <div>
-            <div className="text-3xl font-bold text-gray-900">12</div>
-            <div className="trend-up mt-1">
-              <ArrowUp className="h-4 w-4 mr-1" />
-              <span>+1 from last month</span>
+            <div className="text-3xl font-bold text-gray-900">
+              {stats.totalServices}
+            </div>
+            <div className="trend-same mt-1">
+              <span>Total services</span>
             </div>
           </div>
         </div>
@@ -58,9 +187,11 @@ export default function AdminDashboard() {
             </span>
           </div>
           <div>
-            <div className="text-3xl font-bold text-gray-900">8</div>
+            <div className="text-3xl font-bold text-gray-900">
+              {stats.totalTeamMembers}
+            </div>
             <div className="trend-same mt-1">
-              <span>Same as last month</span>
+              <span>Total team members</span>
             </div>
           </div>
         </div>
@@ -80,84 +211,68 @@ export default function AdminDashboard() {
             </span>
           </div>
           <div>
-            <div className="text-3xl font-bold text-gray-900">145</div>
-            <div className="trend-up mt-1">
-              <ArrowUp className="h-4 w-4 mr-1" />
-              <span>+15 from last month</span>
+            <div className="text-3xl font-bold text-gray-900">
+              {stats.totalMedia}
+            </div>
+            <div className="trend-same mt-1">
+              <span>Total media files</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="grid gap-6 mb-8 md:grid-cols-2 lg:grid-cols-7">
-        <div className="chart-container col-span-4">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="font-semibold text-lg text-gray-900">
-              Analytics Overview
-            </h3>
-            <button className="text-sm text-blue-600 hover:text-blue-800">
-              View Details
-            </button>
-          </div>
-          <div className="h-[250px] flex items-center justify-center bg-gray-50 rounded-lg border border-dashed border-gray-200">
-            <div className="text-center">
-              <BarChart3 className="h-12 w-12 mx-auto text-gray-400 mb-2" />
-              <p className="text-gray-500">Analytics chart would go here</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="recent-posts col-span-3">
+      <div className="grid gap-6 mb-8">
+        <div className="recent-posts">
           <div className="flex items-center justify-between mb-6">
             <h3 className="font-semibold text-lg text-gray-900">
               Recent Posts
             </h3>
-            <button className="text-sm text-blue-600 hover:text-blue-800">
+            <Link
+              href="/dashboard/admin/posts"
+              className="text-sm text-blue-600 hover:text-blue-800"
+            >
               View All
-            </button>
+            </Link>
           </div>
           <div className="space-y-5">
-            <div className="post-item">
-              <h4 className="font-medium text-gray-900 mb-1">
-                Medicare coverage updates for 2023
-              </h4>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">
-                  Published 2 days ago
-                </span>
-                <button className="text-blue-600 hover:text-blue-800">
-                  <ArrowRight className="h-4 w-4" />
-                </button>
+            {recentPosts.length > 0 ? (
+              recentPosts.map((post) => (
+                <div key={post.id} className="post-item">
+                  <h4 className="font-medium text-gray-900 mb-1">
+                    {post.title}
+                  </h4>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm text-gray-500">
+                        {formatDate(post.publishedAt)}
+                      </span>
+                      <span
+                        className={`text-xs px-2 py-1 rounded-full ${
+                          post.status === "PUBLISHED"
+                            ? "bg-green-100 text-green-800"
+                            : post.status === "DRAFT"
+                            ? "bg-gray-100 text-gray-800"
+                            : "bg-yellow-100 text-yellow-800"
+                        }`}
+                      >
+                        {post.status}
+                      </span>
+                    </div>
+                    <Link
+                      href={`/dashboard/admin/posts/${post.id}`}
+                      className="text-blue-600 hover:text-blue-800"
+                    >
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-8">
+                <FileText className="h-12 w-12 mx-auto text-gray-400 mb-2" />
+                <p className="text-gray-500">No posts found</p>
               </div>
-            </div>
-
-            <div className="post-item">
-              <h4 className="font-medium text-gray-900 mb-1">
-                New preventive care benefits explained
-              </h4>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">
-                  Published 5 days ago
-                </span>
-                <button className="text-blue-600 hover:text-blue-800">
-                  <ArrowRight className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-
-            <div className="post-item">
-              <h4 className="font-medium text-gray-900 mb-1">
-                How to access telehealth services
-              </h4>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">
-                  Published 1 week ago
-                </span>
-                <button className="text-blue-600 hover:text-blue-800">
-                  <ArrowRight className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
