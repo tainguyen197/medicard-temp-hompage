@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { fetchServices } from "@/lib/api";
 import { Service } from "@/types/service";
 import {
@@ -60,6 +60,7 @@ const convertServiceToServiceItem = (
 
 const ServicesGallerySection: React.FC = () => {
   const locale = useLocale();
+  const t = useTranslations("services.gallery");
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -226,7 +227,7 @@ const ServicesGallerySection: React.FC = () => {
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex justify-center mb-8 md:mb-16">
           <h2 className="text-2xl md:text-[46px] xl:text-[51px] font-cormorant font-semibold text-[#FFF7EB] uppercase relative">
-            DỊCH VỤ
+            {t("title")}
           </h2>
         </div>
 
@@ -270,7 +271,7 @@ const ServicesGallerySection: React.FC = () => {
             <div>
               <div className="mb-10">
                 <h4 className="text-sm md:text-xl font-medium mb-1 md:mb-3 leading-relaxed">
-                  Bao gồm:
+                  {t("includes")}
                 </h4>
                 <p className="text-gray-300 text-sm md:text-md font-normal line-clamp-2 md:line-clamp-none min-h-[2.75rem]">
                   {activeService.details}
@@ -281,7 +282,7 @@ const ServicesGallerySection: React.FC = () => {
                   href={activeService.link}
                   className="inline-flex items-center px-4 py-2 md:px-7 md:py-3 bg-[#B1873F] hover:bg-amber-700 transition-colors rounded-xl md:rounded-full text-white font-semibold md:font-medium text-xs md:text-[16px] h-10 md:h-12"
                 >
-                  Xem chi tiết
+                  {t("viewDetails")}
                   <svg
                     className="ml-2 w-4 h-4 md:w-5 md:h-5"
                     fill="none"
@@ -301,7 +302,7 @@ const ServicesGallerySection: React.FC = () => {
                   target="_blank"
                   className="inline-flex items-center px-4 py-2 md:px-7 md:py-3 border border-[#B1873F] hover:bg-amber-600/10 transition-colors rounded-xl md:rounded-full text-white font-semibold md:font-medium text-xs md:text-[16px] h-10 md:h-12"
                 >
-                  Đặt lịch
+                  {t("bookAppointment")}
                   <svg
                     className="ml-2 w-4 h-4 md:w-5 md:h-5"
                     fill="none"
@@ -357,7 +358,7 @@ const ServicesGallerySection: React.FC = () => {
             href="#"
             className="inline-block border-b border-white/50 hover:border-white transition-colors pb-1 text-white text-sm md:text-lg"
           >
-            Khám phá thêm
+            {t("exploreMore")}
           </a>
         </div>
       </div>

@@ -175,8 +175,9 @@
       ]
     },
     "team": {
-      "title": "MEDIacCAL TEAM",
+      "title": "OUR EXPERTS",
       "subtitle": "Experienced and dedicated medical team",
+      "emptyState": "Our team of experts will be updated soon.",
       "members": [
         {
           "name": "NGUYEN THI HONG HANH",
@@ -485,6 +486,17 @@
       "services": "Services"
     },
     "viewDetails": "View details",
+    "gallery": {
+      "title": "SERVICES",
+      "includes": "Includes:",
+      "viewDetails": "View details",
+      "bookAppointment": "Book appointment",
+      "exploreMore": "Explore more"
+    },
+    "team": {
+      "title": "OUR EXPERTS",
+      "emptyState": "Our team of experts will be updated soon."
+    },
     "cta": {
       "heading": "Ready to experience the difference",
       "subheading": "Let Healthcare Therapy Center become your reliable support in your healthcare journey.",

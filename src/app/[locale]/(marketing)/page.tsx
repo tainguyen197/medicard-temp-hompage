@@ -16,7 +16,12 @@ export const generateStaticParams = async () => {
   return [{ locale: "en" }, { locale: "vi" }];
 };
 
-export default async function Home() {
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
   const messages = await getMessages();
   const t = messages.home;
 
@@ -30,7 +35,7 @@ export default async function Home() {
       <FacilitySectionWithAnimation t={t.facility} />
       <EquipmentSectionWithAnimation t={t.equipment} />
       <ProcessSectionWithAnimation t={t.process} />
-      <BlogSectionWithAnimation />
+      <BlogSectionWithAnimation locale={locale} />
       <ContactSectionWithAnimation t={t.contact} />
     </div>
   );

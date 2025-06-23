@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { fetchTeamMembers } from "@/lib/api";
 import {
   defaultTeamMembers,
@@ -128,6 +128,7 @@ const TeamMember: React.FC<TeamMemberProps> = ({
 
 const TeamSection: React.FC = () => {
   const locale = useLocale();
+  const t = useTranslations("home.team");
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -399,13 +400,13 @@ const TeamSection: React.FC = () => {
           <div>
             <div className="flex items-center justify-center relative md:top-[-54px]">
               <h2 className="font-cormorant text-xl md:text-5xl max-text-[51px] font-bold text-[#002447] uppercase whitespace-nowrap bg-white px-8">
-                {locale === "en" ? "MEDICAL TEAM" : "ĐỘI NGŨ CHUYÊN GIA"}
+                {t("title")}
               </h2>
             </div>
 
             {/* Team members section with React Slick */}
             <div className="pt-8 bg-white relative z-1">
-              <div className="relative py-4 pb-0 bg-white z-1 px-4 md:px-10 max-w-[1300px] mx-auto">
+              <div className="relative py-4 pb-0 bg-white z-1 px-4 md:px-10 max-w-[1500px] mx-auto">
                 {/* Show error message if there was an error (but still show fallback data) */}
                 {error && (
                   <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
@@ -437,9 +438,7 @@ const TeamSection: React.FC = () => {
                   </Slider>
                 ) : (
                   <div className="text-center py-8 text-gray-600">
-                    {locale === "en"
-                      ? "Our team of experts will be updated soon."
-                      : "Đội ngũ chuyên gia sẽ sớm được cập nhật."}
+                    {t("emptyState")}
                   </div>
                 )}
               </div>

@@ -175,8 +175,9 @@
       ]
     },
     "team": {
-      "title": "ĐỘI NGŨ BÁC SĨ",
+      "title": "ĐỘI NGŨ CHUYÊN GIA",
       "subtitle": "Đội ngũ bác sĩ giàu kinh nghiệm, tận tâm",
+      "emptyState": "Đội ngũ chuyên gia sẽ sớm được cập nhật.",
       "members": [
         {
           "name": "NGUYỄN THỊ HỒNG HẠNH",
@@ -480,6 +481,17 @@
       "services": "Dịch vụ"
     },
     "viewDetails": "Xem chi tiết",
+    "gallery": {
+      "title": "DỊCH VỤ",
+      "includes": "Bao gồm:",
+      "viewDetails": "Xem chi tiết",
+      "bookAppointment": "Đặt lịch",
+      "exploreMore": "Khám phá thêm"
+    },
+    "team": {
+      "title": "ĐỘI NGŨ CHUYÊN GIA",
+      "emptyState": "Đội ngũ chuyên gia sẽ sớm được cập nhật."
+    },
     "cta": {
       "heading": "Sẵn sàng trải nghiệm sự khác biệt",
       "subheading": "Hãy để Healthcare Therapy Center trở thành điểm tựa vững chắc trong hành trình chăm sóc sức khỏe của bạn.",
