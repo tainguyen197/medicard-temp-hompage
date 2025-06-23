@@ -49,34 +49,21 @@ export default async function ServicesPage({
       </Suspense>
 
       {/* CTA Section */}
-      <section className="py-16 bg-white">
+      <section className="bg-white py-16 md:py-20">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-[#1F1F1F] mb-6">
+          <h2 className="text-3xl md:text-5xl max-text-[51px] font-semibold text-[#1F1F1F] mb-6">
             {t.cta.heading}
           </h2>
-          <p className="text-lg md:text-xl px-4 md:px-16 text-black max-w-3xl mx-auto mb-8">
+          <p className="text-lg md:text-xl text-black mb-10 max-w-3xl mx-auto px-16">
             {t.cta.subheading}
           </p>
           <a
             href="https://forms.gle/GJETkvXcnZ7hZwBr8"
             target="_blank"
-            className="inline-flex items-center justify-center px-8 py-3 bg-[#B1873F] text-white rounded-full text-base md:text-lg font-semibold transition-all hover:bg-[#9A7435]"
+            className="inline-block relative rounded-3xl px-6 py-3 bg-[#B1873F] text-white font-medium hover:bg-[#9e7736] transition-colors"
           >
-            {t.cta.button}
-            <svg
-              className="ml-2 w-5 h-5"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M5 12H19M19 12L12 5M19 12L12 19"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <span className="absolute inset-0 bg-[#a75e24] z-0 rounded-full animate-heath-beat"></span>
+            <span className="relative z-10">{t.cta.button}</span>
           </a>
         </div>
       </section>

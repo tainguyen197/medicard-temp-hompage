@@ -1,6 +1,6 @@
 {
   "navigation": {
-    "services": "SERVICES",
+    "services": "SERVICE",
     "about": "ABOUT US",
     "news": "NEWS",
     "contact": "CONTACT",
@@ -15,7 +15,7 @@
     "intro": {
       "description": "Healthcare Therapy Center provides Traditional Medicine services combined with Functional Rehabilitation in a modern, safe and scientific way. With a dedicated and experienced team of doctors and a friendly treatment environment, we provide personalized healthcare solutions - helping customers recover mobility, effectively reduce pain and improve quality of life every day."
     },
-    "appointmentButton": "Book an experience",
+    "appointmentButton": "Book an appointment",
     "certificates": {
       "title": "YOUR HEALTH IS THE JOY OF HEALTHCARE THERAPY CENTER",
       "items": [
@@ -71,7 +71,7 @@
     "cta": {
       "heading": "Ready to experience the difference",
       "subheading": "Let Healthcare Therapy Center become your reliable support in your healthcare journey.",
-      "button": "Book an experience"
+      "button": "Book an appointment"
     }
   },
   "home": {
@@ -267,7 +267,7 @@
       "steps": [
         {
           "step": "01",
-          "title": "Information Collection",
+          "title": "Info Collection",
           "description": "Doctors will base on provided information such as: medical history, symptom examination & initial diagnosis."
         },
         {
@@ -317,7 +317,7 @@
     "contact": {
       "title": "READY TO EXPERIENCE",
       "subtitle": "THE DIFFERENCE?",
-      "button": "Book appointment"
+      "button": "Book an appointment"
     }
   },
   "news": {
@@ -411,7 +411,7 @@
     "cta": {
       "heading": "Ready to experience the difference",
       "subheading": "Let Healthcare Therapy Center become your reliable support in your healthcare journey.",
-      "button": "Book an experience",
+      "button": "Book an appointment",
       "newsletter": {
         "title": "Stay Updated",
         "description": "Subscribe to our newsletter for the latest health tips and news.",
@@ -470,7 +470,7 @@
       "phone": "Phone:",
       "email": "Email:"
     },
-    "appointmentButton": "Book an experience"
+    "appointmentButton": "Book an appointment"
   },
   "services": {
     "title": "SERVICES",
@@ -488,7 +488,7 @@
     "cta": {
       "heading": "Ready to experience the difference",
       "subheading": "Let Healthcare Therapy Center become your reliable support in your healthcare journey.",
-      "button": "Book an experience"
+      "button": "Book an appointment"
     },
     "notFound": {
       "title": "Service not found",
@@ -611,7 +611,7 @@
     "cta": {
       "heading": "Ready to experience the difference",
       "subheading": "Let Healthcare Therapy Center become your reliable support in your healthcare journey.",
-      "button": "Book an experience"
+      "button": "Book an appointment"
     }
   },
   "contactPage": {

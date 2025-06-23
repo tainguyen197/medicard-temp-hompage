@@ -164,7 +164,7 @@ const ProcessSection = ({ t }: ProcessSectionProps) => {
               </div>
             </div>
             <div className="bg-white md:p-8 rounded-xl">
-              <div className="grid grid-cols-2 md:grid-cols-11 gap-y-6 gap-x-4 md:gap-4 items-start">
+              <div className="grid grid-cols-2 md:grid-cols-11 gap-y-6 gap-x-4 md:gap-2 items-start">
                 {t.steps.map((step, index) => (
                   <React.Fragment key={index}>
                     <div className="md:col-span-2">
