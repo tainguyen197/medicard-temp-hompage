@@ -19,9 +19,9 @@
     "certificates": {
       "title": "YOUR HEALTH IS THE JOY OF HEALTHCARE THERAPY CENTER",
       "items": [
-        "Medical Practice License No. 10651/HCM-GPHĐ",
-        "Medical Practice License No. 10674/HCM-GPHĐ",
-        "Business Registration Certificate 0318485902"
+        "Medical Practice License <br/> No. 10651/HCM-GPHĐ",
+        "Medical Practice License <br/> No. 10674/HCM-GPHĐ",
+        "Business Registration Certificate <br/> No. 0318485902"
       ]
     },
     "ourServices": {
@@ -47,12 +47,12 @@
       "title": "9.9/10 CUSTOMERS GIVE THEIR COMPLETE TRUST",
       "items": [
         {
-          "quote": "Everything at Healthcare Therapy Center, from lighting, music to fragrance, is very gentle, helping me forget the stress from outside. This is not only a place for treatment but also a place for me to rest and recharge after tiring work.",
+          "quote": "Everything at Healthcare Therapy Center, from lighting, music to fragrance, is very gentle. This is not only a place for treatment but also a place for me to rest and recharge after tiring work.",
           "name": "Thao Uyen",
           "title": "Office worker"
         },
         {
-          "quote": "The doctors and specialists at Healthcare Therapy Center are all highly qualified, with many years of experience, always dedicated to listening and explaining every issue to me in detail. Thanks to that, I feel very reassured when examining and treating here.",
+          "quote": "The doctors and specialists at Healthcare Therapy Center are all highly qualified. Thanks to that, I feel very reassured when examining and treating here.",
           "name": "Huynh Lam",
           "title": "Office worker"
         },
@@ -62,7 +62,7 @@
           "title": "HR Manager"
         },
         {
-          "quote": "Before starting the treatment, I was examined and consulted by the doctor in extremely detailed and easy-to-understand manner. The doctor explained my health condition and suggested the most suitable options for my situation, helping me feel more reassured.",
+          "quote": "Before starting the treatment, I was examined and consulted by the doctor in extremely detailed and easy-to-understand manner. I feel more reassured.",
           "name": "Quoc Anh",
           "title": "Entrepreneur"
         }
