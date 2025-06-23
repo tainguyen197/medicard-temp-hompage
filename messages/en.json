@@ -1,6 +1,6 @@
 {
   "navigation": {
-    "services": "SERVICES",
+    "services": "SERVICE",
     "about": "ABOUT US",
     "news": "NEWS",
     "contact": "CONTACT",
@@ -15,13 +15,13 @@
     "intro": {
       "description": "Healthcare Therapy Center provides Traditional Medicine services combined with Functional Rehabilitation in a modern, safe and scientific way. With a dedicated and experienced team of doctors and a friendly treatment environment, we provide personalized healthcare solutions - helping customers recover mobility, effectively reduce pain and improve quality of life every day."
     },
-    "appointmentButton": "Book an experience",
+    "appointmentButton": "Book an appointment",
     "certificates": {
       "title": "YOUR HEALTH IS THE JOY OF HEALTHCARE THERAPY CENTER",
       "items": [
-        "Medical Practice License No. 10651/HCM-GPHĐ",
-        "Medical Practice License No. 10674/HCM-GPHĐ",
-        "Business Registration Certificate 0318485902"
+        "Medical Practice License <br/> No. 10651/HCM-GPHĐ",
+        "Medical Practice License <br/> No. 10674/HCM-GPHĐ",
+        "Business Registration Certificate <br/> No. 0318485902"
       ]
     },
     "ourServices": {
@@ -47,12 +47,12 @@
       "title": "9.9/10 CUSTOMERS GIVE THEIR COMPLETE TRUST",
       "items": [
         {
-          "quote": "Everything at Healthcare Therapy Center, from lighting, music to fragrance, is very gentle, helping me forget the stress from outside. This is not only a place for treatment but also a place for me to rest and recharge after tiring work.",
+          "quote": "Everything at Healthcare Therapy Center, from lighting, music to fragrance, is very gentle. This is not only a place for treatment but also a place for me to rest and recharge after tiring work.",
           "name": "Thao Uyen",
           "title": "Office worker"
         },
         {
-          "quote": "The doctors and specialists at Healthcare Therapy Center are all highly qualified, with many years of experience, always dedicated to listening and explaining every issue to me in detail. Thanks to that, I feel very reassured when examining and treating here.",
+          "quote": "The doctors and specialists at Healthcare Therapy Center are all highly qualified. Thanks to that, I feel very reassured when examining and treating here.",
           "name": "Huynh Lam",
           "title": "Office worker"
         },
@@ -62,7 +62,7 @@
           "title": "HR Manager"
         },
         {
-          "quote": "Before starting the treatment, I was examined and consulted by the doctor in extremely detailed and easy-to-understand manner. The doctor explained my health condition and suggested the most suitable options for my situation, helping me feel more reassured.",
+          "quote": "Before starting the treatment, I was examined and consulted by the doctor in extremely detailed and easy-to-understand manner. I feel more reassured.",
           "name": "Quoc Anh",
           "title": "Entrepreneur"
         }
@@ -71,7 +71,7 @@
     "cta": {
       "heading": "Ready to experience the difference",
       "subheading": "Let Healthcare Therapy Center become your reliable support in your healthcare journey.",
-      "button": "Book an experience"
+      "button": "Book an appointment"
     }
   },
   "home": {
@@ -268,7 +268,7 @@
       "steps": [
         {
           "step": "01",
-          "title": "Information Collection",
+          "title": "Info Collection",
           "description": "Doctors will base on provided information such as: medical history, symptom examination & initial diagnosis."
         },
         {
@@ -318,7 +318,7 @@
     "contact": {
       "title": "READY TO EXPERIENCE",
       "subtitle": "THE DIFFERENCE?",
-      "button": "Book appointment"
+      "button": "Book an appointment"
     }
   },
   "news": {
@@ -412,7 +412,7 @@
     "cta": {
       "heading": "Ready to experience the difference",
       "subheading": "Let Healthcare Therapy Center become your reliable support in your healthcare journey.",
-      "button": "Book an experience",
+      "button": "Book an appointment",
       "newsletter": {
         "title": "Stay Updated",
         "description": "Subscribe to our newsletter for the latest health tips and news.",
@@ -471,7 +471,7 @@
       "phone": "Phone:",
       "email": "Email:"
     },
-    "appointmentButton": "Book an experience"
+    "appointmentButton": "Book an appointment"
   },
   "services": {
     "title": "SERVICES",
@@ -500,7 +500,7 @@
     "cta": {
       "heading": "Ready to experience the difference",
       "subheading": "Let Healthcare Therapy Center become your reliable support in your healthcare journey.",
-      "button": "Book an experience"
+      "button": "Book an appointment"
     },
     "notFound": {
       "title": "Service not found",
@@ -623,7 +623,7 @@
     "cta": {
       "heading": "Ready to experience the difference",
       "subheading": "Let Healthcare Therapy Center become your reliable support in your healthcare journey.",
-      "button": "Book an experience"
+      "button": "Book an appointment"
     }
   },
   "contactPage": {

@@ -28,7 +28,10 @@ const CertificateItem = ({
         className="object-contain object-top"
       />
     </div>
-    <p className="text-center text-sm md:text-xl text-gray-700">{title}</p>
+    <p
+      className="text-center text-sm md:text-xl text-gray-700"
+      dangerouslySetInnerHTML={{ __html: title }}
+    ></p>
   </div>
 );
 

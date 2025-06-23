@@ -115,6 +115,12 @@
   align-items: center;
 }
 
+.trend-down {
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+}
+
 .trend-same {
   color: #6c757d;
   display: flex;

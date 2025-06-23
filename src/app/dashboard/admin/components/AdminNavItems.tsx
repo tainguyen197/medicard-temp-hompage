@@ -48,9 +48,6 @@ export function AdminNavItems({
       </div>
       <div className="p-4 border-t mt-4">
         <div className="flex items-center mb-4">
-          <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center mr-3 shadow-sm">
-            {userData.name?.[0] || "U"}
-          </div>
           <div>
             <div className="font-medium">{userData.name}</div>
             <div className="text-xs text-gray-500">{userData.role}</div>
