@@ -34,8 +34,8 @@ interface Contact {
   zaloUrl: string | null;
   instagramUrl: string | null;
   status: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: any;
+  updatedAt: any;
 }
 
 interface ContactFormProps {

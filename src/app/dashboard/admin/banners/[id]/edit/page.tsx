@@ -82,18 +82,11 @@ export default function EditBannerPage() {
   return (
     <BannerForm
       initialData={{
-        title: banner.title,
-        titleEn: banner.titleEn || "",
-        description: banner.description || "",
-        descriptionEn: banner.descriptionEn || "",
         link: banner.link || "",
-        linkEn: banner.linkEn || "",
         type: banner.type,
-        order: banner.order,
         status: banner.status,
       }}
-      bannerId={bannerId}
-      isEdit={true}
+      isEditing={true}
     />
   );
 }

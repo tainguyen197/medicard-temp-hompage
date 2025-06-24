@@ -236,7 +236,7 @@ export async function POST(request: Request) {
               },
             }
           : {}),
-      },
+      } as any,
     });
 
     // Associate post with its images in the Media table
