@@ -28,9 +28,8 @@ model Post {
   contentEn         String?
   excerpt           String?
   excerptEn         String?
-  featuredImage     String?        // Keep for backward compatibility
-  featuredImageId   String?        @unique
-  featuredImageEnId String?        @unique
+  featureImageId   String?        @unique
+  featureImageEnId String?        @unique
   featured          Boolean        @default(false)
   status            String         @default("DRAFT")
   publishedAt       DateTime?
@@ -47,8 +46,8 @@ model Post {
   media             Media[]
   author            User           @relation(fields: [authorId], references: [id])
   categories        PostCategory[]
-  featureImage      Media?         @relation("PostFeatureImage", fields: [featuredImageId], references: [id])
-  featureImageEn    Media?         @relation("PostFeatureImageEn", fields: [featuredImageEnId], references: [id])
+  featureImage      Media?         @relation("PostFeatureImage", fields: [featureImageId], references: [id])
+  featureImageEn    Media?         @relation("PostFeatureImageEn", fields: [featureImageEnId], references: [id])
 }
 
 model Category {

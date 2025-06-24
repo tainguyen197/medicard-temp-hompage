@@ -12,24 +12,14 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 interface DashboardStats {
-  totalPosts: number;
   totalServices: number;
   totalTeamMembers: number;
   totalMedia: number;
   totalBanners: number;
-  postsTrend: number;
-}
-
-interface RecentPost {
-  id: string;
-  title: string;
-  publishedAt: string;
-  status: string;
 }
 
 interface DashboardData {
   stats: DashboardStats;
-  recentPosts: RecentPost[];
 }
 
 export default function AdminDashboard() {
@@ -117,7 +107,7 @@ export default function AdminDashboard() {
 
   if (!dashboardData) return null;
 
-  const { stats, recentPosts } = dashboardData;
+  const { stats } = dashboardData;
 
   return (
     <div className="text-black">
@@ -129,40 +119,6 @@ export default function AdminDashboard() {
       </header>
 
       <div className="grid gap-6 mb-8 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
-        <div className="stat-card">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-medium text-gray-500">Total Posts</h3>
-            <span className="icon-circle">
-              <FileText className="h-5 w-5" />
-            </span>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-gray-900">
-              {stats.totalPosts}
-            </div>
-            <div
-              className={`mt-1 ${
-                stats.postsTrend > 0
-                  ? "trend-up"
-                  : stats.postsTrend < 0
-                  ? "trend-down"
-                  : "trend-same"
-              }`}
-            >
-              {stats.postsTrend > 0 && <ArrowUp className="h-4 w-4 mr-1" />}
-              {stats.postsTrend < 0 && <ArrowDown className="h-4 w-4 mr-1" />}
-              <span>
-                {stats.postsTrend > 0
-                  ? `+${stats.postsTrend}`
-                  : stats.postsTrend < 0
-                  ? stats.postsTrend
-                  : "0"}{" "}
-                from last month
-              </span>
-            </div>
-          </div>
-        </div>
-
         <div className="stat-card">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-medium text-gray-500">Services</h3>
@@ -242,62 +198,6 @@ export default function AdminDashboard() {
             <div className="trend-same mt-1">
               <span>Total banners</span>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="grid gap-6 mb-8">
-        <div className="recent-posts">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="font-semibold text-lg text-gray-900">
-              Recent Posts
-            </h3>
-            <Link
-              href="/dashboard/admin/posts"
-              className="text-sm text-blue-600 hover:text-blue-800"
-            >
-              View All
-            </Link>
-          </div>
-          <div className="space-y-5">
-            {recentPosts.length > 0 ? (
-              recentPosts.map((post) => (
-                <div key={post.id} className="post-item">
-                  <h4 className="font-medium text-gray-900 mb-1">
-                    {post.title}
-                  </h4>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-sm text-gray-500">
-                        {formatDate(post.publishedAt)}
-                      </span>
-                      <span
-                        className={`text-xs px-2 py-1 rounded-full ${
-                          post.status === "PUBLISHED"
-                            ? "bg-green-100 text-green-800"
-                            : post.status === "DRAFT"
-                            ? "bg-gray-100 text-gray-800"
-                            : "bg-yellow-100 text-yellow-800"
-                        }`}
-                      >
-                        {post.status}
-                      </span>
-                    </div>
-                    <Link
-                      href={`/dashboard/admin/posts/${post.id}`}
-                      className="text-blue-600 hover:text-blue-800"
-                    >
-                      <ArrowRight className="h-4 w-4" />
-                    </Link>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="text-center py-8">
-                <FileText className="h-12 w-12 mx-auto text-gray-400 mb-2" />
-                <p className="text-gray-500">No posts found</p>
-              </div>
-            )}
           </div>
         </div>
       </div>

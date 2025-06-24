@@ -57,11 +57,7 @@ export default async function AdminLayout({
       icon: <LayoutDashboard className="h-5 w-5" />,
       adminOnly: true,
     },
-    {
-      label: "News",
-      href: ROUTES.ADMIN_POSTS,
-      icon: <FileText className="h-5 w-5" />,
-    },
+
     {
       label: "Services",
       href: ROUTES.ADMIN_SERVICES,

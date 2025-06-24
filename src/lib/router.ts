@@ -171,11 +171,7 @@ export const adminNavigationItems: RouteItem[] = [
     href: adminRoutes.dashboard.href,
     description: adminRoutes.dashboard.description,
   },
-  {
-    name: adminRoutes.posts.name,
-    href: adminRoutes.posts.href,
-    description: adminRoutes.posts.description,
-  },
+
   {
     name: adminRoutes.services.name,
     href: adminRoutes.services.href,
