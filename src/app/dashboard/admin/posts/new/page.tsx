@@ -47,8 +47,9 @@ export default function NewPostPage() {
   const [metaTitleEn, setMetaTitleEn] = useState("");
   const [metaDescription, setMetaDescription] = useState("");
   const [metaDescriptionEn, setMetaDescriptionEn] = useState("");
-  const [metaKeywords, setMetaKeywords] = useState("");
-  const [metaKeywordsEn, setMetaKeywordsEn] = useState("");
+  const [shortDescription, setShortDescription] = useState("");
+  const [shortDescriptionEn, setShortDescriptionEn] = useState("");
+  const [enKeywords, setEnKeywords] = useState("");
 
   // Fetch categories on component mount
   useEffect(() => {
@@ -145,8 +146,9 @@ export default function NewPostPage() {
           metaTitleEn: metaTitleEn || undefined,
           metaDescription: metaDescription || undefined,
           metaDescriptionEn: metaDescriptionEn || undefined,
-          metaKeywords: metaKeywords || undefined,
-          metaKeywordsEn: metaKeywordsEn || undefined,
+          shortDescription: shortDescription || undefined,
+          shortDescriptionEn: shortDescriptionEn || undefined,
+          enKeywords: enKeywords || undefined,
           featuredImage,
           featuredImageEn,
           featureImageId,
@@ -232,6 +234,19 @@ export default function NewPostPage() {
           </div>
 
           <div className="space-y-2 mt-4">
+            <Label htmlFor="shortDescription">
+              Short Description (Vietnamese)
+            </Label>
+            <Input
+              id="shortDescription"
+              value={shortDescription}
+              onChange={(e) => setShortDescription(e.target.value)}
+              placeholder="Brief description for Vietnamese content"
+              className="w-full"
+            />
+          </div>
+
+          <div className="space-y-2 mt-4">
             <Label>Content (Vietnamese)</Label>
             <div>
               {typeof window !== "undefined" && (
@@ -268,11 +283,11 @@ export default function NewPostPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="metaKeywords">Meta Keywords</Label>
+                <Label htmlFor="enKeywords">Keywords</Label>
                 <Input
-                  id="metaKeywords"
-                  value={metaKeywords}
-                  onChange={(e) => setMetaKeywords(e.target.value)}
+                  id="enKeywords"
+                  value={enKeywords}
+                  onChange={(e) => setEnKeywords(e.target.value)}
                   placeholder="keyword1, keyword2, keyword3"
                   className="w-full"
                 />
@@ -348,6 +363,19 @@ export default function NewPostPage() {
           </div>
 
           <div className="space-y-2 mt-4">
+            <Label htmlFor="shortDescriptionEn">
+              Short Description (English)
+            </Label>
+            <Input
+              id="shortDescriptionEn"
+              value={shortDescriptionEn}
+              onChange={(e) => setShortDescriptionEn(e.target.value)}
+              placeholder="Brief description for English content"
+              className="w-full"
+            />
+          </div>
+
+          <div className="space-y-2 mt-4">
             <Label>Content (English)</Label>
             <div>
               {typeof window !== "undefined" && (
@@ -384,16 +412,16 @@ export default function NewPostPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="metaKeywordsEn">Meta Keywords</Label>
+                <Label htmlFor="shortDescriptionEn">Short Description</Label>
                 <Input
-                  id="metaKeywordsEn"
-                  value={metaKeywordsEn}
-                  onChange={(e) => setMetaKeywordsEn(e.target.value)}
-                  placeholder="keyword1, keyword2, keyword3"
+                  id="shortDescriptionEn"
+                  value={shortDescriptionEn}
+                  onChange={(e) => setShortDescriptionEn(e.target.value)}
+                  placeholder="Brief description for English content"
                   className="w-full"
                 />
                 <p className="text-xs text-gray-500">
-                  Separate keywords with commas
+                  Short summary for listings and previews
                 </p>
               </div>
             </div>

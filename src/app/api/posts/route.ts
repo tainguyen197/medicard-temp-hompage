@@ -37,8 +37,9 @@ const postSchema = z.object({
     .string()
     .max(155, "Meta description (English) must be 155 characters or less")
     .optional(),
-  metaKeywords: z.string().optional(),
-  metaKeywordsEn: z.string().optional(),
+  shortDescription: z.string().optional(),
+  shortDescriptionEn: z.string().optional(),
+  enKeywords: z.string().optional(),
   slug: z.string().optional(),
 });
 
@@ -175,6 +176,8 @@ export async function POST(request: Request) {
       titleEn,
       contentEn,
       excerptEn,
+      shortDescriptionEn,
+      enKeywords,
       featuredImageId,
       featuredImageEnId,
       ...postData
@@ -213,6 +216,8 @@ export async function POST(request: Request) {
         ...(titleEn && { titleEn }),
         ...(contentEn && { contentEn }),
         ...(excerptEn && { excerptEn }),
+        ...(shortDescriptionEn && { shortDescriptionEn }),
+        ...(enKeywords && { enKeywords }),
         ...(featuredImageIdToUse && { featuredImageId: featuredImageIdToUse }),
         ...(featuredImageEnIdToUse && {
           featuredImageEnId: featuredImageEnIdToUse,

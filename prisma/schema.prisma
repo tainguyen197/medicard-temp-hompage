@@ -38,8 +38,9 @@ model Post {
   metaTitleEn       String?
   metaDescription   String?
   metaDescriptionEn String?
-  metaKeywords      String?
-  metaKeywordsEn    String?
+  shortDescription     String?
+  shortDescriptionEn   String?
+  enKeywords           String?
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
   authorId          String
