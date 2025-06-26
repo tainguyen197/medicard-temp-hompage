@@ -19,37 +19,6 @@ model User {
   posts     Post[]
 }
 
-model Post {
-  id                String         @id @default(cuid())
-  title             String
-  titleEn           String?
-  slug              String         @unique
-  content           String
-  contentEn         String?
-  excerpt           String?
-  excerptEn         String?
-  featureImageId   String?        @unique
-  featureImageEnId String?        @unique
-  featured          Boolean        @default(false)
-  status            String         @default("DRAFT")
-  publishedAt       DateTime?
-  metaTitle         String?
-  metaTitleEn       String?
-  metaDescription   String?
-  metaDescriptionEn String?
-  shortDescription     String?
-  shortDescriptionEn   String?
-  enKeywords           String?
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
-  authorId          String
-  media             Media[]
-  author            User           @relation(fields: [authorId], references: [id])
-  categories        PostCategory[]
-  featureImage      Media?         @relation("PostFeatureImage", fields: [featureImageId], references: [id])
-  featureImageEn    Media?         @relation("PostFeatureImageEn", fields: [featureImageEnId], references: [id])
-}
-
 model Category {
   id          String         @id @default(cuid())
   name        String         @unique
@@ -60,15 +29,50 @@ model Category {
   posts       PostCategory[]
 }
 
+model Post {
+  id                   String         @id @default(cuid())
+  slug                 String         @unique
+  title                String
+  titleEn              String?
+  content              String?
+  contentEn            String?
+  excerpt              String?
+  excerptEn            String?
+  shortDescription     String?
+  shortDescriptionEn   String?
+  keywords             String?
+  enKeywords           String?
+  status               String         @default("DRAFT") // "DRAFT", "PENDING_REVIEW", "PUBLISHED", "SCHEDULED"
+  publishedAt          DateTime?
+  featureImageId       String?        @unique
+  featureImageEnId     String?        @unique
+  metaTitle            String?
+  metaTitleEn          String?
+  metaDescription      String?
+  metaDescriptionEn    String?
+  metaKeywords         String?
+  metaKeywordsEn       String?
+  authorId             String
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  author               User           @relation(fields: [authorId], references: [id])
+  featureImage         Media?         @relation("PostFeatureImage", fields: [featureImageId], references: [id])
+  featureImageEn       Media?         @relation("PostFeatureImageEn", fields: [featureImageEnId], references: [id])
+  categories           PostCategory[]
+}
+
 model PostCategory {
+  id         String   @id @default(cuid())
   postId     String
   categoryId String
-  assignedAt DateTime @default(now())
-  category   Category @relation(fields: [categoryId], references: [id])
-  post       Post     @relation(fields: [postId], references: [id])
+  createdAt  DateTime @default(now())
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
-  @@id([postId, categoryId])
+  @@unique([postId, categoryId])
 }
+
+
 
 model Service {
   id                   String   @id @default(cuid())
@@ -105,16 +109,14 @@ model Media {
   fileSize        Int?
   createdAt       DateTime    @default(now())
   uploadedById    String?
-  postId          String?
-  post            Post?       @relation(fields: [postId], references: [id])
   uploadedBy      User?       @relation(fields: [uploadedById], references: [id])
   serviceImage    Service?    @relation("ServiceFeatureImage")
   serviceImageEn  Service?    @relation("ServiceFeatureImageEn")
-  postImage       Post?       @relation("PostFeatureImage")
-  postImageEn     Post?       @relation("PostFeatureImageEn")
   teamMemberImage TeamMember? @relation("TeamMemberImage")
   teamMemberImageEn TeamMember? @relation("TeamMemberImageEn")
   bannerImage     Banner?     @relation("BannerImage")
+  postImage       Post?       @relation("PostFeatureImage")
+  postImageEn     Post?       @relation("PostFeatureImageEn")
 }
 
 model TeamMember {

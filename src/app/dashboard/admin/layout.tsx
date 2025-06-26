@@ -64,6 +64,11 @@ export default async function AdminLayout({
       icon: <Flag className="h-5 w-5" />,
     },
     {
+      label: "News",
+      href: ROUTES.ADMIN_NEWS,
+      icon: <FileText className="h-5 w-5" />,
+    },
+    {
       label: "Team Members",
       href: ROUTES.ADMIN_TEAM,
       icon: <Users className="h-5 w-5" />,
