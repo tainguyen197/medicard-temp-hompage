@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { StarIcon } from "lucide-react";
-import DeletePostModal from "./DeletePostModal";
 import { ROUTES } from "@/lib/router";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface Post {
   id: string;
@@ -40,6 +41,44 @@ export default function PostTableRow({
   formatDate,
   onPostDeleted,
 }: PostTableRowProps) {
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    if (
+      !window.confirm(
+        `Are you sure you want to delete the post "${post.title}"? This action cannot be undone.`
+      )
+    ) {
+      return;
+    }
+
+    setIsDeleting(true);
+
+    try {
+      const response = await fetch(`/api/posts/${post.id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to delete post");
+      }
+
+      toast.success("Post deleted successfully");
+
+      if (onPostDeleted) {
+        onPostDeleted();
+      }
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to delete post"
+      );
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <tr key={post.id} className="hover:bg-gray-50">
       <td className="px-6 py-4 whitespace-nowrap align-middle">
@@ -114,19 +153,13 @@ export default function PostTableRow({
         >
           Edit
         </Link>
-        <DeletePostModal
-          post={{
-            id: post.id,
-            title: post.title,
-            status: post.status,
-            author: post.author ? { name: post.author.name } : undefined,
-          }}
-          onPostDeleted={onPostDeleted}
+        <button
+          onClick={handleDelete}
+          disabled={isDeleting}
+          className="text-red-600 hover:text-red-900 cursor-pointer disabled:opacity-50"
         >
-          <button className="text-red-600 hover:text-red-900 cursor-pointer">
-            Delete
-          </button>
-        </DeletePostModal>
+          {isDeleting ? "Deleting..." : "Delete"}
+        </button>
       </td>
     </tr>
   );
