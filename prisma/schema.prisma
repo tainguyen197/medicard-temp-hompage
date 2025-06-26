@@ -16,7 +16,6 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   Media     Media[]
-  posts     Post[]
 }
 
 model Category {
@@ -26,53 +25,7 @@ model Category {
   description String?
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
-  posts       PostCategory[]
 }
-
-model Post {
-  id                   String         @id @default(cuid())
-  slug                 String         @unique
-  title                String
-  titleEn              String?
-  content              String?
-  contentEn            String?
-  excerpt              String?
-  excerptEn            String?
-  shortDescription     String?
-  shortDescriptionEn   String?
-  keywords             String?
-  enKeywords           String?
-  status               String         @default("DRAFT") // "DRAFT", "PENDING_REVIEW", "PUBLISHED", "SCHEDULED"
-  publishedAt          DateTime?
-  featureImageId       String?        @unique
-  featureImageEnId     String?        @unique
-  metaTitle            String?
-  metaTitleEn          String?
-  metaDescription      String?
-  metaDescriptionEn    String?
-  metaKeywords         String?
-  metaKeywordsEn       String?
-  authorId             String
-  createdAt            DateTime       @default(now())
-  updatedAt            DateTime       @updatedAt
-  author               User           @relation(fields: [authorId], references: [id])
-  featureImage         Media?         @relation("PostFeatureImage", fields: [featureImageId], references: [id])
-  featureImageEn       Media?         @relation("PostFeatureImageEn", fields: [featureImageEnId], references: [id])
-  categories           PostCategory[]
-}
-
-model PostCategory {
-  id         String   @id @default(cuid())
-  postId     String
-  categoryId String
-  createdAt  DateTime @default(now())
-  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-
-  @@unique([postId, categoryId])
-}
-
-
 
 model Service {
   id                   String   @id @default(cuid())
@@ -115,8 +68,6 @@ model Media {
   teamMemberImage TeamMember? @relation("TeamMemberImage")
   teamMemberImageEn TeamMember? @relation("TeamMemberImageEn")
   bannerImage     Banner?     @relation("BannerImage")
-  postImage       Post?       @relation("PostFeatureImage")
-  postImageEn     Post?       @relation("PostFeatureImageEn")
 }
 
 model TeamMember {
