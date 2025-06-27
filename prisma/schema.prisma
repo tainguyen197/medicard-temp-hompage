@@ -53,6 +53,32 @@ model Service {
   featureImageEn       Media?   @relation("ServiceFeatureImageEn", fields: [featureImageEnId], references: [id])
 }
 
+model News {
+  id                   String   @id @default(cuid())
+  slug                 String   @unique
+  title                String
+  titleEn              String?
+  description          String?
+  descriptionEn        String?
+  shortDescription     String?
+  shortDescriptionEn   String?
+  keywords             String?
+  enKeywords           String?
+  status               String   @default("DRAFT")
+  featureImageId       String?  @unique
+  featureImageEnId     String?  @unique
+  metaTitle            String?
+  metaTitleEn          String?
+  metaDescription      String?
+  metaDescriptionEn    String?
+  metaKeywords         String?
+  metaKeywordsEn       String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  featureImage         Media?   @relation("NewsFeatureImage", fields: [featureImageId], references: [id])
+  featureImageEn       Media?   @relation("NewsFeatureImageEn", fields: [featureImageEnId], references: [id])
+}
+
 model Media {
   id              String      @id @default(cuid())
   url             String
@@ -65,6 +91,8 @@ model Media {
   uploadedBy      User?       @relation(fields: [uploadedById], references: [id])
   serviceImage    Service?    @relation("ServiceFeatureImage")
   serviceImageEn  Service?    @relation("ServiceFeatureImageEn")
+  newsImage       News?       @relation("NewsFeatureImage")
+  newsImageEn     News?       @relation("NewsFeatureImageEn")
   teamMemberImage TeamMember? @relation("TeamMemberImage")
   teamMemberImageEn TeamMember? @relation("TeamMemberImageEn")
   bannerImage     Banner?     @relation("BannerImage")

@@ -39,31 +39,24 @@ export default async function NewsContent({
     where.status = status;
   }
 
-  // Get posts with pagination
-  const total = await prisma.post.count({ where });
+  // Get news with pagination
+  const total = await prisma.news.count({ where });
   const totalPages = Math.ceil(total / Number(limit));
 
-  const posts = await prisma.post.findMany({
+  const news = await prisma.news.findMany({
     where,
     orderBy: { createdAt: "desc" },
     skip: (Number(page) - 1) * Number(limit),
     take: Number(limit),
     include: {
       featureImage: true,
-      author: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-        },
-      },
     },
   });
 
   return (
     <>
       {/* News Table */}
-      <NewsTable posts={posts as any} />
+      <NewsTable news={news as any} />
 
       {/* Pagination */}
       {totalPages > 1 && (
