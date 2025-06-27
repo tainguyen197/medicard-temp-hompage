@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -22,6 +22,12 @@ const CKEditorComponent = dynamic(
   () => import("@/components/CKEditorComponent"),
   { ssr: false }
 );
+
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+}
 
 export default function NewNewsPage() {
   const router = useRouter();
@@ -51,7 +57,31 @@ export default function NewNewsPage() {
   const [metaKeywords, setMetaKeywords] = useState("");
   const [metaKeywordsEn, setMetaKeywordsEn] = useState("");
 
-  // Generate slug from title
+  // Category states
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
+  const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState("");
+  const [isCreatingCategory, setIsCreatingCategory] = useState(false);
+
+  // Fetch categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("/api/categories");
+        if (response.ok) {
+          const data = await response.json();
+          setCategories(data.categories || []);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  // Generate slug from text
   const generateSlug = (text: string) => {
     return text
       .toString()
@@ -78,6 +108,47 @@ export default function NewNewsPage() {
   const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSlug(e.target.value);
     setIsSlugManuallyEdited(true);
+  };
+
+  // Handle new category creation
+  const handleCreateCategory = async () => {
+    if (!newCategoryName.trim()) {
+      toast.error("Please enter a category name");
+      return;
+    }
+
+    setIsCreatingCategory(true);
+    try {
+      const response = await fetch("/api/categories", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: newCategoryName.trim(),
+          slug: generateSlug(newCategoryName.trim()),
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to create category");
+      }
+
+      const newCategory = await response.json();
+      setCategories([...categories, newCategory]);
+      setSelectedCategoryId(newCategory.id);
+      setNewCategoryName("");
+      setShowNewCategoryInput(false);
+      toast.success("Category created successfully!");
+    } catch (error) {
+      console.error("Error creating category:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to create category"
+      );
+    } finally {
+      setIsCreatingCategory(false);
+    }
   };
 
   // Use useCallback to memoize the onChange handler to prevent re-renders
@@ -130,6 +201,7 @@ export default function NewNewsPage() {
           status,
           showOnHomepage,
           slug,
+          categoryId: selectedCategoryId || undefined,
           metaTitle: metaTitle || undefined,
           metaTitleEn: metaTitleEn || undefined,
           metaDescription: metaDescription || undefined,
@@ -209,15 +281,78 @@ export default function NewNewsPage() {
             </div>
           </div>
 
-          <div className="space-y-2 mt-4">
-            <Label htmlFor="shortDescription">Excerpt (Vietnamese)</Label>
-            <Input
-              id="shortDescription"
-              value={shortDescription}
-              onChange={(e) => setShortDescription(e.target.value)}
-              placeholder="Brief summary of the news article in Vietnamese"
-              className="w-full"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+            <div className="space-y-2">
+              <Label htmlFor="category">Category</Label>
+              <div className="space-y-2">
+                <Select
+                  value={selectedCategoryId}
+                  onValueChange={setSelectedCategoryId}
+                >
+                  <SelectTrigger id="category">
+                    <SelectValue placeholder="Select a category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {!showNewCategoryInput ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowNewCategoryInput(true)}
+                    className="w-full"
+                  >
+                    + Add New Category
+                  </Button>
+                ) : (
+                  <div className="flex gap-2">
+                    <Input
+                      value={newCategoryName}
+                      onChange={(e) => setNewCategoryName(e.target.value)}
+                      placeholder="Enter category name"
+                      className="flex-1"
+                    />
+                    <Button
+                      type="button"
+                      size="sm"
+                      onClick={handleCreateCategory}
+                      disabled={isCreatingCategory}
+                    >
+                      {isCreatingCategory ? "Creating..." : "Create"}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setShowNewCategoryInput(false);
+                        setNewCategoryName("");
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="shortDescription">Excerpt (Vietnamese)</Label>
+              <Input
+                id="shortDescription"
+                value={shortDescription}
+                onChange={(e) => setShortDescription(e.target.value)}
+                placeholder="Brief summary of the news article in Vietnamese"
+                className="w-full"
+              />
+            </div>
           </div>
 
           <div className="space-y-2 mt-4">

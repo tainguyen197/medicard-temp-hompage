@@ -18,6 +18,7 @@ const newsSchema = z.object({
   enKeywords: z.string().optional(),
   status: z.string().optional().default("DRAFT"),
   showOnHomepage: z.boolean().optional().default(false),
+  categoryId: z.string().optional(),
   slug: z.string().optional(),
   featuredImage: z.string().optional(), // Accept the image URL
   featureImageId: z.string().optional(),
@@ -192,6 +193,9 @@ export async function POST(request: Request) {
         status: validatedData.status,
         showOnHomepage: validatedData.showOnHomepage || false,
         slug,
+        ...(validatedData.categoryId && {
+          categoryId: validatedData.categoryId,
+        }),
         metaTitle: validatedData.metaTitle,
         metaTitleEn: validatedData.metaTitleEn,
         metaDescription: validatedData.metaDescription,
@@ -203,6 +207,7 @@ export async function POST(request: Request) {
       },
       include: {
         featureImage: true,
+        category: true,
       },
     });
 

@@ -12,6 +12,7 @@ const newsUpdateSchema = z.object({
   titleEn: z.string().optional(),
   status: z.string().optional(),
   showOnHomepage: z.boolean().optional(),
+  categoryId: z.string().optional(),
   slug: z.string().optional(),
   description: z.string().optional(),
   descriptionEn: z.string().optional(),
@@ -55,6 +56,8 @@ export async function GET(
       where: { id },
       include: {
         featureImage: true,
+        featureImageEn: true,
+        category: true,
       },
     });
 
@@ -147,7 +150,6 @@ export async function PUT(
       const media = await prisma.media.findFirst({
         where: { url: validatedData.featuredImage },
       });
-
       if (media) {
         featureImageId = media.id;
       }
@@ -179,6 +181,9 @@ export async function PUT(
         ...(validatedData.showOnHomepage !== undefined && {
           showOnHomepage: validatedData.showOnHomepage,
         }),
+        ...(validatedData.categoryId !== undefined && {
+          categoryId: validatedData.categoryId,
+        }),
         slug,
         metaTitle: validatedData.metaTitle,
         metaTitleEn: validatedData.metaTitleEn,
@@ -192,6 +197,7 @@ export async function PUT(
       include: {
         featureImage: true,
         featureImageEn: true,
+        category: true,
       },
     });
 

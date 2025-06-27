@@ -19,117 +19,121 @@ model User {
 }
 
 model Category {
-  id          String         @id @default(cuid())
-  name        String         @unique
-  slug        String         @unique
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
   description String?
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  news        News[]
 }
 
 model Service {
-  id                   String   @id @default(cuid())
-  slug                 String   @unique
-  title                String
-  titleEn              String?
-  description          String?
-  descriptionEn        String?
-  shortDescription     String?
-  shortDescriptionEn   String?
-  keywords             String?
-  enKeywords           String?
-  status               String   @default("DRAFT")
-  showOnHomepage       Boolean  @default(false)
-  featureImageId       String?  @unique
-  featureImageEnId     String?  @unique
-  metaTitle            String?
-  metaTitleEn          String?
-  metaDescription      String?
-  metaDescriptionEn    String?
-  metaKeywords         String?
-  metaKeywordsEn       String?
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
-  featureImage         Media?   @relation("ServiceFeatureImage", fields: [featureImageId], references: [id])
-  featureImageEn       Media?   @relation("ServiceFeatureImageEn", fields: [featureImageEnId], references: [id])
+  id                 String   @id @default(cuid())
+  slug               String   @unique
+  title              String
+  titleEn            String?
+  description        String?
+  descriptionEn      String?
+  shortDescription   String?
+  shortDescriptionEn String?
+  keywords           String?
+  enKeywords         String?
+  status             String   @default("DRAFT")
+  showOnHomepage     Boolean  @default(false)
+  featureImageId     String?  @unique
+  featureImageEnId   String?  @unique
+  metaTitle          String?
+  metaTitleEn        String?
+  metaDescription    String?
+  metaDescriptionEn  String?
+  metaKeywords       String?
+  metaKeywordsEn     String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  featureImageEn     Media?   @relation("ServiceFeatureImageEn", fields: [featureImageEnId], references: [id])
+  featureImage       Media?   @relation("ServiceFeatureImage", fields: [featureImageId], references: [id])
 
   @@index([showOnHomepage])
   @@index([showOnHomepage, createdAt])
 }
 
 model News {
-  id                   String   @id @default(cuid())
-  slug                 String   @unique
-  title                String
-  titleEn              String?
-  description          String?
-  descriptionEn        String?
-  shortDescription     String?
-  shortDescriptionEn   String?
-  keywords             String?
-  enKeywords           String?
-  status               String   @default("DRAFT")
-  showOnHomepage       Boolean  @default(false)
-  featureImageId       String?  @unique
-  featureImageEnId     String?  @unique
-  metaTitle            String?
-  metaTitleEn          String?
-  metaDescription      String?
-  metaDescriptionEn    String?
-  metaKeywords         String?
-  metaKeywordsEn       String?
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
-  featureImage         Media?   @relation("NewsFeatureImage", fields: [featureImageId], references: [id])
-  featureImageEn       Media?   @relation("NewsFeatureImageEn", fields: [featureImageEnId], references: [id])
+  id                 String    @id @default(cuid())
+  slug               String    @unique
+  title              String
+  titleEn            String?
+  description        String?
+  descriptionEn      String?
+  shortDescription   String?
+  shortDescriptionEn String?
+  keywords           String?
+  enKeywords         String?
+  status             String    @default("DRAFT")
+  showOnHomepage     Boolean   @default(false)
+  categoryId         String?
+  featureImageId     String?   @unique
+  featureImageEnId   String?   @unique
+  metaTitle          String?
+  metaTitleEn        String?
+  metaDescription    String?
+  metaDescriptionEn  String?
+  metaKeywords       String?
+  metaKeywordsEn     String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  category           Category? @relation(fields: [categoryId], references: [id])
+  featureImageEn     Media?    @relation("NewsFeatureImageEn", fields: [featureImageEnId], references: [id])
+  featureImage       Media?    @relation("NewsFeatureImage", fields: [featureImageId], references: [id])
 
   @@index([showOnHomepage])
   @@index([showOnHomepage, createdAt])
+  @@index([categoryId])
 }
 
 model Media {
-  id              String      @id @default(cuid())
-  url             String
-  fileName        String?
-  originalName    String?
-  fileType        String?
-  fileSize        Int?
-  createdAt       DateTime    @default(now())
-  uploadedById    String?
-  uploadedBy      User?       @relation(fields: [uploadedById], references: [id])
-  serviceImage    Service?    @relation("ServiceFeatureImage")
-  serviceImageEn  Service?    @relation("ServiceFeatureImageEn")
-  newsImage       News?       @relation("NewsFeatureImage")
-  newsImageEn     News?       @relation("NewsFeatureImageEn")
-  teamMemberImage TeamMember? @relation("TeamMemberImage")
+  id                String      @id @default(cuid())
+  url               String
+  fileName          String?
+  originalName      String?
+  fileType          String?
+  fileSize          Int?
+  createdAt         DateTime    @default(now())
+  uploadedById      String?
+  bannerImage       Banner?     @relation("BannerImage")
+  uploadedBy        User?       @relation(fields: [uploadedById], references: [id])
+  newsImageEn       News?       @relation("NewsFeatureImageEn")
+  newsImage         News?       @relation("NewsFeatureImage")
+  serviceImageEn    Service?    @relation("ServiceFeatureImageEn")
+  serviceImage      Service?    @relation("ServiceFeatureImage")
   teamMemberImageEn TeamMember? @relation("TeamMemberImageEn")
-  bannerImage     Banner?     @relation("BannerImage")
+  teamMemberImage   TeamMember? @relation("TeamMemberImage")
 }
 
 model TeamMember {
-  id               String   @id @default(cuid())
-  name             String
-  nameEn           String?
-  title            String
-  titleEn          String?
-  description      String
-  descriptionEn    String?
-  imageId          String?  @unique
-  imageEnId        String?  @unique
-  order            Int      @default(0)
-  status           String   @default("ACTIVE") // "ACTIVE", "INACTIVE"
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-  image            Media?   @relation("TeamMemberImage", fields: [imageId], references: [id])
-  imageEn          Media?   @relation("TeamMemberImageEn", fields: [imageEnId], references: [id])
+  id            String   @id @default(cuid())
+  name          String
+  nameEn        String?
+  title         String
+  titleEn       String?
+  description   String
+  descriptionEn String?
+  imageId       String?  @unique
+  imageEnId     String?  @unique
+  order         Int      @default(0)
+  status        String   @default("ACTIVE")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  imageEn       Media?   @relation("TeamMemberImageEn", fields: [imageEnId], references: [id])
+  image         Media?   @relation("TeamMemberImage", fields: [imageId], references: [id])
 }
 
 model Banner {
   id        String   @id @default(cuid())
-  type      String   @unique // "HOMEPAGE", "SERVICE", "NEWS" - only one per type
+  type      String   @unique
   link      String?
   imageId   String?  @unique
-  status    String   @default("ACTIVE") // "ACTIVE", "INACTIVE"
+  status    String   @default("ACTIVE")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   image     Media?   @relation("BannerImage", fields: [imageId], references: [id])
@@ -155,7 +159,7 @@ model Contact {
   facebookUrl     String?
   zaloUrl         String?
   instagramUrl    String?
-  status          String   @default("ACTIVE") // "ACTIVE", "INACTIVE"
+  status          String   @default("ACTIVE")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
