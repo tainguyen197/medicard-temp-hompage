@@ -17,6 +17,7 @@ const newsSchema = z.object({
   keywords: z.string().optional(),
   enKeywords: z.string().optional(),
   status: z.string().optional().default("DRAFT"),
+  showOnHomepage: z.boolean().optional().default(false),
   slug: z.string().optional(),
   featuredImage: z.string().optional(), // Accept the image URL
   featureImageId: z.string().optional(),
@@ -134,6 +135,23 @@ export async function POST(request: Request) {
       );
     }
 
+    // Check homepage limit if showOnHomepage is true
+    if (validatedData.showOnHomepage) {
+      const homepageNewsCount = await prisma.news.count({
+        where: { showOnHomepage: true },
+      });
+
+      if (homepageNewsCount >= 3) {
+        return NextResponse.json(
+          {
+            error:
+              "Maximum of 3 news articles can be shown on homepage. Please disable another news article first.",
+          },
+          { status: 400 }
+        );
+      }
+    }
+
     // Find the media record if featuredImage URL is provided
     let featureImageId = validatedData.featureImageId;
     let featureImageEnId = validatedData.featureImageEnId;
@@ -172,6 +190,7 @@ export async function POST(request: Request) {
         keywords: validatedData.keywords,
         enKeywords: validatedData.enKeywords,
         status: validatedData.status,
+        showOnHomepage: validatedData.showOnHomepage || false,
         slug,
         metaTitle: validatedData.metaTitle,
         metaTitleEn: validatedData.metaTitleEn,

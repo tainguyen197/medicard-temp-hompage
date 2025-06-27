@@ -17,6 +17,7 @@ interface News {
   title: string;
   slug: string;
   status: string;
+  showOnHomepage?: boolean;
   createdAt: Date | string;
   shortDescription: string;
   featureImage?: {
@@ -191,6 +192,19 @@ export default function NewsTableRow({
       </td>
       <td className="px-6 py-4 whitespace-nowrap align-middle">
         {getStatusBadge(news.status)}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap align-middle">
+        <div className="flex items-center">
+          {news.showOnHomepage ? (
+            <span className="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200 rounded-full">
+              Yes
+            </span>
+          ) : (
+            <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 border border-gray-200 rounded-full">
+              No
+            </span>
+          )}
+        </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">
         {formatDate(news.createdAt)}

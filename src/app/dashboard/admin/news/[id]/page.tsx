@@ -34,6 +34,7 @@ export default function EditNewsPage({
   const [titleEn, setTitleEn] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState("DRAFT");
+  const [showOnHomepage, setShowOnHomepage] = useState(false);
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
   const [descriptionEn, setDescriptionEn] = useState("");
@@ -71,6 +72,7 @@ export default function EditNewsPage({
         setTitle(news.title || "");
         setTitleEn(news.titleEn || "");
         setStatus(news.status || "DRAFT");
+        setShowOnHomepage(news.showOnHomepage || false);
         setSlug(news.slug || "");
         setDescription(news.description || "");
         setDescriptionEn(news.descriptionEn || "");
@@ -171,6 +173,7 @@ export default function EditNewsPage({
           title,
           titleEn: titleEn || undefined,
           status,
+          showOnHomepage,
           slug,
           description,
           descriptionEn: descriptionEn || undefined,
@@ -499,7 +502,7 @@ export default function EditNewsPage({
             Article Settings
           </legend>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
               <Label htmlFor="status">Status</Label>
               <Select
@@ -527,6 +530,25 @@ export default function EditNewsPage({
               />
               <p className="text-xs text-gray-500">
                 This will be used in the URL: /news/{slug}
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Homepage Display</Label>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="showOnHomepage"
+                  checked={showOnHomepage}
+                  onChange={(e) => setShowOnHomepage(e.target.checked)}
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                />
+                <Label htmlFor="showOnHomepage" className="text-sm">
+                  Show on Homepage
+                </Label>
+              </div>
+              <p className="text-xs text-gray-500">
+                Display this news article on the homepage (max 4 items)
               </p>
             </div>
           </div>

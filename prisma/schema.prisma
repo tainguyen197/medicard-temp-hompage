@@ -65,6 +65,7 @@ model News {
   keywords             String?
   enKeywords           String?
   status               String   @default("DRAFT")
+  showOnHomepage       Boolean  @default(false)
   featureImageId       String?  @unique
   featureImageEnId     String?  @unique
   metaTitle            String?
@@ -77,6 +78,9 @@ model News {
   updatedAt            DateTime @updatedAt
   featureImage         Media?   @relation("NewsFeatureImage", fields: [featureImageId], references: [id])
   featureImageEn       Media?   @relation("NewsFeatureImageEn", fields: [featureImageEnId], references: [id])
+
+  @@index([showOnHomepage])
+  @@index([showOnHomepage, createdAt])
 }
 
 model Media {

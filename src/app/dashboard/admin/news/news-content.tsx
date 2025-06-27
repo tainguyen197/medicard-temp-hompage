@@ -48,8 +48,22 @@ export default async function NewsContent({
     orderBy: { createdAt: "desc" },
     skip: (Number(page) - 1) * Number(limit),
     take: Number(limit),
-    include: {
-      featureImage: true,
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      status: true,
+      showOnHomepage: true,
+      createdAt: true,
+      shortDescription: true,
+      featureImage: {
+        select: {
+          id: true,
+          url: true,
+          fileName: true,
+          originalName: true,
+        },
+      },
     },
   });
 

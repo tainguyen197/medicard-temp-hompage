@@ -35,6 +35,21 @@ body {
 
 /* Additional custom styles can be added below */
 
+/* Line clamp utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 /* CKEditor Heading Styles */
 .ck-content h1,
 .ck-content .ck-heading_heading1 {

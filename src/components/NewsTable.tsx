@@ -10,6 +10,7 @@ interface News {
   title: string;
   slug: string;
   status: string;
+  showOnHomepage?: boolean;
   createdAt: Date | string;
   shortDescription: string;
   featureImage?: {
@@ -120,6 +121,9 @@ export default function NewsTable({ news }: NewsTableProps) {
                 Status
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Homepage
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Created
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -131,7 +135,7 @@ export default function NewsTable({ news }: NewsTableProps) {
             {localNews.length === 0 ? (
               <tr>
                 <td
-                  colSpan={6}
+                  colSpan={7}
                   className="px-6 py-4 text-center text-sm text-gray-500"
                 >
                   No news articles found
