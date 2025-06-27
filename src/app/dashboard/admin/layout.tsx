@@ -69,7 +69,7 @@ export default async function AdminLayout({
       icon: <FileText className="h-5 w-5" />,
     },
     {
-      label: "Team Members",
+      label: "Doctors",
       href: ROUTES.ADMIN_TEAM,
       icon: <Users className="h-5 w-5" />,
       // adminOnly: true,

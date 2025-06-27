@@ -80,12 +80,6 @@ export const adminRoutes: Record<string, AdminRoute> = {
     description: "Trang tổng quan quản trị",
     protected: true,
   },
-  posts: {
-    name: "News",
-    href: "/admin/posts",
-    description: "Quản lý bài viết tin tức",
-    protected: true,
-  },
   news: {
     name: "News",
     href: "/dashboard/admin/news",
@@ -368,8 +362,6 @@ export const ROUTES = {
 
   // Admin routes
   ADMIN_DASHBOARD: adminRoutes.dashboard.href,
-  ADMIN_POSTS: adminRoutes.posts.href,
-  ADMIN_POSTS_NEW: adminRoutes.posts.href + "/new",
   ADMIN_NEWS: adminRoutes.news.href,
   ADMIN_SERVICES: adminRoutes.services.href,
   ADMIN_TEAM: adminRoutes.team.href,

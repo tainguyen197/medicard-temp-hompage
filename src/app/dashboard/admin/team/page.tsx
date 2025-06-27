@@ -20,24 +20,24 @@ export default function TeamPage({
   return (
     <div className="container mx-auto py-10">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Team Members</h1>
+        <h1 className="text-3xl font-bold">Doctors</h1>
 
         <Link
           href={ROUTES.ADMIN_TEAM + "/new"}
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
         >
           <PlusIcon size={16} />
-          New Team Member
+          New Doctor
         </Link>
       </div>
 
       {/* Info Banner */}
       <div className="bg-blue-50 border border-blue-200 rounded-md p-4 mb-6">
         <div>
-          <h2 className="font-medium text-blue-800">Team Management</h2>
+          <h2 className="font-medium text-blue-800">Doctor Management</h2>
           <p className="text-sm text-blue-700 mt-1">
-            Manage your team members. Team member profiles are displayed on the
-            team section of your website with support for Vietnamese and English
+            Manage your doctors. Doctor profiles are displayed on the team
+            section of your website with support for Vietnamese and English
             languages.
           </p>
         </div>

@@ -138,7 +138,7 @@ export default function AdminDashboard() {
 
         <div className="stat-card">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-medium text-gray-500">Team Members</h3>
+            <h3 className="font-medium text-gray-500">Doctors</h3>
             <span className="icon-circle">
               <Users className="h-5 w-5" />
             </span>
@@ -148,7 +148,7 @@ export default function AdminDashboard() {
               {stats.totalTeamMembers}
             </div>
             <div className="trend-same mt-1">
-              <span>Total team members</span>
+              <span>Total doctors</span>
             </div>
           </div>
         </div>

@@ -79,7 +79,7 @@ export default async function TeamContent({
         <div className="flex justify-between items-center mt-6">
           <p className="text-sm text-gray-700">
             Showing {skip + 1} to {Math.min(skip + limit, totalCount)} of{" "}
-            {totalCount} team members
+            {totalCount} doctors
           </p>
 
           <div className="flex gap-3">

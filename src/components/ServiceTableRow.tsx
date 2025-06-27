@@ -17,6 +17,7 @@ interface Service {
   title: string;
   slug: string;
   status: string;
+  showOnHomepage: boolean;
   createdAt: Date | string;
   shortDescription: string;
   featureImage?: {
@@ -193,6 +194,17 @@ export default function ServiceTableRow({
       </td>
       <td className="px-6 py-4 whitespace-nowrap align-middle">
         {getStatusBadge(service.status)}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap align-middle">
+        <span
+          className={`px-2 py-1 text-xs font-medium rounded-full ${
+            service.showOnHomepage
+              ? "bg-blue-100 text-blue-800 border border-blue-200"
+              : "bg-gray-100 text-gray-800 border border-gray-200"
+          }`}
+        >
+          {service.showOnHomepage ? "Yes" : "No"}
+        </span>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">
         {formatDate(service.createdAt)}

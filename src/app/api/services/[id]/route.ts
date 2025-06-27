@@ -12,6 +12,7 @@ const serviceUpdateSchema = z.object({
   title: z.string().min(1, "Title is required"),
   titleEn: z.string().optional(),
   status: z.string().optional(),
+  showOnHomepage: z.boolean().optional(),
   slug: z.string().optional(),
   description: z.string().optional(),
   descriptionEn: z.string().optional(),
@@ -129,6 +130,31 @@ export async function PUT(
       }
     }
 
+    // Check homepage limit if showOnHomepage is being set to true
+    if (
+      validatedData.showOnHomepage === true &&
+      !existingService.showOnHomepage &&
+      validatedData.status === "PUBLISHED"
+    ) {
+      const homepageServicesCount = await prisma.service.count({
+        where: {
+          showOnHomepage: true,
+          status: "PUBLISHED",
+          id: { not: id }, // Exclude current service
+        },
+      });
+
+      if (homepageServicesCount >= 4) {
+        return NextResponse.json(
+          {
+            error:
+              "Maximum of 4 services can be shown on homepage. Please disable another service first.",
+          },
+          { status: 400 }
+        );
+      }
+    }
+
     // Find the media record if featuredImage URL is provided
     let featureImageId = validatedData.featureImageId;
     let featureImageEnId = validatedData.featureImageEnId;
@@ -155,28 +181,36 @@ export async function PUT(
       }
     }
 
+    // Prepare update data
+    const updateData: any = {
+      title: validatedData.title,
+      titleEn: validatedData.titleEn,
+      description: validatedData.description,
+      descriptionEn: validatedData.descriptionEn,
+      shortDescription: validatedData.shortDescription,
+      shortDescriptionEn: validatedData.shortDescriptionEn,
+      keywords: validatedData.keywords,
+      enKeywords: validatedData.enKeywords,
+      status: validatedData.status,
+      slug,
+      metaTitle: validatedData.metaTitle,
+      metaTitleEn: validatedData.metaTitleEn,
+      metaDescription: validatedData.metaDescription,
+      metaDescriptionEn: validatedData.metaDescriptionEn,
+      metaKeywords: validatedData.metaKeywords,
+      metaKeywordsEn: validatedData.metaKeywordsEn,
+      ...(featureImageId && { featureImageId }), // Only add if we have an image ID
+      ...(featureImageEnId && { featureImageEnId }), // Only add if we have an English image ID
+    };
+
+    // Only update showOnHomepage if it's provided in the request
+    if (validatedData.showOnHomepage !== undefined) {
+      updateData.showOnHomepage = validatedData.showOnHomepage;
+    }
+
     const service = await prisma.service.update({
       where: { id },
-      data: {
-        title: validatedData.title,
-        titleEn: validatedData.titleEn,
-        description: validatedData.description,
-        descriptionEn: validatedData.descriptionEn,
-        shortDescription: validatedData.shortDescription,
-        shortDescriptionEn: validatedData.shortDescriptionEn,
-        keywords: validatedData.keywords,
-        enKeywords: validatedData.enKeywords,
-        status: validatedData.status,
-        slug,
-        metaTitle: validatedData.metaTitle,
-        metaTitleEn: validatedData.metaTitleEn,
-        metaDescription: validatedData.metaDescription,
-        metaDescriptionEn: validatedData.metaDescriptionEn,
-        metaKeywords: validatedData.metaKeywords,
-        metaKeywordsEn: validatedData.metaKeywordsEn,
-        ...(featureImageId && { featureImageId }), // Only add if we have an image ID
-        ...(featureImageEnId && { featureImageEnId }), // Only add if we have an English image ID
-      },
+      data: updateData,
       include: {
         featureImage: true,
         featureImageEn: true,

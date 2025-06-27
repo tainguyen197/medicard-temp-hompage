@@ -81,12 +81,12 @@ export default function TeamTable({ teamMembers }: TeamTableProps) {
           {teamMembers.length === 0 ? (
             <tr>
               <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
-                No team members found.{" "}
+                No doctors found.{" "}
                 <Link
                   href={`${ROUTES.ADMIN_TEAM}/new`}
                   className="text-blue-600 hover:text-blue-800"
                 >
-                  Create your first team member
+                  Create your first doctor
                 </Link>
               </td>
             </tr>

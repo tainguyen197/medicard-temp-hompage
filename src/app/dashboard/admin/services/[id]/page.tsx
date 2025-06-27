@@ -34,6 +34,7 @@ export default function EditServicePage({
   const [titleEn, setTitleEn] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState("DRAFT");
+  const [showOnHomepage, setShowOnHomepage] = useState(false);
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
   const [descriptionEn, setDescriptionEn] = useState("");
@@ -71,6 +72,7 @@ export default function EditServicePage({
         setTitle(service.title || "");
         setTitleEn(service.titleEn || "");
         setStatus(service.status || "DRAFT");
+        setShowOnHomepage(service.showOnHomepage || false);
         setSlug(service.slug || "");
         setDescription(service.description || "");
         setDescriptionEn(service.descriptionEn || "");
@@ -166,6 +168,7 @@ export default function EditServicePage({
           title,
           titleEn: titleEn || undefined,
           status,
+          showOnHomepage,
           slug,
           description,
           descriptionEn: descriptionEn || undefined,
@@ -503,7 +506,7 @@ export default function EditServicePage({
             Service Settings
           </legend>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
               <Label htmlFor="status">Status</Label>
               <Select
@@ -531,6 +534,25 @@ export default function EditServicePage({
               />
               <p className="text-xs text-gray-500">
                 This will be used in the URL: /services/{slug}
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Homepage Display</Label>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="showOnHomepage"
+                  checked={showOnHomepage}
+                  onChange={(e) => setShowOnHomepage(e.target.checked)}
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                />
+                <Label htmlFor="showOnHomepage" className="text-sm">
+                  Show on Homepage
+                </Label>
+              </div>
+              <p className="text-xs text-gray-500">
+                Display this service on the homepage (max 4 items)
               </p>
             </div>
           </div>

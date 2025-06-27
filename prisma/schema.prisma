@@ -39,6 +39,7 @@ model Service {
   keywords             String?
   enKeywords           String?
   status               String   @default("DRAFT")
+  showOnHomepage       Boolean  @default(false)
   featureImageId       String?  @unique
   featureImageEnId     String?  @unique
   metaTitle            String?
@@ -51,6 +52,9 @@ model Service {
   updatedAt            DateTime @updatedAt
   featureImage         Media?   @relation("ServiceFeatureImage", fields: [featureImageId], references: [id])
   featureImageEn       Media?   @relation("ServiceFeatureImageEn", fields: [featureImageEnId], references: [id])
+
+  @@index([showOnHomepage])
+  @@index([showOnHomepage, createdAt])
 }
 
 model News {
