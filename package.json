@@ -9,7 +9,8 @@
     "start": "next start",
     "postinstall": "prisma generate",
     "prisma:seed": "ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} prisma/seed.ts",
-    "seed:posts": "ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} prisma/seed-posts.ts"
+    "seed:posts": "ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} prisma/seed-posts.ts",
+    "seed:user": "ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} prisma/seed-user.ts"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^41.4.2",

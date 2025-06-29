@@ -272,11 +272,11 @@ export default function NewNewsPage() {
                 onChange={setFeaturedImage}
                 onImageUploading={setIsImageUploading}
                 onMediaIdChange={setFeatureImageId}
-                aspectRatio={16 / 9}
-                aspectRatioText="16:9"
+                aspectRatio={1 / 1}
+                aspectRatioText="1:1"
               />
               <p className="text-xs text-gray-500">
-                Recommended aspect ratio: 16:9
+                Recommended aspect ratio: 1:1
               </p>
             </div>
           </div>
@@ -465,8 +465,8 @@ export default function NewNewsPage() {
                 onChange={setFeaturedImageEn}
                 onImageUploading={setIsImageEnUploading}
                 onMediaIdChange={setFeatureImageEnId}
-                aspectRatio={16 / 9}
-                aspectRatioText="16:9"
+                aspectRatio={1 / 1}
+                aspectRatioText="1:1"
               />
               <p className="text-xs text-gray-500">
                 Optional: Different image for English version
