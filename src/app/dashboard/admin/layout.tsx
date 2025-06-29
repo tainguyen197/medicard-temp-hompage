@@ -79,20 +79,20 @@ export default async function AdminLayout({
     },
     {
       label: "Media Library",
-      href: "/dashboard/admin/media",
+      href: ROUTES.ADMIN_MEDIA,
       icon: <Image className="h-5 w-5" />,
       roles: ["SUPER_ADMIN", "ADMIN", "EDITOR"],
     },
    
     {
       label: "User Management",
-      href: "/dashboard/admin/users",
+      href: ROUTES.ADMIN_USERS,
       icon: <Users className="h-5 w-5" />,
       roles: ["SUPER_ADMIN"],
     },
     {
       label: "Logs",
-      href: "/dashboard/admin/logs",
+      href: ROUTES.ADMIN_LOGS,
       icon: <FileText className="h-5 w-5" />,
       roles: ["SUPER_ADMIN", "ADMIN"],
     },

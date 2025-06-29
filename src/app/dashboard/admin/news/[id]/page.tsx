@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import ImageUpload from "@/components/ImageUpload";
 import dynamic from "next/dynamic";
+import { ROUTES } from "@/lib/router";
 
 const CKEditorComponent = dynamic(
   () => import("@/components/CKEditorComponent"),
@@ -126,7 +127,7 @@ export default function EditNewsPage({
       } catch (error) {
         console.error("Error fetching news:", error);
         toast.error("Failed to load news article");
-        router.push("/dashboard/admin/news");
+        router.push(ROUTES.ADMIN_NEWS);
       }
     };
 
@@ -273,7 +274,7 @@ export default function EditNewsPage({
       }
 
       toast.success("News article updated successfully!");
-      router.push("/dashboard/admin/news");
+      router.push(ROUTES.ADMIN_NEWS);
       router.refresh();
     } catch (error) {
       console.error("Error updating news:", error);
@@ -302,7 +303,7 @@ export default function EditNewsPage({
         <Button
           className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
           variant="outline"
-          onClick={() => router.push("/dashboard/admin/news")}
+          onClick={() => router.push(ROUTES.ADMIN_NEWS)}
         >
           Cancel
         </Button>
@@ -695,7 +696,7 @@ export default function EditNewsPage({
             className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
             type="button"
             variant="outline"
-            onClick={() => router.push("/dashboard/admin/news")}
+            onClick={() => router.push(ROUTES.ADMIN_NEWS)}
           >
             Cancel
           </Button>

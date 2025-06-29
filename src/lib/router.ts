@@ -82,7 +82,7 @@ export const adminRoutes: Record<string, AdminRoute> = {
   },
   news: {
     name: "News",
-    href: "/dashboard/admin/news",
+    href: "/admin/news",
     description: "Quản lý tin tức và bài viết",
     protected: true,
   },
@@ -119,7 +119,7 @@ export const adminRoutes: Record<string, AdminRoute> = {
   },
   users: {
     name: "Users",
-    href: "/dashboard/admin/users",
+      href: "/admin/users",
     description: "Quản lý người dùng hệ thống",
     protected: true,
     adminOnly: true,
@@ -130,6 +130,12 @@ export const adminRoutes: Record<string, AdminRoute> = {
     description: "Cài đặt hệ thống",
     protected: true,
     adminOnly: true,
+  },
+  logs: {
+    name: "Logs",
+    href: "/admin/logs",
+    description: "Quản lý log hệ thống",
+    protected: true,
   },
 };
 
@@ -377,7 +383,7 @@ export const ROUTES = {
   ADMIN_MEDIA: adminRoutes.media.href,
   ADMIN_USERS: adminRoutes.users.href,
   ADMIN_SETTINGS: adminRoutes.settings.href,
-
+  ADMIN_LOGS: adminRoutes.logs.href,
   // Auth routes
   AUTH_LOGIN: authRoutes.login.href,
   AUTH_LOGOUT: authRoutes.logout.href,

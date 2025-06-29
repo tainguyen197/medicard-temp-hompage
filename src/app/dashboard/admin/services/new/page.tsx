@@ -149,7 +149,7 @@ export default function NewServicePage() {
       }
 
       toast.success("Service created successfully!");
-      router.push("/dashboard/admin/services");
+      router.push(ROUTES.ADMIN_SERVICES);
       router.refresh();
     } catch (error) {
       console.error("Error creating service:", error);

@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./routing";
 
 const intlMiddleware = createMiddleware(routing);
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { nextUrl } = request;
   const subdomain = request.headers.get("host")?.split(".")[0];
 
@@ -14,22 +15,33 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Check authentication for dashboard routes
+  if (nextUrl.pathname.startsWith("/dashboard") && 
+      !nextUrl.pathname.startsWith("/dashboard/auth")) {
+    try {
+      const token = await getToken({ 
+        req: request, 
+        secret: process.env.NEXTAUTH_SECRET 
+      });
+      
+      if (!token) {
+        console.log("No valid token found, redirecting to login");
+        return NextResponse.redirect(new URL("/dashboard/auth/login", request.url));
+      }
+    } catch (error) {
+      console.error("Token validation error:", error);
+      return NextResponse.redirect(new URL("/dashboard/auth/login", request.url));
+    }
+  }
+
   // Handle subdomain routing for dashboard
   if (subdomain === "dashboard") {
     if (nextUrl.pathname.startsWith("/auth")) {
-      console.log(
-        "Rewriting to /dashboard/auth",
-        `/dashboard${nextUrl.pathname}`
-      );
       return NextResponse.rewrite(
         new URL(`/dashboard${nextUrl.pathname}`, request.url)
       );
     }
 
-    console.log(
-      "Rewriting to /dashboard/admin",
-      `/dashboard/admin${nextUrl.pathname}`
-    );
     return NextResponse.rewrite(
       new URL(`/dashboard${nextUrl.pathname}`, request.url)
     );
@@ -46,13 +58,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Match internationalized pathnames
-    // "/",
-    // "/(vi|en)/:path*",
-    // // Match dashboard and API routes
-    // "/dashboard/:path*",
-    // "/api/:path*",
-
-    "/((?!api|dashboard|_next/static|_next/image|images|favicon\\.ico).*)",
+    "/((?!api|_next/static|_next/image|images|favicon\\.ico).*)",
   ],
 };

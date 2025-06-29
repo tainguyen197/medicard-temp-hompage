@@ -95,7 +95,7 @@ export default function EditServicePage({
       } catch (error) {
         console.error("Error fetching service:", error);
         toast.error("Failed to load service");
-        router.push("/dashboard/admin/services");
+        router.push(ROUTES.ADMIN_SERVICES);
       }
     };
 

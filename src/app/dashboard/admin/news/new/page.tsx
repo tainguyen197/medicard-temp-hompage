@@ -221,7 +221,7 @@ export default function NewNewsPage() {
       }
 
       toast.success("News article created successfully!");
-      router.push("/dashboard/admin/news");
+      router.push(ROUTES.ADMIN_NEWS);
       router.refresh();
     } catch (error) {
       console.error("Error creating news article:", error);
@@ -240,7 +240,7 @@ export default function NewNewsPage() {
         <Button
           className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
           variant="outline"
-          onClick={() => router.push("/dashboard/admin/news")}
+          onClick={() => router.push(ROUTES.ADMIN_NEWS)}
         >
           Cancel
         </Button>
@@ -633,7 +633,7 @@ export default function NewNewsPage() {
             className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
             type="button"
             variant="outline"
-            onClick={() => router.push("/dashboard/admin/news")}
+            onClick={() => router.push(ROUTES.ADMIN_NEWS)}
           >
             Cancel
           </Button>
