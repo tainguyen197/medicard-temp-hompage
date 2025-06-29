@@ -6,7 +6,7 @@ import { authOptions } from "../../../../lib/auth";
 import prisma from "../../../../lib/prisma";
 import { createSlug } from "../../../../lib/utils";
 import { use } from "react";
-import { Logger } from "../../../../lib/utils";
+import { Logger, canPublishContent } from "../../../../lib/utils";
 
 // Schema for service update
 const serviceUpdateSchema = z.object({
@@ -103,6 +103,14 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
     const validatedData = serviceUpdateSchema.parse(body);
+
+    // Check if user has permission to publish content
+    if (validatedData.status === "PUBLISHED" && !canPublishContent(session.user.role)) {
+      return NextResponse.json(
+        { error: "You do not have permission to publish content. Only Admins and Super Admins can publish." },
+        { status: 403 }
+      );
+    }
 
     // Get existing service for comparison
     const existingService = await prisma.service.findUnique({

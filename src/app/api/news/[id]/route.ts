@@ -5,7 +5,7 @@ import { z } from "zod";
 import { authOptions } from "../../../../lib/auth";
 import prisma from "../../../../lib/prisma";
 import { createSlug } from "../../../../lib/utils";
-import { Logger } from "../../../../lib/utils";
+import { Logger, canPublishContent } from "../../../../lib/utils";
 
 // Schema for news update
 const newsUpdateSchema = z.object({
@@ -93,6 +93,14 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
     const validatedData = newsUpdateSchema.parse(body);
+
+    // Check if user has permission to publish content
+    if (validatedData.status === "PUBLISHED" && !canPublishContent(session.user.role)) {
+      return NextResponse.json(
+        { error: "You do not have permission to publish content. Only Admins and Super Admins can publish." },
+        { status: 403 }
+      );
+    }
 
     // Get existing news for comparison
     const existingNews = await prisma.news.findUnique({

@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import { authOptions } from "../../../../../lib/auth";
 import prisma from "../../../../../lib/prisma";
+import { canPublishContent } from "../../../../../lib/utils";
 
 // Schema for status update
 const statusUpdateSchema = z.object({
@@ -28,6 +29,14 @@ export async function PATCH(
 
     // Validate the request body
     const { status } = statusUpdateSchema.parse(body);
+
+    // Check if user has permission to publish content
+    if (status === "PUBLISHED" && !canPublishContent(session.user.role)) {
+      return NextResponse.json(
+        { error: "You do not have permission to publish content. Only Admins and Super Admins can publish." },
+        { status: 403 }
+      );
+    }
 
     // Try to use the news model directly
     try {
