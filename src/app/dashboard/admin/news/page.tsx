@@ -71,6 +71,12 @@ function NewsSkeletonContent() {
                 Status
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Homepage
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Pinned
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Created
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -92,6 +98,12 @@ function NewsSkeletonContent() {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="h-6 bg-gray-200 rounded w-24"></div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="h-6 bg-gray-200 rounded w-16"></div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="h-6 bg-gray-200 rounded w-20"></div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="h-5 bg-gray-200 rounded w-28"></div>

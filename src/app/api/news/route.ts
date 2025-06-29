@@ -15,10 +15,9 @@ const newsSchema = z.object({
   descriptionEn: z.string().optional(),
   shortDescription: z.string().optional(),
   shortDescriptionEn: z.string().optional(),
-  keywords: z.string().optional(),
-  enKeywords: z.string().optional(),
   status: z.string().optional().default("DRAFT"),
   showOnHomepage: z.boolean().optional().default(false),
+  pin: z.boolean().optional().default(false),
   categoryId: z.string().optional(),
   slug: z.string().optional(),
   featuredImage: z.string().optional(), // Accept the image URL
@@ -86,7 +85,10 @@ export async function GET(request: Request) {
     // Get news with pagination
     const news = await prisma.news.findMany({
       where,
-      orderBy: { createdAt: "desc" },
+      orderBy: [
+        { pin: "desc" }, // Show pinned items first
+        { createdAt: "desc" }
+      ],
       skip: (page - 1) * limit,
       take: limit,
       include: {
@@ -189,10 +191,9 @@ export async function POST(request: Request) {
         descriptionEn: validatedData.descriptionEn,
         shortDescription: validatedData.shortDescription,
         shortDescriptionEn: validatedData.shortDescriptionEn,
-        keywords: validatedData.keywords,
-        enKeywords: validatedData.enKeywords,
         status: validatedData.status,
         showOnHomepage: validatedData.showOnHomepage || false,
+        pin: validatedData.pin || false,
         slug,
         ...(validatedData.categoryId && {
           categoryId: validatedData.categoryId,

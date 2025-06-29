@@ -45,7 +45,10 @@ export default async function NewsContent({
 
   const news = await prisma.news.findMany({
     where,
-    orderBy: { createdAt: "desc" },
+    orderBy: [
+      { pin: "desc" }, // Show pinned items first
+      { createdAt: "desc" }
+    ],
     skip: (Number(page) - 1) * Number(limit),
     take: Number(limit),
     select: {
@@ -54,6 +57,7 @@ export default async function NewsContent({
       slug: true,
       status: true,
       showOnHomepage: true,
+      pin: true,
       createdAt: true,
       shortDescription: true,
       featureImage: {

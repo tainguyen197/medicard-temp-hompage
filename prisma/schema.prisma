@@ -69,10 +69,9 @@ model News {
   descriptionEn      String?
   shortDescription   String?
   shortDescriptionEn String?
-  keywords           String?
-  enKeywords         String?
   status             String    @default("DRAFT")
   showOnHomepage     Boolean   @default(false)
+  pin                Boolean   @default(false)
   categoryId         String?
   featureImageId     String?   @unique
   featureImageEnId   String?   @unique
@@ -91,6 +90,8 @@ model News {
   @@index([showOnHomepage])
   @@index([showOnHomepage, createdAt])
   @@index([categoryId])
+  @@index([pin])
+  @@index([pin, createdAt])
 }
 
 model Media {

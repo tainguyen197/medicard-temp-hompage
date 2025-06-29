@@ -35,13 +35,12 @@ export default function NewNewsPage() {
   const [titleEn, setTitleEn] = useState("");
   const [status, setStatus] = useState("DRAFT");
   const [showOnHomepage, setShowOnHomepage] = useState(false);
+  const [pin, setPin] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [description, setDescription] = useState("");
   const [descriptionEn, setDescriptionEn] = useState("");
   const [shortDescription, setShortDescription] = useState("");
   const [shortDescriptionEn, setShortDescriptionEn] = useState("");
-  const [keywords, setKeywords] = useState("");
-  const [enKeywords, setEnKeywords] = useState("");
   const [slug, setSlug] = useState("");
   const [featuredImage, setFeaturedImage] = useState("");
   const [featureImageId, setFeatureImageId] = useState("");
@@ -196,10 +195,9 @@ export default function NewNewsPage() {
           descriptionEn: descriptionEn || undefined,
           shortDescription,
           shortDescriptionEn: shortDescriptionEn || undefined,
-          keywords,
-          enKeywords: enKeywords || undefined,
           status,
           showOnHomepage,
+          pin,
           slug,
           categoryId: selectedCategoryId || undefined,
           metaTitle: metaTitle || undefined,
@@ -355,19 +353,7 @@ export default function NewNewsPage() {
             </div>
           </div>
 
-          <div className="space-y-2 mt-4">
-            <Label htmlFor="keywords">Keywords (Vietnamese)</Label>
-            <Input
-              id="keywords"
-              value={keywords}
-              onChange={(e) => setKeywords(e.target.value)}
-              placeholder="tin tức, y tế, sức khỏe, bệnh viện, chăm sóc sức khỏe"
-              className="w-full"
-            />
-            <p className="text-xs text-gray-500">
-              Separate keywords with commas for better SEO
-            </p>
-          </div>
+
 
           <div className="space-y-2 mt-4">
             <Label>News Content (Vietnamese)</Label>
@@ -485,19 +471,7 @@ export default function NewNewsPage() {
             />
           </div>
 
-          <div className="space-y-2 mt-4">
-            <Label htmlFor="enKeywords">Keywords (English)</Label>
-            <Input
-              id="enKeywords"
-              value={enKeywords}
-              onChange={(e) => setEnKeywords(e.target.value)}
-              placeholder="news, healthcare, medical, hospital, health services"
-              className="w-full"
-            />
-            <p className="text-xs text-gray-500">
-              Separate keywords with commas for better SEO
-            </p>
-          </div>
+
 
           <div className="space-y-2 mt-4">
             <Label>News Content (English)</Label>
@@ -623,6 +597,25 @@ export default function NewNewsPage() {
               </div>
               <p className="text-xs text-gray-500">
                 Display this news article on the homepage (max 3 items)
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Pin Article</Label>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="pin"
+                  checked={pin}
+                  onChange={(e) => setPin(e.target.checked)}
+                  className="h-4 w-4 text-yellow-600 focus:ring-yellow-500 border-gray-300 rounded"
+                />
+                <Label htmlFor="pin" className="text-sm">
+                  Pin to Top
+                </Label>
+              </div>
+              <p className="text-xs text-gray-500">
+                Pin this article to show at the top of the news list
               </p>
             </div>
           </div>

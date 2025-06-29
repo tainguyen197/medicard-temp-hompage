@@ -5,13 +5,16 @@ import prisma from "../../../../lib/prisma";
 export async function GET() {
   try {
     // Get published news articles that are marked to show on homepage
-    // Limited to 4 items, ordered by creation date (newest first)
+    // Limited to 4 items, ordered by pin status first, then creation date (newest first)
     const homepageNews = await prisma.news.findMany({
       where: {
         status: "PUBLISHED",
         showOnHomepage: true,
       },
-      orderBy: { createdAt: "desc" },
+      orderBy: [
+        { pin: "desc" }, // Show pinned items first
+        { createdAt: "desc" }
+      ],
       take: 4,
       include: {
         featureImage: true,

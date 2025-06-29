@@ -13,14 +13,13 @@ const newsUpdateSchema = z.object({
   titleEn: z.string().optional(),
   status: z.string().optional(),
   showOnHomepage: z.boolean().optional(),
+  pin: z.boolean().optional(),
   categoryId: z.string().optional(),
   slug: z.string().optional(),
   description: z.string().optional(),
   descriptionEn: z.string().optional(),
   shortDescription: z.string().optional(),
   shortDescriptionEn: z.string().optional(),
-  keywords: z.string().optional(),
-  enKeywords: z.string().optional(),
   featuredImage: z.string().optional(), // Accept the image URL
   featureImageId: z.string().optional(),
   featuredImageEn: z.string().optional(), // Accept the English image URL
@@ -175,11 +174,12 @@ export async function PUT(
         descriptionEn: validatedData.descriptionEn,
         shortDescription: validatedData.shortDescription,
         shortDescriptionEn: validatedData.shortDescriptionEn,
-        keywords: validatedData.keywords,
-        enKeywords: validatedData.enKeywords,
         status: validatedData.status,
         ...(validatedData.showOnHomepage !== undefined && {
           showOnHomepage: validatedData.showOnHomepage,
+        }),
+        ...(validatedData.pin !== undefined && {
+          pin: validatedData.pin,
         }),
         ...(validatedData.categoryId !== undefined && {
           categoryId: validatedData.categoryId,
@@ -212,6 +212,9 @@ export async function PUT(
     }
     if (validatedData.showOnHomepage !== existingNews.showOnHomepage) {
       changes.showOnHomepage = { from: existingNews.showOnHomepage, to: validatedData.showOnHomepage };
+    }
+    if (validatedData.pin !== existingNews.pin) {
+      changes.pin = { from: existingNews.pin, to: validatedData.pin };
     }
     if (validatedData.categoryId !== existingNews.categoryId) {
       changes.categoryId = { from: existingNews.categoryId, to: validatedData.categoryId };
