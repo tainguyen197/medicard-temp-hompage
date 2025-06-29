@@ -16,8 +16,9 @@ import {
 import { authOptions } from "@/lib/auth";
 import { ROUTES } from "@/lib/router";
 import { MessageHandler } from "@/components/MessageHandler";
-import { AdminNavItems } from "./components/AdminNavItems";
+import { AdminNavigation } from "./components/AdminNavigation";
 import { canPublishContent, canManageUsers, canAccessSystemSettings, canViewAuditLogs } from "@/lib/utils";
+import NextImage from "next/image";
 
 // Server component
 export default async function AdminLayout({
@@ -42,7 +43,7 @@ export default async function AdminLayout({
   // Define navigation items with roles
   const navItems = [  
     {
-      label: "Home",
+      label: "Dashboard",
       href: ROUTES.ADMIN_DASHBOARD,
       icon: <LayoutDashboard className="h-5 w-5" />,
       roles: ["SUPER_ADMIN", "ADMIN"],
@@ -96,61 +97,75 @@ export default async function AdminLayout({
       icon: <FileText className="h-5 w-5" />,
       roles: ["SUPER_ADMIN", "ADMIN"],
     },
-    
   ];
 
   // Filter navigation items based on user role
   const filteredNavItems = navItems.filter(item => item.roles.includes(session.user.role));
 
   return (
-    <div className="admin-layout">
+    <div className="min-h-screen bg-slate-50">
       {/* Message Handler for all admin routes */}
       <MessageHandler />
 
       {/* Mobile header */}
-      <div className="md:hidden bg-white border-b shadow-sm p-4">
-        <div className="flex items-center justify-between">
+      <div className="lg:hidden bg-white border-b border-slate-200 shadow-sm">
+        <div className="flex items-center justify-between p-4">
           <Link
             href={ROUTES.ADMIN_DASHBOARD}
-            className="text-xl font-bold text-blue-600"
+            className="text-xl font-bold text-slate-900"
           >
-            Dashboard
+            HTC Wellness
           </Link>
-          <button className="p-2 rounded-md hover:bg-gray-100">
-            <Menu className="h-6 w-6" />
+          <button className="p-2 rounded-lg hover:bg-slate-100 transition-colors">
+            <Menu className="h-6 w-6 text-slate-600" />
           </button>
         </div>
       </div>
-      <div>
-        <Link href={ROUTES.ADMIN_DASHBOARD}>Home</Link>
-      </div>
+
       <div className="flex">
         {/* Sidebar */}
-        <aside className="admin-sidebar hidden md:flex flex-col w-64">
-          <div className="admin-sidebar-logo">
-            <Link href={ROUTES.ADMIN_DASHBOARD} className="flex items-center">
-              <svg
-                className="w-8 h-8 mr-2"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM9 17H7V10H9V17ZM13 17H11V7H13V17ZM17 17H15V13H17V17Z" />
-              </svg>
-              Dashboard
+        <aside className="hidden lg:flex h-screen overflow-y-auto flex-col w-72 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 shadow-xl">
+          {/* Logo Header */}
+          <div className="p-6 border-b border-slate-700/50">
+            <Link href={ROUTES.ADMIN_DASHBOARD} className="flex items-center group">
+                <NextImage src="/images/logo.png" alt="HTC Wellness Logo" width={120} height={60} className="h-12 w-auto" />
             </Link>
           </div>
 
-          <nav className="flex-1 px-4 py-4 space-y-1 flex flex-col justify-between">
-            <AdminNavItems
-              navItems={filteredNavItems}
-              userData={session.user as any}
-            />
-          </nav>
+          {/* Navigation with active state */}
+          <AdminNavigation navItems={filteredNavItems} />
+
+          {/* User Profile Section */}
+          <div className="p-6 border-t border-slate-700/50">
+            <div className="flex items-center mb-4">
+              <div className="w-10 h-10 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-full flex items-center justify-center">
+                <span className="text-slate-900 font-semibold text-sm">
+                  {session.user.name?.charAt(0)?.toUpperCase() || session.user.email?.charAt(0)?.toUpperCase()}
+                </span>
+              </div>
+              <div className="ml-3">
+                <div className="font-medium text-white">{session.user.name || "User"}</div>
+                <div className="text-sm text-slate-300">{session.user.role}</div>
+              </div>
+            </div>
+            <Link
+              href={ROUTES.AUTH_LOGOUT}
+              className="flex items-center w-full px-4 py-2 text-red-300 hover:bg-red-900/20 hover:text-red-200 rounded-lg transition-colors duration-200"
+            >
+              <svg className="h-4 w-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
+              Sign Out
+            </Link>
+          </div>
         </aside>
 
         {/* Main content */}
-        <main className="admin-content flex-1 md:ml-[20%]">{children}</main>
+        <main className="flex-1 min-w-0">
+          <div className="px-6 py-8 h-screen overflow-y-auto">
+            {children}
+          </div>
+        </main>
       </div>
     </div>
   );

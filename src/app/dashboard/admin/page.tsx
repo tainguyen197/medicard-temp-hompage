@@ -7,6 +7,9 @@ import {
   ArrowUp,
   ArrowDown,
   ArrowRight,
+  Activity,
+  BarChart3,
+  TrendingUp,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -73,20 +76,23 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className=" text-black">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500 mt-1">Loading dashboard data...</p>
-        </header>
-        <div className="grid gap-6 mb-8 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
-          {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} className="stat-card animate-pulse">
+      <div className="space-y-8">
+        {/* Header skeleton */}
+        <div className="space-y-4">
+          <div className="h-8 w-64 bg-slate-200 rounded-lg animate-pulse"></div>
+          <div className="h-4 w-96 bg-slate-200 rounded animate-pulse"></div>
+        </div>
+
+        {/* Stats grid skeleton */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 animate-pulse">
               <div className="flex items-center justify-between mb-4">
-                <div className="h-4 bg-gray-200 rounded w-24"></div>
-                <div className="h-8 w-8 bg-gray-200 rounded-full"></div>
+                <div className="h-4 bg-slate-200 rounded w-24"></div>
+                <div className="h-10 w-10 bg-slate-200 rounded-xl"></div>
               </div>
-              <div className="h-8 bg-gray-200 rounded w-16 mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded w-32"></div>
+              <div className="h-8 bg-slate-200 rounded w-16 mb-2"></div>
+              <div className="h-3 bg-slate-200 rounded w-32"></div>
             </div>
           ))}
         </div>
@@ -96,11 +102,21 @@ export default function AdminDashboard() {
 
   if (error) {
     return (
-      <div className=" text-black">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-red-500 mt-1">{error}</p>
-        </header>
+      <div className="space-y-8">
+        {/* Header */}
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
+          <p className="text-slate-600">Welcome back to your admin dashboard.</p>
+        </div>
+
+        {/* Error State */}
+        <div className="bg-red-50 border border-red-200 rounded-2xl p-8 text-center">
+          <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Activity className="w-6 h-6 text-red-600" />
+          </div>
+          <h3 className="text-lg font-semibold text-red-900 mb-2">Unable to Load Dashboard</h3>
+          <p className="text-red-700">{error}</p>
+        </div>
       </div>
     );
   }
@@ -109,95 +125,152 @@ export default function AdminDashboard() {
 
   const { stats } = dashboardData;
 
+  const statsConfig = [
+    {
+      label: "Services",
+      value: stats.totalServices,
+      icon: Flag,
+      color: "blue",
+      description: "Total services available",
+      href: "/dashboard/admin/services"
+    },
+    {
+      label: "Team Members",
+      value: stats.totalTeamMembers,
+      icon: Users,
+      color: "green",
+      description: "Active team members",
+      href: "/dashboard/admin/team"
+    },
+    {
+      label: "Media Files",
+      value: stats.totalMedia,
+      icon: FileText,
+      color: "purple",
+      description: "Files in media library",
+      href: "/dashboard/admin/media"
+    },
+    {
+      label: "Banners",
+      value: stats.totalBanners,
+      icon: BarChart3,
+      color: "orange",
+      description: "Active banner campaigns",
+      href: "/dashboard/admin/banners"
+    },
+  ];
+
+  const getIconBgColor = (color: string) => {
+    const colors = {
+      blue: "bg-blue-100 text-blue-600",
+      green: "bg-green-100 text-green-600", 
+      purple: "bg-purple-100 text-purple-600",
+      orange: "bg-orange-100 text-orange-600",
+    };
+    return colors[color as keyof typeof colors];
+  };
+
   return (
-    <div className="text-black">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-500 mt-1">
-          Welcome back to your admin dashboard.
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="space-y-2">
+        <h1 className="text-3xl font-bold text-slate-900">Dashboard Overview</h1>
+        <p className="text-slate-600">
+          Welcome back! Here's what's happening with your healthcare platform.
         </p>
-      </header>
+      </div>
 
-      <div className="grid gap-6 mb-8 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
-        <div className="stat-card">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-medium text-gray-500">Services</h3>
-            <span className="icon-circle">
-              <Flag className="h-5 w-5" />
-            </span>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-gray-900">
-              {stats.totalServices}
-            </div>
-            <div className="trend-same mt-1">
-              <span>Total services</span>
-            </div>
-          </div>
+      {/* Stats Grid */}
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {statsConfig.map((stat) => {
+          const IconComponent = stat.icon;
+          return (
+            <Link 
+              key={stat.label}
+              href={stat.href}
+              className="group bg-white rounded-2xl shadow-sm border border-slate-200 p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-medium text-slate-700 group-hover:text-slate-900 transition-colors">
+                  {stat.label}
+                </h3>
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${getIconBgColor(stat.color)} group-hover:scale-110 transition-transform duration-200`}>
+                  <IconComponent className="w-6 h-6" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="text-3xl font-bold text-slate-900">
+                  {stat.value}
+                </div>
+                <div className="flex items-center text-sm text-slate-500">
+                  <span>{stat.description}</span>
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
+                </div>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+
+      {/* Quick Actions */}
+      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-semibold text-slate-900">Quick Actions</h2>
+          <TrendingUp className="w-5 h-5 text-slate-400" />
         </div>
+        
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <Link 
+            href="/dashboard/admin/services/new"
+            className="flex items-center p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors duration-200 group"
+          >
+            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-blue-200 transition-colors">
+              <Flag className="w-5 h-5 text-blue-600" />
+            </div>
+            <div>
+              <div className="font-medium text-slate-900">Add New Service</div>
+              <div className="text-sm text-slate-600">Create a new healthcare service</div>
+            </div>
+          </Link>
 
-        <div className="stat-card">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-medium text-gray-500">Doctors</h3>
-            <span className="icon-circle">
-              <Users className="h-5 w-5" />
-            </span>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-gray-900">
-              {stats.totalTeamMembers}
+          <Link 
+            href="/dashboard/admin/news/new"
+            className="flex items-center p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-colors duration-200 group"
+          >
+            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-green-200 transition-colors">
+              <FileText className="w-5 h-5 text-green-600" />
             </div>
-            <div className="trend-same mt-1">
-              <span>Total doctors</span>
+            <div>
+              <div className="font-medium text-slate-900">Create News Article</div>
+              <div className="text-sm text-slate-600">Publish latest news and updates</div>
             </div>
-          </div>
+          </Link>
+
+          <Link 
+            href="/dashboard/admin/team/new"
+            className="flex items-center p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-colors duration-200 group"
+          >
+            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-purple-200 transition-colors">
+              <Users className="w-5 h-5 text-purple-600" />
+            </div>
+            <div>
+              <div className="font-medium text-slate-900">Add Team Member</div>
+              <div className="text-sm text-slate-600">Add a new doctor or staff member</div>
+            </div>
+          </Link>
         </div>
+      </div>
 
-        <div className="stat-card">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-medium text-gray-500">Media Files</h3>
-            <span className="icon-circle">
-              <svg
-                className="h-5 w-5"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M21 19V5C21 3.9 20.1 3 19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19ZM8.5 13.5L11 16.51L14.5 12L19 18H5L8.5 13.5Z" />
-              </svg>
-            </span>
-          </div>
+      {/* System Health */}
+      <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-2xl border border-blue-200 p-6">
+        <div className="flex items-center justify-between">
           <div>
-            <div className="text-3xl font-bold text-gray-900">
-              {stats.totalMedia}
-            </div>
-            <div className="trend-same mt-1">
-              <span>Total media files</span>
-            </div>
+            <h3 className="text-lg font-semibold text-slate-900 mb-2">System Status</h3>
+            <p className="text-slate-600">All systems are running smoothly</p>
           </div>
-        </div>
-
-        <div className="stat-card">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-medium text-gray-500">Banners</h3>
-            <span className="icon-circle">
-              <svg
-                className="h-5 w-5"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94.63 1.5 1.98 2.63 3.61 2.96V19H9v2h6v-2h-2v-3.1c1.63-.33 2.98-1.46 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z" />
-              </svg>
-            </span>
-          </div>
-          <div>
-            <div className="text-3xl font-bold text-gray-900">
-              {stats.totalBanners}
-            </div>
-            <div className="trend-same mt-1">
-              <span>Total banners</span>
-            </div>
+          <div className="flex items-center space-x-2">
+            <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+            <span className="text-sm font-medium text-green-700">Operational</span>
           </div>
         </div>
       </div>
