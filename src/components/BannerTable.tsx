@@ -37,6 +37,8 @@ export default function BannerTable({ banners, onUpdate }: BannerTableProps) {
         return "Service";
       case "NEWS":
         return "News";
+      case "ABOUT":
+        return "About";
       default:
         return type;
     }
@@ -50,6 +52,8 @@ export default function BannerTable({ banners, onUpdate }: BannerTableProps) {
         return "bg-blue-100 text-blue-800";
       case "NEWS":
         return "bg-purple-100 text-purple-800";
+      case "ABOUT":
+        return "bg-orange-100 text-orange-800";
       default:
         return "bg-gray-100 text-gray-800";
     }

@@ -622,7 +622,7 @@ export default function NewNewsPage() {
                 </Label>
               </div>
               <p className="text-xs text-gray-500">
-                Display this news article on the homepage (max 4 items)
+                Display this news article on the homepage (max 3 items)
               </p>
             </div>
           </div>

@@ -151,6 +151,8 @@ export default function BannerForm({
         return "Service";
       case "NEWS":
         return "News";
+      case "ABOUT":
+        return "About";
       default:
         return type;
     }
@@ -164,6 +166,8 @@ export default function BannerForm({
         return "text-blue-600 bg-blue-50";
       case "NEWS":
         return "text-purple-600 bg-purple-50";
+      case "ABOUT":
+        return "text-orange-600 bg-orange-50";
       default:
         return "text-gray-600 bg-gray-50";
     }
@@ -198,6 +202,7 @@ export default function BannerForm({
                     <SelectItem value="HOMEPAGE">Homepage</SelectItem>
                     <SelectItem value="SERVICE">Service</SelectItem>
                     <SelectItem value="NEWS">News</SelectItem>
+                    <SelectItem value="ABOUT">About</SelectItem>
                   </SelectContent>
                 </Select>
                 {formData.type && (

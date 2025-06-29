@@ -150,9 +150,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Type is required" }, { status: 400 });
     }
 
-    if (!["HOMEPAGE", "SERVICE", "NEWS"].includes(type)) {
+      if (!["HOMEPAGE", "SERVICE", "NEWS", "ABOUT"].includes(type)) {
       return NextResponse.json(
-        { error: "Type must be HOMEPAGE, SERVICE, or NEWS" },
+        { error: "Type must be HOMEPAGE, SERVICE, NEWS, or ABOUT" },
         { status: 400 }
       );
     }
