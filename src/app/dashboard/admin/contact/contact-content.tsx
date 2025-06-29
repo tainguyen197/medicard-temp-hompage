@@ -22,8 +22,8 @@ export default async function ContactContent() {
     redirect("/auth/login");
   }
 
-  // Check if user has permission (ADMIN or EDITOR)
-  if (!["ADMIN", "EDITOR"].includes(session.user.role)) {
+  // Check if user has permission (SUPER_ADMIN, ADMIN or EDITOR)
+  if (!["SUPER_ADMIN", "ADMIN", "EDITOR"].includes(session.user.role)) {
     redirect("/");
   }
 

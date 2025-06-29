@@ -10,7 +10,7 @@ interface NavItem {
   label: string;
   href: string;
   icon: React.ReactNode;
-  adminOnly?: boolean;
+  roles: string[];
 }
 
 interface UserData {

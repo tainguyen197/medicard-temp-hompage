@@ -18,7 +18,30 @@ async function main() {
     },
   });
 
+  const superAdmin = await prisma.user.upsert({
+    where: { email: "superadmin@medicare.com" },
+    update: {},
+    create: {
+      email: "superadmin@medicare.com",
+      name: "Super Admin",
+      password,
+      role: "SUPER_ADMIN",
+    },
+  });
+
+  const editor = await prisma.user.upsert({
+    where: { email: "editor@medicare.com" },
+    update: {},
+    create: {
+      email: "editor@medicare.com",
+      name: "Editor User",
+      password,
+      role: "EDITOR",
+    },
+  });
+
   console.log("Admin user created:", admin.email);
+  console.log("Super admin user created:", superAdmin.email);
 }
 
 main()

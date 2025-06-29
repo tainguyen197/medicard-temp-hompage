@@ -17,6 +17,7 @@ import { authOptions } from "@/lib/auth";
 import { ROUTES } from "@/lib/router";
 import { MessageHandler } from "@/components/MessageHandler";
 import { AdminNavItems } from "./components/AdminNavItems";
+import { canPublishContent, canManageUsers, canAccessSystemSettings, canViewAuditLogs } from "@/lib/utils";
 
 // Server component
 export default async function AdminLayout({
@@ -30,71 +31,80 @@ export default async function AdminLayout({
     redirect("/auth/login");
   }
 
-  // Check if user has admin or editor role
-  if (!["ADMIN", "EDITOR"].includes(session.user.role)) {
+  // Check if user has at least editor role
+  if (!["SUPER_ADMIN", "ADMIN", "EDITOR"].includes(session.user.role)) {
     // Redirect to unauthorized page or home
     redirect("/");
   }
 
   const isAdmin = session.user.role === "ADMIN";
 
-  // Define navigation items
+  // Define navigation items with roles
   const navItems = [  
     {
       label: "Home",
       href: ROUTES.ADMIN_DASHBOARD,
       icon: <LayoutDashboard className="h-5 w-5" />,
-      adminOnly: true,
+      roles: ["SUPER_ADMIN", "ADMIN"],
+    },
+    {
+      label: "User Management",
+      href: "/dashboard/admin/users",
+      icon: <Users className="h-5 w-5" />,
+      roles: ["SUPER_ADMIN"],
     },
     {
       label: "Services",
       href: ROUTES.ADMIN_SERVICES,
       icon: <Flag className="h-5 w-5" />,
+      roles: ["SUPER_ADMIN", "ADMIN", "EDITOR"],
     },
     {
       label: "News",
       href: ROUTES.ADMIN_NEWS,
       icon: <FileText className="h-5 w-5" />,
+      roles: ["SUPER_ADMIN", "ADMIN", "EDITOR"],
     },
     {
       label: "Doctors",
       href: ROUTES.ADMIN_TEAM,
       icon: <Users className="h-5 w-5" />,
-      // adminOnly: true,
+      roles: ["SUPER_ADMIN", "ADMIN", "EDITOR"],
     },
     {
       label: "Banners",
       href: ROUTES.ADMIN_BANNERS,
       icon: <Image className="h-5 w-5" />,
+      roles: ["SUPER_ADMIN", "ADMIN"],
     },
     {
       label: "Contact",
       href: ROUTES.ADMIN_CONTACT,
       icon: <Settings className="h-5 w-5" />,
+      roles: ["SUPER_ADMIN", "ADMIN"],
     },
     {
       label: "Media Library",
       href: "/dashboard/admin/media",
       icon: <Image className="h-5 w-5" />,
+      roles: ["SUPER_ADMIN", "ADMIN", "EDITOR"],
     },
     {
       label: "Logs",
       href: "/dashboard/admin/logs",
       icon: <FileText className="h-5 w-5" />,
-      adminOnly: true,
+      roles: ["SUPER_ADMIN", "ADMIN"],
     },
-    // {
-    //   label: "Settings",
-    //   href: ROUTES.ADMIN_SETTINGS,
-    //   icon: <Settings className="h-5 w-5" />,
-    //   adminOnly: true,
-    // },
+    {
+      label: "System Settings",
+      href: "/dashboard/admin/settings",
+      icon: <Settings className="h-5 w-5" />,
+      roles: ["SUPER_ADMIN"],
+    },
   ];
 
-  // Filter out admin-only items for editors
-  const filteredNavItems = navItems.filter(
-    (item) => !item.adminOnly || isAdmin
-  );
+  // Filter navigation items based on user role
+  const filteredNavItems = navItems.filter(item => item.roles.includes(session.user.role));
 
   return (
     <div className="admin-layout">

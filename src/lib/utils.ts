@@ -48,6 +48,7 @@ export function hasRequiredRole(
   requiredRole: string
 ): boolean {
   const roleHierarchy = {
+    SUPER_ADMIN: 200,
     ADMIN: 100,
     EDITOR: 50,
   };
@@ -264,4 +265,20 @@ export class Logger {
       ipAddress,
     });
   }
+}
+
+export function canPublishContent(userRole: string): boolean {
+  return ["SUPER_ADMIN", "ADMIN"].includes(userRole);
+}
+
+export function canManageUsers(userRole: string): boolean {
+  return userRole === "SUPER_ADMIN";
+}
+
+export function canAccessSystemSettings(userRole: string): boolean {
+  return userRole === "SUPER_ADMIN";
+}
+
+export function canViewAuditLogs(userRole: string): boolean {
+  return ["SUPER_ADMIN", "ADMIN"].includes(userRole);
 }
