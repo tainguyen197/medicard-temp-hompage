@@ -36,15 +36,20 @@ export async function middleware(request: NextRequest) {
 
   // Handle subdomain routing for dashboard
   if (subdomain === "dashboard") {
-    if (nextUrl.pathname.startsWith("/auth")) {
+    // Check if pathname already starts with /dashboard to prevent infinite loop
+    if (!nextUrl.pathname.startsWith("/dashboard")) {
+      if (nextUrl.pathname.startsWith("/auth")) {
+        return NextResponse.rewrite(
+          new URL(`/dashboard${nextUrl.pathname}`, request.url)
+        );
+      }
+
       return NextResponse.rewrite(
         new URL(`/dashboard${nextUrl.pathname}`, request.url)
       );
     }
-
-    return NextResponse.rewrite(
-      new URL(`/dashboard${nextUrl.pathname}`, request.url)
-    );
+    // If already starts with /dashboard, just continue
+    return NextResponse.next();
   }
 
   // Redirect dashboard access from main domain
