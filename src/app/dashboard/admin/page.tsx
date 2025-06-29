@@ -133,7 +133,7 @@ export default function AdminDashboard() {
       icon: Flag,
       color: "blue",
       description: "Total services available",
-      href: "/dashboard/admin/services"
+      href: ROUTES.ADMIN_SERVICES
     },
     {
       label: "Team Members",
@@ -141,7 +141,7 @@ export default function AdminDashboard() {
       icon: Users,
       color: "green",
       description: "Active team members",
-      href: "/dashboard/admin/team"
+      href: ROUTES.ADMIN_TEAM
     },
     {
       label: "Media Files",
@@ -149,7 +149,7 @@ export default function AdminDashboard() {
       icon: FileText,
       color: "purple",
       description: "Files in media library",
-      href: "/dashboard/admin/media"
+      href: ROUTES.ADMIN_MEDIA
     },
     {
       label: "Banners",
@@ -157,7 +157,7 @@ export default function AdminDashboard() {
       icon: BarChart3,
       color: "orange",
       description: "Active banner campaigns",
-      href: "/dashboard/admin/banners"
+      href: ROUTES.ADMIN_BANNERS
     },
   ];
 
