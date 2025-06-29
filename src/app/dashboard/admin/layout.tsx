@@ -39,12 +39,7 @@ export default async function AdminLayout({
   const isAdmin = session.user.role === "ADMIN";
 
   // Define navigation items
-  const navItems = [
-    // {
-    //   label: "Dashboard",
-    //   href: ROUTES.ADMIN_DASHBOARD,
-    //   icon: <LayoutDashboard className="h-5 w-5" />,
-    // },
+  const navItems = [  
     {
       label: "Home",
       href: ROUTES.ADMIN_DASHBOARD,
@@ -81,6 +76,12 @@ export default async function AdminLayout({
       label: "Media Library",
       href: "/dashboard/admin/media",
       icon: <Image className="h-5 w-5" />,
+    },
+    {
+      label: "Logs",
+      href: "/dashboard/admin/logs",
+      icon: <FileText className="h-5 w-5" />,
+      adminOnly: true,
     },
     // {
     //   label: "Settings",

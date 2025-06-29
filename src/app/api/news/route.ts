@@ -5,6 +5,7 @@ import { z } from "zod";
 import { authOptions } from "../../../lib/auth";
 import prisma from "../../../lib/prisma";
 import { createSlug } from "../../../lib/utils";
+import { Logger } from "../../../lib/utils";
 
 // Schema for news creation/update
 const newsSchema = z.object({
@@ -208,6 +209,22 @@ export async function POST(request: Request) {
       include: {
         featureImage: true,
         category: true,
+      },
+    });
+
+    // Log the creation
+    await Logger.logCRUD({
+      operation: 'CREATE',
+      entity: 'NEWS',
+      entityId: news.id,
+      userId: session.user.id,
+      entityName: news.title,
+      changes: {
+        title: news.title,
+        status: news.status,
+        showOnHomepage: news.showOnHomepage,
+        slug: news.slug,
+        categoryId: news.categoryId,
       },
     });
 

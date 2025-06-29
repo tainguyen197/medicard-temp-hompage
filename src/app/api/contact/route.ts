@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
+import { Logger } from "../../../lib/utils";
 
 // Validation schema for contact data
 const contactSchema = z.object({
@@ -83,6 +84,32 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    // Log the creation/update
+    const operation = existingContact ? 'UPDATE' : 'CREATE';
+    const changes: Record<string, any> = {};
+    
+    if (existingContact) {
+      if (cleanData.phone !== existingContact.phone) {
+        changes.phone = { from: existingContact.phone, to: cleanData.phone };
+      }
+      if (cleanData.address !== existingContact.address) {
+        changes.address = { from: existingContact.address, to: cleanData.address };
+      }
+      if (cleanData.facebookUrl !== existingContact.facebookUrl) {
+        changes.facebookUrl = { from: existingContact.facebookUrl, to: cleanData.facebookUrl };
+      }
+      // Add other field comparisons as needed
+    }
+
+    await Logger.logCRUD({
+      operation,
+      entity: 'CONTACT',
+      entityId: contact.id,
+      userId: session.user.id,
+      entityName: 'Contact Information',
+      changes: Object.keys(changes).length > 0 ? changes : undefined,
+    });
+
     return NextResponse.json({ contact });
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -95,6 +122,88 @@ export async function POST(request: NextRequest) {
     console.error("Error creating/updating contact:", error);
     return NextResponse.json(
       { error: "Failed to save contact information" },
+      { status: 500 }
+    );
+  }
+}
+
+// PUT /api/contact - Update contact information
+export async function PUT(request: Request) {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const body = await request.json();
+    const validatedData = contactSchema.parse(body);
+
+    // Get existing contact info for comparison
+    const existingContact = await prisma.contact.findFirst();
+
+    // Update or create contact information
+    const contact = await prisma.contact.upsert({
+      where: { id: existingContact?.id || 'default' },
+      update: {
+        phone: validatedData.phone,
+        address: validatedData.address,
+        addressEn: validatedData.addressEn,
+        businessHours: validatedData.businessHours,
+        businessHoursEn: validatedData.businessHoursEn,
+        facebookUrl: validatedData.facebookUrl,
+        zaloUrl: validatedData.zaloUrl,
+        instagramUrl: validatedData.instagramUrl,
+        status: validatedData.status,
+      },
+      create: {
+        phone: validatedData.phone,
+        address: validatedData.address,
+        addressEn: validatedData.addressEn,
+        businessHours: validatedData.businessHours,
+        businessHoursEn: validatedData.businessHoursEn,
+        facebookUrl: validatedData.facebookUrl,
+        zaloUrl: validatedData.zaloUrl,
+        instagramUrl: validatedData.instagramUrl,
+        status: validatedData.status,
+      },
+    });
+
+    // Log the update
+    const operation = existingContact ? 'UPDATE' : 'CREATE';
+    const changes: Record<string, any> = {};
+    
+    if (existingContact) {
+      if (validatedData.phone !== existingContact.phone) {
+        changes.phone = { from: existingContact.phone, to: validatedData.phone };
+      }
+      if (validatedData.address !== existingContact.address) {
+        changes.address = { from: existingContact.address, to: validatedData.address };
+      }
+      if (validatedData.facebookUrl !== existingContact.facebookUrl) {
+        changes.facebookUrl = { from: existingContact.facebookUrl, to: validatedData.facebookUrl };
+      }
+      // Add other field comparisons as needed
+    }
+
+    await Logger.logCRUD({
+      operation,
+      entity: 'CONTACT',
+      entityId: contact.id,
+      userId: session.user.id,
+      entityName: 'Contact Information',
+      changes: Object.keys(changes).length > 0 ? changes : undefined,
+    });
+
+    return NextResponse.json(contact);
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: error.errors }, { status: 400 });
+    }
+
+    console.error("Error updating contact information:", error);
+    return NextResponse.json(
+      { error: "Error updating contact information" },
       { status: 500 }
     );
   }

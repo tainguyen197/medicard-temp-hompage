@@ -5,6 +5,7 @@ import { z } from "zod";
 import { authOptions } from "../../../lib/auth";
 import prisma from "../../../lib/prisma";
 import { createSlug } from "../../../lib/utils";
+import { Logger } from "../../../lib/utils";
 
 // Schema for service creation/update
 const serviceSchema = z.object({
@@ -209,6 +210,21 @@ export async function POST(request: Request) {
       },
       include: {
         featureImage: true,
+      },
+    });
+
+    // Log the creation
+    await Logger.logCRUD({
+      operation: 'CREATE',
+      entity: 'SERVICE',
+      entityId: service.id,
+      userId: session.user.id,
+      entityName: service.title,
+      changes: {
+        title: service.title,
+        status: service.status,
+        showOnHomepage: service.showOnHomepage,
+        slug: service.slug,
       },
     });
 

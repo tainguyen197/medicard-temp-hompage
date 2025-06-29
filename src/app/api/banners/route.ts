@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { S3 } from "aws-sdk";
 import { extname } from "path";
+import { Logger } from "../../../lib/utils";
 
 // Add the same R2 configuration as TeamMember API
 const isR2Available = !!(
@@ -150,7 +151,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Type is required" }, { status: 400 });
     }
 
-      if (!["HOMEPAGE", "SERVICE", "NEWS", "ABOUT"].includes(type)) {
+    if (!["HOMEPAGE", "SERVICE", "NEWS", "ABOUT"].includes(type)) {
       return NextResponse.json(
         { error: "Type must be HOMEPAGE, SERVICE, NEWS, or ABOUT" },
         { status: 400 }
@@ -192,6 +193,22 @@ export async function POST(request: NextRequest) {
       },
       include: {
         image: true,
+      },
+    });
+
+    // Log the creation/update
+    const operation = banner.createdAt === banner.updatedAt ? 'CREATE' : 'UPDATE';
+    await Logger.logCRUD({
+      operation,
+      entity: 'BANNER',
+      entityId: banner.id,
+      userId: session.user.id,
+      entityName: `${type} Banner`,
+      changes: {
+        type: banner.type,
+        status: banner.status,
+        hasImage: !!banner.imageId,
+        link: banner.link,
       },
     });
 

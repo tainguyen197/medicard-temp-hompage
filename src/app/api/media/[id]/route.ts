@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../../lib/auth";
 import prisma from "../../../../lib/prisma";
+import { Logger } from "../../../../lib/utils";
 
 export async function DELETE(
   request: NextRequest,
@@ -21,7 +22,7 @@ export async function DELETE(
 
     const { id } = await params;
 
-    // Check if media file exists
+    // Get existing media file for logging
     const mediaFile = await prisma.media.findUnique({
       where: { id },
     });
@@ -84,6 +85,17 @@ export async function DELETE(
     // Delete the media record from database
     await prisma.media.delete({
       where: { id },
+    });
+
+    // Log the deletion
+    await Logger.logFileOperation({
+      operation: 'DELETE',
+      entity: 'MEDIA',
+      entityId: id,
+      userId: session.user.id,
+      fileName: mediaFile.originalName || mediaFile.fileName || 'Unknown file',
+      fileSize: mediaFile.fileSize,
+      additionalDetails: `Deleted from media library`,
     });
 
     return NextResponse.json(

@@ -5,6 +5,7 @@ import { z } from "zod";
 import { authOptions } from "../../../../lib/auth";
 import prisma from "../../../../lib/prisma";
 import { createSlug } from "../../../../lib/utils";
+import { Logger } from "../../../../lib/utils";
 
 // Schema for news update
 const newsUpdateSchema = z.object({
@@ -85,7 +86,6 @@ export async function PUT(
 ) {
   const session = await getServerSession(authOptions);
 
-  // Check if user is authenticated and has proper permissions
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -95,10 +95,7 @@ export async function PUT(
     const body = await request.json();
     const validatedData = newsUpdateSchema.parse(body);
 
-    // Generate slug if not provided
-    const slug = validatedData.slug || createSlug(validatedData.title);
-
-    // Check if news article exists
+    // Get existing news for comparison
     const existingNews = await prisma.news.findUnique({
       where: { id },
     });
@@ -109,6 +106,9 @@ export async function PUT(
         { status: 404 }
       );
     }
+
+    // Generate slug if not provided
+    const slug = validatedData.slug || createSlug(validatedData.title);
 
     // Check if slug is being changed and if it already exists
     if (slug !== existingNews.slug) {
@@ -201,6 +201,31 @@ export async function PUT(
       },
     });
 
+    // Log the update with changes
+    const changes: Record<string, any> = {};
+    
+    if (validatedData.title !== existingNews.title) {
+      changes.title = { from: existingNews.title, to: validatedData.title };
+    }
+    if (validatedData.status !== existingNews.status) {
+      changes.status = { from: existingNews.status, to: validatedData.status };
+    }
+    if (validatedData.showOnHomepage !== existingNews.showOnHomepage) {
+      changes.showOnHomepage = { from: existingNews.showOnHomepage, to: validatedData.showOnHomepage };
+    }
+    if (validatedData.categoryId !== existingNews.categoryId) {
+      changes.categoryId = { from: existingNews.categoryId, to: validatedData.categoryId };
+    }
+
+    await Logger.logCRUD({
+      operation: 'UPDATE',
+      entity: 'NEWS',
+      entityId: news.id,
+      userId: session.user.id,
+      entityName: news.title,
+      changes: Object.keys(changes).length > 0 ? changes : undefined,
+    });
+
     return NextResponse.json(news);
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -222,7 +247,6 @@ export async function DELETE(
 ) {
   const session = await getServerSession(authOptions);
 
-  // Check if user is authenticated and has proper permissions
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -230,6 +254,7 @@ export async function DELETE(
   try {
     const { id } = await params;
 
+    // Get existing news for logging
     const existingNews = await prisma.news.findUnique({
       where: { id },
     });
@@ -241,11 +266,24 @@ export async function DELETE(
       );
     }
 
+    // Delete the news article
     await prisma.news.delete({
       where: { id },
     });
 
-    return NextResponse.json({ message: "News article deleted successfully" });
+    // Log the deletion
+    await Logger.logCRUD({
+      operation: 'DELETE',
+      entity: 'NEWS',
+      entityId: id,
+      userId: session.user.id,
+      entityName: existingNews.title,
+    });
+
+    return NextResponse.json(
+      { message: "News article deleted successfully" },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error deleting news article:", error);
     return NextResponse.json(

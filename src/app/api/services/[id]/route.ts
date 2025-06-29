@@ -6,6 +6,7 @@ import { authOptions } from "../../../../lib/auth";
 import prisma from "../../../../lib/prisma";
 import { createSlug } from "../../../../lib/utils";
 import { use } from "react";
+import { Logger } from "../../../../lib/utils";
 
 // Schema for service update
 const serviceUpdateSchema = z.object({
@@ -94,7 +95,6 @@ export async function PUT(
 ) {
   const session = await getServerSession(authOptions);
 
-  // Check if user is authenticated and has proper permissions
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -103,6 +103,18 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
     const validatedData = serviceUpdateSchema.parse(body);
+
+    // Get existing service for comparison
+    const existingService = await prisma.service.findUnique({
+      where: { id },
+    });
+
+    if (!existingService) {
+      return NextResponse.json(
+        { error: "Service not found" },
+        { status: 404 }
+      );
+    }
 
     // Generate slug if not provided
     const slug = validatedData.slug || createSlug(validatedData.title);
@@ -217,6 +229,28 @@ export async function PUT(
       },
     });
 
+    // Log the update with changes
+    const changes: Record<string, any> = {};
+    
+    if (validatedData.title !== existingService.title) {
+      changes.title = { from: existingService.title, to: validatedData.title };
+    }
+    if (validatedData.status !== existingService.status) {
+      changes.status = { from: existingService.status, to: validatedData.status };
+    }
+    if (validatedData.showOnHomepage !== existingService.showOnHomepage) {
+      changes.showOnHomepage = { from: existingService.showOnHomepage, to: validatedData.showOnHomepage };
+    }
+
+    await Logger.logCRUD({
+      operation: 'UPDATE',
+      entity: 'SERVICE',
+      entityId: service.id,
+      userId: session.user.id,
+      entityName: service.title,
+      changes: Object.keys(changes).length > 0 ? changes : undefined,
+    });
+
     return NextResponse.json(service);
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -238,7 +272,6 @@ export async function DELETE(
 ) {
   const session = await getServerSession(authOptions);
 
-  // Check if user is authenticated and has proper permissions
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -246,19 +279,36 @@ export async function DELETE(
   try {
     const { id } = await params;
 
+    // Get existing service for logging
     const existingService = await prisma.service.findUnique({
       where: { id },
     });
 
     if (!existingService) {
-      return NextResponse.json({ error: "Service not found" }, { status: 404 });
+      return NextResponse.json(
+        { error: "Service not found" },
+        { status: 404 }
+      );
     }
 
+    // Delete the service
     await prisma.service.delete({
       where: { id },
     });
 
-    return NextResponse.json({ message: "Service deleted successfully" });
+    // Log the deletion
+    await Logger.logCRUD({
+      operation: 'DELETE',
+      entity: 'SERVICE',
+      entityId: id,
+      userId: session.user.id,
+      entityName: existingService.title,
+    });
+
+    return NextResponse.json(
+      { message: "Service deleted successfully" },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error deleting service:", error);
     return NextResponse.json(

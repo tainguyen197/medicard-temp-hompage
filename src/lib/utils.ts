@@ -105,3 +105,163 @@ export function extractImagesFromContentServer(content: string): string[] {
 
   return urls;
 }
+
+/**
+ * Centralized logging service for admin operations
+ */
+export class Logger {
+  /**
+   * Log an action to the audit log
+   */
+  static async logAction(data: {
+    action: string;
+    entity: string;
+    entityId?: string;
+    userId: string;
+    details?: string;
+    ipAddress?: string;
+    userAgent?: string;
+  }) {
+    try {
+      const { PrismaClient } = await import("@prisma/client");
+      const prisma = new PrismaClient();
+      
+      await prisma.auditLog.create({
+        data: {
+          action: data.action,
+          entity: data.entity,
+          entityId: data.entityId || '',
+          userId: data.userId,
+          details: data.details,
+        },
+      });
+      
+      await prisma.$disconnect();
+    } catch (error) {
+      console.error('Failed to log action:', error);
+    }
+  }
+
+  /**
+   * Log CRUD operations with standardized format
+   */
+  static async logCRUD(data: {
+    operation: 'CREATE' | 'READ' | 'UPDATE' | 'DELETE';
+    entity: string;
+    entityId: string;
+    userId: string;
+    entityName?: string;
+    changes?: Record<string, any>;
+    additionalDetails?: string;
+  }) {
+    const { operation, entity, entityId, userId, entityName, changes, additionalDetails } = data;
+    
+    let details = `${operation} ${entity}`;
+    if (entityName) {
+      details += ` "${entityName}"`;
+    }
+    
+    if (changes && Object.keys(changes).length > 0) {
+      details += ` - Changes: ${JSON.stringify(changes)}`;
+    }
+    
+    if (additionalDetails) {
+      details += ` - ${additionalDetails}`;
+    }
+
+    await this.logAction({
+      action: operation,
+      entity,
+      entityId,
+      userId,
+      details,
+    });
+  }
+
+  /**
+   * Log status changes
+   */
+  static async logStatusChange(data: {
+    entity: string;
+    entityId: string;
+    userId: string;
+    entityName: string;
+    previousStatus: string;
+    newStatus: string;
+  }) {
+    const { entity, entityId, userId, entityName, previousStatus, newStatus } = data;
+    
+    await this.logAction({
+      action: 'UPDATE_STATUS',
+      entity,
+      entityId,
+      userId,
+      details: `Changed ${entity} "${entityName}" status from ${previousStatus} to ${newStatus}`,
+    });
+  }
+
+  /**
+   * Log file operations
+   */
+  static async logFileOperation(data: {
+    operation: 'UPLOAD' | 'DELETE' | 'UPDATE';
+    entity: string;
+    entityId: string;
+    userId: string;
+    fileName: string;
+    fileSize?: number;
+    additionalDetails?: string;
+  }) {
+    const { operation, entity, entityId, userId, fileName, fileSize, additionalDetails } = data;
+    
+    let details = `${operation} file "${fileName}"`;
+    if (fileSize) {
+      details += ` (${formatFileSize(fileSize)})`;
+    }
+    
+    if (additionalDetails) {
+      details += ` - ${additionalDetails}`;
+    }
+
+    await this.logAction({
+      action: operation,
+      entity,
+      entityId,
+      userId,
+      details,
+    });
+  }
+
+  /**
+   * Log authentication events
+   */
+  static async logAuthEvent(data: {
+    event: 'LOGIN_SUCCESS' | 'LOGIN_FAILED' | 'LOGOUT' | 'UNAUTHORIZED_ACCESS';
+    userId: string;
+    email?: string;
+    ipAddress?: string;
+    details?: string;
+  }) {
+    const { event, userId, email, ipAddress, details } = data;
+    
+    let logDetails = event;
+    if (email) {
+      logDetails += ` for ${email}`;
+    }
+    if (ipAddress) {
+      logDetails += ` from IP ${ipAddress}`;
+    }
+    if (details) {
+      logDetails += ` - ${details}`;
+    }
+
+    await this.logAction({
+      action: event,
+      entity: 'USER',
+      entityId: userId,
+      userId,
+      details: logDetails,
+      ipAddress,
+    });
+  }
+}

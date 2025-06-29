@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { S3 } from "aws-sdk";
 import { extname } from "path";
+import { Logger } from "../../../lib/utils";
 
 // Check if R2 environment variables are set
 const isR2Available = !!(
@@ -174,6 +175,21 @@ export async function POST(request: NextRequest) {
       include: {
         image: true,
         imageEn: true,
+      },
+    });
+
+    // Log the creation
+    await Logger.logCRUD({
+      operation: 'CREATE',
+      entity: 'TEAM_MEMBER',
+      entityId: teamMember.id,
+      userId: session.user.id,
+      entityName: teamMember.name,
+      changes: {
+        name: teamMember.name,
+        title: teamMember.title,
+        status: teamMember.status,
+        order: teamMember.order,
       },
     });
 
