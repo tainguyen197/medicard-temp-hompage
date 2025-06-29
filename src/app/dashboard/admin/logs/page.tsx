@@ -3,15 +3,16 @@ import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { authOptions } from "@/lib/auth";
 
-export default async function AdminLogsPage({ searchParams }: { searchParams?: { page?: string } }) {
+export default async function AdminLogsPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
   const session = await getServerSession(authOptions);
   if (!session?.user || !["SUPER_ADMIN", "ADMIN"].includes(session.user.role)) {
     redirect("/dashboard/admin");
   }
 
-  const page = parseInt(searchParams?.page || "1", 10);
+  const { page = "1" } = await searchParams;
+  const pageNumber = parseInt(page, 10);
   const pageSize = 20;
-  const skip = (page - 1) * pageSize;
+  const skip = (pageNumber - 1) * pageSize;
 
   const [logs, total] = await Promise.all([
     prisma.auditLog.findMany({
@@ -66,20 +67,20 @@ export default async function AdminLogsPage({ searchParams }: { searchParams?: {
       {/* Pagination */}
       <div className="flex justify-between items-center mt-4">
         <span>
-          Page {page} of {totalPages}
+          Page {pageNumber} of {totalPages}
         </span>
         <div className="space-x-2">
           <a
-            href={`?page=${page - 1}`}
-            className={`px-3 py-1 rounded ${page <= 1 ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"}`}
-            aria-disabled={page <= 1}
+            href={`?page=${pageNumber - 1}`}
+            className={`px-3 py-1 rounded ${pageNumber <= 1 ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"}`}
+            aria-disabled={pageNumber <= 1}
           >
             Previous
           </a>
           <a
-            href={`?page=${page + 1}`}
-            className={`px-3 py-1 rounded ${page >= totalPages ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"}`}
-            aria-disabled={page >= totalPages}
+            href={`?page=${pageNumber + 1}`}
+            className={`px-3 py-1 rounded ${pageNumber >= totalPages ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"}`}
+            aria-disabled={pageNumber >= totalPages}
           >
             Next
           </a>
