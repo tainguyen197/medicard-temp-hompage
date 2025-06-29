@@ -59,6 +59,19 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  events: {
+    async signOut({ token }) {
+      // Log the signout event
+      console.log(`User ${token?.email} signed out`);
+      
+      // You could add audit logging here
+      // await Logger.logAuthEvent({
+      //   event: 'SIGNOUT',
+      //   userId: token?.id,
+      //   email: token?.email
+      // });
+    },
+  },
   callbacks: {
     session: ({ session, token }) => {
       return {
@@ -70,7 +83,12 @@ export const authOptions: NextAuthOptions = {
         },
       };
     },
-    jwt: ({ token, user }) => {
+    jwt: ({ token, user, trigger }) => {
+      // Handle signout trigger to invalidate token
+      if (trigger === "signOut") {
+        return {};
+      }
+      
       if (user) {
         return {
           ...token,

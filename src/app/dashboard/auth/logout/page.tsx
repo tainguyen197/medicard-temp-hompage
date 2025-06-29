@@ -12,23 +12,18 @@ export default function LogoutPage() {
   useEffect(() => {
     const performLogout = async () => {
       try {
-        // Force clear all client-side session data
+        // First call your custom logout API to clear cookies and log the event
+        await fetch('/api/auth/logout', { 
+          method: 'POST',
+          credentials: 'include' 
+        });
+
+        // Then use NextAuth signOut with proper callback
         await signOut({ 
-          redirect: false,
+          redirect: true,
           callbackUrl: ROUTES.AUTH_LOGIN 
         });
         
-        // Clear any additional storage
-        if (typeof window !== 'undefined') {
-          localStorage.clear();
-          sessionStorage.clear();
-        }
-        
-        // Wait a moment for cleanup
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        // Force hard redirect to login
-        window.location.href = ROUTES.AUTH_LOGIN;
       } catch (error) {
         console.error('Logout error:', error);
         // Fallback: force redirect anyway

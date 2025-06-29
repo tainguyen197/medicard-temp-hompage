@@ -19,24 +19,22 @@ export async function POST() {
       // });
     }
 
-    // Clear all NextAuth cookies
+    // Clear all NextAuth cookies more comprehensively
     const cookieStore = await cookies();
-    const cookiesToClear = [
-      'next-auth.session-token',
-      'next-auth.callback-url',
-      'next-auth.csrf-token',
-      '__Secure-next-auth.session-token',
-      '__Host-next-auth.csrf-token'
-    ];
-
-    cookiesToClear.forEach(cookieName => {
-      cookieStore.set(cookieName, '', {
-        expires: new Date(0),
-        path: '/',
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax'
-      });
+    const allCookies = cookieStore.getAll();
+    
+    // Clear NextAuth specific cookies
+    allCookies.forEach(cookie => {
+      if (cookie.name.includes('next-auth') || cookie.name.includes('__Secure-next-auth') || cookie.name.includes('__Host-next-auth')) {
+        cookieStore.set(cookie.name, '', {
+          expires: new Date(0),
+          path: '/',
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          domain: undefined // Let browser determine domain
+        });
+      }
     });
 
     return NextResponse.json({ success: true }, { status: 200 });
