@@ -131,7 +131,7 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const validatedData = teamMemberUpdateSchema.parse(body);
+    // const validatedData = teamMemberUpdateSchema.parse(body);
 
     // Get existing team member for comparison
     const existingTeamMember = await prisma.teamMember.findUnique({
@@ -197,14 +197,14 @@ export async function PUT(
     const teamMember = await prisma.teamMember.update({
       where: { id },
       data: {
-        name: validatedData.name,
-        nameEn: validatedData.nameEn,
-        title: validatedData.title,
-        titleEn: validatedData.titleEn,
-        description: validatedData.description,
-        descriptionEn: validatedData.descriptionEn,
-        order: validatedData.order,
-        status: validatedData.status,
+        name: body.name,
+        nameEn: body.nameEn,
+        title: body.title,
+        titleEn: body.titleEn,
+        description: body.description,
+        descriptionEn: body.descriptionEn,
+        order: body.order,
+        status: body.status,
         ...(imageId && { imageId }),
         ...(imageEnId && { imageEnId }),
       },
@@ -217,17 +217,17 @@ export async function PUT(
     // Log the update with changes
     const changes: Record<string, any> = {};
     
-    if (validatedData.name !== existingTeamMember.name) {
-      changes.name = { from: existingTeamMember.name, to: validatedData.name };
+    if (body.name !== existingTeamMember.name) {
+      changes.name = { from: existingTeamMember.name, to: body.name };
     }
-    if (validatedData.title !== existingTeamMember.title) {
-      changes.title = { from: existingTeamMember.title, to: validatedData.title };
+    if (body.title !== existingTeamMember.title) {
+      changes.title = { from: existingTeamMember.title, to: body.title };
     }
-    if (validatedData.status !== existingTeamMember.status) {
-      changes.status = { from: existingTeamMember.status, to: validatedData.status };
+    if (body.status !== existingTeamMember.status) {
+      changes.status = { from: existingTeamMember.status, to: body.status };
     }
-    if (validatedData.order !== existingTeamMember.order) {
-      changes.order = { from: existingTeamMember.order, to: validatedData.order };
+    if (body.order !== existingTeamMember.order) {
+      changes.order = { from: existingTeamMember.order, to: body.order };
     }
 
     await Logger.logCRUD({

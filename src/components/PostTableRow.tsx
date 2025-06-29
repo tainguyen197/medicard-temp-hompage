@@ -123,7 +123,7 @@ export default function PostTableRow({
       </td>
       <td className="px-6 py-4 whitespace-nowrap align-middle">
         <Link
-          href={`${ROUTES.ADMIN_POSTS}/${post.id}/toggle-featured`}
+          href={`${ROUTES.ADMIN_NEWS}/${post.id}/toggle-featured`}
           className={`inline-flex items-center px-2 py-1 rounded ${
             post?.featured
               ? "bg-amber-100 text-amber-800 hover:bg-amber-200"
@@ -148,7 +148,7 @@ export default function PostTableRow({
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium align-middle">
         <Link
-          href={ROUTES.ADMIN_POSTS + `/${post.id}`}
+          href={ROUTES.ADMIN_NEWS + `/${post.id}`}
           className="text-blue-600 hover:text-blue-900 mr-4"
         >
           Edit

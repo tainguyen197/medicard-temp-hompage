@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import prisma from "@/lib/prisma";
 import { getMessages } from "next-intl/server";
 import ServiceDetailContent from "./ServiceDetailContent";
 
@@ -54,48 +53,37 @@ export async function generateMetadata({
   const t = messages.services.notFound;
 
   try {
-    const service = await prisma.service.findFirst({
-      where: {
-        slug: slug,
-        status: "PUBLISHED",
-      },
-      select: {
-        title: true,
-        titleEn: true,
-        shortDescription: true,
-        shortDescriptionEn: true,
-        description: true,
-        descriptionEn: true,
-      },
+    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/services/by-slug/${slug}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      next: { revalidate: 300 },
     });
 
-    if (!service) {
+    if (response.ok) {
+      const service = await response.json();
+      const title =
+        locale === "en" ? service.titleEn || service.title : service.title;
+      const description =
+        locale === "en"
+          ? service.shortDescriptionEn ||
+            service.shortDescription ||
+            service.descriptionEn ||
+            service.description
+          : service.shortDescription || service.description;
+
       return {
-        title: t.title,
-        description: t.description,
+        title: `${title} | Healthcare Therapy Center`,
+        description: description ? description.substring(0, 155) : "",
       };
     }
-
-    const title =
-      locale === "en" ? service.titleEn || service.title : service.title;
-    const description =
-      locale === "en"
-        ? service.shortDescriptionEn ||
-          service.shortDescription ||
-          service.descriptionEn ||
-          service.description
-        : service.shortDescription || service.description;
-
-    return {
-      title: `${title} | Healthcare Therapy Center`,
-      description: description || "",
-    };
   } catch (error) {
-    return {
-      title: t.title,
-      description: t.description,
-    };
+    console.error("Error fetching service for metadata:", error);
   }
+
+  return {
+    title: t.title,
+    description: t.description,
+  };
 }
 
 export default async function ServiceDetailPage({
@@ -107,24 +95,23 @@ export default async function ServiceDetailPage({
   const messages = await getMessages();
   const t = messages.services;
 
-  let service: Service | null = null;
   console.log("slug", slug);
 
+  let service: Service;
+
   try {
-    // Fetch service by slug from database
-    service = await prisma.service.findFirst({
-      where: {
-        slug: slug,
-        status: "PUBLISHED",
-      },
-      include: {
-        featureImage: true,
-      },
+    // Fetch service by slug from API
+    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/services/by-slug/${slug}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      next: { revalidate: 300 },
     });
 
-    if (!service) {
+    if (!response.ok) {
       notFound();
     }
+
+    service = await response.json();
   } catch (error) {
     console.error("Failed to fetch service:", error);
     notFound();
@@ -298,20 +285,19 @@ async function ServiceDetailLoading() {
 // Generate static params for better performance (optional)
 export async function generateStaticParams() {
   try {
-    const services = await prisma.service.findMany({
-      where: {
-        status: "PUBLISHED",
-      },
-      select: {
-        slug: true,
-      },
+    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/services?limit=100&status=PUBLISHED`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      next: { revalidate: 3600 }, // Cache for 1 hour
     });
 
-    return services.map((service: { slug: string }) => ({
-      slug: service.slug,
-    }));
+    if (response.ok) {
+      const data = await response.json();
+      return data.services?.map((service: any) => ({ slug: service.slug })) || [];
+    }
   } catch (error) {
     console.error("Failed to generate static params:", error);
-    return [];
   }
+  
+  return [];
 }

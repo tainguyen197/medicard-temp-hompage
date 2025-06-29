@@ -34,16 +34,16 @@ export async function DELETE(
       );
     }
 
-    // Check if media file is being used in any posts, services, team members, or banners
+    // Check if media file is being used in any news, services, team members, or banners
     const [
-      postsUsingMedia,
+      newsUsingMedia,
       servicesUsingMedia,
       teamMembersUsingMedia,
       bannersUsingMedia,
     ] = await Promise.all([
-      prisma.post.count({
+      prisma.news.count({
         where: {
-          OR: [{ featuredImageId: id }, { featuredImageEnId: id }],
+          OR: [{ featureImageId: id }, { featureImageEnId: id }],
         },
       }),
       prisma.service.count({
@@ -62,7 +62,7 @@ export async function DELETE(
     ]);
 
     if (
-      postsUsingMedia > 0 ||
+      newsUsingMedia > 0 ||
       servicesUsingMedia > 0 ||
       teamMembersUsingMedia > 0 ||
       bannersUsingMedia > 0
@@ -70,9 +70,9 @@ export async function DELETE(
       return NextResponse.json(
         {
           error:
-            "Cannot delete media file. It is currently being used in posts, services, team members, or banners.",
+            "Cannot delete media file. It is currently being used in news, services, team members, or banners.",
           details: {
-            posts: postsUsingMedia,
+            news: newsUsingMedia,
             services: servicesUsingMedia,
             teamMembers: teamMembersUsingMedia,
             banners: bannersUsingMedia,
@@ -94,7 +94,7 @@ export async function DELETE(
       entityId: id,
       userId: session.user.id,
       fileName: mediaFile.originalName || mediaFile.fileName || 'Unknown file',
-      fileSize: mediaFile.fileSize,
+      fileSize: mediaFile.fileSize || 0,
       additionalDetails: `Deleted from media library`,
     });
 

@@ -2,7 +2,6 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import prisma from "@/lib/prisma";
 import { getTranslations } from "next-intl/server";
 
 interface Service {
@@ -42,7 +41,6 @@ export default async function ServiceDetailContent({
   slug: string;
   locale: string;
 }) {
-  let service: Service | null = null;
   console.log("slug", slug);
 
   const t = await getTranslations({
@@ -50,21 +48,22 @@ export default async function ServiceDetailContent({
     namespace: "services.breadcrumb",
   });
 
+  let service: Service;
+
   try {
-    // Fetch service by slug from database - now including translation fields
-    service = await prisma.service.findFirst({
-      where: {
-        slug: slug,
-        status: "PUBLISHED",
-      },
-      include: {
-        featureImage: true,
-      },
+    // Fetch service by slug from API
+    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/services/by-slug/${slug}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      next: { revalidate: 300 }, // Cache for 5 minutes
     });
 
-    if (!service) {
+    if (!response.ok) {
+      console.log(`Service not found: ${slug}`);
       notFound();
     }
+
+    service = await response.json();
   } catch (error) {
     console.error("Failed to fetch service:", error);
     notFound();

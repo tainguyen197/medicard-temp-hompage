@@ -2,7 +2,6 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { getMessages } from "next-intl/server";
-import prisma from "@/lib/prisma";
 
 interface DisplayService {
   id: string;
@@ -125,54 +124,37 @@ export async function ServicesDataComponent({
   let services: Service[] = [];
 
   try {
-    // Fetch services directly from the database with Prisma (like posts page does)
-    console.log("Fetching services from database...");
+    // Fetch services from API
+    console.log("Fetching services from API...");
 
-    // Get services (only show published services for public page) - now including translation fields
-    const servicesData = await prisma.service.findMany({
-      where: {
-        status: "PUBLISHED",
-      },
-      orderBy: { createdAt: "desc" },
-      select: {
-        id: true,
-        slug: true,
-        title: true,
-        titleEn: true,
-        shortDescription: true,
-        shortDescriptionEn: true,
-        description: true,
-        descriptionEn: true,
-        status: true,
-        createdAt: true,
-        updatedAt: true,
-        featureImage: {
-          select: {
-            id: true,
-            url: true,
-            fileName: true,
-            originalName: true,
-          },
-        },
-      },
+    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/services?status=PUBLISHED`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      next: { revalidate: 300 }, // Cache for 5 minutes
     });
 
-    // Convert Prisma results to Service type with localized content
-    services = servicesData.map((service: any) => {
-      const localizedContent = getLocalizedServiceContent(service, locale);
-      return {
-        ...service,
-        title: localizedContent.title,
-        description: localizedContent.description,
-        shortDescription: localizedContent.shortDescription,
-      };
-    }) as Service[];
+    if (response.ok) {
+      const data = await response.json();
+      
+      // Convert API results to Service type with localized content
+      services = (data.services || []).map((service: any) => {
+        const localizedContent = getLocalizedServiceContent(service, locale);
+        return {
+          ...service,
+          title: localizedContent.title,
+          description: localizedContent.description,
+          shortDescription: localizedContent.shortDescription,
+          createdAt: typeof service.createdAt === 'string' ? new Date(service.createdAt) : service.createdAt,
+          updatedAt: typeof service.updatedAt === 'string' ? new Date(service.updatedAt) : service.updatedAt,
+        };
+      }) as Service[];
 
-    console.log(`Found ${services.length} published services`);
+      console.log(`Found ${services.length} published services`);
 
-    if (services.length > 0) {
-      console.log("First service title:", services[0]?.title);
-      console.log("First service status:", services[0]?.status);
+      if (services.length > 0) {
+        console.log("First service title:", services[0]?.title);
+        console.log("First service status:", services[0]?.status);
+      }
     }
   } catch (error) {
     console.error("Failed to fetch services:", error);

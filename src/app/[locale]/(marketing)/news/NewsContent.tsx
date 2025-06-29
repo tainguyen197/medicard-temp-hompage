@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import prisma from "@/lib/prisma";
 import { Post } from "@/types/post";
 import { getMessages } from "next-intl/server";
 
@@ -38,75 +37,39 @@ export async function NewsDataComponent({
   let totalPosts = 0;
 
   try {
-    // Fetch posts directly from the database with Prisma
-    console.log("Fetching posts from database...");
+    // Fetch posts from API
+    console.log("Fetching posts from API...");
 
-    // Build filter object (only show published posts for public page)
-    const where = {
-      status: "PUBLISHED",
-    };
-
-    // Get total count for pagination
-    totalPosts = await prisma.post.count({
-      where,
+    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/posts?page=${currentPage}&limit=${postsPerPage}&status=PUBLISHED`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      next: { revalidate: 300 }, // Cache for 5 minutes
     });
 
-    // Get posts with pagination - now including titleEn, contentEn, excerptEn
-    const posts = await prisma.post.findMany({
-      where,
-      orderBy: { createdAt: "desc" },
-      take: postsPerPage,
-      skip: (currentPage - 1) * postsPerPage,
-      select: {
-        id: true,
-        title: true,
-        titleEn: true,
-        slug: true,
-        content: true,
-        contentEn: true,
-        excerpt: true,
-        excerptEn: true,
-        featuredImage: true,
-        featured: true,
-        status: true,
-        publishedAt: true,
-        createdAt: true,
-        updatedAt: true,
-        authorId: true,
-        author: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-        categories: {
-          include: {
-            category: true,
-          },
-        },
-      },
-    });
+    if (response.ok) {
+      const data = await response.json();
+      totalPosts = data.meta?.total || 0;
+      
+      // Convert API results to Post type with localized content
+      blogPosts = (data.posts || []).map((post: any) => {
+        const localizedContent = getLocalizedContent(post, locale);
+        return {
+          ...post,
+          title: localizedContent.title,
+          content: localizedContent.content,
+          excerpt: localizedContent.excerpt,
+          createdAt: typeof post.createdAt === 'string' ? post.createdAt : post.createdAt.toISOString(),
+          updatedAt: typeof post.updatedAt === 'string' ? post.updatedAt : post.updatedAt.toISOString(),
+          publishedAt: post.publishedAt ? (typeof post.publishedAt === 'string' ? post.publishedAt : post.publishedAt.toISOString()) : null,
+        };
+      }) as Post[];
 
-    // Convert Prisma results to Post type with localized content
-    blogPosts = posts.map((post: any) => {
-      const localizedContent = getLocalizedContent(post, locale);
-      return {
-        ...post,
-        title: localizedContent.title,
-        content: localizedContent.content,
-        excerpt: localizedContent.excerpt,
-        createdAt: post.createdAt.toISOString(),
-        updatedAt: post.updatedAt.toISOString(),
-        publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
-      };
-    }) as Post[];
+      console.log(`Found ${blogPosts.length} posts on page ${currentPage}`);
 
-    console.log(`Found ${blogPosts.length} posts on page ${currentPage}`);
-
-    if (blogPosts.length > 0) {
-      console.log("First post title:", blogPosts[0]?.title);
-      console.log("First post status:", blogPosts[0]?.status);
+      if (blogPosts.length > 0) {
+        console.log("First post title:", blogPosts[0]?.title);
+        console.log("First post status:", blogPosts[0]?.status);
+      }
     }
   } catch (error) {
     console.error("Failed to fetch posts:", error);
@@ -129,58 +92,29 @@ export async function NewsDataComponent({
   // Fetch trending posts (featured posts)
   let trendingPosts: Post[] = [];
   try {
-    const featuredPostsData = await prisma.post.findMany({
-      where: {
-        status: "PUBLISHED",
-        featured: true,
-      },
-      orderBy: { createdAt: "desc" },
-      take: 5,
-      select: {
-        id: true,
-        title: true,
-        titleEn: true,
-        slug: true,
-        content: true,
-        contentEn: true,
-        excerpt: true,
-        excerptEn: true,
-        featuredImage: true,
-        featured: true,
-        status: true,
-        publishedAt: true,
-        createdAt: true,
-        updatedAt: true,
-        authorId: true,
-        author: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-        categories: {
-          include: {
-            category: true,
-          },
-        },
-      },
+    const featuredResponse = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/posts?limit=5&status=PUBLISHED&featured=true`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      next: { revalidate: 300 },
     });
 
-    trendingPosts = featuredPostsData.map((post: any) => {
-      const localizedContent = getLocalizedContent(post, locale);
-      return {
-        ...post,
-        title: localizedContent.title,
-        content: localizedContent.content,
-        excerpt: localizedContent.excerpt,
-        createdAt: post.createdAt.toISOString(),
-        updatedAt: post.updatedAt.toISOString(),
-        publishedAt: post.publishedAt ? post.publishedAt.toISOString() : null,
-      };
-    }) as Post[];
+    if (featuredResponse.ok) {
+      const featuredData = await featuredResponse.json();
+      trendingPosts = (featuredData.posts || []).map((post: any) => {
+        const localizedContent = getLocalizedContent(post, locale);
+        return {
+          ...post,
+          title: localizedContent.title,
+          content: localizedContent.content,
+          excerpt: localizedContent.excerpt,
+          createdAt: typeof post.createdAt === 'string' ? post.createdAt : post.createdAt.toISOString(),
+          updatedAt: typeof post.updatedAt === 'string' ? post.updatedAt : post.updatedAt.toISOString(),
+          publishedAt: post.publishedAt ? (typeof post.publishedAt === 'string' ? post.publishedAt : post.publishedAt.toISOString()) : null,
+        };
+      }) as Post[];
 
-    console.log(`Found ${trendingPosts.length} featured posts`);
+      console.log(`Found ${trendingPosts.length} featured posts`);
+    }
   } catch (error) {
     console.error("Failed to fetch featured posts:", error);
   }

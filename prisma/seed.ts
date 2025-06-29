@@ -84,36 +84,6 @@ async function main() {
     },
   ];
 
-  for (const post of postsData) {
-    const { categories, ...postData } = post;
-    const postPayload: {
-      title: string;
-      slug: string;
-      content: string;
-      excerpt?: string;
-      status: string;
-      authorId: string;
-      publishedAt?: string | null;
-    } = { ...postData };
-    if (postData.publishedAt === undefined && postData.status === "DRAFT") {
-      postPayload.publishedAt = null;
-    }
-
-    const createdPost = await prisma.post.upsert({
-      where: { slug: post.slug },
-      update: postPayload,
-      create: {
-        ...postPayload,
-        categories: categories
-          ? {
-              create: categories.map((cat) => ({ categoryId: cat.categoryId })),
-            }
-          : undefined,
-      },
-    });
-    console.log(`Created post with id: ${createdPost.id}`);
-  }
-
   // Create sample services - Healthcare Therapy Center services based on https://htcwellness.com/services
   const servicesData = [
     {

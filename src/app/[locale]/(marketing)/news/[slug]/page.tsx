@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Metadata } from "next";
 import { Suspense } from "react";
-import prisma from "@/lib/prisma";
+// import prisma from "@/lib/prisma";
 import NewsDetailContent from "./NewsDetailContent";
 import { getTranslations } from "next-intl/server";
 import { useLocale } from "next-intl";
@@ -40,34 +40,32 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "newsDetail.metadata" });
 
   try {
-    // Fetch post directly using Prisma
-    const post: any = await prisma.post.findUnique({
-      where: { slug },
+    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/news/by-slug/${slug}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      next: { revalidate: 300 },
     });
-
-    if (!post) {
+    
+    if (response.ok) {
+      const news = await response.json();
+      const title = locale === "en" ? news.titleEn || news.title : news.title;
+      const description = locale === "en" 
+        ? news.shortDescriptionEn || news.shortDescription || news.descriptionEn || news.description
+        : news.shortDescription || news.description;
+      
       return {
-        title: t("notFoundTitle"),
-        description: t("notFoundDescription"),
+        title: `${title} | Healthcare Therapy Center`,
+        description: description ? description.substring(0, 155) : "",
       };
     }
-
-    const title = locale === "en" ? post.titleEn || post.title : post.title;
-    const description =
-      locale === "en"
-        ? post.excerptEn || post.excerpt
-        : post.excerpt || `${post.content.substring(0, 200)}...`;
-
-    return {
-      title: `${title} | Healthcare Therapy Center`,
-      description,
-    };
   } catch (error) {
-    return {
-      title: t("notFoundTitle"),
-      description: t("notFoundDescription"),
-    };
+    console.error("Error fetching news for metadata:", error);
   }
+
+  return {
+    title: t("notFoundTitle"),
+    description: t("notFoundDescription"),
+  };
 }
 
 export default async function BlogDetailPage({
@@ -228,8 +226,22 @@ async function NewsDetailSkeletonContent({ locale }: { locale: string }) {
   );
 }
 
-// in src/app/[locale]/(marketing)/news/[slug]/page.tsx
+// Generate static params for better performance (optional)
 export async function generateStaticParams() {
-  const news = await prisma.post.findMany({ select: { slug: true } });
-  return news.map((n) => ({ slug: n.slug }));
+  try {
+    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/news?limit=100&status=PUBLISHED`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      next: { revalidate: 3600 }, // Cache for 1 hour
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      return data.news?.map((n: any) => ({ slug: n.slug })) || [];
+    }
+  } catch (error) {
+    console.error("Error fetching news for static params:", error);
+  }
+  
+  return [];
 }

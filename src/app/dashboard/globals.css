@@ -17,6 +17,8 @@ body {
   color: black;
 }
 
+/* Admin layout styles are now handled via JavaScript in AdminLayoutClient component */
+
 /* Define CKEditor CSS variables globally so they're available on all pages */
 :root {
   --ck-color-base-border: #c4c4c4;

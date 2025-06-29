@@ -19,7 +19,7 @@ async function main() {
   });
 
   const superAdmin = await prisma.user.upsert({
-    where: { email: "superadmin@medicare.com" },
+    where: { email: "ç" },
     update: {},
     create: {
       email: "superadmin@medicare.com",

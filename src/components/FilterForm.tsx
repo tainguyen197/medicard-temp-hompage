@@ -66,7 +66,7 @@ export default function FilterForm({
     params.append("page", "1");
     params.append("limit", values.limit);
 
-    const url = `${ROUTES.ADMIN_POSTS}?${params.toString()}`;
+    const url = `${ROUTES.NEWS}?${params.toString()}`;
     console.log("Navigating to:", url);
 
     // Navigate to the URL with query params
@@ -84,7 +84,7 @@ export default function FilterForm({
             <input
               type="text"
               name="search"
-              placeholder="Search posts..."
+              placeholder="Search news..."
               value={values.search}
               onChange={(e) => setValues({ ...values, search: e.target.value })}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md"
