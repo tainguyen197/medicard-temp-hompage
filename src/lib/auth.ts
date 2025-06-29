@@ -84,11 +84,6 @@ export const authOptions: NextAuthOptions = {
       };
     },
     jwt: ({ token, user, trigger }) => {
-      // Handle signout trigger to invalidate token
-      if (trigger === "signOut") {
-        return {};
-      }
-      
       if (user) {
         return {
           ...token,
