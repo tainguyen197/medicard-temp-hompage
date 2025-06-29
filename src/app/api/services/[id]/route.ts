@@ -119,15 +119,6 @@ export async function PUT(
     // Generate slug if not provided
     const slug = validatedData.slug || createSlug(validatedData.title);
 
-    // Check if service exists
-    const existingService = await prisma.service.findUnique({
-      where: { id },
-    });
-
-    if (!existingService) {
-      return NextResponse.json({ error: "Service not found" }, { status: 404 });
-    }
-
     // Check if slug is being changed and if it already exists
     if (slug !== existingService.slug) {
       const slugExists = await prisma.service.findUnique({

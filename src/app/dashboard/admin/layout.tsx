@@ -48,12 +48,6 @@ export default async function AdminLayout({
       roles: ["SUPER_ADMIN", "ADMIN"],
     },
     {
-      label: "User Management",
-      href: "/dashboard/admin/users",
-      icon: <Users className="h-5 w-5" />,
-      roles: ["SUPER_ADMIN"],
-    },
-    {
       label: "Services",
       href: ROUTES.ADMIN_SERVICES,
       icon: <Flag className="h-5 w-5" />,
@@ -89,18 +83,20 @@ export default async function AdminLayout({
       icon: <Image className="h-5 w-5" />,
       roles: ["SUPER_ADMIN", "ADMIN", "EDITOR"],
     },
+   
+    {
+      label: "User Management",
+      href: "/dashboard/admin/users",
+      icon: <Users className="h-5 w-5" />,
+      roles: ["SUPER_ADMIN"],
+    },
     {
       label: "Logs",
       href: "/dashboard/admin/logs",
       icon: <FileText className="h-5 w-5" />,
       roles: ["SUPER_ADMIN", "ADMIN"],
     },
-    {
-      label: "System Settings",
-      href: "/dashboard/admin/settings",
-      icon: <Settings className="h-5 w-5" />,
-      roles: ["SUPER_ADMIN"],
-    },
+    
   ];
 
   // Filter navigation items based on user role

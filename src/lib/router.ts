@@ -117,6 +117,13 @@ export const adminRoutes: Record<string, AdminRoute> = {
     description: "Thư viện hình ảnh và video",
     protected: true,
   },
+  users: {
+    name: "Users",
+    href: "/dashboard/admin/users",
+    description: "Quản lý người dùng hệ thống",
+    protected: true,
+    adminOnly: true,
+  },
   settings: {
     name: "Settings",
     href: "/admin/settings",
@@ -368,6 +375,7 @@ export const ROUTES = {
   ADMIN_BANNERS: adminRoutes.banners.href,
   ADMIN_CONTACT: adminRoutes.contact.href,
   ADMIN_MEDIA: adminRoutes.media.href,
+  ADMIN_USERS: adminRoutes.users.href,
   ADMIN_SETTINGS: adminRoutes.settings.href,
 
   // Auth routes
