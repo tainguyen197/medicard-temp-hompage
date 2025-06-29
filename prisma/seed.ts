@@ -149,6 +149,134 @@ async function main() {
     console.log(`Created service with id: ${createdService.id}`);
   }
 
+  // Create sample news data based on htcwellness.com/news
+  const newsData = [
+    {
+      title: "Chiro Therapy trong điều trị các vấn đề về cột sống",
+      titleEn: "Chiro Therapy in Treating Spinal Issues",
+      slug: "chiro-therapy-trong-dieu-tri-cac-van-de-ve-cot-song",
+      description:
+        "Gìn giữ sức khoẻ cộng đồng bằng tinh hoa dân tộc: Những vị thuốc có nguồn gốc từ thiên nhiên và được điều chỉnh linh hoạt theo từng ca bệnh khác nhau, phối hợp với các phương pháp điều trị khác của y học cổ truyền như châm cứu, xoa bóp, bấm huyệt,... với mục tiêu chính là tập trung vào điều chỉnh và cân bằng lại các yếu tố Âm - Dương bên trong cơ thể. Chiro Therapy là một phương pháp điều trị hiệu quả cho các vấn đề về cột sống, giúp giảm đau và cải thiện chức năng vận động một cách tự nhiên.",
+      descriptionEn:
+        "Preserving community health with the essence of the nation: Natural medicines flexibly adjusted for different cases, combined with other traditional medicine treatment methods such as acupuncture, massage, acupressure... with the main goal of focusing on adjusting and rebalancing the Yin-Yang factors inside the body. Chiro Therapy is an effective treatment method for spinal issues, helping to reduce pain and improve motor function naturally.",
+      shortDescription:
+        "Phương pháp Chiro Therapy hiệu quả trong điều trị các vấn đề về cột sống, kết hợp y học cổ truyền.",
+      shortDescriptionEn:
+        "Effective Chiro Therapy method for treating spinal issues, combined with traditional medicine.",
+      status: "PUBLISHED",
+      showOnHomepage: true,
+      pin: true,
+      categoryId: physicalRehabCategory.id,
+      metaTitle: "Chiro Therapy điều trị cột sống hiệu quả | Healthcare Therapy Center",
+      metaTitleEn: "Effective Chiro Therapy for Spine Treatment | Healthcare Therapy Center",
+      metaDescription: "Tìm hiểu về phương pháp Chiro Therapy trong điều trị các vấn đề về cột sống tại Healthcare Therapy Center",
+      metaDescriptionEn: "Learn about Chiro Therapy method for treating spinal issues at Healthcare Therapy Center",
+      metaKeywords: "chiro therapy, điều trị cột sống, y học cổ truyền, châm cứu, xoa bóp",
+      metaKeywordsEn: "chiro therapy, spinal treatment, traditional medicine, acupuncture, massage",
+    },
+    {
+      title: "Công nghệ Laser cao cấp trong vật lý trị liệu",
+      titleEn: "Advanced Laser Technology in Physical Therapy",
+      slug: "cong-nghe-laser-cao-cap-trong-vat-ly-tri-lieu",
+      description:
+        "Healthcare Therapy Center tự hào ứng dụng công nghệ Laser công suất cao tiên tiến nhất trong điều trị vật lý trị liệu. Công nghệ này đã được chứng minh hiệu quả qua nhiều nghiên cứu khoa học trên thế giới, giúp giảm đau, tăng cường quá trình hồi phục và cải thiện chức năng vận động. Laser therapy không chỉ an toàn mà còn mang lại kết quả điều trị nhanh chóng và bền vững cho bệnh nhân.",
+      descriptionEn:
+        "Healthcare Therapy Center proudly applies the most advanced high-power Laser technology in physical therapy treatment. This technology has been proven effective through many scientific studies worldwide, helping to reduce pain, enhance recovery processes, and improve motor function. Laser therapy is not only safe but also provides quick and sustainable treatment results for patients.",
+      shortDescription:
+        "Ứng dụng công nghệ Laser công suất cao tiên tiến trong điều trị vật lý trị liệu hiệu quả.",
+      shortDescriptionEn:
+        "Application of advanced high-power Laser technology in effective physical therapy treatment.",
+      status: "PUBLISHED",
+      showOnHomepage: true,
+      pin: false,
+      categoryId: physicalRehabCategory.id,
+      metaTitle: "Công nghệ Laser cao cấp vật lý trị liệu | HTC",
+      metaTitleEn: "Advanced Laser Physical Therapy Technology | HTC",
+      metaDescription: "Khám phá công nghệ Laser tiên tiến trong vật lý trị liệu tại Healthcare Therapy Center",
+      metaDescriptionEn: "Discover advanced Laser technology in physical therapy at Healthcare Therapy Center",
+      metaKeywords: "laser therapy, vật lý trị liệu, công nghệ cao, giảm đau",
+      metaKeywordsEn: "laser therapy, physical therapy, high technology, pain relief",
+    },
+    {
+      title: "Phương pháp điều trị tổng hợp cho đau thần kinh tọa",
+      titleEn: "Comprehensive Treatment Method for Sciatica",
+      slug: "phuong-phap-dieu-tri-tong-hop-cho-dau-than-kinh-toa",
+      description:
+        "Đau thần kinh tọa là một trong những vấn đề phổ biến về cột sống mà nhiều người gặp phải. Tại Healthcare Therapy Center, chúng tôi áp dụng phương pháp điều trị tổng hợp kết hợp giữa y học cổ truyền và công nghệ hiện đại. Từ việc sử dụng thuốc thảo dược tự nhiên, châm cứu, xoa bóp đến các công nghệ Shockwave và Radio Frequency, chúng tôi mang đến giải pháp điều trị toàn diện và hiệu quả cho bệnh nhân.",
+      descriptionEn:
+        "Sciatica is one of the common spinal problems that many people face. At Healthcare Therapy Center, we apply a comprehensive treatment method that combines traditional medicine and modern technology. From using natural herbal medicines, acupuncture, massage to Shockwave and Radio Frequency technologies, we provide comprehensive and effective treatment solutions for patients.",
+      shortDescription:
+        "Điều trị đau thần kinh tọa bằng phương pháp tổng hợp y học cổ truyền và công nghệ hiện đại.",
+      shortDescriptionEn:
+        "Treating sciatica with comprehensive traditional medicine and modern technology methods.",
+      status: "PUBLISHED",
+      showOnHomepage: false,
+      pin: false,
+      categoryId: physicalRehabCategory.id,
+      metaTitle: "Điều trị đau thần kinh tọa hiệu quả | Healthcare Therapy Center",
+      metaTitleEn: "Effective Sciatica Treatment | Healthcare Therapy Center",
+      metaDescription: "Phương pháp điều trị đau thần kinh tọa tổng hợp tại Healthcare Therapy Center",
+      metaDescriptionEn: "Comprehensive sciatica treatment method at Healthcare Therapy Center",
+      metaKeywords: "đau thần kinh tọa, điều trị cột sống, shockwave, radio frequency",
+      metaKeywordsEn: "sciatica, spinal treatment, shockwave, radio frequency",
+    },
+    {
+      title: "Lợi ích của châm cứu trong y học cổ truyền",
+      titleEn: "Benefits of Acupuncture in Traditional Medicine",
+      slug: "loi-ich-cua-cham-cuu-trong-y-hoc-co-truyen",
+      description:
+        "Châm cứu là một trong những phương pháp điều trị cổ xưa và hiệu quả nhất trong y học cổ truyền Việt Nam. Phương pháp này không chỉ giúp giảm đau mà còn cân bằng lại năng lượng trong cơ thể, tăng cường hệ miễn dịch và cải thiện tuần hoàn máu. Tại Healthcare Therapy Center, đội ngũ bác sĩ có kinh nghiệm sẽ thực hiện châm cứu một cách an toàn và chính xác, mang lại hiệu quả điều trị tối ưu cho bệnh nhân.",
+      descriptionEn:
+        "Acupuncture is one of the oldest and most effective treatment methods in Vietnamese traditional medicine. This method not only helps reduce pain but also rebalances energy in the body, strengthens the immune system, and improves blood circulation. At Healthcare Therapy Center, experienced doctors will perform acupuncture safely and accurately, providing optimal treatment effectiveness for patients.",
+      shortDescription:
+        "Châm cứu - phương pháp y học cổ truyền hiệu quả trong cân bằng năng lượng và giảm đau.",
+      shortDescriptionEn:
+        "Acupuncture - effective traditional medicine method for energy balance and pain relief.",
+      status: "PUBLISHED",
+      showOnHomepage: true,
+      pin: false,
+      categoryId: mentalWellnessCategory.id,
+      metaTitle: "Châm cứu y học cổ truyền hiệu quả | HTC",
+      metaTitleEn: "Effective Traditional Acupuncture | HTC",
+      metaDescription: "Tìm hiểu lợi ích của châm cứu trong y học cổ truyền tại Healthcare Therapy Center",
+      metaDescriptionEn: "Learn about the benefits of acupuncture in traditional medicine at Healthcare Therapy Center",
+      metaKeywords: "châm cứu, y học cổ truyền, cân bằng năng lượng, giảm đau",
+      metaKeywordsEn: "acupuncture, traditional medicine, energy balance, pain relief",
+    },
+    {
+      title: "Dịch vụ chăm sóc sức khỏe toàn diện tại HTC",
+      titleEn: "Comprehensive Healthcare Services at HTC",
+      slug: "dich-vu-cham-soc-suc-khoe-toan-dien-tai-htc",
+      description:
+        "Healthcare Therapy Center cam kết mang đến dịch vụ chăm sóc sức khỏe toàn diện, từ việc phòng ngừa bệnh tật đến điều trị và phục hồi chức năng. Chúng tôi không chỉ tập trung vào việc điều trị khi bệnh đã xuất hiện mà còn chú trọng đến việc duy trì và nâng cao sức khỏe của khách hàng. Với đội ngũ chuyên gia giàu kinh nghiệm và trang thiết bị hiện đại, HTC là địa chỉ tin cậy cho mọi nhu cầu chăm sóc sức khỏe của bạn.",
+      descriptionEn:
+        "Healthcare Therapy Center is committed to providing comprehensive healthcare services, from disease prevention to treatment and functional rehabilitation. We not only focus on treatment when disease has appeared but also pay attention to maintaining and improving customers' health. With experienced specialists and modern equipment, HTC is a trusted address for all your healthcare needs.",
+      shortDescription:
+        "Dịch vụ chăm sóc sức khỏe toàn diện từ phòng ngừa đến điều trị và phục hồi chức năng.",
+      shortDescriptionEn:
+        "Comprehensive healthcare services from prevention to treatment and functional rehabilitation.",
+      status: "PUBLISHED",
+      showOnHomepage: false,
+      pin: false,
+      categoryId: mentalWellnessCategory.id,
+      metaTitle: "Dịch vụ chăm sóc sức khỏe toàn diện | Healthcare Therapy Center",
+      metaTitleEn: "Comprehensive Healthcare Services | Healthcare Therapy Center",
+      metaDescription: "Khám phá dịch vụ chăm sóc sức khỏe toàn diện tại Healthcare Therapy Center",
+      metaDescriptionEn: "Discover comprehensive healthcare services at Healthcare Therapy Center",
+      metaKeywords: "chăm sóc sức khỏe, phòng ngừa bệnh, điều trị, phục hồi chức năng",
+      metaKeywordsEn: "healthcare, disease prevention, treatment, functional rehabilitation",
+    },
+  ];
+
+  for (const news of newsData) {
+    const createdNews = await prisma.news.upsert({
+      where: { slug: news.slug },
+      update: news,
+      create: news,
+    });
+    console.log(`Created news with id: ${createdNews.id}`);
+  }
+
   console.log(`Seeding finished.`);
 }
 

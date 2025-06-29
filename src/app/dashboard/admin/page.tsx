@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { ROUTES } from "@/lib/router";
 
 interface DashboardStats {
   totalServices: number;
@@ -221,7 +222,7 @@ export default function AdminDashboard() {
         
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Link 
-            href="/dashboard/admin/services/new"
+            href={ROUTES.ADMIN_SERVICES + "/new"}
             className="flex items-center p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors duration-200 group"
           >
             <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-blue-200 transition-colors">
@@ -234,7 +235,7 @@ export default function AdminDashboard() {
           </Link>
 
           <Link 
-            href="/dashboard/admin/news/new"
+            href={ROUTES.ADMIN_NEWS + "/new"}
             className="flex items-center p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-colors duration-200 group"
           >
             <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-green-200 transition-colors">
@@ -247,7 +248,7 @@ export default function AdminDashboard() {
           </Link>
 
           <Link 
-            href="/dashboard/admin/team/new"
+            href={ROUTES.ADMIN_TEAM + "/new"}
             className="flex items-center p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-colors duration-200 group"
           >
             <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-purple-200 transition-colors">
