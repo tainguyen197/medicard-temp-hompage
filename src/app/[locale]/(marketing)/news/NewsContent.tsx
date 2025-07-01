@@ -1,18 +1,18 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Post } from "@/types/post";
+import { News, NewsResponse } from "@/types/post";
 import { getMessages } from "next-intl/server";
 
 // Default image fallback if no featured image
 const DEFAULT_IMAGE = "/images/news/news-image-1.jpg";
 
-const getLocalizedContent = (post: any, locale: string) => {
+const getLocalizedContent = (news: any, locale: string) => {
   const isEnglish = locale === "en";
   return {
-    title: isEnglish ? post.titleEn || post.title : post.title,
-    content: isEnglish ? post.contentEn || post.content : post.content,
-    excerpt: isEnglish ? post.excerptEn || post.excerpt : post.excerpt,
+    title: isEnglish ? news.titleEn || news.title : news.title,
+    description: isEnglish ? news.descriptionEn || news.description : news.description,
+    shortDescription: isEnglish ? news.shortDescriptionEn || news.shortDescription : news.shortDescription,
   };
 };
 
@@ -33,52 +33,52 @@ export async function NewsDataComponent({
   const currentPage = Number(page);
   const postsPerPage = 10;
 
-  let blogPosts: Post[] = [];
-  let totalPosts = 0;
+  let newsItems: News[] = [];
+  let totalNews = 0;
 
   try {
     // Fetch posts from API
-    console.log("Fetching posts from API...");
+    console.log("Fetching news from API...");
 
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/posts?page=${currentPage}&limit=${postsPerPage}&status=PUBLISHED`, {
+    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/news?page=${currentPage}&limit=${postsPerPage}&status=PUBLISHED`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       next: { revalidate: 300 }, // Cache for 5 minutes
     });
 
     if (response.ok) {
-      const data = await response.json();
-      totalPosts = data.meta?.total || 0;
+      const data: NewsResponse = await response.json();
+      totalNews = data.meta?.total || 0;
       
-      // Convert API results to Post type with localized content
-      blogPosts = (data.posts || []).map((post: any) => {
-        const localizedContent = getLocalizedContent(post, locale);
+      // Convert API results with localized content
+      newsItems = (data.news || []).map((newsItem: News) => {
+        const localizedContent = getLocalizedContent(newsItem, locale);
         return {
-          ...post,
+          ...newsItem,
           title: localizedContent.title,
-          content: localizedContent.content,
-          excerpt: localizedContent.excerpt,
-          createdAt: typeof post.createdAt === 'string' ? post.createdAt : post.createdAt.toISOString(),
-          updatedAt: typeof post.updatedAt === 'string' ? post.updatedAt : post.updatedAt.toISOString(),
-          publishedAt: post.publishedAt ? (typeof post.publishedAt === 'string' ? post.publishedAt : post.publishedAt.toISOString()) : null,
+          description: localizedContent.description,
+          shortDescription: localizedContent.shortDescription,
+          featuredImage: newsItem.featureImage?.url,
+          createdAt: newsItem.createdAt,
+          updatedAt: newsItem.updatedAt,
         };
-      }) as Post[];
+      });
 
-      console.log(`Found ${blogPosts.length} posts on page ${currentPage}`);
+      console.log(`Found ${newsItems.length} news items on page ${currentPage}`);
 
-      if (blogPosts.length > 0) {
-        console.log("First post title:", blogPosts[0]?.title);
-        console.log("First post status:", blogPosts[0]?.status);
+      if (newsItems.length > 0) {
+        console.log("First news title:", newsItems[0]?.title);
+        console.log("First news status:", newsItems[0]?.status);
       }
     }
   } catch (error) {
-    console.error("Failed to fetch posts:", error);
-    blogPosts = [];
+    console.error("Failed to fetch news:", error);
+    newsItems = [];
   }
 
-  // If no posts from database, show a message or fallback
-  if (blogPosts.length === 0) {
-    console.log("No posts found, showing empty state");
+  // If no news from database, show a message or fallback
+  if (newsItems.length === 0) {
+    console.log("No news found, showing empty state");
     return (
       <section className="container mx-auto px-4 mb-16 md:mb-20 max-w-[1040px] text-center py-20">
         <h2 className="text-2xl text-gray-600 mb-4">{t.emptyState.title}</h2>
@@ -87,12 +87,12 @@ export async function NewsDataComponent({
     );
   }
 
-  console.log("Rendering news page with posts");
+  console.log("Rendering news page with content");
 
   // Fetch trending posts (featured posts)
-  let trendingPosts: Post[] = [];
+  let trendingNews: News[] = [];
   try {
-    const featuredResponse = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/posts?limit=5&status=PUBLISHED&featured=true`, {
+    const featuredResponse = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/news/featured`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       next: { revalidate: 300 },
@@ -100,38 +100,38 @@ export async function NewsDataComponent({
 
     if (featuredResponse.ok) {
       const featuredData = await featuredResponse.json();
-      trendingPosts = (featuredData.posts || []).map((post: any) => {
-        const localizedContent = getLocalizedContent(post, locale);
+      trendingNews = (featuredData.posts || []).map((newsItem: any) => {
+        const localizedContent = getLocalizedContent(newsItem, locale);
         return {
-          ...post,
+          ...newsItem,
           title: localizedContent.title,
-          content: localizedContent.content,
-          excerpt: localizedContent.excerpt,
-          createdAt: typeof post.createdAt === 'string' ? post.createdAt : post.createdAt.toISOString(),
-          updatedAt: typeof post.updatedAt === 'string' ? post.updatedAt : post.updatedAt.toISOString(),
-          publishedAt: post.publishedAt ? (typeof post.publishedAt === 'string' ? post.publishedAt : post.publishedAt.toISOString()) : null,
-        };
-      }) as Post[];
+          description: localizedContent.description,
+          shortDescription: localizedContent.shortDescription,
+          featuredImage: newsItem.featureImage?.url,
+          createdAt: newsItem.createdAt,
+          updatedAt: newsItem.updatedAt,
+        } as News;
+      });
 
-      console.log(`Found ${trendingPosts.length} featured posts`);
+      console.log(`Found ${trendingNews.length} featured news items`);
     }
   } catch (error) {
-    console.error("Failed to fetch featured posts:", error);
+    console.error("Failed to fetch featured news:", error);
   }
 
-  // If we don't have enough featured posts, supplement with most recent posts
-  if (trendingPosts.length < 5) {
-    const recentPostsForTrending = blogPosts.filter(
-      (post) => !trendingPosts.some((tp) => tp.id === post.id)
+  // If we don't have enough featured news, supplement with most recent news
+  if (trendingNews.length < 5) {
+    const recentNewsForTrending = newsItems.filter(
+      (item: News) => !trendingNews.some((tn) => tn.id === item.id)
     );
-    trendingPosts = [
-      ...trendingPosts,
-      ...recentPostsForTrending.slice(0, 5 - trendingPosts.length),
+    trendingNews = [
+      ...trendingNews,
+      ...recentNewsForTrending.slice(0, 5 - trendingNews.length),
     ];
   }
 
   // Calculate total pages for pagination
-  const totalPages = Math.ceil(totalPosts / postsPerPage);
+  const totalPages = Math.ceil(totalNews / postsPerPage);
 
   // Generate array of page numbers to display
   const getPageNumbers = () => {
@@ -168,30 +168,32 @@ export async function NewsDataComponent({
   };
 
   const pageNumbers = getPageNumbers();
+ 
+  console.log(newsItems);
 
   return (
     <>
       {/* 3. Trending Topics - Only show if we have enough posts */}
-      {trendingPosts.length >= 5 && (
+      {trendingNews.length >= 5 && (
         <section className="container mx-auto px-4 mb-16 md:mb-20 max-w-[1040px]">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Featured post (larger) - left side */}
             <div className="md:w-1/2">
               <Link
-                href={`/news/${trendingPosts[0].slug}`}
+                href={`/news/${trendingNews[0].slug}`}
                 className="group relative rounded-lg overflow-hidden block h-full"
               >
                 <div className="aspect-auto h-full relative">
                   <Image
-                    src={trendingPosts[0].featuredImage || DEFAULT_IMAGE}
-                    alt={trendingPosts[0].title}
+                    src={trendingNews[0].featuredImage || DEFAULT_IMAGE}
+                    alt={trendingNews[0].title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute inset-0">
                     <div className="absolute bottom-0 w-full p-4 md:p-8 bg-[#00000080]">
                       <h3 className="text-white font-medium text-xl md:text-2xl">
-                        {trendingPosts[0].title}
+                        {trendingNews[0].title}
                       </h3>
                     </div>
                   </div>
@@ -202,23 +204,23 @@ export async function NewsDataComponent({
             {/* Grid of smaller posts - right side */}
             <div className="md:w-1/2">
               <div className="grid grid-cols-2 gap-4 h-full">
-                {trendingPosts.slice(1, 5).map((post) => (
+                {trendingNews.slice(1, 5).map((newsItem) => (
                   <Link
-                    href={`/news/${post.slug}`}
-                    key={post.id}
+                    href={`/news/${newsItem.slug}`}
+                    key={newsItem.id}
                     className="group relative rounded-lg overflow-hidden"
                   >
                     <div className="aspect-square relative">
                       <Image
-                        src={post.featuredImage || DEFAULT_IMAGE}
-                        alt={post.title}
+                        src={newsItem.featuredImage || DEFAULT_IMAGE}
+                        alt={newsItem.title}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                       <div className="absolute inset-0">
                         <div className="absolute bottom-0 p-4 bg-[#00000080]">
                           <h3 className="text-white font-medium text-sm md:text-base">
-                            {post.title}
+                            {newsItem.title}
                           </h3>
                         </div>
                       </div>
@@ -233,29 +235,29 @@ export async function NewsDataComponent({
 
       {/* 4. Topic Listing */}
       <section className="container mx-auto px-4 max-w-[1040px]">
-        {blogPosts.map((post) => (
-          <article key={post.id}>
+        {newsItems.map((newsItem) => (
+          <article key={newsItem.id}>
             <div className="relative flex flex-col md:flex-row items-center mb-4 md:mb-12 group justify-between">
               <Link
-                href={`/news/${post.slug}`}
+                href={`/news/${newsItem.slug}`}
                 className="absolute inset-0 z-1"
               />
               <div className="pr-8 flex flex-col">
                 <h2 className="text-2xl font-medium text-[#222222] mb-4 group-hover:text-[#B1873F] transition-colors">
-                  {post.title}
+                  {newsItem.title}
                 </h2>
                 <p className="text-gray-600 line-clamp-3 mb-4">
-                  {post.excerpt || `${post.content.substring(0, 200)}...`}
+                  {newsItem.shortDescription || `${newsItem.description?.substring(0, 200)}...`}
                 </p>
               </div>
               <div className="mt-4 md:mt-0">
                 <Link
-                  href={`/news/${post.slug}`}
+                  href={`/news/${newsItem.slug}`}
                   className="block relative rounded-xl overflow-hidden aspect-square md:h-44"
                 >
                   <Image
-                    src={post.featuredImage || DEFAULT_IMAGE}
-                    alt={post.title}
+                    src={newsItem.featuredImage || DEFAULT_IMAGE}
+                    alt={newsItem.title}
                     fill
                     className="object-cover"
                   />

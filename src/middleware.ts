@@ -10,11 +10,13 @@ export async function middleware(request: NextRequest) {
   const { nextUrl } = request;
   const subdomain = request.headers.get("host")?.split(".")[0];
 
-    // Skip internationalization middleware for RSC requests
-    if (nextUrl.searchParams.has('_rsc')) {
-      return NextResponse.next();
-    }
-
+  // Skip internationalization middleware for RSC requests
+  const isRscRequest = nextUrl.searchParams.has('_rsc') || 
+                     request.headers.has('rsc');
+  
+  if (isRscRequest) {
+    return NextResponse.next();
+  }
 
   // Handle API routes
   if (nextUrl.pathname.startsWith("/api")) {
@@ -69,6 +71,7 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!api|_next/static|_next/image|_next/data|images|favicon\\.ico).*)",
+    // Skip _next internal requests, but match everything else
+    "/((?!_next/static|_next/image|_next/data|favicon\\.ico|images).*)",
   ],
 };

@@ -4,7 +4,7 @@ import { ServicesResponse } from "@/types/service";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
 const isDev = process.env.NODE_ENV === "development";
 
-interface FetchPostsParams {
+interface FetchNewsParams {
   page?: number;
   limit?: number;
   status?: string;
@@ -45,8 +45,8 @@ interface TeamMember {
   } | null;
 }
 
-export async function fetchPosts(
-  params: FetchPostsParams = {}
+export async function fetchNews(
+  params: FetchNewsParams = {}
 ): Promise<PostsResponse> {
   const {
     page = 1,
@@ -56,7 +56,7 @@ export async function fetchPosts(
     search,
   } = params;
 
-  console.log("fetchPosts called with params:", {
+  console.log("fetchNews called with params:", {
     page,
     limit,
     status,
@@ -84,7 +84,7 @@ export async function fetchPosts(
   }
 
   // Construct the full URL properly - prepend with origin if relative
-  let apiUrl = `${API_BASE_URL}/api/posts`;
+  let apiUrl = `${API_BASE_URL}/api/news`;
   if (!apiUrl.startsWith("http")) {
     // In browser context, we need to prepend the origin
     if (typeof window !== "undefined") {
@@ -92,7 +92,7 @@ export async function fetchPosts(
     } else {
       // In Node.js context (SSR), we need to handle relative URLs
       // by using the Next.js absolute URL pattern
-      apiUrl = `/api/posts`;
+      apiUrl = `/api/news`;
     }
   }
 
@@ -106,33 +106,33 @@ export async function fetchPosts(
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch posts: ${response.status}`);
+      throw new Error(`Failed to fetch news: ${response.status}`);
     }
 
     const data = await response.json();
     console.log(
       `API returned ${
-        data.posts?.length || 0
-      } posts, status filter was: "${status}"`
+        data.news?.length || 0
+      } news items, status filter was: "${status}"`
     );
     return data;
   } catch (error) {
-    console.error("Error fetching posts:", error);
+    console.error("Error fetching news:", error);
     throw error;
   }
 }
 
-export async function fetchPost(slug: string) {
+export async function fetchNewsItem(slug: string) {
   try {
-    // Construct the URL with the same approach as fetchPosts
-    let apiUrl = `${API_BASE_URL}/api/posts/${slug}`;
+    // Construct the URL with the same approach as fetchNews
+    let apiUrl = `${API_BASE_URL}/api/news/by-slug/${slug}`;
     if (!apiUrl.startsWith("http")) {
       // In browser context, we need to prepend the origin
       if (typeof window !== "undefined") {
         apiUrl = `${window.location.origin}${apiUrl}`;
       } else {
         // In Node.js context (SSR), we need to handle relative URLs
-        apiUrl = `/api/posts/${slug}`;
+        apiUrl = `/api/news/by-slug/${slug}`;
       }
     }
 
@@ -141,7 +141,7 @@ export async function fetchPost(slug: string) {
       apiUrl = `${apiUrl}?_=${Date.now()}`;
     }
 
-    console.log("Fetching post from URL:", apiUrl);
+    console.log("Fetching news item from URL:", apiUrl);
 
     const response = await fetch(apiUrl, {
       next: isDev ? { revalidate: 0 } : { revalidate: 300 },
@@ -149,16 +149,20 @@ export async function fetchPost(slug: string) {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch post: ${response.status}`);
+      throw new Error(`Failed to fetch news item: ${response.status}`);
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching post:", error);
+    console.error("Error fetching news item:", error);
     throw error;
   }
 }
+
+// Keep for backward compatibility, but rename internally to use news
+export const fetchPosts = fetchNews;
+export const fetchPost = fetchNewsItem;
 
 export async function fetchServices(
   params: FetchServicesParams = {}

@@ -2,18 +2,18 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { fetchPosts } from "@/lib/api";
-import { Post } from "@/types/post";
+import { News } from "@/types/post";
+import HomepageNewsSection from "./HomepageNewsSection";
 
 interface BlogPostProps {
   image: string;
   title: string;
-  excerpt: string;
+  description: string;
   slug: string;
   id: string;
 }
 
-const BlogPost = ({ image, title, excerpt, slug, id }: BlogPostProps) => (
+const BlogPost = ({ image, title, description, slug, id }: BlogPostProps) => (
   <Link
     href={`/news/${slug}`}
     className="group relative rounded-lg overflow-hidden max-w-[330px] mx-auto"
@@ -32,7 +32,7 @@ const BlogPost = ({ image, title, excerpt, slug, id }: BlogPostProps) => (
           {title}
         </h3>
         <p className="text-gray-600 text-sm md:text-md line-clamp-2">
-          {excerpt}
+          {description}
         </p>
       </div>
     </div>
@@ -40,9 +40,6 @@ const BlogPost = ({ image, title, excerpt, slug, id }: BlogPostProps) => (
 );
 
 const BlogSection = async ({ locale = "vi" }: { locale?: string }) => {
-  // Default fallback image for posts without featured images
-  const DEFAULT_IMAGE = "/images/news/news-image-1.jpg";
-
   // Get translations
   const t = await getTranslations({ locale, namespace: "home.news" });
   const tEmpty = await getTranslations({
@@ -50,20 +47,23 @@ const BlogSection = async ({ locale = "vi" }: { locale?: string }) => {
     namespace: "news.emptyState",
   });
 
-  let blogPosts: Post[] = [];
+  let homepageNews: News[] = [];
 
   try {
-    // Fetch the latest 3 published posts
-    const response = await fetchPosts({
-      limit: 3,
-      status: "PUBLISHED",
-      page: 1,
+    // Fetch news that are marked for homepage display
+    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/news/homepage`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      next: { revalidate: 300 }, // Cache for 5 minutes
     });
-    blogPosts = response.posts;
+    
+    if (response.ok) {
+      const data = await response.json();
+      homepageNews = data.news || [];
+    }
   } catch (error) {
-    console.error("Failed to fetch blog posts:", error);
-    // Fallback to empty array if API fails
-    blogPosts = [];
+    console.error("Failed to fetch homepage news:", error);
+    homepageNews = [];
   }
 
   return (
@@ -73,18 +73,29 @@ const BlogSection = async ({ locale = "vi" }: { locale?: string }) => {
           {t("title")}
         </h2>
 
-        {blogPosts.length > 0 ? (
+        {homepageNews.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-16">
-            {blogPosts.map((post) => (
-              <BlogPost
-                key={post.id}
-                slug={post.slug}
-                id={post.id}
-                image={post.featuredImage || DEFAULT_IMAGE}
-                title={post.title}
-                excerpt={post.excerpt || `${post.content.substring(0, 150)}...`}
-              />
-            ))}
+            {homepageNews.map((newsItem) => {
+              // Handle localization
+              const title = locale === "en" && newsItem.titleEn ? newsItem.titleEn : newsItem.title;
+              const description = locale === "en" && newsItem.shortDescriptionEn 
+                ? newsItem.shortDescriptionEn 
+                : newsItem.shortDescription || (newsItem.description ? `${newsItem.description.substring(0, 150)}...` : '');
+              const image = locale === "en" && newsItem.featureImageEn
+                ? newsItem.featureImageEn.url
+                : newsItem.featureImage?.url || "/images/news/news-image-1.jpg";
+                
+              return (
+                <BlogPost
+                  key={newsItem.id}
+                  slug={newsItem.slug}
+                  id={newsItem.id}
+                  image={image}
+                  title={title}
+                  description={description || ''}
+                />
+              );
+            })}
           </div>
         ) : (
           <div className="text-center py-12">

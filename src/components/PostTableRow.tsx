@@ -6,47 +6,45 @@ import { ROUTES } from "@/lib/router";
 import { useState } from "react";
 import { toast } from "sonner";
 
-interface Post {
+interface News {
   id: string;
   title: string;
   slug: string;
   status: string;
-  featured: boolean;
-  featuredImage?: string | null;
+  pin: boolean;
+  featureImageId?: string | null;
+  featureImage?: {
+    id: string;
+    url: string;
+  } | null;
   publishedAt?: Date | string | null;
   createdAt: Date | string;
-  author?: {
+  categoryId?: string | null;
+  category?: {
     id: string;
-    name?: string | null;
-    email: string;
-  };
-  categories?: {
-    category: {
-      id: string;
-      name: string;
-      slug: string;
-      description?: string | null;
-    };
-  }[];
+    name: string;
+    slug: string;
+    description?: string | null;
+  } | null;
 }
 
-interface PostTableRowProps {
-  post: Post;
+interface NewsTableRowProps {
+  news: News;
   formatDate: (date: Date | string) => string;
-  onPostDeleted?: () => void;
+  onNewsDeleted?: () => void;
 }
 
 export default function PostTableRow({
-  post,
+  news,
   formatDate,
-  onPostDeleted,
-}: PostTableRowProps) {
+  onNewsDeleted,
+}: NewsTableRowProps) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
     if (
       !window.confirm(
-        `Are you sure you want to delete the post "${post.title}"? This action cannot be undone.`
+        `Are you sure you want to delete the news article "${news.title}"? This action cannot be undone.`
       )
     ) {
       return;
@@ -55,24 +53,24 @@ export default function PostTableRow({
     setIsDeleting(true);
 
     try {
-      const response = await fetch(`/api/posts/${post.id}`, {
+      const response = await fetch(`/api/news/${news.id}`, {
         method: "DELETE",
       });
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "Failed to delete post");
+        throw new Error(error.error || "Failed to delete news article");
       }
 
-      toast.success("Post deleted successfully");
+      toast.success("News article deleted successfully");
 
-      if (onPostDeleted) {
-        onPostDeleted();
+      if (onNewsDeleted) {
+        onNewsDeleted();
       }
     } catch (error) {
-      console.error("Error deleting post:", error);
+      console.error("Error deleting news article:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to delete post"
+        error instanceof Error ? error.message : "Failed to delete news article"
       );
     } finally {
       setIsDeleting(false);
@@ -80,14 +78,14 @@ export default function PostTableRow({
   };
 
   return (
-    <tr key={post.id} className="hover:bg-gray-50">
+    <tr key={news.id} className="hover:bg-gray-50">
       <td className="px-6 py-4 whitespace-nowrap align-middle">
         <div className="flex items-center justify-center">
-          {post.featuredImage ? (
+          {news.featureImage ? (
             <div className="h-14 w-14 rounded-md overflow-hidden">
               <img
-                src={post.featuredImage}
-                alt={post.title}
+                src={news.featureImage.url}
+                alt={news.title}
                 className="h-full w-full object-cover"
               />
             </div>
@@ -100,32 +98,32 @@ export default function PostTableRow({
       </td>
       <td className="px-6 py-4 whitespace-nowrap align-middle">
         <div>
-          <div className="text-sm font-medium text-gray-900">{post.title}</div>
-          <div className="text-sm text-gray-500">/news/{post.slug}</div>
+          <div className="text-sm font-medium text-gray-900">{news.title}</div>
+          <div className="text-sm text-gray-500">/news/{news.slug}</div>
         </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">
-        {post.author?.name}
+        Admin
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">
-        {post.categories?.map((pc) => pc.category.name).join(", ")}
+        {news.category?.name || "-"}
       </td>
       <td className="px-6 py-4 whitespace-nowrap align-middle">
         <span
           className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-            post.status === "PUBLISHED"
+            news.status === "PUBLISHED"
               ? "bg-green-100 text-green-800"
               : "bg-gray-100 text-gray-800"
           }`}
         >
-          {post.status.replace("_", " ")}
+          {news.status.replace("_", " ")}
         </span>
       </td>
       <td className="px-6 py-4 whitespace-nowrap align-middle">
         <Link
-          href={`${ROUTES.ADMIN_NEWS}/${post.id}/toggle-featured`}
+          href={`${ROUTES.ADMIN_NEWS}/${news.id}/status`}
           className={`inline-flex items-center px-2 py-1 rounded ${
-            post?.featured
+            news?.pin
               ? "bg-amber-100 text-amber-800 hover:bg-amber-200"
               : "bg-gray-100 text-gray-800 hover:bg-gray-200"
           }`}
@@ -133,22 +131,20 @@ export default function PostTableRow({
           <StarIcon
             size={16}
             className={
-              post?.featured ? "text-amber-500 fill-amber-500" : "text-gray-400"
+              news?.pin ? "text-amber-500 fill-amber-500" : "text-gray-400"
             }
           />
           <span className="ml-1 text-xs">
-            {post?.featured ? "Featured" : "Not Featured"}
+            {news?.pin ? "Pinned" : "Not Pinned"}
           </span>
         </Link>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-middle">
-        {post.publishedAt
-          ? formatDate(post.publishedAt)
-          : formatDate(post.createdAt)}
+        {formatDate(news.createdAt)}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium align-middle">
         <Link
-          href={ROUTES.ADMIN_NEWS + `/${post.id}`}
+          href={ROUTES.ADMIN_NEWS + `/${news.id}`}
           className="text-blue-600 hover:text-blue-900 mr-4"
         >
           Edit
