@@ -238,21 +238,6 @@ export const footerCompanyLinks: RouteItem[] = [
   },
 ];
 
-export const footerServiceLinks: RouteItem[] = [
-  {
-    name: "Y học cổ truyền",
-    href: publicRoutes.services.children.ortho.href,
-  },
-  {
-    name: "Vật lý trị liệu",
-    href: publicRoutes.services.children.rehab.href,
-  },
-  {
-    name: "Phục hồi chức năng",
-    href: publicRoutes.services.children.func.href,
-  },
-];
-
 // Route helper functions
 export const routeHelpers = {
   /**

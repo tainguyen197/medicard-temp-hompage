@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { getTranslations } from 'next-intl/server';
-import { footerServiceLinks, ROUTES } from "@/lib/router";
+import {  ROUTES } from "@/lib/router";
 import { getContactData, fallbackContactData } from "@/lib/contact";
 import {Link} from '@/navigation'
 
@@ -81,10 +81,12 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
     ));
   };
 
+  console.log(homepageServices)
+
   // Use homepage services if available, otherwise fall back to hardcoded links
   const servicesToDisplay = homepageServices.length >= 3 
     ? homepageServices.slice(0, 3) 
-    : footerServiceLinks.slice(0, 3);
+    : homepageServices
 
   // Helper function to get localized service content
   const getLocalizedServiceContent = (service: Service) => {
@@ -158,24 +160,24 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
               {t('services')}
             </h4>
             <ul className="space-y-3">
-              {servicesToDisplay.map((service, index) => {
+              {servicesToDisplay.map((service: Service, index) => {
                 // Handle both Service object and footerServiceLinks format
                 const isServiceObject = 'slug' in service;
-                const href = isServiceObject ? `/services/${service.slug}` : service.href;
+                const href = isServiceObject ? `/services/${service.slug}`: '';
                 let name = '';
                 
                 if (isServiceObject) {
                   const localizedContent = getLocalizedServiceContent(service);
                   name = localizedContent.title;
                 } else {
-                  name = service.name;
+                  name = (service as any).title as string;
                 }
                 
                 return (
-                  <li key={isServiceObject ? service.id : service.href}>
+                  <li key={isServiceObject ? service.id : (service as any).href}>
                     <Link
                       href={href}
-                      className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
+                      className="hover:text-[#B1873F] transition-colors text-sm uppercase md:text-md"
                     >
                       {name}
                     </Link>

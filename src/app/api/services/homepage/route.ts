@@ -40,6 +40,7 @@ export async function GET() {
       take: 4, // Maximum 4 services for homepage
     });
 
+
     return NextResponse.json({
       services,
       count: services.length,
