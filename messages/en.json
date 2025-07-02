@@ -652,5 +652,17 @@
     },
     "notFound": "Service not found",
     "service": "Service"
+  },
+  "footer": {
+    "company": "Company",
+    "services": "Services",
+    "home": "Home",
+    "about": "About Us",
+    "news": "News",
+    "hotline": "HOTLINE",
+    "openingHours": "Opening Hours:",
+    "copyright": "Copyright © 2025 Healthcare Therapy Center",
+    "terms": "Terms",
+    "privacy": "Privacy"
   }
 }

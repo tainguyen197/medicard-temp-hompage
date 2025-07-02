@@ -9,16 +9,7 @@ const intlMiddleware = createMiddleware(routing);
 export async function middleware(request: NextRequest) {
   const { nextUrl } = request;
   const subdomain = request.headers.get("host")?.split(".")[0];
-  const { pathname, search } = nextUrl;
 
-  // Skip internal requests (important!)
-  if (
-    pathname.startsWith("/_next") ||
-    search.includes("__rsc") ||
-    pathname.includes(".") // static files
-  ) {
-    return NextResponse.next();
-  }
 
   // Handle API routes
   if (nextUrl.pathname.startsWith("/api")) {
@@ -26,27 +17,21 @@ export async function middleware(request: NextRequest) {
   }
 
   // Check authentication for dashboard routes
-  if (
-    nextUrl.pathname.startsWith("/dashboard") &&
-    !nextUrl.pathname.startsWith("/dashboard/auth")
-  ) {
+  if (nextUrl.pathname.startsWith("/dashboard") && 
+      !nextUrl.pathname.startsWith("/dashboard/auth")) {
     try {
-      const token = await getToken({
-        req: request,
-        secret: process.env.NEXTAUTH_SECRET,
+      const token = await getToken({ 
+        req: request, 
+        secret: process.env.NEXTAUTH_SECRET 
       });
-
+      
       if (!token) {
         console.log("No valid token found, redirecting to login");
-        return NextResponse.redirect(
-          new URL("/dashboard/auth/login", request.url)
-        );
+        return NextResponse.redirect(new URL("/dashboard/auth/login", request.url));
       }
     } catch (error) {
       console.error("Token validation error:", error);
-      return NextResponse.redirect(
-        new URL("/dashboard/auth/login", request.url)
-      );
+      return NextResponse.redirect(new URL("/dashboard/auth/login", request.url));
     }
   }
 

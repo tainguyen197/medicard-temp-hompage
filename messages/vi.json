@@ -618,5 +618,17 @@
       "subheading": "Hãy để Healthcare Therapy Center trở thành điểm tựa vững chắc trong hành trình chăm sóc sức khỏe của bạn.",
       "button": "Đặt lịch trải nghiệm"
     }
+  },
+  "footer": {
+    "company": "Công ty",
+    "services": "Dịch vụ",
+    "home": "Trang chủ",
+    "about": "Về chúng tôi",
+    "news": "Tin tức",
+    "hotline": "HOTLINE",
+    "openingHours": "Giờ mở cửa:",
+    "copyright": "Bản quyền © 2025 Healthcare Therapy Center",
+    "terms": "Điều khoản",
+    "privacy": "Chính sách"
   }
 }

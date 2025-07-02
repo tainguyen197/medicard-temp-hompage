@@ -1,11 +1,50 @@
-import Link from "next/link";
 import Image from "next/image";
+import { getTranslations } from 'next-intl/server';
 import { footerServiceLinks, ROUTES } from "@/lib/router";
 import { getContactData, fallbackContactData } from "@/lib/contact";
+import {Link} from '@/navigation'
 
-export default async function Footer() {
+interface Service {
+  id: string;
+  title: string;
+  titleEn?: string;
+  slug: string;
+  shortDescription?: string;
+  shortDescriptionEn?: string;
+}
+
+interface FooterProps {
+  locale?: string;
+}
+
+// Fetch homepage services
+async function getHomepageServices() {
+  try {
+    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/services/homepage`, {
+      next: { revalidate: 300 } // Revalidate every 5 minutes
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch homepage services');
+    }
+    
+    const data = await response.json();
+    return data.services || [];
+  } catch (error) {
+    console.error('Failed to fetch homepage services for footer:', error);
+    return [];
+  }
+}
+
+export default async function Footer({ locale = "vi" }: FooterProps) {
+  // Get translations for server component
+  const t = await getTranslations({ locale, namespace: 'footer' });
+
   // Fetch contact data from database
   const contactData = await getContactData();
+  
+  // Fetch homepage services
+  const homepageServices: Service[] = await getHomepageServices();
 
   // Use database data if available, otherwise fall back to hardcoded values
   const contact = {
@@ -42,6 +81,19 @@ export default async function Footer() {
     ));
   };
 
+  // Use homepage services if available, otherwise fall back to hardcoded links
+  const servicesToDisplay = homepageServices.length >= 3 
+    ? homepageServices.slice(0, 3) 
+    : footerServiceLinks.slice(0, 3);
+
+  // Helper function to get localized service content
+  const getLocalizedServiceContent = (service: Service) => {
+    const isEnglish = locale === "en";
+    return {
+      title: isEnglish && service.titleEn ? service.titleEn : service.title,
+    };
+  };
+
   return (
     <footer className="bg-[#182134] text-white">
       <div className="container mx-auto px-4 py-12">
@@ -60,7 +112,7 @@ export default async function Footer() {
             <div className="text-white mb-4 font-bold">
               <p className="mb-2 text-sm md:text-md">{contact.address}</p>
               <p className="text-sm md:text-md">
-                Giờ mở cửa: <br />
+                {t('openingHours')} <br />
                 {formatBusinessHours(contact.businessHours)}
               </p>
             </div>
@@ -70,7 +122,7 @@ export default async function Footer() {
           {/* Company links */}
           <div className="col-span-2 md:col-span-1">
             <h4 className="text-md md:text-xl font-bold md:font-medium mb-6">
-              Công ty
+              {t('company')}
             </h4>
             <ul className="space-y-3">
               <li>
@@ -78,7 +130,7 @@ export default async function Footer() {
                   href={ROUTES.HOME}
                   className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
-                  Trang chủ
+                  {t('home')}
                 </Link>
               </li>
               <li>
@@ -86,7 +138,7 @@ export default async function Footer() {
                   href={ROUTES.ABOUT}
                   className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
-                  Về chúng tôi
+                  {t('about')}
                 </Link>
               </li>
               <li>
@@ -94,49 +146,49 @@ export default async function Footer() {
                   href={ROUTES.NEWS}
                   className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
-                  Tin tức
+                  {t('news')}
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Services links */}
+          {/* Services links - Dynamic from homepage services */}
           <div className="col-span-3 md:col-span-1">
             <h4 className="text-md md:text-xl font-bold md:font-medium mb-6">
-              Dịch vụ
+              {t('services')}
             </h4>
             <ul className="space-y-3">
-              <li>
-                <Link
-                  href={footerServiceLinks[0].href}
-                  className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
-                >
-                  {footerServiceLinks[0].name}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={footerServiceLinks[1].href}
-                  className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
-                >
-                  {footerServiceLinks[1].name}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href={footerServiceLinks[2].href}
-                  className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
-                >
-                  {footerServiceLinks[2].name}
-                </Link>
-              </li>
+              {servicesToDisplay.map((service, index) => {
+                // Handle both Service object and footerServiceLinks format
+                const isServiceObject = 'slug' in service;
+                const href = isServiceObject ? `/services/${service.slug}` : service.href;
+                let name = '';
+                
+                if (isServiceObject) {
+                  const localizedContent = getLocalizedServiceContent(service);
+                  name = localizedContent.title;
+                } else {
+                  name = service.name;
+                }
+                
+                return (
+                  <li key={isServiceObject ? service.id : service.href}>
+                    <Link
+                      href={href}
+                      className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
+                    >
+                      {name}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
           {/* Hotline and social */}
           <div className="col-span-5 md:col-span-1 flex items-center md:block">
             <h4 className="hidden md:block text-xl font-medium mb-4">
-              HOTLINE
+              {t('hotline')}
             </h4>
             <div className="md:mb-6">
               <Link
@@ -246,14 +298,14 @@ export default async function Footer() {
         {/* Copyright and links */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center text-sm text-gray-400">
           <div>
-            <p>Bản quyền © 2025 Healthcare Therapy Center</p>
+            <p>{t('copyright')}</p>
           </div>
           <div className="hidden md:flex mt-4 md:mt-0">
             <Link href="/terms" className="hover:text-white mr-6">
-              Điều khoản
+              {t('terms')}
             </Link>
             <Link href="/privacy" className="hover:text-white">
-              Chính sách
+              {t('privacy')}
             </Link>
           </div>
         </div>

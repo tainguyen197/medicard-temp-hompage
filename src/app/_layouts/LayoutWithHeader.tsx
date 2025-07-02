@@ -4,14 +4,16 @@ import Footer from "@/components/Footer";
 
 export default async function LayoutWithHeader({
   children,
+  locale,
 }: Readonly<{
   children: React.ReactNode;
+  locale?: string;
 }>) {
   return (
     <>
       {/* <Header /> */}
       <main className="overflow-x-hidden">{children}</main>
-      <Footer />
+      <Footer locale={locale} />
       <div className="fixed bottom-6 right-6 md:bottom-12 md:right-12 z-50">
         <a
           href="tel:0901430077"

@@ -49,7 +49,7 @@ export default async function RootLayout({
         className={`${manrope.variable} ${cormorant.variable} font-sans antialiased`}
       >
         <NextIntlClientProvider>
-          <LayoutWithHeader>{children}</LayoutWithHeader>
+          <LayoutWithHeader locale={locale}>{children}</LayoutWithHeader>
         </NextIntlClientProvider>
       </body>
     </html>
