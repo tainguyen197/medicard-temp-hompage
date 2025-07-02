@@ -11,7 +11,7 @@ export default async function LayoutWithHeader({
 }>) {
   return (
     <>
-      {/* <Header /> */}
+      <Header />
       <main className="overflow-x-hidden">{children}</main>
       <Footer locale={locale} />
       <div className="fixed bottom-6 right-6 md:bottom-12 md:right-12 z-50">
