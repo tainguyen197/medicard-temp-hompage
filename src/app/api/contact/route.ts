@@ -21,13 +21,9 @@ const contactSchema = z.object({
 // GET /api/contact - Get contact information
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     // Get the first (and should be only) contact record
     const contact = await prisma.contact.findFirst({
+      where: { status: "ACTIVE" },
       orderBy: { createdAt: "desc" },
     });
 
@@ -50,7 +46,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user has permission (ADMIN or EDITOR)
-    if (!["ADMIN", "EDITOR"].includes(session.user.role)) {
+    if (!["ADMIN", "EDITOR", "SUPER_ADMIN"].includes(session.user.role)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -85,28 +81,34 @@ export async function POST(request: NextRequest) {
     }
 
     // Log the creation/update
-    const operation = existingContact ? 'UPDATE' : 'CREATE';
+    const operation = existingContact ? "UPDATE" : "CREATE";
     const changes: Record<string, any> = {};
-    
+
     if (existingContact) {
       if (cleanData.phone !== existingContact.phone) {
         changes.phone = { from: existingContact.phone, to: cleanData.phone };
       }
       if (cleanData.address !== existingContact.address) {
-        changes.address = { from: existingContact.address, to: cleanData.address };
+        changes.address = {
+          from: existingContact.address,
+          to: cleanData.address,
+        };
       }
       if (cleanData.facebookUrl !== existingContact.facebookUrl) {
-        changes.facebookUrl = { from: existingContact.facebookUrl, to: cleanData.facebookUrl };
+        changes.facebookUrl = {
+          from: existingContact.facebookUrl,
+          to: cleanData.facebookUrl,
+        };
       }
       // Add other field comparisons as needed
     }
 
     await Logger.logCRUD({
       operation,
-      entity: 'CONTACT',
+      entity: "CONTACT",
       entityId: contact.id,
       userId: session.user.id,
-      entityName: 'Contact Information',
+      entityName: "Contact Information",
       changes: Object.keys(changes).length > 0 ? changes : undefined,
     });
 
@@ -144,7 +146,7 @@ export async function PUT(request: Request) {
 
     // Update or create contact information
     const contact = await prisma.contact.upsert({
-      where: { id: existingContact?.id || 'default' },
+      where: { id: existingContact?.id || "default" },
       update: {
         phone: validatedData.phone,
         address: validatedData.address,
@@ -170,28 +172,37 @@ export async function PUT(request: Request) {
     });
 
     // Log the update
-    const operation = existingContact ? 'UPDATE' : 'CREATE';
+    const operation = existingContact ? "UPDATE" : "CREATE";
     const changes: Record<string, any> = {};
-    
+
     if (existingContact) {
       if (validatedData.phone !== existingContact.phone) {
-        changes.phone = { from: existingContact.phone, to: validatedData.phone };
+        changes.phone = {
+          from: existingContact.phone,
+          to: validatedData.phone,
+        };
       }
       if (validatedData.address !== existingContact.address) {
-        changes.address = { from: existingContact.address, to: validatedData.address };
+        changes.address = {
+          from: existingContact.address,
+          to: validatedData.address,
+        };
       }
       if (validatedData.facebookUrl !== existingContact.facebookUrl) {
-        changes.facebookUrl = { from: existingContact.facebookUrl, to: validatedData.facebookUrl };
+        changes.facebookUrl = {
+          from: existingContact.facebookUrl,
+          to: validatedData.facebookUrl,
+        };
       }
       // Add other field comparisons as needed
     }
 
     await Logger.logCRUD({
       operation,
-      entity: 'CONTACT',
+      entity: "CONTACT",
       entityId: contact.id,
       userId: session.user.id,
-      entityName: 'Contact Information',
+      entityName: "Contact Information",
       changes: Object.keys(changes).length > 0 ? changes : undefined,
     });
 

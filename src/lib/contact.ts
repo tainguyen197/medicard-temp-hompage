@@ -18,7 +18,6 @@ export interface ContactData {
 export async function getContactData(): Promise<ContactData | null> {
   try {
     const contact = await prisma.contact.findFirst({
-      where: { status: "ACTIVE" },
       orderBy: { createdAt: "desc" },
     });
     return contact;
