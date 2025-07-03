@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { EditIcon, TrashIcon } from "lucide-react";
 import { ROUTES } from "@/lib/router";
+import DeleteTeamMemberModal from "@/components/DeleteTeamMemberModal";
 
 type TeamMember = {
   id: string;
@@ -33,6 +35,8 @@ interface TeamTableProps {
 }
 
 export default function TeamTable({ teamMembers }: TeamTableProps) {
+  const router = useRouter();
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "ACTIVE":
@@ -164,10 +168,14 @@ export default function TeamTable({ teamMembers }: TeamTableProps) {
                     <EditIcon size={16} className="mr-1" />
                     Edit
                   </Link>
-                  <button className="text-red-600 hover:text-red-900 inline-flex items-center px-2 py-1 rounded">
-                    <TrashIcon size={16} className="mr-1" />
-                    Delete
-                  </button>
+                  <DeleteTeamMemberModal
+                    teamMember={{ id: member.id, name: member.name }}
+                  >
+                    <button className="text-red-600 hover:text-red-900 inline-flex items-center px-2 py-1 rounded">
+                      <TrashIcon size={16} className="mr-1" />
+                      Delete
+                    </button>
+                  </DeleteTeamMemberModal>
                 </td>
               </tr>
             ))

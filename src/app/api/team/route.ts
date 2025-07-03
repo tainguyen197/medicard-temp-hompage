@@ -88,7 +88,10 @@ export async function POST(request: NextRequest) {
   try {
     // Check authentication
     const session = await getServerSession(authOptions);
-    if (!session?.user || !["ADMIN", "EDITOR"].includes(session.user.role)) {
+    if (
+      !session?.user ||
+      !["ADMIN", "EDITOR", "SUPER_ADMIN"].includes(session.user.role)
+    ) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -180,8 +183,8 @@ export async function POST(request: NextRequest) {
 
     // Log the creation
     await Logger.logCRUD({
-      operation: 'CREATE',
-      entity: 'TEAM_MEMBER',
+      operation: "CREATE",
+      entity: "TEAM_MEMBER",
       entityId: teamMember.id,
       userId: session.user.id,
       entityName: teamMember.name,

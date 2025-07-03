@@ -130,8 +130,15 @@ export async function PUT(
 
   try {
     const { id } = await params;
-    const body = await request.json();
-    // const validatedData = teamMemberUpdateSchema.parse(body);
+    const formData = await request.formData();
+    const name = formData.get("name") as string;
+    const nameEn = (formData.get("nameEn") as string) || null;
+    const title = formData.get("title") as string;
+    const titleEn = (formData.get("titleEn") as string) || null;
+    const description = formData.get("description") as string;
+    const descriptionEn = (formData.get("descriptionEn") as string) || null;
+    const order = parseInt(formData.get("order") as string, 10) || 0;
+    const status = formData.get("status") as string;
 
     // Get existing team member for comparison
     const existingTeamMember = await prisma.teamMember.findUnique({
@@ -146,8 +153,8 @@ export async function PUT(
     }
 
     // Handle file uploads for images
-    const imageFile = body.imageFile as File | null;
-    const imageEnFile = body.imageEnFile as File | null;
+    const imageFile = formData.get("imageFile") as File | null;
+    const imageEnFile = formData.get("imageEnFile") as File | null;
 
     let imageId: string | null = existingTeamMember.imageId;
     let imageEnId: string | null = existingTeamMember.imageEnId;
@@ -197,14 +204,14 @@ export async function PUT(
     const teamMember = await prisma.teamMember.update({
       where: { id },
       data: {
-        name: body.name,
-        nameEn: body.nameEn,
-        title: body.title,
-        titleEn: body.titleEn,
-        description: body.description,
-        descriptionEn: body.descriptionEn,
-        order: body.order,
-        status: body.status,
+        name,
+        nameEn,
+        title,
+        titleEn,
+        description,
+        descriptionEn,
+        order,
+        status,
         ...(imageId && { imageId }),
         ...(imageEnId && { imageEnId }),
       },
@@ -216,23 +223,23 @@ export async function PUT(
 
     // Log the update with changes
     const changes: Record<string, any> = {};
-    
-    if (body.name !== existingTeamMember.name) {
-      changes.name = { from: existingTeamMember.name, to: body.name };
+
+    if (name !== existingTeamMember.name) {
+      changes.name = { from: existingTeamMember.name, to: name };
     }
-    if (body.title !== existingTeamMember.title) {
-      changes.title = { from: existingTeamMember.title, to: body.title };
+    if (title !== existingTeamMember.title) {
+      changes.title = { from: existingTeamMember.title, to: title };
     }
-    if (body.status !== existingTeamMember.status) {
-      changes.status = { from: existingTeamMember.status, to: body.status };
+    if (status !== existingTeamMember.status) {
+      changes.status = { from: existingTeamMember.status, to: status };
     }
-    if (body.order !== existingTeamMember.order) {
-      changes.order = { from: existingTeamMember.order, to: body.order };
+    if (order !== existingTeamMember.order) {
+      changes.order = { from: existingTeamMember.order, to: order };
     }
 
     await Logger.logCRUD({
-      operation: 'UPDATE',
-      entity: 'TEAM_MEMBER',
+      operation: "UPDATE",
+      entity: "TEAM_MEMBER",
       entityId: teamMember.id,
       userId: session.user.id,
       entityName: teamMember.name,
@@ -281,8 +288,8 @@ export async function DELETE(
 
     // Log the deletion
     await Logger.logCRUD({
-      operation: 'DELETE',
-      entity: 'TEAM_MEMBER',
+      operation: "DELETE",
+      entity: "TEAM_MEMBER",
       entityId: id,
       userId: session.user.id,
       entityName: existingTeamMember.name,
