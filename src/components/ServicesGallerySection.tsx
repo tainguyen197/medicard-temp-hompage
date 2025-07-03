@@ -263,9 +263,12 @@ const ServicesGallerySection: React.FC = () => {
               <h3 className="font-cormorant text-md md:text-[30px] font-bold mb-2 md:mb-5 text-white line-clamp-1 md:line-clamp-none">
                 {activeService.title}
               </h3>
-              <p className="text-gray-300 mb-4 md:mb-10 text-sm md:text-md leading-relaxed line-clamp-5 md:line-clamp-none  min-h-[7.25rem]">
-                {activeService.description}
-              </p>
+              <p
+                className="text-gray-300 mb-4 md:mb-10 text-sm md:text-md leading-relaxed line-clamp-5 md:line-clamp-none  min-h-[7.25rem]"
+                dangerouslySetInnerHTML={{
+                  __html: activeService.description,
+                }}
+              />
             </div>
             <div>
               <div className="mb-10">
