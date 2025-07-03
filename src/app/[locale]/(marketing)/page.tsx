@@ -1,5 +1,6 @@
 import { getMessages } from "next-intl/server";
 import HeroSection from "@/components/HeroSection";
+import { getBannerByType, BANNER_TYPES } from "@/lib/banner-utils";
 import {
   AboutSectionWithAnimation,
   ServicesGallerySectionWithAnimation,
@@ -25,9 +26,12 @@ export default async function Home({
   const messages = await getMessages();
   const t = messages.home;
 
+  // Fetch homepage banner
+  const homepageBannerUrl = await getBannerByType(BANNER_TYPES.HOMEPAGE);
+
   return (
     <div className="min-h-screen pt-[72px] md:pt-[96px]">
-      <HeroSection />
+      <HeroSection imageUrl={homepageBannerUrl} altText="Homepage Hero" />
       <AboutSectionWithAnimation t={t.about} />
       <ServicesGallerySectionWithAnimation />
       <TreatmentMethodsSectionWithAnimation t={t.treatmentMethods} />

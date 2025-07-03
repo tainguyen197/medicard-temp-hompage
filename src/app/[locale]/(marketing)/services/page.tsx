@@ -3,6 +3,11 @@ import Image from "next/image";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getMessages } from "next-intl/server";
 import { ServicesDataComponent } from "./ServicesContent";
+import {
+  getBannerByType,
+  BANNER_TYPES,
+  DEFAULT_HERO_IMAGE,
+} from "@/lib/banner-utils";
 
 export const generateStaticParams = async () => {
   return [{ locale: "en" }, { locale: "vi" }];
@@ -18,12 +23,16 @@ export default async function ServicesPage({
   const messages = await getMessages();
   const t = messages.services;
 
+  // Fetch service banner
+  const serviceBannerUrl = await getBannerByType(BANNER_TYPES.SERVICE);
+  const heroImage = serviceBannerUrl || DEFAULT_HERO_IMAGE;
+
   return (
     <div className="pt-[72px] md:pt-[96px]">
       {/* Hero Section */}
       <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
         <Image
-          src="/images/hero-section.png"
+          src={heroImage}
           alt={t.title}
           className="object-cover object-start"
           priority

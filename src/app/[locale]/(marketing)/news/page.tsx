@@ -4,6 +4,11 @@ import AnimatedSection from "@/components/AnimatedSection";
 import { getMessages } from "next-intl/server";
 import { NewsDataComponent } from "./NewsContent";
 import NewsLoading from "./NewsLoading";
+import {
+  getBannerByType,
+  BANNER_TYPES,
+  DEFAULT_HERO_IMAGE,
+} from "@/lib/banner-utils";
 
 export const generateStaticParams = async () => {
   return [{ locale: "en" }, { locale: "vi" }];
@@ -21,13 +26,17 @@ export default async function BlogPage({
   const messages = await getMessages();
   const t = messages.news;
 
+  // Fetch news banner
+  const newsBannerUrl = await getBannerByType(BANNER_TYPES.NEWS);
+  const heroImage = newsBannerUrl || DEFAULT_HERO_IMAGE;
+
   return (
     <div className="min-h-screen pt-[72px] md:pt-[96px]">
       {/* 1. Hero Section */}
       <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
         <div className="absolute inset-0">
           <Image
-            src="/images/hero-section.png"
+            src={heroImage}
             alt="News Hero"
             fill
             className="object-cover"

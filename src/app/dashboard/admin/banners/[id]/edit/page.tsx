@@ -85,6 +85,8 @@ export default function EditBannerPage() {
         link: banner.link || "",
         type: banner.type,
         status: banner.status,
+        id: banner.id,
+        image: banner.image as any,
       }}
       isEditing={true}
     />

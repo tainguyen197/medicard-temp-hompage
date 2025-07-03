@@ -6,6 +6,11 @@ import ServicesDetailSection from "@/components/ServicesDetailSection";
 import TestimonialSection from "@/components/TestimonialSection";
 import ServicesDetailSectionSkeleton from "@/components/ServicesDetailSectionSkeleton";
 import TestimonialSectionSkeleton from "@/components/TestimonialSectionSkeleton";
+import {
+  getBannerByType,
+  BANNER_TYPES,
+  DEFAULT_HERO_IMAGE,
+} from "@/lib/banner-utils";
 
 export const generateStaticParams = async () => {
   return [{ locale: "en" }, { locale: "vi" }];
@@ -39,13 +44,17 @@ export default async function AboutPage() {
   const messages = await getMessages();
   const t = messages.about;
 
+  // Fetch about banner
+  const aboutBannerUrl = await getBannerByType(BANNER_TYPES.ABOUT);
+  const heroImage = aboutBannerUrl || DEFAULT_HERO_IMAGE;
+
   return (
     <div className="pt-[72px] md:pt-[96px]">
       {/* 1. Hero Section */}
       <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
         <div className="absolute inset-0">
           <Image
-            src="/images/hero-section.png"
+            src={heroImage}
             alt={t.title}
             fill
             className="object-cover"
