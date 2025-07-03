@@ -108,11 +108,7 @@ export default function ServicesDetailSection({
                 service,
                 locale
               );
-              const fallbackImages = [
-                "/images/service_1.png",
-                "/images/service_2.png",
-                "/images/service_3.png",
-              ];
+              const fallbackImages = ["/images/no-image.png"];
 
               return (
                 <div key={service.id} className="relative mb-10 last:mb-0">
@@ -124,10 +120,7 @@ export default function ServicesDetailSection({
                       <div className="flex flex-col md:flex-row md:gap-x-10 md:pb-10 md:border-b border-[#E2E2E2] cursor-pointer">
                         <div className="h-52 aspect-270/200  relative rounded-2xl overflow-hidden">
                           <Image
-                            src={
-                              service.featureImage?.url ||
-                              fallbackImages[index % fallbackImages.length]
-                            }
+                            src={service.featureImage?.url || fallbackImages[0]}
                             alt={localizedContent.title || "Service"}
                             className="object-cover w-full"
                             fill
@@ -157,10 +150,15 @@ export default function ServicesDetailSection({
                               </svg>
                             </button>
                           </div>
-                          <p className="text-md md:text-lg text-[#909090] leading-relaxed">
-                            {localizedContent.description ||
-                              localizedContent.shortDescription}
-                          </p>
+                          <p
+                            className="text-md md:text-lg text-[#909090] leading-relaxed"
+                            dangerouslySetInnerHTML={{
+                              __html:
+                                localizedContent.description ||
+                                localizedContent.shortDescription ||
+                                "",
+                            }}
+                          />
                         </div>
                       </div>
                     </div>

@@ -187,7 +187,11 @@ export default function MediaContent({
                 Media Library Statistics
               </h2>
               <p className="text-sm text-blue-700 mt-1">
-                Total {meta.total} files • {meta.totalSizeMB} MB used
+                Total {meta.total} files • {meta.totalSizeMB} MB used of 500 MB
+              </p>
+              <p className="text-xs text-gray-600 mt-1">
+                Tip: Delete old images to free up space if you need to stay
+                within the 500 MB limit.
               </p>
             </div>
           </div>
