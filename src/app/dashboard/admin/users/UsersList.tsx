@@ -31,7 +31,11 @@ interface UsersListProps {
   pagination: PaginationData;
 }
 
-export default function UsersList({ users, currentUserId, pagination }: UsersListProps) {
+export default function UsersList({
+  users,
+  currentUserId,
+  pagination,
+}: UsersListProps) {
   const router = useRouter();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
@@ -51,7 +55,7 @@ export default function UsersList({ users, currentUserId, pagination }: UsersLis
     }
     params.set("page", "1");
     params.set("limit", pagination.limit.toString());
-    
+
     router.push(`${ROUTES.ADMIN_USERS}?${params.toString()}`);
   };
 
@@ -86,7 +90,7 @@ export default function UsersList({ users, currentUserId, pagination }: UsersLis
         role: "EDITOR",
       });
       setShowCreateModal(false);
-      
+
       // Refresh the page
       router.refresh();
     } catch (error) {
@@ -121,6 +125,16 @@ export default function UsersList({ users, currentUserId, pagination }: UsersLis
 
   return (
     <>
+      <div className="flex justify-end mb-6">
+        <button
+          type="button"
+          onClick={() => setShowCreateModal(true)}
+          className="flex items-center gap-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+        >
+          <PlusIcon size={16} />
+          <span>Create User</span>
+        </button>
+      </div>
       {/* Users Table */}
       <UsersTable users={users} currentUserId={currentUserId} />
 
@@ -134,7 +148,10 @@ export default function UsersList({ users, currentUserId, pagination }: UsersLis
             </span>{" "}
             to{" "}
             <span className="font-medium">
-              {Math.min(pagination.currentPage * pagination.limit, pagination.total)}
+              {Math.min(
+                pagination.currentPage * pagination.limit,
+                pagination.total
+              )}
             </span>{" "}
             of <span className="font-medium">{pagination.total}</span> results
           </div>
@@ -165,7 +182,7 @@ export default function UsersList({ users, currentUserId, pagination }: UsersLis
 
       {/* Create User Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
             <div className="flex items-center justify-between p-6 border-b">
               <h2 className="text-xl font-semibold text-gray-900">
@@ -254,7 +271,6 @@ export default function UsersList({ users, currentUserId, pagination }: UsersLis
                 >
                   <option value="EDITOR">Editor</option>
                   <option value="ADMIN">Admin</option>
-                  <option value="SUPER_ADMIN">Super Admin</option>
                 </select>
               </div>
 
@@ -280,4 +296,4 @@ export default function UsersList({ users, currentUserId, pagination }: UsersLis
       )}
     </>
   );
-} 
+}

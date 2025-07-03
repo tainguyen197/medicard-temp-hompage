@@ -117,10 +117,12 @@ export default function UsersTableRow({
       <tr className="bg-gray-50">
         <td className="px-6 py-4 whitespace-nowrap">
           <input
-          disabled
+            disabled
             type="email"
             value={editForm.email}
-            onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+            onChange={(e) =>
+              setEditForm({ ...editForm, email: e.target.value })
+            }
             className="w-full border rounded px-2 py-1 text-sm disabled:opacity-50"
             required
           />
@@ -143,7 +145,9 @@ export default function UsersTableRow({
           >
             <option value="EDITOR">Editor</option>
             <option value="ADMIN">Admin</option>
-            <option value="SUPER_ADMIN">Super Admin</option>
+            {user.role === "SUPER_ADMIN" && (
+              <option value="SUPER_ADMIN">Super Admin</option>
+            )}
           </select>
         </td>
         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -153,7 +157,9 @@ export default function UsersTableRow({
           <input
             type="password"
             value={editForm.password}
-            onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
+            onChange={(e) =>
+              setEditForm({ ...editForm, password: e.target.value })
+            }
             className="w-full border rounded px-2 py-1 text-sm"
             placeholder="New password (optional)"
           />
@@ -231,4 +237,4 @@ export default function UsersTableRow({
       </td>
     </tr>
   );
-} 
+}

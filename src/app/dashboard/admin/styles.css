@@ -1,5 +1,8 @@
 /* Modern Admin Dashboard Styles */
 
+button{
+  cursor: pointer;
+}
 /* Custom scrollbar for sidebar */
 aside::-webkit-scrollbar {
   width: 4px;
