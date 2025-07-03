@@ -45,14 +45,13 @@ export default function ServicesTable({ services }: ServicesTableProps) {
     try {
       console.log(`Updating service ${serviceId} to status ${newStatus}`);
 
-      // Use our test API which works correctly
-      const response = await fetch(`/api/test/status`, {
-        method: "POST",
+      // Call actual service status update API
+      const response = await fetch(`/api/services/${serviceId}/status`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          "Cache-Control": "no-cache",
         },
-        body: JSON.stringify({ id: serviceId, status: newStatus }),
+        body: JSON.stringify({ status: newStatus }),
         cache: "no-store",
       });
 
