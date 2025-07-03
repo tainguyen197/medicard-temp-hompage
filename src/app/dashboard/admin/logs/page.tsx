@@ -3,7 +3,11 @@ import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { authOptions } from "@/lib/auth";
 
-export default async function AdminLogsPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+export default async function AdminLogsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
   const session = await getServerSession(authOptions);
   if (!session?.user || !["SUPER_ADMIN", "ADMIN"].includes(session.user.role)) {
     redirect("/dashboard/admin");
@@ -51,9 +55,15 @@ export default async function AdminLogsPage({ searchParams }: { searchParams: Pr
           <tbody>
             {logs.map((log) => (
               <tr key={log.id} className="border-b last:border-0">
-                <td className="px-4 py-2 whitespace-nowrap">{new Date(log.createdAt).toLocaleString()}</td>
                 <td className="px-4 py-2 whitespace-nowrap">
-                  {userMap[log.userId]?.name || userMap[log.userId]?.email || log.userId}
+                  {new Date(log.createdAt).toLocaleString(undefined, {
+                    timeZone: "Asia/Bangkok",
+                  })}
+                </td>
+                <td className="px-4 py-2 whitespace-nowrap">
+                  {userMap[log.userId]?.name ||
+                    userMap[log.userId]?.email ||
+                    log.userId}
                 </td>
                 <td className="px-4 py-2 whitespace-nowrap">{log.action}</td>
                 <td className="px-4 py-2 whitespace-nowrap">{log.entity}</td>
@@ -72,14 +82,22 @@ export default async function AdminLogsPage({ searchParams }: { searchParams: Pr
         <div className="space-x-2">
           <a
             href={`?page=${pageNumber - 1}`}
-            className={`px-3 py-1 rounded ${pageNumber <= 1 ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"}`}
+            className={`px-3 py-1 rounded ${
+              pageNumber <= 1
+                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                : "bg-blue-600 text-white hover:bg-blue-700"
+            }`}
             aria-disabled={pageNumber <= 1}
           >
             Previous
           </a>
           <a
             href={`?page=${pageNumber + 1}`}
-            className={`px-3 py-1 rounded ${pageNumber >= totalPages ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"}`}
+            className={`px-3 py-1 rounded ${
+              pageNumber >= totalPages
+                ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                : "bg-blue-600 text-white hover:bg-blue-700"
+            }`}
             aria-disabled={pageNumber >= totalPages}
           >
             Next
@@ -88,4 +106,4 @@ export default async function AdminLogsPage({ searchParams }: { searchParams: Pr
       </div>
     </div>
   );
-} 
+}
