@@ -32,6 +32,7 @@ export interface Service {
     fileName?: string | null;
     originalName?: string | null;
   } | null;
+  showOnHomepage?: boolean;
 }
 
 export interface ServicesResponse {

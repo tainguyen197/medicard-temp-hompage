@@ -94,14 +94,14 @@ const ServicesGallerySection: React.FC = () => {
 
         const response = await fetchServices({
           status: "PUBLISHED",
-          limit: 20, // Get more services to have options
+          limit: 10, // Get more services to have options
         });
 
         if (response.services && response.services.length > 0) {
           // Convert API services to ServiceItem format
-          const convertedServices = response.services.map((service) =>
-            convertServiceToServiceItem(service, locale)
-          );
+          const convertedServices = response.services
+            .filter((service) => service.showOnHomepage)
+            .map((service) => convertServiceToServiceItem(service, locale));
           setServices(convertedServices);
         } else {
           // Use fallback data if no services found
@@ -184,7 +184,6 @@ const ServicesGallerySection: React.FC = () => {
       setCurrentIndex((prev) => (prev + 1) % displayServices.length);
     }, 6000);
     return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoAdvance, displayServices.length]);
 
   // Trigger animation on active service change
