@@ -1,10 +1,11 @@
 import React, { Suspense } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getMessages } from "next-intl/server";
 import { ServicesDataComponent } from "./ServicesContent";
 import {
-  getBannerByType,
+  getBannerDataByType,
   BANNER_TYPES,
   DEFAULT_HERO_IMAGE,
 } from "@/lib/banner-utils";
@@ -23,21 +24,38 @@ export default async function ServicesPage({
   const messages = await getMessages();
   const t = messages.services;
 
-  // Fetch service banner
-  const serviceBannerUrl = await getBannerByType(BANNER_TYPES.SERVICE);
-  const heroImage = serviceBannerUrl || DEFAULT_HERO_IMAGE;
+  // Fetch service banner data
+  const serviceBanner = await getBannerDataByType(BANNER_TYPES.SERVICE);
+  const heroImage = serviceBanner.imageUrl || DEFAULT_HERO_IMAGE;
+
+  const imageElement = (
+    <Image
+      src={heroImage}
+      alt={t.title}
+      className="object-cover object-start"
+      priority
+      fill
+    />
+  );
 
   return (
     <div className="pt-[72px] md:pt-[96px]">
       {/* Hero Section */}
       <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
-        <Image
-          src={heroImage}
-          alt={t.title}
-          className="object-cover object-start"
-          priority
-          fill
-        />
+        <div className="absolute inset-0">
+          {serviceBanner.link ? (
+            <Link
+              href={serviceBanner.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full h-full group"
+            >
+              {imageElement}
+            </Link>
+          ) : (
+            imageElement
+          )}
+        </div>
       </section>
 
       {/* Introduction Section */}

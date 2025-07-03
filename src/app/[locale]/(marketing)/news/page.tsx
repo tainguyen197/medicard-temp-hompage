@@ -1,11 +1,12 @@
 import Image from "next/image";
 import React, { Suspense } from "react";
+import Link from "next/link";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getMessages } from "next-intl/server";
 import { NewsDataComponent } from "./NewsContent";
 import NewsLoading from "./NewsLoading";
 import {
-  getBannerByType,
+  getBannerDataByType,
   BANNER_TYPES,
   DEFAULT_HERO_IMAGE,
 } from "@/lib/banner-utils";
@@ -26,22 +27,37 @@ export default async function BlogPage({
   const messages = await getMessages();
   const t = messages.news;
 
-  // Fetch news banner
-  const newsBannerUrl = await getBannerByType(BANNER_TYPES.NEWS);
-  const heroImage = newsBannerUrl || DEFAULT_HERO_IMAGE;
+  // Fetch news banner data
+  const newsBanner = await getBannerDataByType(BANNER_TYPES.NEWS);
+  const heroImage = newsBanner.imageUrl || DEFAULT_HERO_IMAGE;
+
+  const imageElement = (
+    <Image
+      src={heroImage}
+      alt="News Hero"
+      fill
+      className="object-cover"
+      priority
+    />
+  );
 
   return (
     <div className="min-h-screen pt-[72px] md:pt-[96px]">
       {/* 1. Hero Section */}
       <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
         <div className="absolute inset-0">
-          <Image
-            src={heroImage}
-            alt="News Hero"
-            fill
-            className="object-cover"
-            priority
-          />
+          {newsBanner.link ? (
+            <Link
+              href={newsBanner.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full h-full group"
+            >
+              {imageElement}
+            </Link>
+          ) : (
+            imageElement
+          )}
         </div>
       </section>
 

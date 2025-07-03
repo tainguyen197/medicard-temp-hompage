@@ -14,6 +14,11 @@ interface Banner {
   image?: BannerImage;
 }
 
+interface BannerData {
+  imageUrl: string | null;
+  link: string | null;
+}
+
 export async function getBannerByType(type: string): Promise<string | null> {
   try {
     const banner = await prisma.banner.findUnique({
@@ -33,6 +38,37 @@ export async function getBannerByType(type: string): Promise<string | null> {
   } catch (error) {
     console.error(`Error fetching ${type} banner:`, error);
     return null;
+  }
+}
+
+export async function getBannerDataByType(type: string): Promise<BannerData> {
+  try {
+    const banner = await prisma.banner.findUnique({
+      where: {
+        type: type,
+      },
+      include: {
+        image: true,
+      },
+    });
+
+    if (banner && banner.status === "ACTIVE") {
+      return {
+        imageUrl: banner.image?.url || null,
+        link: banner.link || null,
+      };
+    }
+
+    return {
+      imageUrl: null,
+      link: null,
+    };
+  } catch (error) {
+    console.error(`Error fetching ${type} banner data:`, error);
+    return {
+      imageUrl: null,
+      link: null,
+    };
   }
 }
 

@@ -1,5 +1,6 @@
 import React, { Suspense } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { getMessages } from "next-intl/server";
 import AnimatedSection from "@/components/AnimatedSection";
 import ServicesDetailSection from "@/components/ServicesDetailSection";
@@ -7,7 +8,7 @@ import TestimonialSection from "@/components/TestimonialSection";
 import ServicesDetailSectionSkeleton from "@/components/ServicesDetailSectionSkeleton";
 import TestimonialSectionSkeleton from "@/components/TestimonialSectionSkeleton";
 import {
-  getBannerByType,
+  getBannerDataByType,
   BANNER_TYPES,
   DEFAULT_HERO_IMAGE,
 } from "@/lib/banner-utils";
@@ -44,22 +45,37 @@ export default async function AboutPage() {
   const messages = await getMessages();
   const t = messages.about;
 
-  // Fetch about banner
-  const aboutBannerUrl = await getBannerByType(BANNER_TYPES.ABOUT);
-  const heroImage = aboutBannerUrl || DEFAULT_HERO_IMAGE;
+  // Fetch about banner data
+  const aboutBanner = await getBannerDataByType(BANNER_TYPES.ABOUT);
+  const heroImage = aboutBanner.imageUrl || DEFAULT_HERO_IMAGE;
+
+  const imageElement = (
+    <Image
+      src={heroImage}
+      alt={t.title}
+      fill
+      className="object-cover"
+      priority
+    />
+  );
 
   return (
     <div className="pt-[72px] md:pt-[96px]">
       {/* 1. Hero Section */}
       <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
         <div className="absolute inset-0">
-          <Image
-            src={heroImage}
-            alt={t.title}
-            fill
-            className="object-cover"
-            priority
-          />
+          {aboutBanner.link ? (
+            <Link
+              href={aboutBanner.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full h-full group"
+            >
+              {imageElement}
+            </Link>
+          ) : (
+            imageElement
+          )}
         </div>
       </section>
 
