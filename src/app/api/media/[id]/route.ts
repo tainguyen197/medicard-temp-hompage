@@ -16,7 +16,7 @@ export async function DELETE(
     }
 
     // Check if user has permission (ADMIN or EDITOR)
-    if (!["ADMIN", "EDITOR"].includes(session.user.role)) {
+    if (!["ADMIN", "EDITOR", "SUPER_ADMIN"].includes(session.user.role)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -89,11 +89,11 @@ export async function DELETE(
 
     // Log the deletion
     await Logger.logFileOperation({
-      operation: 'DELETE',
-      entity: 'MEDIA',
+      operation: "DELETE",
+      entity: "MEDIA",
       entityId: id,
       userId: session.user.id,
-      fileName: mediaFile.originalName || mediaFile.fileName || 'Unknown file',
+      fileName: mediaFile.originalName || mediaFile.fileName || "Unknown file",
       fileSize: mediaFile.fileSize || 0,
       additionalDetails: `Deleted from media library`,
     });
