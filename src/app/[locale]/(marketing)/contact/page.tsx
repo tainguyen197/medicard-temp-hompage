@@ -2,6 +2,7 @@ import React from "react";
 import Image from "next/image";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getMessages } from "next-intl/server";
+import { prisma } from "@/lib/prisma";
 
 export const generateStaticParams = async () => {
   return [{ locale: "en" }, { locale: "vi" }];
@@ -12,6 +13,10 @@ export const revalidate = 300; // Revalidate every 5 minutes
 export default async function ContactPage() {
   const messages = await getMessages();
   const t = messages.contact;
+  const contact = await prisma.contact.findFirst({
+    where: { status: "ACTIVE" },
+    orderBy: { createdAt: "desc" },
+  });
 
   return (
     <div className="pt-20">
@@ -62,7 +67,9 @@ export default async function ContactPage() {
                   </h2>
                   <p className="text-[#000] mb-2">
                     <span className="font-medium">{t.contactInfo.phone}</span>{" "}
-                    0901 430 077
+                    <a href={`tel:${contact.phone}`} className="underline">
+                      {contact.phone}
+                    </a>
                   </p>
                   <p className="text-[#000]">
                     <span className="font-medium">{t.contactInfo.email}</span>{" "}

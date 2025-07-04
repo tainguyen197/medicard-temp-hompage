@@ -1,6 +1,7 @@
 import "@/app/globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { prisma } from "@/lib/prisma";
 
 export default async function LayoutWithHeader({
   children,
@@ -9,14 +10,20 @@ export default async function LayoutWithHeader({
   children: React.ReactNode;
   locale?: string;
 }>) {
+  const contact = await prisma.contact.findFirst({
+    where: { status: "ACTIVE" },
+    orderBy: { createdAt: "desc" },
+  });
+  const phone = contact?.phone ?? "";
+
   return (
     <>
-      <Header />
+      <Header phone={phone} />
       <main className="overflow-x-hidden">{children}</main>
       <Footer locale={locale} />
       <div className="fixed bottom-6 right-6 md:bottom-12 md:right-12 z-50">
         <a
-          href="tel:0901430077"
+          href={`tel:${phone}`}
           className="flex items-center justify-center bg-[#B1873F] text-white p-4 rounded-full shadow-lg hover:shadow-xl active:scale-95 transition-all duration-300 animate-bounce"
           aria-label="Call Us"
         >

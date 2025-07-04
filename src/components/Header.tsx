@@ -7,7 +7,11 @@ import { ROUTES } from "@/lib/router";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { Link, usePathname, useRouter } from "@/navigation";
 
-const Header = () => {
+interface HeaderProps {
+  phone: string;
+}
+
+const Header = ({ phone }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -94,7 +98,7 @@ const Header = () => {
           </nav>
 
           <div className="flex items-center space-x-4">
-            <a href="tel:0901430077">
+            <a href={`tel:${phone}`}>
               <div className="hidden md:flex items-center justify-center w-10 h-10 rounded-full border-2 border-amber-50">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
