@@ -105,9 +105,7 @@ const TeamMember: React.FC<TeamMemberProps> = ({
 
   return (
     <div
-      className={`flex-shrink-0 ${currentWidthClass} overflow-hidden bg-white flex flex-col mb-8 ${
-        index % 2 !== 0 ? "md:mt-20" : ""
-      }`}
+      className={`flex-shrink-0 ${currentWidthClass} overflow-hidden bg-white flex flex-col mb-8`}
     >
       <div className="relative rounded-3xl md:rounded-t-4xl overflow-hidden">
         <div className="aspect-[3/4] relative">
@@ -450,14 +448,21 @@ const TeamSection: React.FC = () => {
           padding: 0 !important;
         }
 
-        /* Make sure alternating cards have the correct offset */
-        .team-slider .slick-slide:nth-child(even) .md\\:mt-20 {
+        /* Alternating pattern for slider - based on visual position */
+        .team-slider .slick-slide:nth-child(even) > div {
           margin-top: 5rem;
         }
 
-        /* Static display styling */
-        .flex.justify-center.items-start.gap-4 .md\\:mt-20 {
+        /* Static display styling - based on visual position */
+        .grid > div:nth-child(even) > div {
           margin-top: 5rem;
+        }
+
+        @media (max-width: 767px) {
+          .team-slider .slick-slide:nth-child(even) > div,
+          .grid > div:nth-child(even) > div {
+            margin-top: 0;
+          }
         }
       `}</style>
     </section>
