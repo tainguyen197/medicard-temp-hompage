@@ -100,12 +100,12 @@ const TeamMember: React.FC<TeamMemberProps> = ({
   dynamicCardWidth,
 }) => {
   const defaultWidthClasses =
-    "sm:w-[230px] md:w-[230px] lg:w-[250px] xl:w-[280px]";
+    "sm:w-[230px] md:w-[230px] lg:w-[250px] xl:w-[280px] m-auto";
   const currentWidthClass = dynamicCardWidth || defaultWidthClasses;
 
   return (
     <div
-      className={`flex-shrink-0 w-full ${currentWidthClass} overflow-hidden bg-white flex flex-col mb-8 ${
+      className={`flex-shrink-0 ${currentWidthClass} overflow-hidden bg-white flex flex-col mb-8 ${
         index % 2 !== 0 ? "md:mt-20" : ""
       }`}
     >
@@ -263,7 +263,7 @@ const TeamSection: React.FC = () => {
       cardWidth: string | undefined;
     } => {
       const screenWidth = window.innerWidth;
-      let cardWidth: string | undefined = undefined;
+      const cardWidth: string | undefined = undefined;
       const currentTeamSize = displayTeamMembers.length;
 
       const commonProps: Partial<Settings> = {
@@ -273,7 +273,7 @@ const TeamSection: React.FC = () => {
       };
 
       if (screenWidth < 768) {
-        // Explicit mobile handling
+        // Mobile handling
         return {
           settings: {
             ...commonProps,
@@ -290,75 +290,39 @@ const TeamSection: React.FC = () => {
             draggable: currentTeamSize > 1,
             swipe: currentTeamSize > 1,
             touchMove: currentTeamSize > 1,
-            responsive: [], // No further responsive needed
+            responsive: [],
           },
           cardWidth: undefined,
         };
-      } else if (
-        // Static display for >= 768px and 1-4 items
-        currentTeamSize > 0 &&
-        currentTeamSize <= 4
-      ) {
-        // Static display: Calculate card width based on screenWidth and currentTeamSize
-        if (screenWidth < 1024) {
-          // 768px to 1023px (md breakpoint range)
-          if (currentTeamSize === 4) cardWidth = "w-[150px]";
-          else if (currentTeamSize === 3) cardWidth = "w-[200px]";
-        } else if (screenWidth < 1280) {
-          // 1024px to 1279px (lg breakpoint range)
-          if (currentTeamSize === 4) cardWidth = "w-[210px]";
-        }
-        // For xl (>=1280px) or fewer items where defaults are fine, cardWidth remains undefined
-
-        return {
-          settings: {
-            ...commonProps,
-            slidesToShow: currentTeamSize,
-            slidesToScroll: currentTeamSize,
-            infinite: false,
-            autoplay: false,
-            arrows: false,
-            draggable: false,
-            swipe: false,
-            touchMove: false,
-            responsive: [],
-          },
-          cardWidth,
-        };
       } else {
-        // Slider for >= 768px and (currentTeamSize > 4 or currentTeamSize === 0)
-        // Note: currentTeamSize === 0 is primarily handled by updateLayout initial settings
-        const numSlidesBase =
-          currentTeamSize > 0 ? Math.min(4, currentTeamSize) : 1;
-        const canSlideBase = currentTeamSize > numSlidesBase;
-
+        // Desktop/Tablet - Slider settings for more than 4 items
         return {
           settings: {
             ...commonProps,
-            infinite: currentTeamSize > 1,
-            slidesToShow: numSlidesBase,
+            infinite: true,
+            slidesToShow: 4,
             slidesToScroll: 1,
-            autoplay: currentTeamSize > 1,
+            autoplay: true,
             autoplaySpeed: 3000,
-            arrows: canSlideBase,
+            arrows: true,
             prevArrow: <PrevArrow />,
             nextArrow: <NextArrow />,
-            draggable: currentTeamSize > 1,
-            swipe: currentTeamSize > 1,
-            touchMove: currentTeamSize > 1,
+            draggable: true,
+            swipe: true,
+            touchMove: true,
             responsive: [
               {
-                breakpoint: 1280, // for screens < 1280px (i.e., 768px to 1279px)
+                breakpoint: 1280, // for screens < 1280px
                 settings: {
-                  slidesToShow: Math.min(3, currentTeamSize),
-                  arrows: currentTeamSize > Math.min(3, currentTeamSize),
+                  slidesToShow: 3,
+                  arrows: true,
                 },
               },
               {
-                breakpoint: 1024, // for screens < 1024px (i.e., 768px to 1023px)
+                breakpoint: 1024, // for screens < 1024px
                 settings: {
-                  slidesToShow: Math.min(2, currentTeamSize),
-                  arrows: currentTeamSize > Math.min(2, currentTeamSize),
+                  slidesToShow: 2,
+                  arrows: true,
                 },
               },
             ],
@@ -393,11 +357,11 @@ const TeamSection: React.FC = () => {
 
   return (
     <section className="pt-10 md:pt-16 md:pb-20 bg-white">
-      <div className="mx-auto relative">
+      <div className="max-w-[100rem] mx-auto relative">
         <div className="relative mx-auto">
           {/* Title with horizontal lines on sides */}
           <div className="hidden lg:block border-[3px] border-[#002447] rounded-[40px] py-8 max-w-[1300px] absolute inset-0 -top-8 mx-32 2xl:mx-auto bottom-[-52px]" />
-          <div>
+          <div className="">
             <div className="flex items-center justify-center relative md:top-[-54px]">
               <h2 className="font-cormorant text-xl md:text-5xl max-text-[51px] font-bold text-[#002447] uppercase whitespace-nowrap bg-white px-8">
                 {t("title")}
@@ -405,8 +369,8 @@ const TeamSection: React.FC = () => {
             </div>
 
             {/* Team members section with React Slick */}
-            <div className="pt-8 bg-white relative z-1">
-              <div className="relative py-4 pb-0 bg-white z-1 px-4 md:px-10 max-w-[1500px] mx-auto">
+            <div className="pt-8 bg-white relative z-1 overflow-hidden">
+              <div className="relative py-4 pb-0 bg-white z-1 px-4 md:px-10 mx-auto">
                 {/* Show error message if there was an error (but still show fallback data) */}
                 {error && (
                   <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
@@ -421,21 +385,43 @@ const TeamSection: React.FC = () => {
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#002447]"></div>
                   </div>
                 ) : displayTeamMembers.length > 0 ? (
-                  <Slider
-                    ref={sliderRef}
-                    {...currentSliderSettings}
-                    className="team-slider"
-                  >
-                    {displayTeamMembers.map((member, index) => (
-                      <div key={index} className="px-2">
-                        <TeamMember
-                          {...member}
-                          index={index}
-                          dynamicCardWidth={dynamicCardWidth}
-                        />
+                  displayTeamMembers.length <= 4 ? (
+                    // Static display for 4 or fewer items
+                    <div className="flex justify-center">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-fit">
+                        {displayTeamMembers.map((member, index) => (
+                          <div key={index}>
+                            <TeamMember
+                              {...member}
+                              index={index}
+                              dynamicCardWidth="w-[280px]"
+                            />
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </Slider>
+                    </div>
+                  ) : (
+                    // Slider for more than 4 items with auto-loop
+                    <Slider
+                      key={`slider-${displayTeamMembers.length}`}
+                      ref={sliderRef}
+                      {...currentSliderSettings}
+                      autoplay={true}
+                      infinite={true}
+                      autoplaySpeed={3000}
+                      className="team-slider"
+                    >
+                      {displayTeamMembers.map((member, index) => (
+                        <div key={index} className="px-2">
+                          <TeamMember
+                            {...member}
+                            index={index}
+                            dynamicCardWidth={dynamicCardWidth}
+                          />
+                        </div>
+                      ))}
+                    </Slider>
+                  )
                 ) : (
                   <div className="text-center py-8 text-gray-600">
                     {t("emptyState")}
@@ -466,6 +452,11 @@ const TeamSection: React.FC = () => {
 
         /* Make sure alternating cards have the correct offset */
         .team-slider .slick-slide:nth-child(even) .md\\:mt-20 {
+          margin-top: 5rem;
+        }
+
+        /* Static display styling */
+        .flex.justify-center.items-start.gap-4 .md\\:mt-20 {
           margin-top: 5rem;
         }
       `}</style>
