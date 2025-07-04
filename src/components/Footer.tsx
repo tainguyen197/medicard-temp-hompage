@@ -1,8 +1,8 @@
 import Image from "next/image";
-import { getTranslations } from 'next-intl/server';
-import {  ROUTES } from "@/lib/router";
+import { getTranslations } from "next-intl/server";
+import { ROUTES } from "@/lib/router";
 import { getContactData, fallbackContactData } from "@/lib/contact";
-import {Link} from '@/navigation'
+import { Link } from "@/navigation";
 
 interface Service {
   id: string;
@@ -20,43 +20,61 @@ interface FooterProps {
 // Fetch homepage services
 async function getHomepageServices() {
   try {
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/services/homepage`, {
-      next: { revalidate: 300 } // Revalidate every 5 minutes
-    });
-    
+    const response = await fetch(
+      `${
+        process.env.NEXTAUTH_URL || "http://localhost:3000"
+      }/api/services/homepage`,
+      {
+        next: { revalidate: 300 }, // Revalidate every 5 minutes
+      }
+    );
+
     if (!response.ok) {
-      throw new Error('Failed to fetch homepage services');
+      throw new Error("Failed to fetch homepage services");
     }
-    
+
     const data = await response.json();
     return data.services || [];
   } catch (error) {
-    console.error('Failed to fetch homepage services for footer:', error);
+    console.error("Failed to fetch homepage services for footer:", error);
     return [];
   }
 }
 
 export default async function Footer({ locale = "vi" }: FooterProps) {
   // Get translations for server component
-  const t = await getTranslations({ locale, namespace: 'footer' });
+  const t = await getTranslations({ locale, namespace: "footer" });
 
   // Fetch contact data from database
   const contactData = await getContactData();
-  
+
   // Fetch homepage services
   const homepageServices: Service[] = await getHomepageServices();
 
   // Use database data if available, otherwise fall back to hardcoded values
+  // Handle locale-specific content
   const contact = {
     phone: contactData?.phone || fallbackContactData.phone || "0901 430 077",
     address:
-      contactData?.address ||
-      fallbackContactData.address ||
-      "327 đường Nguyễn Trọng Tuyển, Phường 10, Quận Phú Nhuận, TP.HCM",
+      locale === "en"
+        ? contactData?.addressEn ||
+          contactData?.address ||
+          fallbackContactData.addressEn ||
+          fallbackContactData.address ||
+          "327 Nguyen Trong Tuyen Street, Ward 10, Phu Nhuan District, Ho Chi Minh City"
+        : contactData?.address ||
+          fallbackContactData.address ||
+          "327 đường Nguyễn Trọng Tuyển, Phường 10, Quận Phú Nhuận, TP.HCM",
     businessHours:
-      contactData?.businessHours ||
-      fallbackContactData.businessHours ||
-      "Thứ 2 - Thứ 7: 8h00 - 19h00\nChủ nhật: 8h00 - 18h00",
+      locale === "en"
+        ? contactData?.businessHoursEn ||
+          contactData?.businessHours ||
+          fallbackContactData.businessHoursEn ||
+          fallbackContactData.businessHours ||
+          "Monday - Saturday: 8:00 AM - 7:00 PM\nSunday: 8:00 AM - 6:00 PM"
+        : contactData?.businessHours ||
+          fallbackContactData.businessHours ||
+          "Thứ 2 - Thứ 7: 8h00 - 19h00\nChủ nhật: 8h00 - 18h00",
     facebookUrl:
       contactData?.facebookUrl ||
       fallbackContactData.facebookUrl ||
@@ -73,20 +91,27 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
 
   // Format business hours for display
   const formatBusinessHours = (hours: string) => {
-    return hours.split("\n").map((line, index) => (
+    // Handle both \n and <br/> tags for line breaks
+    const lines = hours
+      .replace(/<br\s*\/?>/gi, "\n") // Convert <br/> tags to \n
+      .split("\n")
+      .filter((line) => line.trim() !== ""); // Remove empty lines
+
+    return lines.map((line, index) => (
       <span key={index}>
-        {line}
-        {index < hours.split("\n").length - 1 && <br />}
+        {line.trim()}
+        {index < lines.length - 1 && <br />}
       </span>
     ));
   };
 
-  console.log(homepageServices)
+  console.log(homepageServices);
 
   // Use homepage services if available, otherwise fall back to hardcoded links
-  const servicesToDisplay = homepageServices.length >= 3 
-    ? homepageServices.slice(0, 3) 
-    : homepageServices
+  const servicesToDisplay =
+    homepageServices.length >= 3
+      ? homepageServices.slice(0, 3)
+      : homepageServices;
 
   // Helper function to get localized service content
   const getLocalizedServiceContent = (service: Service) => {
@@ -114,7 +139,7 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
             <div className="text-white mb-4 font-bold">
               <p className="mb-2 text-sm md:text-md">{contact.address}</p>
               <p className="text-sm md:text-md">
-                {t('openingHours')} <br />
+                {t("openingHours")} <br />
                 {formatBusinessHours(contact.businessHours)}
               </p>
             </div>
@@ -124,7 +149,7 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
           {/* Company links */}
           <div className="col-span-2 md:col-span-1">
             <h4 className="text-md md:text-xl font-bold md:font-medium mb-6">
-              {t('company')}
+              {t("company")}
             </h4>
             <ul className="space-y-3">
               <li>
@@ -132,7 +157,7 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
                   href={ROUTES.HOME}
                   className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
-                  {t('home')}
+                  {t("home")}
                 </Link>
               </li>
               <li>
@@ -140,7 +165,7 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
                   href={ROUTES.ABOUT}
                   className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
-                  {t('about')}
+                  {t("about")}
                 </Link>
               </li>
               <li>
@@ -148,7 +173,7 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
                   href={ROUTES.NEWS}
                   className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                 >
-                  {t('news')}
+                  {t("news")}
                 </Link>
               </li>
             </ul>
@@ -157,24 +182,26 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
           {/* Services links - Dynamic from homepage services */}
           <div className="col-span-3 md:col-span-1">
             <h4 className="text-md md:text-xl font-bold md:font-medium mb-6">
-              {t('services')}
+              {t("services")}
             </h4>
             <ul className="space-y-3">
               {servicesToDisplay.map((service: Service, index) => {
                 // Handle both Service object and footerServiceLinks format
-                const isServiceObject = 'slug' in service;
-                const href = isServiceObject ? `/services/${service.slug}`: '';
-                let name = '';
-                
+                const isServiceObject = "slug" in service;
+                const href = isServiceObject ? `/services/${service.slug}` : "";
+                let name = "";
+
                 if (isServiceObject) {
                   const localizedContent = getLocalizedServiceContent(service);
                   name = localizedContent.title;
                 } else {
                   name = (service as any).title as string;
                 }
-                
+
                 return (
-                  <li key={isServiceObject ? service.id : (service as any).href}>
+                  <li
+                    key={isServiceObject ? service.id : (service as any).href}
+                  >
                     <Link
                       href={href}
                       className="hover:text-[#B1873F] transition-colors text-sm uppercase md:text-md"
@@ -190,7 +217,7 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
           {/* Hotline and social */}
           <div className="col-span-5 md:col-span-1 flex items-center md:block">
             <h4 className="hidden md:block text-xl font-medium mb-4">
-              {t('hotline')}
+              {t("hotline")}
             </h4>
             <div className="md:mb-6">
               <Link
@@ -300,14 +327,14 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
         {/* Copyright and links */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center text-sm text-gray-400">
           <div>
-            <p>{t('copyright')}</p>
+            <p>{t("copyright")}</p>
           </div>
           <div className="hidden md:flex mt-4 md:mt-0">
             <Link href="/terms" className="hover:text-white mr-6">
-              {t('terms')}
+              {t("terms")}
             </Link>
             <Link href="/privacy" className="hover:text-white">
-              {t('privacy')}
+              {t("privacy")}
             </Link>
           </div>
         </div>

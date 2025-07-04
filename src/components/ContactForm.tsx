@@ -177,6 +177,16 @@ export default function ContactForm({ contact }: ContactFormProps) {
               rows={3}
               required
             />
+            <p className="text-xs text-gray-500 mt-1">
+              💡 Mẹo: Bạn có thể sử dụng{" "}
+              <code className="bg-gray-100 px-1 rounded text-xs">
+                &lt;br/&gt;
+              </code>{" "}
+              để xuống dòng. Ví dụ:{" "}
+              <span className="italic">
+                Thứ 2 - Thứ 7: 8h00 - 19h00 &lt;br/&gt;Chủ nhật: 8h00 - 18h00
+              </span>
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -221,6 +231,17 @@ export default function ContactForm({ contact }: ContactFormProps) {
               placeholder="Monday - Saturday: 8:00 AM - 7:00 PM&#10;Sunday: 8:00 AM - 6:00 PM"
               rows={3}
             />
+            <p className="text-xs text-gray-500 mt-1">
+              💡 Tip: You can use{" "}
+              <code className="bg-gray-100 px-1 rounded text-xs">
+                &lt;br/&gt;
+              </code>{" "}
+              for line breaks. Example:{" "}
+              <span className="italic">
+                Monday - Saturday: 8:00 AM - 7:00 PM &lt;br/&gt;Sunday: 8:00 AM
+                - 6:00 PM
+              </span>
+            </p>
           </div>
         </CardContent>
       </Card>

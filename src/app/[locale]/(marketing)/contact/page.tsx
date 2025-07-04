@@ -3,6 +3,7 @@ import Image from "next/image";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getMessages } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
+import { getContactData, fallbackContactData } from "@/lib/contact";
 
 export const generateStaticParams = async () => {
   return [{ locale: "en" }, { locale: "vi" }];
@@ -10,13 +11,54 @@ export const generateStaticParams = async () => {
 
 export const revalidate = 300; // Revalidate every 5 minutes
 
-export default async function ContactPage() {
+interface ContactPageProps {
+  params: {
+    locale: string;
+  };
+}
+
+export default async function ContactPage({ params }: ContactPageProps) {
+  const { locale } = params;
   const messages = await getMessages();
   const t = messages.contact;
-  const contact = await prisma.contact.findFirst({
-    where: { status: "ACTIVE" },
-    orderBy: { createdAt: "desc" },
-  });
+
+  // Fetch contact data from database
+  const contactData = await getContactData();
+
+  // Use database data if available, otherwise fall back to hardcoded values
+  const contact = {
+    phone: contactData?.phone || fallbackContactData.phone || "0901 430 077",
+    address:
+      locale === "en"
+        ? contactData?.addressEn ||
+          contactData?.address ||
+          fallbackContactData.addressEn ||
+          fallbackContactData.address
+        : contactData?.address || fallbackContactData.address,
+    businessHours:
+      locale === "en"
+        ? contactData?.businessHoursEn ||
+          contactData?.businessHours ||
+          fallbackContactData.businessHoursEn ||
+          fallbackContactData.businessHours
+        : contactData?.businessHours || fallbackContactData.businessHours,
+  };
+
+  // Format business hours for display (handle both \n and <br/> tags)
+  const formatBusinessHours = (hours: string) => {
+    if (!hours) return null;
+
+    const lines = hours
+      .replace(/<br\s*\/?>/gi, "\n") // Convert <br/> tags to \n
+      .split("\n")
+      .filter((line) => line.trim() !== ""); // Remove empty lines
+
+    return lines.map((line, index) => (
+      <p key={index} className="text-[#000]">
+        {line.trim()}
+      </p>
+    ));
+  };
 
   return (
     <div className="pt-20">
@@ -48,7 +90,7 @@ export default async function ContactPage() {
                   <h2 className="font-bold text-xl text-[#B1873F] mb-3">
                     {t.address.title}
                   </h2>
-                  <p className="text-[#000]">{t.address.text}</p>
+                  <p className="text-[#000]">{contact.address}</p>
                 </div>
 
                 {/* Business Hours */}
@@ -56,8 +98,8 @@ export default async function ContactPage() {
                   <h2 className="font-bold text-xl text-[#B1873F] mb-3">
                     {t.businessHours.title}
                   </h2>
-                  <p className="text-[#000]">{t.businessHours.weekdays}</p>
-                  <p className="text-[#000]">{t.businessHours.sunday}</p>
+                  {contact.businessHours &&
+                    formatBusinessHours(contact.businessHours)}
                 </div>
 
                 {/* Contact Information */}
