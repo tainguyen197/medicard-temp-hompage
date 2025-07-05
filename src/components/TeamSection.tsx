@@ -383,8 +383,8 @@ const TeamSection: React.FC = () => {
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#002447]"></div>
                   </div>
                 ) : displayTeamMembers.length > 0 ? (
-                  displayTeamMembers.length <= 4 ? (
-                    // Static display for 4 or fewer items
+                  (displayTeamMembers.length <= 4 && !isMobile) ? (
+                    // Static display for 4 or fewer items (only on desktop)
                     <div className="flex justify-center">
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-16 w-fit">
                         {displayTeamMembers.map((member, index) => (
@@ -399,7 +399,7 @@ const TeamSection: React.FC = () => {
                       </div>
                     </div>
                   ) : (
-                    // Slider for more than 4 items with auto-loop
+                    // Slider for more than 4 items or on mobile
                     <Slider
                       key={`slider-${displayTeamMembers.length}`}
                       ref={sliderRef}
