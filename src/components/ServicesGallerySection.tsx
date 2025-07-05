@@ -85,9 +85,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({ appoint
   };
 
   // Get fallback services from our data file
-  const fallbackServices: ServiceItem[] = defaultServices.map(
-    convertServiceDataToServiceItem
-  );
+  const fallbackServices: ServiceItem[] = []
 
   // Fetch services from API
   useEffect(() => {
@@ -222,6 +220,12 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({ appoint
           </div>
         </div>
       </section>
+    );
+  }
+
+  if (services.length === 0) {
+    return (
+     <></>
     );
   }
 

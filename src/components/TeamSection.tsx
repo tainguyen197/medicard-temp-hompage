@@ -386,7 +386,7 @@ const TeamSection: React.FC = () => {
                   displayTeamMembers.length <= 4 ? (
                     // Static display for 4 or fewer items
                     <div className="flex justify-center">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 w-fit">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-16 w-fit">
                         {displayTeamMembers.map((member, index) => (
                           <div key={index}>
                             <TeamMember
@@ -409,7 +409,7 @@ const TeamSection: React.FC = () => {
                       autoplaySpeed={3000}
                       className="team-slider"
                     >
-                      {displayTeamMembers.map((member, index) => (
+                      {[...displayTeamMembers, ...displayTeamMembers, ...displayTeamMembers, ...displayTeamMembers].map((member, index) => (
                         <div key={index} className="px-2">
                           <TeamMember
                             {...member}

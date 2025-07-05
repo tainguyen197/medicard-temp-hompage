@@ -15,7 +15,7 @@ export async function GET() {
         { pin: "desc" }, // Show pinned items first
         { createdAt: "desc" }
       ],
-      take: 4,
+      take: 3,
       include: {
         featureImage: true,
         featureImageEn: true,
