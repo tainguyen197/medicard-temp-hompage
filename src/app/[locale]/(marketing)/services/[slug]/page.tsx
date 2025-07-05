@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { getMessages } from "next-intl/server";
 import ServiceDetailContent from "./ServiceDetailContent";
+import { getAppointmentLink } from "@/lib/contact";
 
 // Force dynamic rendering to avoid DYNAMIC_SERVER_USAGE error
 export const dynamic = "force-dynamic";
@@ -94,6 +95,9 @@ export default async function ServiceDetailPage({
   const { slug, locale } = await params;
   const messages = await getMessages();
   const t = messages.services;
+  
+  // Fetch appointment link
+  const appointmentLink = await getAppointmentLink();
 
   console.log("slug", slug);
 
@@ -153,7 +157,7 @@ export default async function ServiceDetailPage({
       </section>
 
       {/* Dynamic Content with Suspense */}
-      <Suspense fallback={<ServiceDetailLoading />}>
+      <Suspense fallback={<ServiceDetailLoading appointmentLink={appointmentLink} />}>
         <ServiceDetailContent slug={slug || ""} locale={locale} />
       </Suspense>
 
@@ -167,7 +171,7 @@ export default async function ServiceDetailPage({
             {t.cta.subheading}
           </p>
           <a
-            href="https://forms.gle/GJETkvXcnZ7hZwBr8"
+            href={appointmentLink}
             target="_blank"
             className="inline-flex items-center justify-center px-8 py-3 bg-[#B1873F] text-white rounded-full text-base md:text-lg font-semibold transition-all hover:bg-[#9A7435]"
           >
@@ -191,7 +195,7 @@ export default async function ServiceDetailPage({
   );
 }
 
-async function ServiceDetailLoading() {
+async function ServiceDetailLoading({ appointmentLink }: { appointmentLink: string }) {
   const messages = await getMessages();
   const t = messages.services;
 
@@ -258,7 +262,7 @@ async function ServiceDetailLoading() {
             {t.cta.subheading}
           </p>
           <a
-            href="https://forms.gle/GJETkvXcnZ7hZwBr8"
+            href={appointmentLink}
             target="_blank"
             className="inline-flex items-center justify-center px-8 py-3 bg-[#B1873F] text-white rounded-full text-base md:text-lg font-semibold transition-all hover:bg-[#9A7435]"
           >

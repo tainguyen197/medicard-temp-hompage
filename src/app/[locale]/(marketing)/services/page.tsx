@@ -9,6 +9,7 @@ import {
   BANNER_TYPES,
   DEFAULT_HERO_IMAGE,
 } from "@/lib/banner-utils";
+import { getAppointmentLink } from "@/lib/contact";
 
 export const generateStaticParams = async () => {
   return [{ locale: "en" }, { locale: "vi" }];
@@ -27,6 +28,9 @@ export default async function ServicesPage({
   // Fetch service banner data
   const serviceBanner = await getBannerDataByType(BANNER_TYPES.SERVICE);
   const heroImage = serviceBanner.imageUrl || DEFAULT_HERO_IMAGE;
+  
+  // Fetch appointment link
+  const appointmentLink = await getAppointmentLink();
 
   const imageElement = (
     <Image
@@ -85,7 +89,7 @@ export default async function ServicesPage({
             {t.cta.subheading}
           </p>
           <a
-            href="https://forms.gle/GJETkvXcnZ7hZwBr8"
+            href={appointmentLink}
             target="_blank"
             className="inline-block relative rounded-3xl px-6 py-3 bg-[#B1873F] text-white font-medium hover:bg-[#9e7736] transition-colors"
           >

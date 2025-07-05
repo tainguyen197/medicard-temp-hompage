@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import NewsDetailContent from "./NewsDetailContent";
 import { getTranslations } from "next-intl/server";
 import { useLocale } from "next-intl";
+import { getAppointmentLink } from "@/lib/contact";
 
 // Force dynamic rendering to avoid DYNAMIC_SERVER_USAGE error
 export const dynamic = "force-dynamic";
@@ -75,6 +76,9 @@ export default async function BlogDetailPage({
 }) {
   const { slug, locale } = await params;
   const t = await getTranslations({ locale, namespace: "newsDetail.cta" });
+  
+  // Fetch appointment link
+  const appointmentLink = await getAppointmentLink();
 
   return (
     <div>
@@ -105,7 +109,7 @@ export default async function BlogDetailPage({
             {t("subheading")}
           </p>
           <a
-            href="https://forms.gle/GJETkvXcnZ7hZwBr8"
+            href={appointmentLink}
             target="_blank"
             className="inline-flex items-center justify-center px-8 py-3 bg-[#B1873F] text-white rounded-full text-base md:text-lg font-semibold transition-all hover:bg-[#9A7435]"
           >

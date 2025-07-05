@@ -3,7 +3,7 @@ import Image from "next/image";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getMessages } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
-import { getContactData, fallbackContactData } from "@/lib/contact";
+import { getContactData, fallbackContactData, getContactEmail, getAppointmentLink } from "@/lib/contact";
 
 export const generateStaticParams = async () => {
   return [{ locale: "en" }, { locale: "vi" }];
@@ -24,10 +24,13 @@ export default async function ContactPage({ params }: ContactPageProps) {
 
   // Fetch contact data from database
   const contactData = await getContactData();
+  const contactEmail = await getContactEmail();
+  const appointmentLink = await getAppointmentLink();
 
   // Use database data if available, otherwise fall back to hardcoded values
   const contact = {
     phone: contactData?.phone || fallbackContactData.phone || "0901 430 077",
+    email: contactEmail,
     address:
       locale === "en"
         ? contactData?.addressEn ||
@@ -115,14 +118,16 @@ export default async function ContactPage({ params }: ContactPageProps) {
                   </p>
                   <p className="text-[#000]">
                     <span className="font-medium">{t.contactInfo.email}</span>{" "}
-                    healthcaretherapycenter.89@gmail.com
+                    <a href={`mailto:${contact.email}`} className="underline">
+                      {contact.email}
+                    </a>
                   </p>
                 </div>
 
                 {/* Appointment Button */}
                 <div className="mt-12">
                   <a
-                    href="https://forms.gle/GJETkvXcnZ7hZwBr8"
+                    href={appointmentLink}
                     target="_blank"
                     className="inline-flex items-center justify-center bg-[#B1873F] text-white py-3 px-8 rounded-md hover:bg-[#9e7738] transition-colors duration-300"
                   >

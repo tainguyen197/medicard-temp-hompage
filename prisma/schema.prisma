@@ -155,6 +155,7 @@ model AuditLog {
 model Contact {
   id              String   @id @default(cuid())
   phone           String?
+  email           String?
   address         String?
   addressEn       String?
   businessHours   String?

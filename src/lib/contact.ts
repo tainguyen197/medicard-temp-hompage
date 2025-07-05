@@ -40,6 +40,9 @@ export const fallbackContactData: Partial<ContactData> = {
 // Default appointment link as fallback
 const DEFAULT_APPOINTMENT_LINK = "https://forms.gle/GJETkvXcnZ7hZwBr8";
 
+// Default email as fallback
+const DEFAULT_EMAIL = "healthcaretherapycenter.89@gmail.com";
+
 /**
  * Get the appointment link from the database
  * Returns default link if no appointment link is configured
@@ -54,6 +57,23 @@ export async function getAppointmentLink(): Promise<string> {
   } catch (error) {
     console.error("Error fetching appointment link:", error);
     return DEFAULT_APPOINTMENT_LINK;
+  }
+}
+
+/**
+ * Get the email from the database
+ * Returns default email if no email is configured
+ */
+export async function getContactEmail(): Promise<string> {
+  try {
+    const contact = await prisma.contact.findFirst({
+      where: { status: "ACTIVE" },
+    });
+    
+    return (contact as any)?.email || DEFAULT_EMAIL;
+  } catch (error) {
+    console.error("Error fetching contact email:", error);
+    return DEFAULT_EMAIL;
   }
 }
 

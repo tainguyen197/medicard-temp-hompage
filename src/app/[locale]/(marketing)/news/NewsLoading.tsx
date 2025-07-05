@@ -1,9 +1,13 @@
 import { getMessages } from "next-intl/server";
 import Link from "next/link";
+import { getAppointmentLink } from "@/lib/contact";
 
 async function NewsLoading() {
   const messages = await getMessages();
   const t = messages.news;
+  
+  // Fetch appointment link
+  const appointmentLink = await getAppointmentLink();
 
   return (
     <div className="">
@@ -70,7 +74,7 @@ async function NewsLoading() {
             {t.cta.subheading}
           </p>
           <Link
-            href="https://forms.gle/GJETkvXcnZ7hZwBr8"
+            href={appointmentLink}
             target="_blank"
             className="inline-flex items-center px-8 py-4 bg-[#B1873F] text-white rounded-full font-semibold hover:bg-[#c09857] transition-colors"
           >

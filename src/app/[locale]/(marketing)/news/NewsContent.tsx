@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { News, NewsResponse } from "@/types/post";
 import { getMessages } from "next-intl/server";
+import { getAppointmentLink } from "@/lib/contact";
 
 // Default image fallback if no featured image
 const DEFAULT_IMAGE = "/images/news/news-image-1.jpg";
@@ -27,6 +28,9 @@ export async function NewsDataComponent({
   const { locale } = await params;
   const messages = await getMessages();
   const t = messages.news;
+  
+  // Fetch appointment link
+  const appointmentLink = await getAppointmentLink();
 
   // Get the current page from search params or default to 1
   const { page = "1" } = await searchParams;
@@ -366,7 +370,7 @@ export async function NewsDataComponent({
             {t.cta.subheading}
           </p>
           <a
-            href="https://forms.gle/GJETkvXcnZ7hZwBr8"
+            href={appointmentLink}
             target="_blank"
             className="inline-block relative rounded-3xl px-6 py-3 bg-[#B1873F] text-white font-medium hover:bg-[#9e7736] transition-colors"
           >

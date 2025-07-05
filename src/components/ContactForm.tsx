@@ -26,6 +26,7 @@ import { toast } from "sonner";
 interface Contact {
   id: string;
   phone: string | null;
+  email: string | null;
   address: string | null;
   addressEn: string | null;
   businessHours: string | null;
@@ -48,6 +49,7 @@ export default function ContactForm({ contact }: ContactFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     phone: contact?.phone || "",
+    email: contact?.email || "",
     address: contact?.address || "",
     addressEn: contact?.addressEn || "",
     businessHours: contact?.businessHours || "",
@@ -123,6 +125,22 @@ export default function ContactForm({ contact }: ContactFormProps) {
                   handleInputChange("phone", e.target.value)
                 }
                 placeholder="0901 430 077"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="email" className="block text-sm font-medium">
+                Email
+              </label>
+              <Input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  handleInputChange("email", e.target.value)
+                }
+                placeholder="healthcaretherapycenter.89@gmail.com"
                 required
               />
             </div>

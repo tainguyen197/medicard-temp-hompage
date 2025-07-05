@@ -8,6 +8,7 @@ import { Logger } from "../../../lib/utils";
 // Validation schema for contact data
 const contactSchema = z.object({
   phone: z.string().min(1, "Phone is required"),
+  email: z.string().email("Valid email is required").min(1, "Email is required"),
   address: z.string().min(1, "Address is required"),
   addressEn: z.string().optional(),
   businessHours: z.string().min(1, "Business hours are required"),
@@ -90,6 +91,9 @@ export async function POST(request: NextRequest) {
       if (cleanData.phone !== existingContact.phone) {
         changes.phone = { from: existingContact.phone, to: cleanData.phone };
       }
+      if (cleanData.email !== (existingContact as any).email) {
+        changes.email = { from: (existingContact as any).email, to: cleanData.email };
+      }
       if (cleanData.address !== existingContact.address) {
         changes.address = {
           from: existingContact.address,
@@ -157,6 +161,7 @@ export async function PUT(request: Request) {
       where: { id: existingContact?.id || "default" },
       update: {
         phone: validatedData.phone,
+        email: validatedData.email,
         address: validatedData.address,
         addressEn: validatedData.addressEn,
         businessHours: validatedData.businessHours,
@@ -169,6 +174,7 @@ export async function PUT(request: Request) {
       } as any,
       create: {
         phone: validatedData.phone,
+        email: validatedData.email,
         address: validatedData.address,
         addressEn: validatedData.addressEn,
         businessHours: validatedData.businessHours,

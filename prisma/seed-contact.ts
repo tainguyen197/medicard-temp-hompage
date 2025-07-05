@@ -10,10 +10,11 @@ async function seedContact() {
     if (existingContact) {
       console.log("Contact information already exists. Updating...");
       
-      // Update existing contact with appointment link
+      // Update existing contact with appointment link and email
       await prisma.contact.update({
         where: { id: existingContact.id },
         data: {
+          email: "healthcaretherapycenter.89@gmail.com",
           appointmentLink: "https://forms.gle/GJETkvXcnZ7hZwBr8",
         } as any,
       });
@@ -26,6 +27,7 @@ async function seedContact() {
       await prisma.contact.create({
         data: {
           phone: "0901 430 077",
+          email: "healthcaretherapycenter.89@gmail.com",
           address: "327 đường Nguyễn Trọng Tuyển, Phường 10, Quận Phú Nhuận, TP.HCM",
           addressEn: "327 Nguyen Trong Tuyen Street, Ward 10, Phu Nhuan District, Ho Chi Minh City",
           businessHours: "Thứ 2 - Thứ 7: 8h00 - 19h00<br/>Chủ nhật: 8h00 - 18h00",
