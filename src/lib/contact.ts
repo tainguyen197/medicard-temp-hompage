@@ -36,3 +36,40 @@ export const fallbackContactData: Partial<ContactData> = {
   zaloUrl: "https://zalo.me/0901430077",
   instagramUrl: "https://www.instagram.com/healthcaretherapycenter/",
 };
+
+// Default appointment link as fallback
+const DEFAULT_APPOINTMENT_LINK = "https://forms.gle/GJETkvXcnZ7hZwBr8";
+
+/**
+ * Get the appointment link from the database
+ * Returns default link if no appointment link is configured
+ */
+export async function getAppointmentLink(): Promise<string> {
+  try {
+    const contact = await prisma.contact.findFirst({
+      where: { status: "ACTIVE" },
+    });
+    
+    return (contact as any)?.appointmentLink || DEFAULT_APPOINTMENT_LINK;
+  } catch (error) {
+    console.error("Error fetching appointment link:", error);
+    return DEFAULT_APPOINTMENT_LINK;
+  }
+}
+
+/**
+ * Get complete contact information
+ */
+export async function getContactInfo() {
+  try {
+    const contact = await prisma.contact.findFirst({
+      where: { status: "ACTIVE" },
+      orderBy: { createdAt: "desc" },
+    });
+    
+    return contact;
+  } catch (error) {
+    console.error("Error fetching contact information:", error);
+    return null;
+  }
+}

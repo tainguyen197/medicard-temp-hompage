@@ -162,6 +162,7 @@ model Contact {
   facebookUrl     String?
   zaloUrl         String?
   instagramUrl    String?
+  appointmentLink String?
   status          String   @default("ACTIVE")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt

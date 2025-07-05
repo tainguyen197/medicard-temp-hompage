@@ -8,9 +8,10 @@ interface ContactSectionProps {
     subtitle: string;
     button: string;
   };
+  appointmentLink?: string;
 }
 
-const ContactSection = ({ t }: ContactSectionProps) => {
+const ContactSection = ({ t, appointmentLink }: ContactSectionProps) => {
   return (
     <section id="contact" className="relative">
       <div className="relative h-40 md:h-[500px]">
@@ -31,7 +32,7 @@ const ContactSection = ({ t }: ContactSectionProps) => {
             </h2>
 
             <Link
-              href="https://forms.gle/GJETkvXcnZ7hZwBr8"
+              href={appointmentLink || "https://forms.gle/GJETkvXcnZ7hZwBr8"}
               target="_blank"
               className="inline-block text-sm md:text-base bg-[#C99A4D] hover:bg-amber-800 text-white font-manrope md:font-cormorant md:uppercase font-medium py-1 px-4 md:py-3 md:px-8 rounded-full absolute md:relative top-0 right-0 mt-4 md:mt-0"
             >

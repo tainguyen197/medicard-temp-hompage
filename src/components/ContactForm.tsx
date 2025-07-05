@@ -33,6 +33,7 @@ interface Contact {
   facebookUrl: string | null;
   zaloUrl: string | null;
   instagramUrl: string | null;
+  appointmentLink: string | null;
   status: string;
   createdAt: any;
   updatedAt: any;
@@ -54,6 +55,7 @@ export default function ContactForm({ contact }: ContactFormProps) {
     facebookUrl: contact?.facebookUrl || "",
     zaloUrl: contact?.zaloUrl || "",
     instagramUrl: contact?.instagramUrl || "",
+    appointmentLink: contact?.appointmentLink || "",
     status: contact?.status || "ACTIVE",
   });
 
@@ -186,6 +188,27 @@ export default function ContactForm({ contact }: ContactFormProps) {
               <span className="italic">
                 Thứ 2 - Thứ 7: 8h00 - 19h00 &lt;br/&gt;Chủ nhật: 8h00 - 18h00
               </span>
+            </p>
+          </div>
+
+          <div className="space-y-2">
+            <label
+              htmlFor="appointmentLink"
+              className="block text-sm font-medium"
+            >
+              Link đặt lịch hẹn
+            </label>
+            <Input
+              id="appointmentLink"
+              type="url"
+              value={formData.appointmentLink}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                handleInputChange("appointmentLink", e.target.value)
+              }
+              placeholder="https://forms.gle/GJETkvXcnZ7hZwBr8"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              💡 Link này sẽ được sử dụng cho nút "Đặt lịch hẹn" trên website
             </p>
           </div>
         </CardContent>

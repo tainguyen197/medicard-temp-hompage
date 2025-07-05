@@ -1,6 +1,7 @@
 import { getMessages } from "next-intl/server";
 import HeroSection from "@/components/HeroSection";
 import { getBannerDataByType, BANNER_TYPES } from "@/lib/banner-utils";
+import { getAppointmentLink } from "@/lib/contact";
 import {
   AboutSectionWithAnimation,
   ServicesGallerySectionWithAnimation,
@@ -28,6 +29,9 @@ export default async function Home({
 
   // Fetch homepage banner data
   const homepageBanner = await getBannerDataByType(BANNER_TYPES.HOMEPAGE);
+  
+  // Fetch appointment link
+  const appointmentLink = await getAppointmentLink();
 
   return (
     <div className="min-h-screen pt-[72px] md:pt-[96px]">
@@ -37,14 +41,14 @@ export default async function Home({
         altText="Homepage Hero"
       />
       <AboutSectionWithAnimation t={t.about} />
-      <ServicesGallerySectionWithAnimation />
+      <ServicesGallerySectionWithAnimation appointmentLink={appointmentLink} />
       <TreatmentMethodsSectionWithAnimation t={t.treatmentMethods} />
       <TeamSectionWithAnimation />
       <FacilitySectionWithAnimation t={t.facility} />
       <EquipmentSectionWithAnimation t={t.equipment} />
       <ProcessSectionWithAnimation t={t.process} />
       <BlogSectionWithAnimation locale={locale} />
-      <ContactSectionWithAnimation t={t.contact} />
+      <ContactSectionWithAnimation t={t.contact} appointmentLink={appointmentLink} />
     </div>
   );
 }

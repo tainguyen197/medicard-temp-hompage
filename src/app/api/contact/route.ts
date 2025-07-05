@@ -15,6 +15,7 @@ const contactSchema = z.object({
   facebookUrl: z.string().url().optional().or(z.literal("")),
   zaloUrl: z.string().url().optional().or(z.literal("")),
   instagramUrl: z.string().url().optional().or(z.literal("")),
+  appointmentLink: z.string().url().optional().or(z.literal("")),
   status: z.enum(["ACTIVE", "INACTIVE"]).default("ACTIVE"),
 });
 
@@ -59,6 +60,7 @@ export async function POST(request: NextRequest) {
       facebookUrl: validatedData.facebookUrl || null,
       zaloUrl: validatedData.zaloUrl || null,
       instagramUrl: validatedData.instagramUrl || null,
+      appointmentLink: validatedData.appointmentLink || null,
       addressEn: validatedData.addressEn || null,
       businessHoursEn: validatedData.businessHoursEn || null,
     };
@@ -98,6 +100,12 @@ export async function POST(request: NextRequest) {
         changes.facebookUrl = {
           from: existingContact.facebookUrl,
           to: cleanData.facebookUrl,
+        };
+      }
+      if (cleanData.appointmentLink !== (existingContact as any).appointmentLink) {
+        changes.appointmentLink = {
+          from: (existingContact as any).appointmentLink,
+          to: cleanData.appointmentLink,
         };
       }
       // Add other field comparisons as needed
@@ -156,8 +164,9 @@ export async function PUT(request: Request) {
         facebookUrl: validatedData.facebookUrl,
         zaloUrl: validatedData.zaloUrl,
         instagramUrl: validatedData.instagramUrl,
+        appointmentLink: validatedData.appointmentLink,
         status: validatedData.status,
-      },
+      } as any,
       create: {
         phone: validatedData.phone,
         address: validatedData.address,
@@ -167,8 +176,9 @@ export async function PUT(request: Request) {
         facebookUrl: validatedData.facebookUrl,
         zaloUrl: validatedData.zaloUrl,
         instagramUrl: validatedData.instagramUrl,
+        appointmentLink: validatedData.appointmentLink,
         status: validatedData.status,
-      },
+      } as any,
     });
 
     // Log the update

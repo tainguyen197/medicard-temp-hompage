@@ -58,7 +58,11 @@ const convertServiceToServiceItem = (
   };
 };
 
-const ServicesGallerySection: React.FC = () => {
+interface ServicesGallerySectionProps {
+  appointmentLink?: string;
+}
+
+const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({ appointmentLink }) => {
   const locale = useLocale();
   const t = useTranslations("services.gallery");
   const [services, setServices] = useState<ServiceItem[]>([]);
@@ -300,7 +304,7 @@ const ServicesGallerySection: React.FC = () => {
                   </svg>
                 </a>
                 <a
-                  href="https://forms.gle/GJETkvXcnZ7hZwBr8"
+                  href={appointmentLink || "https://forms.gle/GJETkvXcnZ7hZwBr8"}
                   target="_blank"
                   className="inline-flex items-center px-4 py-2 md:px-7 md:py-3 border border-[#B1873F] hover:bg-amber-600/10 transition-colors rounded-xl md:rounded-full text-white font-semibold md:font-medium text-xs md:text-[16px] h-10 md:h-12"
                 >
