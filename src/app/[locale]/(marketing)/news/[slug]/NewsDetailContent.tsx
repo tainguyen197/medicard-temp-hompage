@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import RelatedPostsList from "./RelatedPostsList";
 
 // Default image fallback if no featured image
 const DEFAULT_IMAGE = "/images/news/news-image-1.jpg";
@@ -152,10 +153,13 @@ export default async function NewsDetailContent({
             <h2 className="text-2xl font-semibold text-[#222222] mb-10">
               {t("relatedPosts.title")}
             </h2>
-            {/* TODO: Add related posts functionality */}
-            <div className="text-gray-500">
-              {t("relatedPosts.comingSoon") || "Related posts coming soon..."}
-            </div>
+            {news.categoryId ? (
+              <RelatedPostsList categoryId={news.categoryId} currentNewsId={news.id} locale={locale} />
+            ) : (
+              <div className="text-gray-500">
+                {t("relatedPosts.comingSoon") || "No related posts found."}
+              </div>
+            )}
           </div>
         </div>
       </>

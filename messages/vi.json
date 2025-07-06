@@ -611,7 +611,8 @@
       "news": "Tin tức"
     },
     "relatedPosts": {
-      "title": "Bạn có thể quan tâm"
+      "title": "Bạn có thể quan tâm",
+      "comingSoon": "Những bài viết sắp tới đang được cập nhật, hãy quay lại sau."
     },
     "cta": {
       "heading": "Sẵn sàng trải nghiệm sự khác biệt",

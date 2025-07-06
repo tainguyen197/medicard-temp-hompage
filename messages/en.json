@@ -618,7 +618,8 @@
       "news": "News"
     },
     "relatedPosts": {
-      "title": "You might be interested"
+      "title": "You might be interested",
+      "comingSoon": "The upcoming posts are being updated, please check back later."
     },
     "cta": {
       "heading": "Ready to experience the difference",
