@@ -4,12 +4,13 @@ import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { fallbackContactData } from "@/lib/contact";
 
-export default async function NotFound({
+// This is a Server Component
+export default async function LocalizedNotFound({
   params
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params;
+  // Get the locale from params instead of using useLocale hook
   const t = await getTranslations("notFound");
   
   // Fetch contact data
@@ -50,11 +51,11 @@ export default async function NotFound({
         </p>
       </div>
 
-      <Link href={`/${locale}`} className="max-w-lg w-full text-center mx-auto">
+      <Link href={`/`} className="max-w-lg w-full text-center mx-auto">
         <div className="bg-[#B1873F] text-white py-3 px-8 rounded-full hover:bg-[#9A7535] transition-colors duration-300 font-medium">
           {t("button")}
         </div>
       </Link>
     </div>
   );
-}
+} 

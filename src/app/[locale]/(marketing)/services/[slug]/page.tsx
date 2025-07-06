@@ -104,6 +104,12 @@ export default async function ServiceDetailPage({
   let service: Service;
 
   try {
+    if (!slug) {
+      console.error("No slug provided");
+      notFound();
+      return;
+    }
+    
     // Fetch service by slug from API
     const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/services/by-slug/${slug}`, {
       method: 'GET',
@@ -112,7 +118,9 @@ export default async function ServiceDetailPage({
     });
 
     if (!response.ok) {
+      console.error(`Service not found: ${slug}, status: ${response.status}`);
       notFound();
+      return;
     }
 
     service = await response.json();

@@ -490,7 +490,7 @@
       "title": "SERVICES",
       "includes": "Includes:",
       "viewDetails": "View details",
-      "bookAppointment": "Book appointment",
+      "bookAppointment": "Book an appointment",
       "exploreMore": "Explore more"
     },
     "team": {
@@ -664,5 +664,11 @@
     "copyright": "Copyright © 2025 Healthcare Therapy Center",
     "terms": "Terms",
     "privacy": "Privacy"
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Sorry, content not found",
+    "description": "Please return to the homepage or contact us via Hotline {phone} for assistance",
+    "button": "Return to Homepage"
   }
 }

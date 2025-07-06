@@ -42,7 +42,7 @@ export default async function NewsDetailContent({
   const t = await getTranslations({ locale, namespace: "newsDetail" });
 
   try {
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/news/by-slug/${slug}`, {
+    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/news/by-slug/${slug}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       next: { revalidate: 300 }, // Cache for 5 minutes

@@ -173,7 +173,6 @@ export async function NewsDataComponent({
 
   const pageNumbers = getPageNumbers();
  
-  console.log(newsItems);
 
   return (
     <>

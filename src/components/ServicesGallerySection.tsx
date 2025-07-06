@@ -10,6 +10,7 @@ import {
   getLocalizedService,
   ServiceData,
 } from "@/data/services";
+import { ROUTES } from "@/lib/router";
 
 interface ServiceItem {
   id: string;
@@ -69,20 +70,6 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({ appoint
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Convert ServiceData to ServiceItem format for backward compatibility
-  const convertServiceDataToServiceItem = (
-    serviceData: ServiceData
-  ): ServiceItem => {
-    const localizedService = getLocalizedService(serviceData, locale);
-    return {
-      id: serviceData.id,
-      title: localizedService.title,
-      description: localizedService.description,
-      details: localizedService.details,
-      image: serviceData.image,
-      link: serviceData.link,
-    };
-  };
 
   // Get fallback services from our data file
   const fallbackServices: ServiceItem[] = []
@@ -365,7 +352,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({ appoint
 
         <div className="text-center mt-10 md:mt-14">
           <a
-            href="#"
+            href={ROUTES.SERVICES}
             className="inline-block border-b border-white/50 hover:border-white transition-colors pb-1 text-white text-sm md:text-lg"
           >
             {t("exploreMore")}

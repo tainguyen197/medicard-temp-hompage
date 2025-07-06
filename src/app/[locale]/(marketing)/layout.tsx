@@ -6,7 +6,6 @@ import LayoutWithHeader from "@/app/_layouts/LayoutWithHeader";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getMessages } from "next-intl/server";
 import { routing } from "@/routing";
 
 const manrope = Manrope({

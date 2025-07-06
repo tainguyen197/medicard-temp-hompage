@@ -630,5 +630,11 @@
     "copyright": "Bản quyền © 2025 Healthcare Therapy Center",
     "terms": "Điều khoản",
     "privacy": "Chính sách"
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Rất tiếc, không tìm thấy nội dung",
+    "description": "Vui lòng quay trở lại trang chủ hoặc liên hệ qua Hotline {phone} để được hỗ trợ",
+    "button": "Trở về Trang chủ"
   }
 }
