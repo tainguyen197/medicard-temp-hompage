@@ -268,7 +268,7 @@ export class Logger {
 }
 
 export function canPublishContent(userRole: string): boolean {
-  return ["SUPER_ADMIN", "ADMIN"].includes(userRole);
+  return ["SUPER_ADMIN", "ADMIN", "EDITOR"].includes(userRole);
 }
 
 export function canManageUsers(userRole: string): boolean {

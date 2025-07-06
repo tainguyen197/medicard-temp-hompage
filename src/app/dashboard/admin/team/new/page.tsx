@@ -11,7 +11,7 @@ export default async function NewTeamMemberPage() {
   }
 
   // Check if user has admin or editor role
-  if (!["SUPER_ADMIN", "ADMIN", "EDITOR"].includes(session.user.role)) {
+  if (!["SUPER_ADMIN", "ADMIN"].includes(session.user.role)) {
     redirect("/");
   }
 

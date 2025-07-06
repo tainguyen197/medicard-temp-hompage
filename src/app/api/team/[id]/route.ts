@@ -124,7 +124,7 @@ export async function PUT(
 ) {
   const session = await getServerSession(authOptions);
 
-  if (!session?.user) {
+  if (!session?.user || !["SUPER_ADMIN", "ADMIN"].includes(session.user.role)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -272,9 +272,10 @@ export async function DELETE(
 ) {
   const session = await getServerSession(authOptions);
 
-  if (!session?.user) {
+  if (!session?.user || !["SUPER_ADMIN", "ADMIN"].includes(session.user.role)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
 
   try {
     const { id } = await params;

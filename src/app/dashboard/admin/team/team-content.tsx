@@ -26,6 +26,10 @@ export default async function TeamContent({
     redirect("/auth/login");
   }
 
+  if (!["SUPER_ADMIN", "ADMIN"].includes(session.user.role)) {
+    redirect("/");
+  }
+
   const params = await searchParams;
   const page = Number(params.page) || 1;
   const limit = Number(params.limit) || 10;
