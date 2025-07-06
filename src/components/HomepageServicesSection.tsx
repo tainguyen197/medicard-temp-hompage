@@ -57,7 +57,7 @@ export default function HomepageServicesSection({
         {/* Section Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            {locale === "en" ? "Our Services" : "Dịch Vụ Của Chúng Tôi"}
+            {locale === "en" ? "Our Service" : "Dịch Vụ Của Chúng Tôi"}
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             {locale === "en"
