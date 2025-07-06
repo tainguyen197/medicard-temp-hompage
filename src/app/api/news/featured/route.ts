@@ -1,50 +1,29 @@
 import { NextResponse } from "next/server";
 import prisma from "../../../../lib/prisma";
 
-// GET /api/news/featured - Get featured/trending news articles
-export async function GET(request: Request) {
+// GET /api/news/featured - Get featured news articles (pinned ones)
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get("limit") || "5");
-
-    // Get featured posts first
-    const featuredPosts = await prisma.news.findMany({
+    // Get published and pinned news articles
+    // Limited to 5 items, ordered by creation date (newest first)
+    const featuredNews = await prisma.news.findMany({
       where: {
         status: "PUBLISHED",
-        // Note: Add featured field to News model if needed
+        pin: true,
       },
       orderBy: { createdAt: "desc" },
-      take: limit,
+      take: 5,
       include: {
         featureImage: true,
         featureImageEn: true,
         category: true,
+        categoryEn: true,
       },
     });
 
-    // If we don't have enough featured posts, supplement with most recent posts
-    let posts = featuredPosts;
-    if (featuredPosts.length < limit) {
-      const recentPosts = await prisma.news.findMany({
-        where: {
-          status: "PUBLISHED",
-          id: { notIn: featuredPosts.map((p: any) => p.id) }, // Exclude already selected featured posts
-        },
-        orderBy: { createdAt: "desc" },
-        take: limit - featuredPosts.length,
-        include: {
-          featureImage: true,
-          featureImageEn: true,
-          category: true,
-        },
-      });
-
-      posts = [...featuredPosts, ...recentPosts];
-    }
-
     return NextResponse.json({
-      posts,
-      count: posts.length,
+      posts: featuredNews,
+      count: featuredNews.length,
     });
   } catch (error) {
     console.error("Error fetching featured news:", error);

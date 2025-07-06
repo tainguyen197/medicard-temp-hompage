@@ -8,6 +8,7 @@ export async function GET(request: Request) {
     const categoryId = searchParams.get("categoryId");
     const currentNewsId = searchParams.get("currentNewsId");
     const limit = parseInt(searchParams.get("limit") || "3");
+    const locale = searchParams.get("locale") || "vi";
 
     if (!categoryId) {
       return NextResponse.json(
@@ -16,19 +17,33 @@ export async function GET(request: Request) {
       );
     }
 
-    // Build filter object
+    // Build filter object based on locale
     const where: {
       status: string;
-      categoryId: string;
       id?: { not: string };
+      OR?: Array<{
+        categoryId?: string;
+        categoryEnId?: string;
+      }>;
     } = {
       status: "PUBLISHED",
-      categoryId,
     };
 
     // Exclude current news if provided
     if (currentNewsId) {
       where.id = { not: currentNewsId };
+    }
+
+    // Filter by appropriate category based on locale
+    if (locale === "en") {
+      where.OR = [
+        { categoryEnId: categoryId },
+        { categoryId: categoryId } // Fallback to Vietnamese category if no English matches
+      ];
+    } else {
+      where.OR = [
+        { categoryId: categoryId }
+      ];
     }
 
     // Get related news articles
@@ -40,6 +55,7 @@ export async function GET(request: Request) {
         featureImage: true,
         featureImageEn: true,
         category: true,
+        categoryEn: true,
       },
     });
 
