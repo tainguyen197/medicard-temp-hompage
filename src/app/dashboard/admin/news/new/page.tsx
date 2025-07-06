@@ -27,6 +27,7 @@ interface Category {
   id: string;
   name: string;
   slug: string;
+  language: string;
 }
 
 export default function NewNewsPage() {
@@ -56,21 +57,34 @@ export default function NewNewsPage() {
   const [metaKeywords, setMetaKeywords] = useState("");
   const [metaKeywordsEn, setMetaKeywordsEn] = useState("");
 
-  // Category states
-  const [categories, setCategories] = useState<Category[]>([]);
+  // Category states - separate for each language
+  const [categoriesVi, setCategoriesVi] = useState<Category[]>([]);
+  const [categoriesEn, setCategoriesEn] = useState<Category[]>([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
+  const [selectedCategoryEnId, setSelectedCategoryEnId] = useState("");
   const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
+  const [showNewCategoryEnInput, setShowNewCategoryEnInput] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
+  const [newCategoryNameEn, setNewCategoryNameEn] = useState("");
   const [isCreatingCategory, setIsCreatingCategory] = useState(false);
+  const [isCreatingCategoryEn, setIsCreatingCategoryEn] = useState(false);
 
-  // Fetch categories
+  // Fetch categories for both languages
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("/api/categories");
-        if (response.ok) {
-          const data = await response.json();
-          setCategories(data.categories || []);
+        // Fetch Vietnamese categories
+        const responseVi = await fetch("/api/categories?language=vi");
+        if (responseVi.ok) {
+          const dataVi = await responseVi.json();
+          setCategoriesVi(dataVi.categories || []);
+        }
+
+        // Fetch English categories
+        const responseEn = await fetch("/api/categories?language=en");
+        if (responseEn.ok) {
+          const dataEn = await responseEn.json();
+          setCategoriesEn(dataEn.categories || []);
         }
       } catch (error) {
         console.error("Error fetching categories:", error);
@@ -109,7 +123,7 @@ export default function NewNewsPage() {
     setIsSlugManuallyEdited(true);
   };
 
-  // Handle new category creation
+  // Handle new Vietnamese category creation
   const handleCreateCategory = async () => {
     if (!newCategoryName.trim()) {
       toast.error("Please enter a category name");
@@ -126,6 +140,7 @@ export default function NewNewsPage() {
         body: JSON.stringify({
           name: newCategoryName.trim(),
           slug: generateSlug(newCategoryName.trim()),
+          language: "vi",
         }),
       });
 
@@ -135,11 +150,11 @@ export default function NewNewsPage() {
       }
 
       const newCategory = await response.json();
-      setCategories([...categories, newCategory]);
+      setCategoriesVi([...categoriesVi, newCategory]);
       setSelectedCategoryId(newCategory.id);
       setNewCategoryName("");
       setShowNewCategoryInput(false);
-      toast.success("Category created successfully!");
+      toast.success("Vietnamese category created successfully!");
     } catch (error) {
       console.error("Error creating category:", error);
       toast.error(
@@ -147,6 +162,48 @@ export default function NewNewsPage() {
       );
     } finally {
       setIsCreatingCategory(false);
+    }
+  };
+
+  // Handle new English category creation
+  const handleCreateCategoryEn = async () => {
+    if (!newCategoryNameEn.trim()) {
+      toast.error("Please enter an English category name");
+      return;
+    }
+
+    setIsCreatingCategoryEn(true);
+    try {
+      const response = await fetch("/api/categories", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: newCategoryNameEn.trim(),
+          slug: generateSlug(newCategoryNameEn.trim()),
+          language: "en",
+        }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to create English category");
+      }
+
+      const newCategory = await response.json();
+      setCategoriesEn([...categoriesEn, newCategory]);
+      setSelectedCategoryEnId(newCategory.id);
+      setNewCategoryNameEn("");
+      setShowNewCategoryEnInput(false);
+      toast.success("English category created successfully!");
+    } catch (error) {
+      console.error("Error creating English category:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to create English category"
+      );
+    } finally {
+      setIsCreatingCategoryEn(false);
     }
   };
 
@@ -200,6 +257,7 @@ export default function NewNewsPage() {
           pin,
           slug,
           categoryId: selectedCategoryId || undefined,
+          categoryEnId: selectedCategoryEnId || undefined,
           metaTitle: metaTitle || undefined,
           metaTitleEn: metaTitleEn || undefined,
           metaDescription: metaDescription || undefined,
@@ -291,7 +349,7 @@ export default function NewNewsPage() {
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                   <SelectContent>
-                    {categories.map((category) => (
+                    {categoriesVi.map((category) => (
                       <SelectItem key={category.id} value={category.id}>
                         {category.name}
                       </SelectItem>
@@ -314,7 +372,7 @@ export default function NewNewsPage() {
                     <Input
                       value={newCategoryName}
                       onChange={(e) => setNewCategoryName(e.target.value)}
-                      placeholder="Enter category name"
+                      placeholder="Enter Vietnamese category name"
                       className="flex-1"
                     />
                     <Button
@@ -352,8 +410,6 @@ export default function NewNewsPage() {
               />
             </div>
           </div>
-
-
 
           <div className="space-y-2 mt-4">
             <Label>News Content (Vietnamese)</Label>
@@ -460,18 +516,79 @@ export default function NewNewsPage() {
             </div>
           </div>
 
-          <div className="space-y-2 mt-4">
-            <Label htmlFor="shortDescriptionEn">Excerpt (English)</Label>
-            <Input
-              id="shortDescriptionEn"
-              value={shortDescriptionEn}
-              onChange={(e) => setShortDescriptionEn(e.target.value)}
-              placeholder="Brief summary of the news article in English"
-              className="w-full"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+            <div className="space-y-2">
+              <Label htmlFor="categoryEn">Category (English)</Label>
+              <div className="space-y-2">
+                <Select
+                  value={selectedCategoryEnId}
+                  onValueChange={setSelectedCategoryEnId}
+                >
+                  <SelectTrigger id="categoryEn">
+                    <SelectValue placeholder="Select a category for English" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categoriesEn.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {!showNewCategoryEnInput ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowNewCategoryEnInput(true)}
+                    className="w-full"
+                  >
+                    + Add New English Category
+                  </Button>
+                ) : (
+                  <div className="flex gap-2">
+                    <Input
+                      value={newCategoryNameEn}
+                      onChange={(e) => setNewCategoryNameEn(e.target.value)}
+                      placeholder="Enter English category name"
+                      className="flex-1"
+                    />
+                    <Button
+                      type="button"
+                      size="sm"
+                      onClick={handleCreateCategoryEn}
+                      disabled={isCreatingCategoryEn}
+                    >
+                      {isCreatingCategoryEn ? "Creating..." : "Create"}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setShowNewCategoryEnInput(false);
+                        setNewCategoryNameEn("");
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="shortDescriptionEn">Excerpt (English)</Label>
+              <Input
+                id="shortDescriptionEn"
+                value={shortDescriptionEn}
+                onChange={(e) => setShortDescriptionEn(e.target.value)}
+                placeholder="Brief summary of the news article in English"
+                className="w-full"
+              />
+            </div>
           </div>
-
-
 
           <div className="space-y-2 mt-4">
             <Label>News Content (English)</Label>

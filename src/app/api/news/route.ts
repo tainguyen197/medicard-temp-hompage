@@ -18,6 +18,7 @@ const newsSchema = z.object({
   showOnHomepage: z.boolean().optional().default(false),
   pin: z.boolean().optional().default(false),
   categoryId: z.string().optional(),
+  categoryEnId: z.string().optional(),
   slug: z.string().optional(),
   featuredImage: z.string().optional(), // Accept the image URL
   featureImageId: z.string().optional(),
@@ -92,6 +93,9 @@ export async function GET(request: Request) {
       take: limit,
       include: {
         featureImage: true, // Include the related Media record
+        featureImageEn: true,
+        category: true,
+        categoryEn: true,
       },
     });
 
@@ -205,6 +209,9 @@ export async function POST(request: Request) {
         ...(validatedData.categoryId && {
           categoryId: validatedData.categoryId,
         }),
+        ...(validatedData.categoryEnId && {
+          categoryEnId: validatedData.categoryEnId,
+        }),
         metaTitle: validatedData.metaTitle,
         metaTitleEn: validatedData.metaTitleEn,
         metaDescription: validatedData.metaDescription,
@@ -216,7 +223,9 @@ export async function POST(request: Request) {
       },
       include: {
         featureImage: true,
+        featureImageEn: true,
         category: true,
+        categoryEn: true,
       },
     });
 
@@ -233,6 +242,7 @@ export async function POST(request: Request) {
         showOnHomepage: news.showOnHomepage,
         slug: news.slug,
         categoryId: news.categoryId,
+        categoryEnId: news.categoryEnId,
       },
     });
 

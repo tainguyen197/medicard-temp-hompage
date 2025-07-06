@@ -22,12 +22,17 @@ model User {
 
 model Category {
   id          String   @id @default(cuid())
-  name        String   @unique
-  slug        String   @unique
+  name        String
+  slug        String
   description String?
+  language    String   @default("vi") // "vi" or "en"
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  news        News[]
+  news        News[]   @relation("NewsCategory")
+  newsEn      News[]   @relation("NewsCategoryEn")
+
+  @@unique([slug, language])
+  @@index([language])
 }
 
 model Service {
@@ -73,6 +78,7 @@ model News {
   showOnHomepage     Boolean   @default(false)
   pin                Boolean   @default(false)
   categoryId         String?
+  categoryEnId       String?
   featureImageId     String?   @unique
   featureImageEnId   String?   @unique
   metaTitle          String?
@@ -83,13 +89,15 @@ model News {
   metaKeywordsEn     String?
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
-  category           Category? @relation(fields: [categoryId], references: [id])
+  category           Category? @relation("NewsCategory", fields: [categoryId], references: [id])
+  categoryEn         Category? @relation("NewsCategoryEn", fields: [categoryEnId], references: [id])
   featureImageEn     Media?    @relation("NewsFeatureImageEn", fields: [featureImageEnId], references: [id])
   featureImage       Media?    @relation("NewsFeatureImage", fields: [featureImageId], references: [id])
 
   @@index([showOnHomepage])
   @@index([showOnHomepage, createdAt])
   @@index([categoryId])
+  @@index([categoryEnId])
   @@index([pin])
   @@index([pin, createdAt])
 }

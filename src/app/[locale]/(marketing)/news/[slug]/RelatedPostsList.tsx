@@ -35,7 +35,7 @@ export default async function RelatedPostsList({ categoryId, currentNewsId, loca
   if (categoryId) {
     try {
       const response = await fetch(
-        `${process.env.NEXTAUTH_URL}/api/news/related?categoryId=${categoryId}&currentNewsId=${currentNewsId}&limit=3`,
+        `${process.env.NEXTAUTH_URL}/api/news/related?categoryId=${categoryId}&currentNewsId=${currentNewsId}&limit=3&locale=${locale}`,
         {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },

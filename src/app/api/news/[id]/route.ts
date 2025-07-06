@@ -15,6 +15,7 @@ const newsUpdateSchema = z.object({
   showOnHomepage: z.boolean().optional(),
   pin: z.boolean().optional(),
   categoryId: z.string().optional(),
+  categoryEnId: z.string().optional(),
   slug: z.string().optional(),
   description: z.string().optional(),
   descriptionEn: z.string().optional(),
@@ -58,6 +59,7 @@ export async function GET(
         featureImage: true,
         featureImageEn: true,
         category: true,
+        categoryEn: true,
       },
     });
 
@@ -192,6 +194,9 @@ export async function PUT(
         ...(validatedData.categoryId !== undefined && {
           categoryId: validatedData.categoryId,
         }),
+        ...(validatedData.categoryEnId !== undefined && {
+          categoryEnId: validatedData.categoryEnId,
+        }),
         slug,
         metaTitle: validatedData.metaTitle,
         metaTitleEn: validatedData.metaTitleEn,
@@ -206,6 +211,7 @@ export async function PUT(
         featureImage: true,
         featureImageEn: true,
         category: true,
+        categoryEn: true,
       },
     });
 
@@ -226,6 +232,9 @@ export async function PUT(
     }
     if (validatedData.categoryId !== existingNews.categoryId) {
       changes.categoryId = { from: existingNews.categoryId, to: validatedData.categoryId };
+    }
+    if (validatedData.categoryEnId !== existingNews.categoryEnId) {
+      changes.categoryEnId = { from: existingNews.categoryEnId, to: validatedData.categoryEnId };
     }
 
     await Logger.logCRUD({

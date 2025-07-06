@@ -11,17 +11,21 @@ const categorySchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().optional(),
   slug: z.string().optional(),
+  language: z.enum(["vi", "en"]).default("vi"),
 });
 
-// GET /api/categories - Get all categories
+// GET /api/categories - Get all categories with language filter
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
   // Parse query parameters
   const search = searchParams.get("search");
+  const language = searchParams.get("language") || "vi"; // Default to Vietnamese
 
   // Build filter object
-  const where: any = {};
+  const where: any = {
+    language: language as "vi" | "en", // Filter by language
+  };
 
   if (search) {
     where.OR = [
@@ -63,7 +67,7 @@ export async function POST(request: Request) {
   }
 
   // Check if user has required role (ADMIN or EDITOR)
-  if (!["ADMIN", "EDITOR"].includes(session.user.role)) {
+  if (!["ADMIN", "EDITOR", "SUPER_ADMIN"].includes(session.user.role)) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
@@ -74,14 +78,17 @@ export async function POST(request: Request) {
     // Generate slug if not provided
     const slug = validatedData.slug || createSlug(validatedData.name);
 
-    // Check if slug already exists
-    const existingCategory = await prisma.category.findUnique({
-      where: { slug },
+    // Check if slug already exists for this language
+    const existingCategory = await prisma.category.findFirst({
+      where: {
+        slug,
+        language: validatedData.language,
+      },
     });
 
     if (existingCategory) {
       return NextResponse.json(
-        { error: "A category with this slug already exists" },
+        { error: `A ${validatedData.language === 'vi' ? 'Vietnamese' : 'English'} category with this slug already exists` },
         { status: 400 }
       );
     }
@@ -89,8 +96,10 @@ export async function POST(request: Request) {
     // Create the category
     const category = await prisma.category.create({
       data: {
-        ...validatedData,
+        name: validatedData.name,
+        description: validatedData.description,
         slug,
+        language: validatedData.language,
       },
     });
 
@@ -101,7 +110,7 @@ export async function POST(request: Request) {
         entity: "Category",
         entityId: category.id,
         userId: session.user.id,
-        details: `Created category "${category.name}"`,
+        details: `Created ${validatedData.language === 'vi' ? 'Vietnamese' : 'English'} category "${category.name}"`,
       },
     });
 

@@ -14,6 +14,8 @@ const getLocalizedContent = (news: any, locale: string) => {
     title: isEnglish ? news.titleEn || news.title : news.title,
     description: isEnglish ? news.descriptionEn || news.description : news.description,
     shortDescription: isEnglish ? news.shortDescriptionEn || news.shortDescription : news.shortDescription,
+    category: isEnglish && news.categoryEn ? news.categoryEn : news.category,
+    featuredImage: isEnglish && news.featureImageEn?.url ? news.featureImageEn.url : news.featureImage?.url,
   };
 };
 
@@ -62,7 +64,7 @@ export async function NewsDataComponent({
           title: localizedContent.title,
           description: localizedContent.description,
           shortDescription: localizedContent.shortDescription,
-          featuredImage: newsItem.featureImage?.url,
+          featuredImage: localizedContent.featuredImage,
           createdAt: newsItem.createdAt,
           updatedAt: newsItem.updatedAt,
         };
@@ -111,7 +113,7 @@ export async function NewsDataComponent({
           title: localizedContent.title,
           description: localizedContent.description,
           shortDescription: localizedContent.shortDescription,
-          featuredImage: newsItem.featureImage?.url,
+          featuredImage: localizedContent.featuredImage,
           createdAt: newsItem.createdAt,
           updatedAt: newsItem.updatedAt,
         } as News;

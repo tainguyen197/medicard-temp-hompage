@@ -18,6 +18,7 @@ export async function GET(
         featureImage: true,
         featureImageEn: true,
         category: true,
+        categoryEn: true,
       },
     });
 

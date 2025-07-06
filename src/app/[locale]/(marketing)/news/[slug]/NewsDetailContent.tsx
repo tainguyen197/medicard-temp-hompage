@@ -14,6 +14,8 @@ const getLocalizedContent = (news: any, locale: string) => {
     title: isEnglish ? news.titleEn || news.title : news.title,
     description: isEnglish ? news.descriptionEn || news.description : news.description,
     shortDescription: isEnglish ? news.shortDescriptionEn || news.shortDescription : news.shortDescription,
+    category: isEnglish && news.categoryEn ? news.categoryEn : news.category,
+    categoryId: isEnglish && news.categoryEnId ? news.categoryEnId : news.categoryId,
   };
 };
 
@@ -107,10 +109,10 @@ export default async function NewsDetailContent({
           </h1>
           <div className="flex items-center text-gray-500 text-sm md:text-base mb-8">
             <span>{formatDate(news.createdAt)}</span>
-            {news.category && (
+            {localizedContent.category && (
               <>
                 <span className="mx-2">•</span>
-                <span>{news.category.name}</span>
+                <span>{localizedContent.category.name}</span>
               </>
             )}
           </div>
@@ -153,8 +155,8 @@ export default async function NewsDetailContent({
             <h2 className="text-2xl font-semibold text-[#222222] mb-10">
               {t("relatedPosts.title")}
             </h2>
-            {news.categoryId ? (
-              <RelatedPostsList categoryId={news.categoryId} currentNewsId={news.id} locale={locale} />
+            {localizedContent.categoryId ? (
+              <RelatedPostsList categoryId={localizedContent.categoryId} currentNewsId={news.id} locale={locale} />
             ) : (
               <div className="text-gray-500">
                 {t("relatedPosts.comingSoon") || "No related posts found."}
