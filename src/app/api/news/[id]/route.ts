@@ -150,6 +150,22 @@ export async function PUT(
       }
     }
 
+    // Check pin limit if pin is being set to true
+    if (validatedData.pin && !existingNews.pin) {
+      const pinCount = await prisma.news.count({
+        where: {
+          pin: true,
+          id: { not: id },
+        },
+      });
+      if (pinCount >= 5) {
+        return NextResponse.json(
+          { error: "Maximum of 5 pinned news articles allowed. Unpin another article first." },
+          { status: 400 }
+        );
+      }
+    }
+
     // Find the media record if featuredImage URL is provided
     let featureImageId = validatedData.featureImageId;
     let featureImageEnId = validatedData.featureImageEnId;

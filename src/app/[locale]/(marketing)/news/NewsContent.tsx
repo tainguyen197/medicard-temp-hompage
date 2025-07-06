@@ -125,16 +125,10 @@ export async function NewsDataComponent({
     console.error("Failed to fetch featured news:", error);
   }
 
-  // If we don't have enough featured news, supplement with most recent news
-  if (trendingNews.length < 5) {
-    const recentNewsForTrending = newsItems.filter(
-      (item: News) => !trendingNews.some((tn) => tn.id === item.id)
-    );
-    trendingNews = [
-      ...trendingNews,
-      ...recentNewsForTrending.slice(0, 5 - trendingNews.length),
-    ];
-  }
+  // Filter newsItems to exclude any items that are present in trendingNews
+  newsItems = newsItems.filter(
+    (item) => !trendingNews.some((trending) => trending.id === item.id)
+  );
 
   // Calculate total pages for pagination
   const totalPages = Math.ceil(totalNews / postsPerPage);
@@ -179,7 +173,7 @@ export async function NewsDataComponent({
   return (
     <>
       {/* 3. Trending Topics - Only show if we have enough posts */}
-      {trendingNews.length >= 5 && (
+      {trendingNews.length >0 && (
         <section className="container mx-auto px-4 mb-16 md:mb-20 max-w-[1040px]">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Featured post (larger) - left side */}

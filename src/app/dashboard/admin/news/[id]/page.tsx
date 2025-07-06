@@ -326,6 +326,10 @@ export default function EditNewsPage({
 
       if (!response.ok) {
         const error = await response.json();
+        // check if error is array and get the first error
+        if (Array.isArray(error?.error)) {
+          throw new Error(error.error[0].message || "Failed to update news article");
+        }
         throw new Error(error.error || "Failed to update news article");
       }
 
@@ -795,7 +799,7 @@ export default function EditNewsPage({
                 </Label>
               </div>
               <p className="text-xs text-gray-500">
-                Pin this article to show at the top of the news list
+                Pin this article to show at the top of the news list (max 5 items)
               </p>
             </div>
           </div>
