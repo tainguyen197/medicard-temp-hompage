@@ -28,6 +28,11 @@ interface BannerFormProps {
       url: string;
       filename: string;
     };
+    imageEn?: {
+      id: string;
+      url: string;
+      filename: string;
+    };
   };
   isEditing?: boolean;
 }
@@ -39,13 +44,16 @@ export default function BannerForm({
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imageEnPreview, setImageEnPreview] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     type: initialData?.type || "",
     link: initialData?.link || "",
     status: initialData?.status || "ACTIVE",
     imageFile: null as File | null,
+    imageEnFile: null as File | null,
     existingImageUrl: initialData?.image?.url || "",
+    existingImageEnUrl: initialData?.imageEn?.url || "",
   });
 
   const createImagePreview = (file: File): Promise<string> => {
@@ -90,6 +98,40 @@ export default function BannerForm({
     }
   };
 
+  const handleEnFileChange = async (file: File | null) => {
+    if (!file) {
+      setFormData((prev) => ({ ...prev, imageEnFile: null }));
+      setImageEnPreview(null);
+      return;
+    }
+
+    const maxFileSize = 10 * 1024 * 1024;
+    if (file.size > maxFileSize) {
+      toast.error("File size must be less than 10MB");
+      return;
+    }
+
+    const validTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/webp",
+      "image/gif",
+    ];
+    if (!validTypes.includes(file.type)) {
+      toast.error("File must be a valid image (JPEG, PNG, WebP, GIF)");
+      return;
+    }
+
+    try {
+      const preview = await createImagePreview(file);
+      setFormData((prev) => ({ ...prev, imageEnFile: file }));
+      setImageEnPreview(preview);
+    } catch (error) {
+      toast.error("Failed to process English image");
+    }
+  };
+
   const handleRemoveImage = () => {
     setFormData((prev) => ({
       ...prev,
@@ -97,6 +139,15 @@ export default function BannerForm({
       existingImageUrl: "",
     }));
     setImagePreview(null);
+  };
+
+  const handleRemoveEnImage = () => {
+    setFormData((prev) => ({
+      ...prev,
+      imageEnFile: null,
+      existingImageEnUrl: "",
+    }));
+    setImageEnPreview(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -112,6 +163,10 @@ export default function BannerForm({
 
       if (formData.imageFile) {
         submitData.append("imageFile", formData.imageFile);
+      }
+
+      if (formData.imageEnFile) {
+        submitData.append("imageEnFile", formData.imageEnFile);
       }
 
       const url = isEditing
@@ -174,6 +229,7 @@ export default function BannerForm({
   };
 
   const currentImage = imagePreview || formData.existingImageUrl;
+  const currentEnImage = imageEnPreview || formData.existingImageEnUrl;
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -203,6 +259,7 @@ export default function BannerForm({
                     <SelectItem value="SERVICE">Service</SelectItem>
                     <SelectItem value="NEWS">News</SelectItem>
                     <SelectItem value="ABOUT">About</SelectItem>
+                    <SelectItem value="CONTACT">Contact</SelectItem>
                   </SelectContent>
                 </Select>
                 {formData.type && (
@@ -255,12 +312,15 @@ export default function BannerForm({
           </CardContent>
         </Card>
 
-        {/* Banner Image */}
+        {/* Vietnamese Banner Image */}
         <Card>
           <CardHeader>
             <CardTitle className="text-lg font-semibold">
-              Banner Image
+              Vietnamese Banner Image
             </CardTitle>
+            <p className="text-sm text-gray-600">
+              Main banner image (required). This will be used as fallback for both languages if English image is not provided.
+            </p>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -268,7 +328,7 @@ export default function BannerForm({
                 <div className="relative">
                   <Image
                     src={currentImage}
-                    alt="Banner image"
+                    alt="Vietnamese banner image"
                     width={400}
                     height={200}
                     className="rounded-lg object-cover"
@@ -290,7 +350,7 @@ export default function BannerForm({
                   )}
                   {!formData.imageFile && formData.existingImageUrl && (
                     <div className="mt-2 text-sm text-gray-600">
-                      Current image
+                      Current Vietnamese image
                     </div>
                   )}
                 </div>
@@ -301,7 +361,7 @@ export default function BannerForm({
                     <div className="mt-4">
                       <Label htmlFor="image-upload" className="cursor-pointer">
                         <span className="mt-2 block text-sm font-medium text-gray-900">
-                          Upload banner image
+                          Upload Vietnamese banner image
                         </span>
                         <span className="mt-1 block text-sm text-gray-500">
                           PNG, JPG, GIF up to 10MB
@@ -315,6 +375,80 @@ export default function BannerForm({
                         onChange={(e) => {
                           const file = e.target.files?.[0];
                           handleFileChange(file || null);
+                        }}
+                        disabled={isSubmitting}
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* English Banner Image */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold">
+              English Banner Image (Optional)
+            </CardTitle>
+            <p className="text-sm text-gray-600">
+              Optional English version of the banner. If not provided, the Vietnamese image will be used for both languages.
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {currentEnImage ? (
+                <div className="relative">
+                  <Image
+                    src={currentEnImage}
+                    alt="English banner image"
+                    width={400}
+                    height={200}
+                    className="rounded-lg object-cover"
+                  />
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    className="absolute top-2 right-2"
+                    onClick={handleRemoveEnImage}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                  {formData.imageEnFile && (
+                    <div className="mt-2 text-sm text-gray-600">
+                      {formData.imageEnFile.name} (
+                      {(formData.imageEnFile.size / 1024 / 1024).toFixed(2)} MB)
+                    </div>
+                  )}
+                  {!formData.imageEnFile && formData.existingImageEnUrl && (
+                    <div className="mt-2 text-sm text-gray-600">
+                      Current English image
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="border-2 border-dashed border-gray-200 rounded-lg p-6">
+                  <div className="text-center">
+                    <Upload className="mx-auto h-12 w-12 text-gray-300" />
+                    <div className="mt-4">
+                      <Label htmlFor="image-en-upload" className="cursor-pointer">
+                        <span className="mt-2 block text-sm font-medium text-gray-900">
+                          Upload English banner image
+                        </span>
+                        <span className="mt-1 block text-sm text-gray-500">
+                          PNG, JPG, GIF up to 10MB (Optional)
+                        </span>
+                      </Label>
+                      <Input
+                        id="image-en-upload"
+                        type="file"
+                        className="hidden"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          handleEnFileChange(file || null);
                         }}
                         disabled={isSubmitting}
                       />

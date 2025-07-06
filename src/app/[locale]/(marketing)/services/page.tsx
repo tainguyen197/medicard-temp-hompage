@@ -22,11 +22,12 @@ export default async function ServicesPage({
 }: {
   params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
   const messages = await getMessages();
   const t = messages.services;
 
   // Fetch service banner data
-  const serviceBanner = await getBannerDataByType(BANNER_TYPES.SERVICE);
+  const serviceBanner = await getBannerDataByType(BANNER_TYPES.SERVICE, locale);
   const heroImage = serviceBanner.imageUrl || DEFAULT_HERO_IMAGE;
   
   // Fetch appointment link

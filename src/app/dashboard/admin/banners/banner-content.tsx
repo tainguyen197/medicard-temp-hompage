@@ -17,6 +17,11 @@ interface Banner {
     url: string;
     filename: string;
   };
+  imageEn?: {
+    id: string;
+    url: string;
+    filename: string;
+  };
 }
 
 export default function BannerContent() {
@@ -125,7 +130,7 @@ export default function BannerContent() {
       {/* Summary */}
       <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
         <h3 className="font-medium text-blue-900 mb-2">Banner Types Summary</h3>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 text-sm">
           <div className="bg-white p-3 rounded border">
             <span className="font-medium text-green-600">Homepage:</span>{" "}
             {banners.find((b) => b.type === "HOMEPAGE")
@@ -143,6 +148,10 @@ export default function BannerContent() {
           <div className="bg-white p-3 rounded border">
             <span className="font-medium text-orange-600">About:</span>{" "}
             {banners.find((b) => b.type === "ABOUT") ? "✓ Active" : "Not set"}
+          </div>
+          <div className="bg-white p-3 rounded border">
+            <span className="font-medium text-pink-600">Contact:</span>{" "}
+            {banners.find((b) => b.type === "CONTACT") ? "✓ Active" : "Not set"}
           </div>
         </div>
       </div>

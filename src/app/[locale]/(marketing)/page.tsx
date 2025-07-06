@@ -28,7 +28,7 @@ export default async function Home({
   const t = messages.home;
 
   // Fetch homepage banner data
-  const homepageBanner = await getBannerDataByType(BANNER_TYPES.HOMEPAGE);
+  const homepageBanner = await getBannerDataByType(BANNER_TYPES.HOMEPAGE, locale);
   
   // Fetch appointment link
   const appointmentLink = await getAppointmentLink();

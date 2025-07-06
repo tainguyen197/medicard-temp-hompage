@@ -18,6 +18,11 @@ interface Banner {
     url: string;
     filename: string;
   };
+  imageEn?: {
+    id: string;
+    url: string;
+    filename: string;
+  };
 }
 
 interface BannerTableProps {
@@ -39,6 +44,8 @@ export default function BannerTable({ banners, onUpdate }: BannerTableProps) {
         return "News";
       case "ABOUT":
         return "About";
+      case "CONTACT":
+        return "Contact";
       default:
         return type;
     }
@@ -54,6 +61,8 @@ export default function BannerTable({ banners, onUpdate }: BannerTableProps) {
         return "bg-purple-100 text-purple-800";
       case "ABOUT":
         return "bg-orange-100 text-orange-800";
+      case "CONTACT":
+        return "bg-pink-100 text-pink-800";
       default:
         return "bg-gray-100 text-gray-800";
     }
@@ -116,7 +125,10 @@ export default function BannerTable({ banners, onUpdate }: BannerTableProps) {
         <thead className="bg-gray-50">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Image
+              Vietnamese Image
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              English Image
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
               Type
@@ -146,7 +158,7 @@ export default function BannerTable({ banners, onUpdate }: BannerTableProps) {
                   <div className="relative h-12 w-20 rounded-md overflow-hidden">
                     <Image
                       src={banner.image.url}
-                      alt={`${getBannerTypeLabel(banner.type)} banner`}
+                      alt={`${getBannerTypeLabel(banner.type)} Vietnamese banner`}
                       fill
                       className="object-cover"
                     />
@@ -154,6 +166,22 @@ export default function BannerTable({ banners, onUpdate }: BannerTableProps) {
                 ) : (
                   <div className="h-12 w-20 bg-gray-100 rounded-md flex items-center justify-center">
                     <span className="text-xs text-gray-400">No image</span>
+                  </div>
+                )}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                {banner.imageEn ? (
+                  <div className="relative h-12 w-20 rounded-md overflow-hidden">
+                    <Image
+                      src={banner.imageEn.url}
+                      alt={`${getBannerTypeLabel(banner.type)} English banner`}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="h-12 w-20 bg-gray-100 rounded-md flex items-center justify-center">
+                    <span className="text-xs text-gray-400">No EN image</span>
                   </div>
                 )}
               </td>

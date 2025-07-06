@@ -107,6 +107,7 @@ export async function GET(request: NextRequest) {
       where,
       include: {
         image: true,
+        imageEn: true,
       },
       orderBy: { type: "asc" }, // Homepage, News, Service alphabetical order
     });
@@ -145,22 +146,24 @@ export async function POST(request: NextRequest) {
     const link = (formData.get("link") as string) || null;
     const status = (formData.get("status") as string) || "ACTIVE";
     const imageFile = formData.get("imageFile") as File | null;
+    const imageEnFile = formData.get("imageEnFile") as File | null;
 
     // Validate required fields
     if (!type) {
       return NextResponse.json({ error: "Type is required" }, { status: 400 });
     }
 
-    if (!["HOMEPAGE", "SERVICE", "NEWS", "ABOUT"].includes(type)) {
+    if (!["HOMEPAGE", "SERVICE", "NEWS", "ABOUT", "CONTACT"].includes(type)) {
       return NextResponse.json(
-        { error: "Type must be HOMEPAGE, SERVICE, NEWS, or ABOUT" },
+        { error: "Type must be HOMEPAGE, SERVICE, NEWS, ABOUT, or CONTACT" },
         { status: 400 }
       );
     }
 
     let imageId: string | null = null;
+    let imageEnId: string | null = null;
 
-    // Upload image if provided
+    // Upload Vietnamese image if provided
     if (imageFile && imageFile.size > 0) {
       try {
         const { mediaId } = await uploadFileToR2(
@@ -178,21 +181,42 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Upload English image if provided
+    if (imageEnFile && imageEnFile.size > 0) {
+      try {
+        const { mediaId } = await uploadFileToR2(
+          imageEnFile,
+          session.user.id,
+          "banner"
+        );
+        imageEnId = mediaId;
+      } catch (error) {
+        console.error("Error uploading banner English image:", error);
+        return NextResponse.json(
+          { error: "Failed to upload banner English image" },
+          { status: 500 }
+        );
+      }
+    }
+
     const banner = await prisma.banner.upsert({
       where: { type },
       update: {
         link,
         imageId,
+        imageEnId,
         status,
       },
       create: {
         type,
         link,
         imageId,
+        imageEnId,
         status,
       },
       include: {
         image: true,
+        imageEn: true,
       },
     });
 

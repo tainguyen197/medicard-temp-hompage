@@ -99,6 +99,7 @@ export async function GET(
       where: { id },
       include: {
         image: true,
+        imageEn: true,
       },
     });
 
@@ -138,6 +139,7 @@ export async function PUT(
     const link = (formData.get("link") as string) || null;
     const status = (formData.get("status") as string) || "ACTIVE";
     const imageFile = formData.get("imageFile") as File | null;
+    const imageEnFile = formData.get("imageEnFile") as File | null;
 
     // Get existing banner for comparison
     const existingBanner = await prisma.banner.findUnique({
@@ -150,6 +152,7 @@ export async function PUT(
 
     // Handle image upload if a new image is provided
     let imageId: string | null = existingBanner.imageId;
+    let imageEnId: string | null = existingBanner.imageEnId;
 
     if (imageFile && imageFile.size > 0) {
       try {
@@ -168,10 +171,27 @@ export async function PUT(
       }
     }
 
+    if (imageEnFile && imageEnFile.size > 0) {
+      try {
+        const { mediaId } = await uploadFileToR2(
+          imageEnFile,
+          session.user.id,
+          "banner"
+        );
+        imageEnId = mediaId;
+      } catch (error) {
+        console.error("Error uploading banner English image:", error);
+        return NextResponse.json(
+          { error: "Failed to upload banner English image" },
+          { status: 500 }
+        );
+      }
+    }
+
     // Validate type if provided
-    if (type && !["HOMEPAGE", "SERVICE", "NEWS", "ABOUT"].includes(type)) {
+    if (type && !["HOMEPAGE", "SERVICE", "NEWS", "ABOUT", "CONTACT"].includes(type)) {
       return NextResponse.json(
-        { error: "Type must be HOMEPAGE, SERVICE, NEWS, or ABOUT" },
+        { error: "Type must be HOMEPAGE, SERVICE, NEWS, ABOUT, or CONTACT" },
         { status: 400 }
       );
     }
@@ -197,10 +217,12 @@ export async function PUT(
         ...(type && { type }),
         link: link !== undefined ? link : undefined,
         imageId: imageId !== undefined ? imageId : undefined,
+        imageEnId: imageEnId !== undefined ? imageEnId : undefined,
         status: status || undefined,
       },
       include: {
         image: true,
+        imageEn: true,
       },
     });
 
@@ -218,6 +240,9 @@ export async function PUT(
     }
     if (imageId !== existingBanner.imageId) {
       changes.imageId = { from: existingBanner.imageId, to: imageId };
+    }
+    if (imageEnId !== existingBanner.imageEnId) {
+      changes.imageEnId = { from: existingBanner.imageEnId, to: imageEnId };
     }
 
     await Logger.logCRUD({

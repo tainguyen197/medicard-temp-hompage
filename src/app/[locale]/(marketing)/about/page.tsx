@@ -42,12 +42,17 @@ const CertificateItem = ({
   </div>
 );
 
-export default async function AboutPage() {
+export default async function AboutPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
   const messages = await getMessages();
   const t = messages.about;
 
   // Fetch about banner data
-  const aboutBanner = await getBannerDataByType(BANNER_TYPES.ABOUT);
+  const aboutBanner = await getBannerDataByType(BANNER_TYPES.ABOUT, locale);
   const heroImage = aboutBanner.imageUrl || DEFAULT_HERO_IMAGE;
   
   // Fetch appointment link

@@ -104,6 +104,7 @@ model Media {
   createdAt         DateTime    @default(now())
   uploadedById      String?
   bannerImage       Banner?     @relation("BannerImage")
+  bannerImageEn     Banner?     @relation("BannerImageEn")
   uploadedBy        User?       @relation(fields: [uploadedById], references: [id])
   newsImageEn       News?       @relation("NewsFeatureImageEn")
   newsImage         News?       @relation("NewsFeatureImage")
@@ -136,10 +137,12 @@ model Banner {
   type      String   @unique
   link      String?
   imageId   String?  @unique
+  imageEnId String?  @unique
   status    String   @default("ACTIVE")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   image     Media?   @relation("BannerImage", fields: [imageId], references: [id])
+  imageEn   Media?   @relation("BannerImageEn", fields: [imageEnId], references: [id])
 }
 
 model AuditLog {

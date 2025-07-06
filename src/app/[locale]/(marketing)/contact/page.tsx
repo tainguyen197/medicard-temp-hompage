@@ -1,9 +1,15 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getMessages } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { getContactData, fallbackContactData, getContactEmail, getAppointmentLink } from "@/lib/contact";
+import {
+  getBannerDataByType,
+  BANNER_TYPES,
+  DEFAULT_HERO_IMAGE,
+} from "@/lib/banner-utils";
 
 export const generateStaticParams = async () => {
   return [{ locale: "en" }, { locale: "vi" }];
@@ -20,6 +26,10 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
   const contactData = await getContactData();
   const contactEmail = await getContactEmail();
   const appointmentLink = await getAppointmentLink();
+
+  // Fetch contact banner data
+  const contactBanner = await getBannerDataByType(BANNER_TYPES.CONTACT, locale); // Using CONTACT type for contact page
+  const heroImage = contactBanner.imageUrl || DEFAULT_HERO_IMAGE;
 
   // Use database data if available, otherwise fall back to hardcoded values
   const contact = {
@@ -57,6 +67,16 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
     ));
   };
 
+  const imageElement = (
+    <Image
+      src={heroImage}
+      alt="Contact Hero"
+      fill
+      className="object-cover"
+      priority
+    />
+  );
+
   return (
     <div className="pt-20">
       {/* Main Contact Section */}
@@ -68,7 +88,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
               <div className="md:w-1/2">
                 <div className="relative h-[400px] md:h-[500px] w-full rounded-lg overflow-hidden">
                   <Image
-                    src="/images/contact-us.jpg"
+                    src={heroImage}
                     alt="Healthcare Therapy Center"
                     fill
                     className="object-cover"

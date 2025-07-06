@@ -24,11 +24,12 @@ export default async function BlogPage({
   searchParams: Promise<{ page?: string }>;
   params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
   const messages = await getMessages();
   const t = messages.news;
 
   // Fetch news banner data
-  const newsBanner = await getBannerDataByType(BANNER_TYPES.NEWS);
+  const newsBanner = await getBannerDataByType(BANNER_TYPES.NEWS, locale);
   const heroImage = newsBanner.imageUrl || DEFAULT_HERO_IMAGE;
 
   const imageElement = (
