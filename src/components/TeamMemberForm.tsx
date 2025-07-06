@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeftIcon, ImageIcon, XIcon } from "lucide-react";
 import Link from "next/link";
 import { ROUTES } from "@/lib/router";
+import { toast } from "sonner";
 
 interface TeamMemberFormData {
   name: string;
@@ -184,13 +185,15 @@ export default function TeamMemberForm({
       });
 
       if (!response.ok) {
-        throw new Error("Failed to save team member");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Faile 123d to save team member");
       }
 
       router.push(ROUTES.ADMIN_TEAM);
     } catch (error) {
+      console.log('error', error);
       console.error("Error saving team member:", error);
-      alert("Failed to save team member. Please try again.");
+      toast.error(error instanceof Error ? error.message : "Failed to save team member");
     } finally {
       setIsSubmitting(false);
     }

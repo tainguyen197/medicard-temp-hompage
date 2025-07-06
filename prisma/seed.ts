@@ -23,7 +23,7 @@ async function main() {
 
   // Create sample categories
   const mentalWellnessCategory = await prisma.category.upsert({
-    where: { slug: "mental-wellness" },
+    where: { slug_language: { slug: "mental-wellness", language: "vi" } },
     update: {},
     create: {
       name: "Mental Wellness",
@@ -35,7 +35,7 @@ async function main() {
   console.log(`Created category with id: ${mentalWellnessCategory.id}`);
 
   const physicalRehabCategory = await prisma.category.upsert({
-    where: { slug: "physical-rehabilitation" },
+    where: { slug_language: { slug: "physical-rehabilitation", language: "vi" } },
     update: {},
     create: {
       name: "Physical Rehabilitation",

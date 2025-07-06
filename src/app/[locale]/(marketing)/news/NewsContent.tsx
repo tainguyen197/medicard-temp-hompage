@@ -39,71 +39,14 @@ export async function NewsDataComponent({
   const currentPage = Number(page);
   const postsPerPage = 10;
 
-  let newsItems: News[] = [];
-  let totalNews = 0;
-
-  try {
-    // Fetch posts from API
-    console.log("Fetching news from API...");
-
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/news?page=${currentPage}&limit=${postsPerPage}&status=PUBLISHED`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      next: { revalidate: 300 }, // Cache for 5 minutes
-    });
-
-    if (response.ok) {
-      const data: NewsResponse = await response.json();
-      totalNews = data.meta?.total || 0;
-      
-      // Convert API results with localized content
-      newsItems = (data.news || []).map((newsItem: News) => {
-        const localizedContent = getLocalizedContent(newsItem, locale);
-        return {
-          ...newsItem,
-          title: localizedContent.title,
-          description: localizedContent.description,
-          shortDescription: localizedContent.shortDescription,
-          featuredImage: localizedContent.featuredImage,
-          createdAt: newsItem.createdAt,
-          updatedAt: newsItem.updatedAt,
-        };
-      });
-
-      console.log(`Found ${newsItems.length} news items on page ${currentPage}`);
-
-      if (newsItems.length > 0) {
-        console.log("First news title:", newsItems[0]?.title);
-        console.log("First news status:", newsItems[0]?.status);
-      }
-    }
-  } catch (error) {
-    console.error("Failed to fetch news:", error);
-    newsItems = [];
-  }
-
-  // If no news from database, show a message or fallback
-  if (newsItems.length === 0) {
-    console.log("No news found, showing empty state");
-    return (
-      <section className="container mx-auto px-4 mb-16 md:mb-20 max-w-[1040px] text-center py-20">
-        <h2 className="text-2xl text-gray-600 mb-4">{t.emptyState.title}</h2>
-        <p className="text-gray-500">{t.emptyState.description}</p>
-      </section>
-    );
-  }
-
-  console.log("Rendering news page with content");
-
-  // Fetch trending posts (featured posts)
+  // 1. Fetch trending (pinned) news
   let trendingNews: News[] = [];
   try {
-    const featuredResponse = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/news/featured`, {
+    const featuredResponse = await fetch(`${process.env.NEXTAUTH_URL}/api/news/featured`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       next: { revalidate: 300 },
     });
-
     if (featuredResponse.ok) {
       const featuredData = await featuredResponse.json();
       trendingNews = (featuredData.posts || []).map((newsItem: any) => {
@@ -118,12 +61,53 @@ export async function NewsDataComponent({
           updatedAt: newsItem.updatedAt,
         } as News;
       });
-
-      console.log(`Found ${trendingNews.length} featured news items`);
     }
   } catch (error) {
     console.error("Failed to fetch featured news:", error);
   }
+
+  // 2. Fetch non-pinned news with pagination
+  let newsItems: News[] = [];
+  let totalNews = 0;
+  try {
+    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/news?page=${currentPage}&limit=${postsPerPage}&status=PUBLISHED&pin=false`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      next: { revalidate: 300 },
+    });
+
+    if (response.ok) {
+      const data: NewsResponse = await response.json();
+      totalNews = data.meta?.total || 0;
+      newsItems = (data.news || []).map((newsItem: News) => {
+        const localizedContent = getLocalizedContent(newsItem, locale);
+        return {
+          ...newsItem,
+          title: localizedContent.title,
+          description: localizedContent.description,
+          shortDescription: localizedContent.shortDescription,
+          featuredImage: localizedContent.featuredImage,
+          createdAt: newsItem.createdAt,
+          updatedAt: newsItem.updatedAt,
+        };
+      });
+    }
+  } catch (error) {
+    console.error("Failed to fetch non-pinned news:", error);
+    newsItems = [];
+  }
+
+  // If no non-pinned news from database, show a message or fallback
+  if (newsItems.length === 0) {
+    return (
+      <section className="container mx-auto px-4 mb-16 md:mb-20 max-w-[1040px] text-center py-20">
+        <h2 className="text-2xl text-gray-600 mb-4">{t.emptyState.title}</h2>
+        <p className="text-gray-500">{t.emptyState.description}</p>
+      </section>
+    );
+  }
+
+  console.log("Rendering news page with content");
 
   // Filter newsItems to exclude any items that are present in trendingNews
   newsItems = newsItems.filter(

@@ -65,7 +65,7 @@ export default async function AdminLayout({
       label: "Doctors",
       href: ROUTES.ADMIN_TEAM,
       icon: <Users className="h-5 w-5" />,
-      roles: ["SUPER_ADMIN", "ADMIN", "EDITOR"],
+      roles: ["SUPER_ADMIN", "ADMIN"],
     },
     {
       label: "Banners",

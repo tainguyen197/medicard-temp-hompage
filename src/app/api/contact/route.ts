@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if user has permission (ADMIN or EDITOR)
-    if (!["ADMIN", "EDITOR", "SUPER_ADMIN"].includes(session.user.role)) {
+    if (!["ADMIN", "SUPER_ADMIN"].includes(session.user.role)) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

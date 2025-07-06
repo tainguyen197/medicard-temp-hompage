@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
     const session = await getServerSession(authOptions);
     if (
       !session?.user ||
-      !["ADMIN", "EDITOR", "SUPER_ADMIN"].includes(session.user.role)
+      !["ADMIN", "SUPER_ADMIN"].includes(session.user.role)
     ) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
@@ -160,6 +160,16 @@ export async function POST(request: NextRequest) {
           { status: 500 }
         );
       }
+    }
+
+    // Role-based status change restriction
+    if (
+      status === "ACTIVE" && session.user.role === "EDITOR"
+    ) {
+      return NextResponse.json(
+        { error: "EDITOR is not allowed to set status to ACTIVE" },
+        { status: 403 }
+      );
     }
 
     const teamMember = await prisma.teamMember.create({

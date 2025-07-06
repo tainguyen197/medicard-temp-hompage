@@ -201,6 +201,16 @@ export async function PUT(
       }
     }
 
+    // Role-based status change restriction
+    if (
+      status === "ACTIVE" && session.user.role === "EDITOR"
+    ) {
+      return NextResponse.json(
+        { error: "EDITOR is not allowed to set status to ACTIVE" },
+        { status: 403 }
+      );
+    }
+
     const teamMember = await prisma.teamMember.update({
       where: { id },
       data: {
