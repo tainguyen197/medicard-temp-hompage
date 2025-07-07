@@ -12,17 +12,24 @@ const getLocalizedContent = (news: any, locale: string) => {
   const isEnglish = locale === "en";
   return {
     title: isEnglish ? news.titleEn || news.title : news.title,
-    description: isEnglish ? news.descriptionEn || news.description : news.description,
-    shortDescription: isEnglish ? news.shortDescriptionEn || news.shortDescription : news.shortDescription,
+    description: isEnglish
+      ? news.descriptionEn || news.description
+      : news.description,
+    shortDescription: isEnglish
+      ? news.shortDescriptionEn || news.shortDescription
+      : news.shortDescription,
     category: isEnglish && news.categoryEn ? news.categoryEn : news.category,
-    categoryId: isEnglish && news.categoryEnId ? news.categoryEnId : news.categoryId,
+    categoryId:
+      isEnglish && news.categoryEnId ? news.categoryEnId : news.categoryId,
   };
 };
 
 // Helper function to get localized image
 const getLocalizedImage = (news: any, locale: string) => {
   const isEnglish = locale === "en";
-  return isEnglish && news.featureImageEn ? news.featureImageEn : news.featureImage;
+  return isEnglish && news.featureImageEn
+    ? news.featureImageEn
+    : news.featureImage;
 };
 
 // Category item type definition
@@ -45,17 +52,20 @@ export default async function NewsDetailContent({
   const t = await getTranslations({ locale, namespace: "newsDetail" });
 
   try {
-    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/news/by-slug/${slug}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      next: { revalidate: 300 }, // Cache for 5 minutes
-    });
-    
+    const response = await fetch(
+      `${process.env.NEXTAUTH_URL}/api/news/by-slug/${slug}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        next: { revalidate: 300 }, // Cache for 5 minutes
+      }
+    );
+
     if (!response.ok) {
       console.log(`News not found: ${slug}`);
       notFound();
     }
-    
+
     const news = await response.json();
     const localizedContent = getLocalizedContent(news, locale);
     const localizedImage = getLocalizedImage(news, locale);
@@ -118,20 +128,6 @@ export default async function NewsDetailContent({
           </div>
         </div>
 
-        {/* Featured Image */}
-        {localizedImage && (
-          <div className="container mx-auto px-4 mb-8 max-w-7xl">
-            <div className="relative w-full h-[300px] md:h-[500px] rounded-lg overflow-hidden">
-              <Image
-                src={localizedImage.url}
-                alt={localizedContent.title}
-                fill
-                className="object-cover"
-              />
-            </div>
-          </div>
-        )}
-
         {/* Article Content */}
         <div className="container mx-auto px-4 mb-16 max-w-7xl">
           <div className="mx-auto">
@@ -156,7 +152,11 @@ export default async function NewsDetailContent({
               {t("relatedPosts.title")}
             </h2>
             {localizedContent.categoryId ? (
-              <RelatedPostsList categoryId={localizedContent.categoryId} currentNewsId={news.id} locale={locale} />
+              <RelatedPostsList
+                categoryId={localizedContent.categoryId}
+                currentNewsId={news.id}
+                locale={locale}
+              />
             ) : (
               <div className="text-gray-500">
                 {t("relatedPosts.comingSoon") || "No related posts found."}
