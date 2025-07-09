@@ -63,16 +63,17 @@ interface ServicesGallerySectionProps {
   appointmentLink?: string;
 }
 
-const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({ appointmentLink }) => {
+const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
+  appointmentLink,
+}) => {
   const locale = useLocale();
   const t = useTranslations("services.gallery");
   const [services, setServices] = useState<ServiceItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-
   // Get fallback services from our data file
-  const fallbackServices: ServiceItem[] = []
+  const fallbackServices: ServiceItem[] = [];
 
   // Fetch services from API
   useEffect(() => {
@@ -211,9 +212,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({ appoint
   }
 
   if (services.length === 0) {
-    return (
-     <></>
-    );
+    return <></>;
   }
 
   return (
@@ -243,8 +242,8 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({ appoint
               }`}
             >
               <Image
-                src={activeService.image}
-                alt={activeService.title}
+                src={activeService?.image}
+                alt={activeService?.title}
                 fill
                 className="object-cover"
                 priority
@@ -295,7 +294,9 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({ appoint
                   </svg>
                 </a>
                 <a
-                  href={appointmentLink || "https://forms.gle/GJETkvXcnZ7hZwBr8"}
+                  href={
+                    appointmentLink || "https://forms.gle/GJETkvXcnZ7hZwBr8"
+                  }
                   target="_blank"
                   className="inline-flex items-center px-4 py-2 md:px-7 md:py-3 border border-[#B1873F] hover:bg-amber-600/10 transition-colors rounded-xl md:rounded-full text-white font-semibold md:font-medium text-xs md:text-[16px] h-10 md:h-12"
                 >
@@ -339,7 +340,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({ appoint
               >
                 <div className="relative aspect-[265/185] max-h-[216px]">
                   <Image
-                    src={service.image}
+                    src={service?.image}
                     alt={service.title}
                     fill
                     className="object-cover"
