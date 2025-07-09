@@ -127,13 +127,6 @@ export async function POST(request: Request) {
     const body = await request.json();
     const validatedData = newsSchema.parse(body);
 
-    // Check if user has permission to publish content
-    if (validatedData.status === "PUBLISHED" && !canPublishContent(session.user.role)) {
-      return NextResponse.json(
-        { error: "You do not have permission to publish content. Only Admins and Super Admins can publish." },
-        { status: 403 }
-      );
-    }
 
     // Generate slug if not provided
     const slug = validatedData.slug || createSlug(validatedData.title);

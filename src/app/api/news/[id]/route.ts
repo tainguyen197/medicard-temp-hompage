@@ -85,6 +85,8 @@ export async function PUT(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+
+  try {
   const session = await getServerSession(authOptions);
 
   if (!session?.user) {
@@ -95,14 +97,6 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
     const validatedData = newsUpdateSchema.parse(body);
-
-    // Check if user has permission to publish content
-    if (validatedData.status === "PUBLISHED" && !canPublishContent(session.user.role)) {
-      return NextResponse.json(
-        { error: "You do not have permission to publish content. Only Admins and Super Admins can publish." },
-        { status: 403 }
-      );
-    }
 
     // Get existing news for comparison
     const existingNews = await prisma.news.findUnique({
@@ -274,6 +268,13 @@ export async function PUT(
       { status: 500 }
     );
   }
+} catch (error) {
+  console.error("Error updating news article:", error);
+  return NextResponse.json(
+    { error: "Error updating news article" },
+    { status: 500 }
+  );
+}
 }
 
 // DELETE /api/news/[id] - Delete a news article
