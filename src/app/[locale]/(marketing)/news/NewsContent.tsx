@@ -6,7 +6,7 @@ import { getMessages } from "next-intl/server";
 import { getAppointmentLink } from "@/lib/contact";
 
 // Default image fallback if no featured image
-const DEFAULT_IMAGE = "/images/news/news-image-1.jpg";
+const DEFAULT_IMAGE = "/images/default_news_ai.jpeg";
 
 const getLocalizedContent = (news: any, locale: string) => {
   const isEnglish = locale === "en";

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import DeleteServiceModal from "./DeleteServiceModal";
 import { ROUTES } from "@/lib/router";
+import Image from "next/image";
 
 interface Service {
   id: string;
@@ -34,6 +35,8 @@ interface ServiceTableRowProps {
   onServiceDeleted?: () => void;
   onStatusChange?: (serviceId: string, newStatus: string) => Promise<void>;
 }
+
+const DEFAULT_SERVICE_IMAGE = "/images/default_image_ai.png";
 
 export default function ServiceTableRow({
   service,
@@ -164,19 +167,14 @@ export default function ServiceTableRow({
     <tr key={service.id} className="hover:bg-gray-50">
       <td className="px-6 py-4 whitespace-nowrap align-middle">
         <div className="flex items-center justify-center">
-          {service.featureImage ? (
-            <div className="w-16 aspect-[270/200] relative rounded-md overflow-hidden">
-              <img
-                src={service.featureImage.url}
+          <div className="w-16 aspect-[270/200] relative rounded-md overflow-hidden">
+            <Image
+              src={service.featureImage?.url || DEFAULT_SERVICE_IMAGE}
                 alt={service.title}
                 className="w-full h-full object-cover"
+                fill
               />
             </div>
-          ) : (
-            <div className="w-16 aspect-[270/200] bg-gray-100 rounded-md flex items-center justify-center text-xs text-gray-500">
-              No image
-            </div>
-          )}
         </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap align-middle">

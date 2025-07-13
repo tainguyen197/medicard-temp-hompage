@@ -83,7 +83,7 @@ const BlogSection = async ({ locale = "vi" }: { locale?: string }) => {
                 : newsItem.shortDescription || (newsItem.description ? `${newsItem.description.substring(0, 150)}...` : '');
               const image = locale === "en" && newsItem.featureImageEn
                 ? newsItem.featureImageEn.url
-                : newsItem.featureImage?.url || "/images/news/news-image-1.jpg";
+                : newsItem.featureImage?.url || "/images/default_news_ai.jpeg";
                 
               return (
                 <BlogPost

@@ -1,7 +1,6 @@
 import React from "react";
 import ServicesDetailSectionSkeleton from "@/components/ServicesDetailSectionSkeleton";
 import TestimonialSectionSkeleton from "@/components/TestimonialSectionSkeleton";
-import Image from "next/image";
 
 export default function AboutLoading() {
   return (
@@ -9,17 +8,11 @@ export default function AboutLoading() {
       {/* Hero Section Skeleton */}
       <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
         <div className="absolute inset-0">
-          <Image
-            src="/images/hero-section.png"
-            alt="Hero Section"
-            fill
-            className="object-cover"
-            priority
-          />
+          <div className="w-full h-full bg-gray-200 animate-pulse rounded-lg"></div>
         </div>
       </section>
 
-      {/* Healthcare Center Introduction Section Skeleton */}
+      {/* Healthcare Center Introdu ction Section Skeleton */}
       <section className="pt-10 md:pt-16">
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="text-center">
