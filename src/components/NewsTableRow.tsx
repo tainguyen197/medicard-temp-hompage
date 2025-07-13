@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import DeleteNewsModal from "./DeleteNewsModal";
 import { ROUTES } from "@/lib/router";
+import Image from "next/image";
 
 interface News {
   id: string;
@@ -35,6 +36,8 @@ interface NewsTableRowProps {
   onNewsDeleted?: () => void;
   onStatusChange?: (newsId: string, newStatus: string) => Promise<void>;
 }
+
+const DEFAULT_NEWS_IMAGE = "/images/default_image_ai.png";
 
 export default function NewsTableRow({
   news,
@@ -165,19 +168,14 @@ export default function NewsTableRow({
     <tr key={news.id} className="hover:bg-gray-50">
       <td className="px-6 py-4 whitespace-nowrap align-middle">
         <div className="flex items-center justify-center">
-          {news.featureImage ? (
             <div className="w-16 aspect-[270/200] relative rounded-md overflow-hidden">
-              <img
-                src={news.featureImage.url}
+              <Image
+                src={news?.featureImage?.url || DEFAULT_NEWS_IMAGE}
                 alt={news.title}
                 className="w-full h-full object-cover"
-              />
-            </div>
-          ) : (
-            <div className="w-16 aspect-[270/200] bg-gray-100 rounded-md flex items-center justify-center text-xs text-gray-500">
-              No image
-            </div>
-          )}
+                fill
+            />
+          </div>
         </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap align-middle">

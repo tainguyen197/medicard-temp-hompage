@@ -108,7 +108,7 @@ export default function ServicesDetailSection({
                 service,
                 locale
               );
-              const fallbackImages = ["/images/no-image.png"];
+              const fallbackImages = ["/images/default_image_ai.png"];
 
               return (
                 <div key={service.id} className="relative mb-10 last:mb-0">

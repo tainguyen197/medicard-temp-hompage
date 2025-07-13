@@ -50,6 +50,8 @@ const getLocalizedServiceContent = (service: any, locale: string) => {
   };
 };
 
+const DEFAULT_SERVICE_IMAGE = "/images/default_image_ai.png";
+
 export default function ServicesContent({
   services,
   viewDetailsText,
@@ -67,7 +69,7 @@ export default function ServicesContent({
                 <div className="flex flex-col md:flex-row md:gap-x-10 md:pb-10 md:border-b border-[#E2E2E2]">
                   <div className="h-52 aspect-270/200 relative rounded-2xl overflow-hidden">
                     <Image
-                      src={service.image}
+                      src={service.image || DEFAULT_SERVICE_IMAGE}
                       alt={service.title}
                       className="object-cover w-full"
                       fill
@@ -168,49 +170,9 @@ export async function ServicesDataComponent({
           id: service.slug || service.id, // Use slug for URL, fallback to id
           title: service.title,
           shortDescription: service.shortDescription || "",
-          image: service.featureImage?.url || "/images/service_1.png", // Fallback to existing service image
+          image: service.featureImage?.url || DEFAULT_SERVICE_IMAGE, // Fallback to existing service image
         }))
       : [
-          // Fallback to hardcoded data if no services from database
-          {
-            id: "ortho",
-            title: t.individual.traditionalMedicine.title,
-            shortDescription:
-              t.individual.traditionalMedicine.subtitle +
-              ": " +
-              t.individual.traditionalMedicine.intro2.substring(0, 200) +
-              "...",
-            image: "/images/service_1.png",
-          },
-          {
-            id: "rehab",
-            title: t.individual.physicalTherapy.title,
-            shortDescription:
-              t.individual.physicalTherapy.subtitle +
-              ". " +
-              t.individual.physicalTherapy.intro2.substring(0, 150) +
-              "...",
-            image: "/images/service_2.png",
-          },
-          {
-            id: "func",
-            title: t.individual.functionalRehabilitation.title,
-            shortDescription:
-              t.individual.functionalRehabilitation.treatment.spineDisorders +
-              "; " +
-              t.individual.functionalRehabilitation.treatment.jointDisorders.substring(
-                0,
-                100
-              ) +
-              "...",
-            image: "/images/service_3.png",
-          },
-          {
-            id: "transport",
-            title: t.individual.transport.title,
-            shortDescription: t.individual.transport.subtitle,
-            image: "/images/service_4.png",
-          },
         ];
 
   console.log(

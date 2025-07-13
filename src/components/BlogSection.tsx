@@ -19,7 +19,7 @@ const BlogPost = ({ image, title, description, slug, id }: BlogPostProps) => (
     className="group relative rounded-lg overflow-hidden max-w-[330px] mx-auto"
   >
     <div className="bg-white group grid grid-cols-2 gap-4 md:block">
-      <div className="relative md:aspect-square max-h-[330px] rounded-2xl overflow-hidden">
+      <div className="relative md:aspect-square h-[330px] rounded-2xl overflow-hidden">
         <Image
           src={image}
           alt={title}

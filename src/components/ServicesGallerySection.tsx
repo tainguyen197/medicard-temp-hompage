@@ -45,16 +45,16 @@ const convertServiceToServiceItem = (
 
   return {
     id: service.slug || service.id,
-    title: localizedContent.title || "Service Title",
+    title: localizedContent.title,
     description:
       localizedContent.description ||
       localizedContent.shortDescription ||
-      "Service description",
-    details: localizedContent.shortDescription || "Service details",
+      "",
+    details: localizedContent.shortDescription || "",
     image:
       service.featureImage?.url ||
       service.featureImageEn?.url ||
-      "/images/service_1.png",
+      "/images/default_image_ai.png",
     link: `/services/${service.slug || service.id}`,
   };
 };
@@ -118,7 +118,13 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
 
   // Use fallback services while loading or if no services available
   const displayServices = services.length > 0 ? services : fallbackServices;
-  const activeService = displayServices[currentIndex] || fallbackServices[0];
+  const activeService = displayServices[currentIndex] || {
+    id: "",
+    title: "",
+    description: "",
+    details: "",
+    image: "",
+  };
 
   const thumbnailsRef = useRef<HTMLDivElement>(null);
   const thumbnailRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -316,7 +322,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
                   </svg>
                 </a>
               </div>
-            </div>
+            </div>  
           </div>
         </div>
 
