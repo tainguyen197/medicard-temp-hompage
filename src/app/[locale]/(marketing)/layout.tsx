@@ -25,6 +25,7 @@ export const metadata: Metadata = {
   title: "Healthcare Therapy Center | Giải pháp chăm sóc sức khoẻ toàn diện",
   description:
     "Healthcare Therapy Center cung cấp dịch vụ Y Học Cổ Truyền kết hợp Phục Hồi Chức Năng theo hướng hiện đại, an toàn và khoa học.",
+  
 };
 
 export const generateStaticParams = async () => {
@@ -42,8 +43,15 @@ export default async function RootLayout({
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
+  
   return (
     <html lang={locale} className="scroll-smooth">
+      <head>
+        <meta name="apple-mobile-web-app-title" content="HTC" />
+        <link rel="icon" href="/icon1.png" type="image/png" media="(prefers-color-scheme: light)" />
+        <link rel="icon" href="/icon0.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)" />
+        <link rel="icon" href="/icon1.png" type="image/png" />
+      </head>
       <body
         className={`${manrope.variable} ${cormorant.variable} font-sans antialiased`}
       >

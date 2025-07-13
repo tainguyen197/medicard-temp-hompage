@@ -37,7 +37,7 @@ interface NewsTableRowProps {
   onStatusChange?: (newsId: string, newStatus: string) => Promise<void>;
 }
 
-const DEFAULT_NEWS_IMAGE = "/images/default_image_ai.png";
+const DEFAULT_NEWS_IMAGE = "/images/default_news_ai.jpeg";
 
 export default function NewsTableRow({
   news,
@@ -168,7 +168,7 @@ export default function NewsTableRow({
     <tr key={news.id} className="hover:bg-gray-50">
       <td className="px-6 py-4 whitespace-nowrap align-middle">
         <div className="flex items-center justify-center">
-            <div className="w-16 aspect-[270/200] relative rounded-md overflow-hidden">
+            <div className="w-16 aspect-[200/200] relative rounded-md overflow-hidden">
               <Image
                 src={news?.featureImage?.url || DEFAULT_NEWS_IMAGE}
                 alt={news.title}

@@ -65,6 +65,6 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     // Skip _next internal requests, but match everything else
-    "/((?!_next/static|_next/image|_next/data|favicon\\.ico|images).*)",
+    "/((?!_next/static|_next/image|_next/data|favicon\\.ico|icon0\\.svg|icon1\\.png|images).*)",
   ],
 };
