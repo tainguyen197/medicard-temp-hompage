@@ -69,6 +69,15 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
   const locale = useLocale();
   const t = useTranslations("services.gallery");
   const [services, setServices] = useState<ServiceItem[]>([]);
+  const [activeService, setActiveService] = useState<ServiceItem>({ 
+    id: "",
+    title: "",
+    description: "",
+    details: "",
+    image: "",
+    link: "",
+  });
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -93,6 +102,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
             .filter((service) => service.showOnHomepage)
             .map((service) => convertServiceToServiceItem(service, locale));
           setServices(convertedServices);
+          setActiveService(convertedServices[0]);
         } else {
           // Use fallback data if no services found
           setServices(fallbackServices);
@@ -118,16 +128,15 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
 
   // Use fallback services while loading or if no services available
   const displayServices = services.length > 0 ? services : fallbackServices;
-  const activeService = displayServices[currentIndex] || {
-    id: "",
-    title: "",
-    description: "",
-    details: "",
-    image: "",
-  };
 
   const thumbnailsRef = useRef<HTMLDivElement>(null);
   const thumbnailRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    if (services.length > 0) {
+      setActiveService(services[currentIndex]);
+    }
+  }, [currentIndex, services]);
 
   // Setup thumbnail refs array
   useEffect(() => {
