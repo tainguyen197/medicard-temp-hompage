@@ -5,14 +5,15 @@ import { prisma } from "@/lib/prisma";
 import { canManageContent } from "@/lib/utils";
 
 interface Params {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 // PATCH /api/equipment/[id]/status - Update equipment status
 export async function PATCH(req: NextRequest, { params }: Params) {
   try {
+    const { id } = await params;
     // Check authentication and permissions
     const session = await getServerSession(authOptions);
     if (!session?.user || !canManageContent(session.user.role)) {
@@ -35,7 +36,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 
     // Check if equipment exists
     const existingEquipment = await prisma.equipment.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!existingEquipment) {
@@ -47,7 +48,7 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 
     // Update equipment status
     const updatedEquipment = await prisma.equipment.update({
-      where: { id: params.id },
+      where: { id },
       data: { status },
     });
 
