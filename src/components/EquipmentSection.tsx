@@ -18,6 +18,24 @@ interface EquipmentSectionProps {
       image: string;
     }>;
   };
+  locale?: string;
+}
+
+interface ApiEquipment {
+  id: string;
+  name: string;
+  nameEn?: string;
+  description: string;
+  descriptionEn?: string;
+  status: string;
+  showOnHomepage: boolean;
+  order: number;
+  image?: {
+    url: string;
+  };
+  imageEn?: {
+    url: string;
+  };
 }
 
 interface EquipmentItemType {
@@ -107,16 +125,50 @@ const EquipmentItem: React.FC<EquipmentItemProps> = ({
   );
 };
 
-// Removed PrevArrow and NextArrow components
+const EquipmentSection = ({ t, locale = "vi" }: EquipmentSectionProps) => {
+  const [apiEquipment, setApiEquipment] = useState<ApiEquipment[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-const EquipmentSection = ({ t }: EquipmentSectionProps) => {
-  const equipmentsData: EquipmentItemType[] = t.items.map((item, index) => ({
-    id: `equip${index + 1}`,
-    image: item.image,
-    title: "EQUIPMENT",
-    subtitle: item.name,
-    description: item.description,
-  }));
+  useEffect(() => {
+    const fetchEquipment = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch("/api/equipment/homepage");
+        
+        if (!response.ok) {
+          throw new Error("Failed to fetch equipment data");
+        }
+        
+        const data = await response.json();
+        setApiEquipment(data);
+      } catch (err) {
+        console.error("Error fetching equipment:", err);
+        setError("Failed to load equipment data");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchEquipment();
+  }, []);
+
+  // Map API data to component format or use fallback data
+  const equipmentsData: EquipmentItemType[] = apiEquipment.length > 0
+    ? apiEquipment.map((item) => ({
+        id: item.id,
+        image: (locale === "en" && item.imageEn?.url) ? item.imageEn.url : (item.image?.url || "/images/equipment_1.png"),
+        title: "EQUIPMENT",
+        subtitle: (locale === "en" && item.nameEn) ? item.nameEn : item.name,
+        description: (locale === "en" && item.descriptionEn) ? item.descriptionEn : item.description,
+      }))
+    : t.items.map((item, index) => ({
+        id: `equip${index + 1}`,
+        image: item.image,
+        title: "EQUIPMENT",
+        subtitle: item.name,
+        description: item.description,
+      }));
 
   const [infoVisibility, setInfoVisibility] = useState<{
     [key: string]: boolean;
@@ -274,6 +326,40 @@ const EquipmentSection = ({ t }: EquipmentSectionProps) => {
           </div>
           <div className="text-center py-8 text-gray-500">
             Loading equipment...
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <section className="py-10 md:py-16 bg-white overflow-hidden">
+        <div className="container mx-auto px-4 xl:px-16 2xl:px-32 max-w-7xl">
+          <div className="text-center mb-8 md:mb-16">
+            <h2 className="text-xl md:text-5xl font-cormorant font-bold text-gray-900 uppercase mb-4">
+              {t.title}
+            </h2>
+            <p className="text-xs md:text-xl text-gray-700">{t.subtitle}</p>
+          </div>
+          <div className="flex justify-center items-center h-[420px]">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error && numEquipments === 0) {
+    return (
+      <section className="py-10 md:py-16 bg-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-xl md:text-5xl font-cormorant font-bold text-gray-900 uppercase mb-4">
+            {t.title}
+          </h2>
+          <p className="text-xs md:text-xl text-gray-700 mb-8">{t.subtitle}</p>
+          <div className="py-8 text-gray-500">
+            {error}
           </div>
         </div>
       </section>

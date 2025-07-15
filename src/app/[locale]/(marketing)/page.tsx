@@ -45,7 +45,7 @@ export default async function Home({
       <TreatmentMethodsSectionWithAnimation t={t.treatmentMethods} />
       <TeamSectionWithAnimation />
       <FacilitySectionWithAnimation t={t.facility} />
-      <EquipmentSectionWithAnimation t={t.equipment} />
+      <EquipmentSectionWithAnimation t={t.equipment} locale={locale} />
       <ProcessSectionWithAnimation t={t.process} />
       <BlogSectionWithAnimation locale={locale} />
       <ContactSectionWithAnimation t={t.contact} appointmentLink={appointmentLink} />
