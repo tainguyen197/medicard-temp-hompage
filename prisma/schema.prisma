@@ -65,6 +65,26 @@ model Service {
   @@index([showOnHomepage, createdAt])
 }
 
+model Equipment {
+  id                 String   @id @default(cuid())
+  name               String
+  nameEn             String?
+  description        String
+  descriptionEn      String?
+  status             String   @default("ACTIVE")
+  showOnHomepage     Boolean  @default(true)
+  order              Int      @default(0)
+  imageId            String?  @unique
+  imageEnId          String?  @unique
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  image              Media?   @relation("EquipmentImage", fields: [imageId], references: [id])
+  imageEn            Media?   @relation("EquipmentImageEn", fields: [imageEnId], references: [id])
+  
+  @@index([showOnHomepage])
+  @@index([order])
+}
+
 model News {
   id                 String    @id @default(cuid())
   slug               String    @unique
@@ -120,6 +140,8 @@ model Media {
   serviceImage      Service?    @relation("ServiceFeatureImage")
   teamMemberImageEn TeamMember? @relation("TeamMemberImageEn")
   teamMemberImage   TeamMember? @relation("TeamMemberImage")
+  equipmentImage    Equipment?  @relation("EquipmentImage")
+  equipmentImageEn  Equipment?  @relation("EquipmentImageEn")
 }
 
 model TeamMember {

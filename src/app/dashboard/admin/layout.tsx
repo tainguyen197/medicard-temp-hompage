@@ -11,6 +11,7 @@ import {
   Image,
   Settings,
   Menu,
+  Stethoscope,
 } from "lucide-react";
 
 import { authOptions } from "@/lib/auth";
@@ -65,6 +66,12 @@ export default async function AdminLayout({
       label: "Doctors",
       href: ROUTES.ADMIN_TEAM,
       icon: <Users className="h-5 w-5" />,
+      roles: ["SUPER_ADMIN", "ADMIN"],
+    },
+    {
+      label: "Equipment",
+      href: ROUTES.ADMIN_EQUIPMENT,
+      icon: <Stethoscope className="h-5 w-5" />,
       roles: ["SUPER_ADMIN", "ADMIN"],
     },
     {

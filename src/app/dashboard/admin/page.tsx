@@ -10,6 +10,7 @@ import {
   Activity,
   BarChart3,
   TrendingUp,
+  Stethoscope,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -20,6 +21,7 @@ interface DashboardStats {
   totalTeamMembers: number;
   totalMedia: number;
   totalBanners: number;
+  totalEquipment: number;
 }
 
 interface DashboardData {
@@ -144,6 +146,14 @@ export default function AdminDashboard() {
       href: ROUTES.ADMIN_TEAM
     },
     {
+      label: "Equipment",
+      value: stats.totalEquipment,
+      icon: Stethoscope,
+      color: "purple",
+      description: "Medical equipment items",
+      href: ROUTES.ADMIN_EQUIPMENT
+    },
+    {
       label: "Media Files",
       value: stats.totalMedia,
       icon: FileText,
@@ -257,6 +267,19 @@ export default function AdminDashboard() {
             <div>
               <div className="font-medium text-slate-900">Add Team Member</div>
               <div className="text-sm text-slate-600">Add a new doctor or staff member</div>
+            </div>
+          </Link>
+
+          <Link 
+            href={ROUTES.ADMIN_EQUIPMENT + "/new"}
+            className="flex items-center p-4 bg-cyan-50 rounded-xl hover:bg-cyan-100 transition-colors duration-200 group"
+          >
+            <div className="w-10 h-10 bg-cyan-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-cyan-200 transition-colors">
+              <Stethoscope className="w-5 h-5 text-cyan-600" />
+            </div>
+            <div>
+              <div className="font-medium text-slate-900">Add Equipment</div>
+              <div className="text-sm text-slate-600">Add new medical equipment</div>
             </div>
           </Link>
         </div>

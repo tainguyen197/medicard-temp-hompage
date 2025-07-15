@@ -72,7 +72,7 @@ export async function POST(request: Request) {
     //   },
     // });
 
-    return NextResponse.json({ url: fileUrl }, { status: 201 });
+    return NextResponse.json({ url: fileUrl, id: fileName }, { status: 201 });
   } catch (error) {
     console.error("Error uploading file:", error);
     return NextResponse.json(

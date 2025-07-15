@@ -99,6 +99,13 @@ export const adminRoutes: Record<string, AdminRoute> = {
     protected: true,
     adminOnly: true,
   },
+  equipment: {
+    name: "Equipment",
+    href: "/dashboard/admin/equipment",
+    description: "Quản lý thiết bị y tế",
+    protected: true,
+    adminOnly: true,
+  },
   banners: {
     name: "Banners",
     href: "/dashboard/admin/banners",
@@ -363,6 +370,7 @@ export const ROUTES = {
   ADMIN_NEWS: adminRoutes.news.href,
   ADMIN_SERVICES: adminRoutes.services.href,
   ADMIN_TEAM: adminRoutes.team.href,
+  ADMIN_EQUIPMENT: adminRoutes.equipment.href,
   ADMIN_BANNERS: adminRoutes.banners.href,
   ADMIN_CONTACT: adminRoutes.contact.href,
   ADMIN_MEDIA: adminRoutes.media.href,

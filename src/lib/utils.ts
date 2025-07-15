@@ -271,6 +271,10 @@ export function canPublishContent(userRole: string): boolean {
   return ["SUPER_ADMIN", "ADMIN", "EDITOR"].includes(userRole);
 }
 
+export function canManageContent(userRole: string): boolean {
+  return ["SUPER_ADMIN", "ADMIN"].includes(userRole);
+}
+
 export function canManageUsers(userRole: string): boolean {
   return userRole === "SUPER_ADMIN";
 }
