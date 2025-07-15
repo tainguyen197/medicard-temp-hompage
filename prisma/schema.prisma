@@ -67,7 +67,7 @@ model Service {
 
 model Equipment {
   id                 String   @id @default(cuid())
-  name               String
+  name               String   @unique
   nameEn             String?
   description        String
   descriptionEn      String?
