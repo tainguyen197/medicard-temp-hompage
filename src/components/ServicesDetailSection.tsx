@@ -154,7 +154,6 @@ export default function ServicesDetailSection({
                             className="text-md md:text-lg text-[#909090] leading-relaxed"
                             dangerouslySetInnerHTML={{
                               __html:
-                                localizedContent.description ||
                                 localizedContent.shortDescription ||
                                 "",
                             }}

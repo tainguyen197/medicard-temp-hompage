@@ -191,7 +191,13 @@ export default function EditServicePage({
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "Failed to update service");
+        const isArray = Array.isArray(error.error);
+        if (isArray) {
+          console.log(error.error[0].message);
+          throw new Error(error.error[0].message || "Failed to update service");
+        } else {
+          throw new Error(error.error || "Failed to update service");
+        }
       }
 
       toast.success("Service updated successfully!");

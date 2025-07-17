@@ -33,6 +33,7 @@ const getLocalizedServiceContent = (service: Service, locale: string) => {
       locale === "en" && service.shortDescriptionEn
         ? service.shortDescriptionEn
         : service.shortDescription,
+    details: locale === "en" && service.enKeywords ? service.enKeywords : service.keywords,
   };
 };
 
@@ -46,11 +47,8 @@ const convertServiceToServiceItem = (
   return {
     id: service.slug || service.id,
     title: localizedContent.title,
-    description:
-      localizedContent.description ||
-      localizedContent.shortDescription ||
-      "",
-    details: localizedContent.shortDescription || "",
+    description: localizedContent.shortDescription || "",
+    details: localizedContent.details || "",
     image:
       service.featureImage?.url ||
       service.featureImageEn?.url ||
@@ -129,6 +127,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
   // Use fallback services while loading or if no services available
   const displayServices = services.length > 0 ? services : fallbackServices;
 
+  console.log(services);
   const thumbnailsRef = useRef<HTMLDivElement>(null);
   const thumbnailRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -347,7 +346,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
                 key={service.id}
                 ref={setThumbnailRef(index)}
                 className={`cursor-pointer relative overflow-hidden rounded-3xl min-w-[180px] md:min-w-[265px] flex-shrink-0 transition-all duration-300 ${
-                  service.id === activeService.id
+                  service.id === activeService?.id
                     ? "border-2 border-amber-500"
                     : "opacity-75 hover:opacity-100"
                 }`}
