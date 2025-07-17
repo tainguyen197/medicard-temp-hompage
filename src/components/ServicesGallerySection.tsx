@@ -270,12 +270,12 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
           <div className="w-full lg:w-1/2 flex flex-col justify-end">
             <div>
               <h3 className="font-cormorant text-md md:text-[30px] font-bold mb-2 md:mb-5 text-white line-clamp-1 md:line-clamp-none">
-                {activeService.title}
+                {activeService?.title}
               </h3>
               <p
                 className="text-gray-300 mb-4 md:mb-10 text-sm md:text-md leading-relaxed line-clamp-5 md:line-clamp-none  min-h-[7.25rem]"
                 dangerouslySetInnerHTML={{
-                  __html: activeService.description,
+                  __html: activeService?.description,
                 }}
               />
             </div>
@@ -285,12 +285,12 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
                   {t("includes")}
                 </h4>
                 <p className="text-gray-300 text-sm md:text-md font-normal line-clamp-2 md:line-clamp-none min-h-[2.75rem]">
-                  {activeService.details}
+                  {activeService?.details}
                 </p>
               </div>
               <div className="flex flex-wrap gap-4">
                 <a
-                  href={activeService.link}
+                  href={activeService?.link}
                   className="inline-flex items-center px-4 py-2 md:px-7 md:py-3 bg-[#B1873F] hover:bg-amber-700 transition-colors rounded-xl md:rounded-full text-white font-semibold md:font-medium text-xs md:text-[16px] h-10 md:h-12"
                 >
                   {t("viewDetails")}
