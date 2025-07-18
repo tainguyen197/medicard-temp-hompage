@@ -1,11 +1,10 @@
-@import "tailwindcss";
+@layer base, theme, utilities;
 
-/* Direct CSS Reset */
-/* * {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-} */
+@import "taitrung-super-editor/styles.css";
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
 
 html,
 body {

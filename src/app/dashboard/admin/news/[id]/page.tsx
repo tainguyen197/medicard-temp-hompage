@@ -19,7 +19,6 @@ import { ROUTES } from "@/lib/router";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import { useNewsEditForm } from "@/hooks/useNewsEditForm";
 import { TextEditor } from "taitrung-super-editor";
-import "taitrung-super-editor/styles.css";
 
 export default function EditNewsPage({
   params,

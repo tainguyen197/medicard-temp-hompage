@@ -1,5 +1,6 @@
 "use client";
 
+import { ROUTES } from "@/lib/router";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -14,7 +15,10 @@ export function AdminNavigation({ navItems }: { navItems: NavItem[] }) {
   const pathname = usePathname();
 
   const isActive = (href: string) => {
-    return pathname === href || pathname.startsWith(`${href}/`);
+    return (
+      pathname === href ||
+      (pathname.startsWith(`${href}/`) && href !== ROUTES.ADMIN_DASHBOARD)
+    );
   };
 
   return (
@@ -29,11 +33,13 @@ export function AdminNavigation({ navItems }: { navItems: NavItem[] }) {
               : "text-slate-300 hover:bg-slate-800/50 hover:text-white"
           }`}
         >
-          <span className={`mr-3 transition-colors ${
-            isActive(item.href) 
-              ? "text-cyan-400" 
-              : "text-slate-400 group-hover:text-cyan-400"
-          }`}>
+          <span
+            className={`mr-3 transition-colors ${
+              isActive(item.href)
+                ? "text-cyan-400"
+                : "text-slate-400 group-hover:text-cyan-400"
+            }`}
+          >
             {item.icon}
           </span>
           <span className="font-medium">{item.label}</span>
@@ -46,4 +52,4 @@ export function AdminNavigation({ navItems }: { navItems: NavItem[] }) {
       ))}
     </nav>
   );
-} 
+}
