@@ -1,8 +1,11 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,40 +19,80 @@ import {
 } from "@/components/ui/select";
 import ImageUpload from "@/components/ImageUpload";
 import { ROUTES } from "@/lib/router";
-import dynamic from "next/dynamic";
+import { TextEditor } from "taitrung-super-editor";
+import "taitrung-super-editor/styles.css";
 
-const CKEditorComponent = dynamic(
-  () => import("@/components/CKEditorComponent"),
-  { ssr: false }
-);
+// Define the form schema with Zod
+const serviceFormSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  titleEn: z.string().optional(),
+  status: z.enum(["DRAFT", "PUBLISHED"]),
+  showOnHomepage: z.boolean(),
+  description: z.string().min(1, "Description is required"),
+  descriptionEn: z.string().optional(),
+  shortDescription: z.string().optional(),
+  shortDescriptionEn: z.string().optional(),
+  keywords: z.string().optional(),
+  enKeywords: z.string().optional(),
+  slug: z.string().min(1, "Slug is required"),
+  featuredImage: z.string().optional().nullable(),
+  featureImageId: z.string().optional().nullable(),
+  featuredImageEn: z.string().optional().nullable(),
+  featureImageEnId: z.string().optional().nullable(),
+  metaTitle: z.string().optional(),
+  metaTitleEn: z.string().optional(),
+  metaDescription: z.string().optional(),
+  metaDescriptionEn: z.string().optional(),
+  metaKeywords: z.string().optional(),
+  metaKeywordsEn: z.string().optional(),
+});
+
+type ServiceFormValues = z.infer<typeof serviceFormSchema>;
 
 export default function NewServicePage() {
   const router = useRouter();
-  const [title, setTitle] = useState("");
-  const [titleEn, setTitleEn] = useState("");
-  const [status, setStatus] = useState("DRAFT");
-  const [showOnHomepage, setShowOnHomepage] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [description, setDescription] = useState("");
-  const [descriptionEn, setDescriptionEn] = useState("");
-  const [shortDescription, setShortDescription] = useState("");
-  const [shortDescriptionEn, setShortDescriptionEn] = useState("");
-  const [keywords, setKeywords] = useState("");
-  const [enKeywords, setEnKeywords] = useState("");
-  const [slug, setSlug] = useState("");
-  const [featuredImage, setFeaturedImage] = useState("");
-  const [featureImageId, setFeatureImageId] = useState("");
-  const [featuredImageEn, setFeaturedImageEn] = useState("");
-  const [featureImageEnId, setFeatureImageEnId] = useState("");
   const [isImageUploading, setIsImageUploading] = useState(false);
   const [isImageEnUploading, setIsImageEnUploading] = useState(false);
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
-  const [metaTitle, setMetaTitle] = useState("");
-  const [metaTitleEn, setMetaTitleEn] = useState("");
-  const [metaDescription, setMetaDescription] = useState("");
-  const [metaDescriptionEn, setMetaDescriptionEn] = useState("");
-  const [metaKeywords, setMetaKeywords] = useState("");
-  const [metaKeywordsEn, setMetaKeywordsEn] = useState("");
+
+  // Initialize form with React Hook Form
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<ServiceFormValues>({
+    resolver: zodResolver(serviceFormSchema),
+    defaultValues: {
+      title: "",
+      titleEn: "",
+      status: "DRAFT",
+      showOnHomepage: false,
+      description: "",
+      descriptionEn: "",
+      shortDescription: "",
+      shortDescriptionEn: "",
+      keywords: "",
+      enKeywords: "",
+      slug: "",
+      featuredImage: "",
+      featureImageId: "",
+      featuredImageEn: "",
+      featureImageEnId: "",
+      metaTitle: "",
+      metaTitleEn: "",
+      metaDescription: "",
+      metaDescriptionEn: "",
+      metaKeywords: "",
+      metaKeywordsEn: "",
+    },
+  });
+
+  // Watch title for slug generation
+  const title = watch("title");
 
   // Generate slug from title
   const generateSlug = (text: string) => {
@@ -64,48 +107,24 @@ export default function NewServicePage() {
   };
 
   // Handle title change and auto-generate slug
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTitle = e.target.value;
-    setTitle(newTitle);
+  const handleTitleChange = (value: string) => {
+    setValue("title", value);
 
     // Only auto-generate slug if it hasn't been manually edited
     if (!isSlugManuallyEdited) {
-      setSlug(generateSlug(newTitle));
+      setValue("slug", generateSlug(value));
     }
   };
 
   // Handle slug change
   const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSlug(e.target.value);
+    setValue("slug", e.target.value);
     setIsSlugManuallyEdited(true);
   };
 
-  // Use useCallback to memoize the onChange handler to prevent re-renders
-  const handleEditorChange = useCallback(
-    (event: unknown, editor: { getData: () => string }) => {
-      const data = editor.getData();
-      setDescription(data);
-    },
-    []
-  );
-
-  const handleEditorChangeEn = useCallback(
-    (event: unknown, editor: { getData: () => string }) => {
-      const data = editor.getData();
-      setDescriptionEn(data);
-    },
-    []
-  );
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!title) {
-      toast.error("Please enter a title for your service");
-      return;
-    }
-
-    if (!description || description === "<p><br></p>") {
+  // Handle form submission
+  const onSubmit = async (data: ServiceFormValues) => {
+    if (data.description === "<p><br></p>") {
       toast.error("Please add a description to your service");
       return;
     }
@@ -119,27 +138,17 @@ export default function NewServicePage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          title,
-          titleEn: titleEn || undefined,
-          description,
-          descriptionEn: descriptionEn || undefined,
-          shortDescription,
-          shortDescriptionEn: shortDescriptionEn || undefined,
-          keywords,
-          enKeywords: enKeywords || undefined,
-          status,
-          showOnHomepage,
-          slug,
-          metaTitle: metaTitle || undefined,
-          metaTitleEn: metaTitleEn || undefined,
-          metaDescription: metaDescription || undefined,
-          metaDescriptionEn: metaDescriptionEn || undefined,
-          metaKeywords: metaKeywords || undefined,
-          metaKeywordsEn: metaKeywordsEn || undefined,
-          featuredImage, // Send the image URL
-          featureImageId, // Send the media ID if available
-          featuredImageEn, // Send the English image URL
-          featureImageEnId, // Send the English media ID if available
+          ...data,
+          titleEn: data.titleEn || undefined,
+          descriptionEn: data.descriptionEn || undefined,
+          shortDescriptionEn: data.shortDescriptionEn || undefined,
+          enKeywords: data.enKeywords || undefined,
+          metaTitle: data.metaTitle || undefined,
+          metaTitleEn: data.metaTitleEn || undefined,
+          metaDescription: data.metaDescription || undefined,
+          metaDescriptionEn: data.metaDescriptionEn || undefined,
+          metaKeywords: data.metaKeywords || undefined,
+          metaKeywordsEn: data.metaKeywordsEn || undefined,
         }),
       });
 
@@ -161,20 +170,63 @@ export default function NewServicePage() {
     }
   };
 
+  // Save draft to local storage
+  const saveDraft = useCallback(() => {
+    const formData = watch();
+    localStorage.setItem("service-draft", JSON.stringify(formData));
+    toast.success("Draft saved");
+  }, [watch]);
+
+  // Load draft from local storage
+  const loadDraft = useCallback(() => {
+    const savedDraft = localStorage.getItem("service-draft");
+    if (savedDraft) {
+      try {
+        const draftData = JSON.parse(savedDraft);
+        Object.entries(draftData).forEach(([key, value]) => {
+          setValue(key as any, value as any);
+        });
+        toast.success("Draft loaded");
+      } catch (error) {
+        toast.error("Failed to load draft");
+      }
+    } else {
+      toast.error("No draft found");
+    }
+  }, [setValue]);
+
   return (
     <div className="container mx-auto p-8 bg-white rounded-md">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Create New Service</h1>
-        <Button
-          className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
-          variant="outline"
-          onClick={() => router.push(ROUTES.ADMIN_SERVICES)}
-        >
-          Cancel
-        </Button>
+        <div className="flex space-x-2">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={saveDraft}
+            className="bg-green-500 text-white hover:bg-green-600"
+          >
+            Save Draft
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={loadDraft}
+            className="bg-blue-500 text-white hover:bg-blue-600"
+          >
+            Load Draft
+          </Button>
+          <Button
+            className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
+            variant="outline"
+            onClick={() => router.push(ROUTES.ADMIN_SERVICES)}
+          >
+            Cancel
+          </Button>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Vietnamese Content Section */}
         <fieldset className="p-4 border border-gray-200 rounded-lg">
           <legend className="text-lg font-semibold mb-4 px-2">
@@ -186,22 +238,33 @@ export default function NewServicePage() {
               <Label htmlFor="title">Service Title (Vietnamese)</Label>
               <Input
                 id="title"
-                value={title}
-                onChange={handleTitleChange}
+                {...register("title")}
+                onChange={(e) => handleTitleChange(e.target.value)}
                 placeholder="Enter service title in Vietnamese"
                 className="w-full"
               />
+              {errors.title && (
+                <p className="text-red-500 text-sm">{errors.title.message}</p>
+              )}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="featuredImage">Feature Image</Label>
-              <ImageUpload
-                value={featuredImage}
-                onChange={setFeaturedImage}
-                onImageUploading={setIsImageUploading}
-                onMediaIdChange={setFeatureImageId}
-                aspectRatio={270 / 200}
-                aspectRatioText="270:200"
+              <Controller
+                control={control}
+                name="featuredImage"
+                render={({ field }) => (
+                  <ImageUpload
+                    value={field.value || ""}
+                    onChange={(url) => {
+                      field.onChange(url);
+                    }}
+                    onImageUploading={setIsImageUploading}
+                    onMediaIdChange={(id) => setValue("featureImageId", id)}
+                    aspectRatio={270 / 200}
+                    aspectRatioText="270:200"
+                  />
+                )}
               />
               <p className="text-xs text-gray-500">
                 Recommended aspect ratio: 270:200
@@ -215,8 +278,7 @@ export default function NewServicePage() {
             </Label>
             <Input
               id="shortDescription"
-              value={shortDescription}
-              onChange={(e) => setShortDescription(e.target.value)}
+              {...register("shortDescription")}
               placeholder="Brief summary of the service in Vietnamese"
               className="w-full"
             />
@@ -226,8 +288,7 @@ export default function NewServicePage() {
             <Label htmlFor="keywords">Keywords (Vietnamese)</Label>
             <Input
               id="keywords"
-              value={keywords}
-              onChange={(e) => setKeywords(e.target.value)}
+              {...register("keywords")}
               placeholder="Thăm khám, tư vấn, chẩn đoán và điều trị các bệnh lý cơ xương khớp, Sử dụng các máy móc vật lý trị liệu, Kỹ thuật viên có tay nghề chuyên môn cao"
               className="w-full"
             />
@@ -240,10 +301,23 @@ export default function NewServicePage() {
             <Label>Service Description (Vietnamese)</Label>
             <div>
               {typeof window !== "undefined" && (
-                <CKEditorComponent
-                  data={description}
-                  onChange={handleEditorChange}
+                <Controller
+                  control={control}
+                  name="description"
+                  render={({ field }) => (
+                    <TextEditor
+                      value={field.value || ""}
+                      onChange={(value: any) => {
+                        field.onChange(value);
+                      }}
+                    />
+                  )}
                 />
+              )}
+              {errors.description && (
+                <p className="text-red-500 text-sm">
+                  {errors.description.message}
+                </p>
               )}
             </div>
           </div>
@@ -261,14 +335,13 @@ export default function NewServicePage() {
                 </Label>
                 <Input
                   id="metaTitle"
-                  value={metaTitle}
-                  onChange={(e) => setMetaTitle(e.target.value)}
+                  {...register("metaTitle")}
                   placeholder="SEO title for search engines"
                   maxLength={65}
                   className="w-full"
                 />
                 <p className="text-xs text-gray-500">
-                  {metaTitle.length}/65 characters
+                  {(watch("metaTitle") || "").length}/65 characters
                 </p>
               </div>
 
@@ -276,8 +349,7 @@ export default function NewServicePage() {
                 <Label htmlFor="metaKeywords">Meta Keywords</Label>
                 <Input
                   id="metaKeywords"
-                  value={metaKeywords}
-                  onChange={(e) => setMetaKeywords(e.target.value)}
+                  {...register("metaKeywords")}
                   placeholder="keyword1, keyword2, keyword3"
                   className="w-full"
                 />
@@ -293,15 +365,14 @@ export default function NewServicePage() {
               </Label>
               <textarea
                 id="metaDescription"
-                value={metaDescription}
-                onChange={(e) => setMetaDescription(e.target.value)}
+                {...register("metaDescription")}
                 placeholder="Brief description for search engine results"
                 maxLength={155}
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <p className="text-xs text-gray-500">
-                {metaDescription.length}/155 characters
+                {(watch("metaDescription") || "").length}/155 characters
               </p>
             </div>
           </div>
@@ -318,8 +389,7 @@ export default function NewServicePage() {
               <Label htmlFor="titleEn">Service Title (English)</Label>
               <Input
                 id="titleEn"
-                value={titleEn}
-                onChange={(e) => setTitleEn(e.target.value)}
+                {...register("titleEn")}
                 placeholder="Enter service title in English"
                 className="w-full"
               />
@@ -327,13 +397,21 @@ export default function NewServicePage() {
 
             <div className="space-y-2">
               <Label htmlFor="featuredImageEn">Feature Image (English)</Label>
-              <ImageUpload
-                value={featuredImageEn}
-                onChange={setFeaturedImageEn}
-                onImageUploading={setIsImageEnUploading}
-                onMediaIdChange={setFeatureImageEnId}
-                aspectRatio={270 / 200}
-                aspectRatioText="270:200"
+              <Controller
+                control={control}
+                name="featuredImageEn"
+                render={({ field }) => (
+                  <ImageUpload
+                    value={field.value || ""}
+                    onChange={(url) => {
+                      field.onChange(url);
+                    }}
+                    onImageUploading={setIsImageEnUploading}
+                    onMediaIdChange={(id) => setValue("featureImageEnId", id)}
+                    aspectRatio={270 / 200}
+                    aspectRatioText="270:200"
+                  />
+                )}
               />
               <p className="text-xs text-gray-500">
                 Optional: Different image for English version
@@ -347,8 +425,7 @@ export default function NewServicePage() {
             </Label>
             <Input
               id="shortDescriptionEn"
-              value={shortDescriptionEn}
-              onChange={(e) => setShortDescriptionEn(e.target.value)}
+              {...register("shortDescriptionEn")}
               placeholder="Brief summary of the service in English"
               className="w-full"
             />
@@ -358,8 +435,7 @@ export default function NewServicePage() {
             <Label htmlFor="enKeywords">Keywords (English)</Label>
             <Input
               id="enKeywords"
-              value={enKeywords}
-              onChange={(e) => setEnKeywords(e.target.value)}
+              {...register("enKeywords")}
               placeholder="Medical examination, consultation, diagnosis, treatment, physical therapy equipment, professional expertise"
               className="w-full"
             />
@@ -372,9 +448,17 @@ export default function NewServicePage() {
             <Label>Service Description (English)</Label>
             <div>
               {typeof window !== "undefined" && (
-                <CKEditorComponent
-                  data={descriptionEn}
-                  onChange={handleEditorChangeEn}
+                <Controller
+                  control={control}
+                  name="descriptionEn"
+                  render={({ field }) => (
+                    <TextEditor
+                      value={field.value || ""}
+                      onChange={(value: any) => {
+                        field.onChange(value);
+                      }}
+                    />
+                  )}
                 />
               )}
             </div>
@@ -393,14 +477,13 @@ export default function NewServicePage() {
                 </Label>
                 <Input
                   id="metaTitleEn"
-                  value={metaTitleEn}
-                  onChange={(e) => setMetaTitleEn(e.target.value)}
+                  {...register("metaTitleEn")}
                   placeholder="SEO title for search engines (English)"
                   maxLength={65}
                   className="w-full"
                 />
                 <p className="text-xs text-gray-500">
-                  {metaTitleEn.length}/65 characters
+                  {(watch("metaTitleEn") || "").length}/65 characters
                 </p>
               </div>
 
@@ -408,8 +491,7 @@ export default function NewServicePage() {
                 <Label htmlFor="metaKeywordsEn">Meta Keywords</Label>
                 <Input
                   id="metaKeywordsEn"
-                  value={metaKeywordsEn}
-                  onChange={(e) => setMetaKeywordsEn(e.target.value)}
+                  {...register("metaKeywordsEn")}
                   placeholder="keyword1, keyword2, keyword3"
                   className="w-full"
                 />
@@ -425,15 +507,14 @@ export default function NewServicePage() {
               </Label>
               <textarea
                 id="metaDescriptionEn"
-                value={metaDescriptionEn}
-                onChange={(e) => setMetaDescriptionEn(e.target.value)}
+                {...register("metaDescriptionEn")}
                 placeholder="Brief description for search engine results (English)"
                 maxLength={155}
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <p className="text-xs text-gray-500">
-                {metaDescriptionEn.length}/155 characters
+                {(watch("metaDescriptionEn") || "").length}/155 characters
               </p>
             </div>
           </div>
@@ -448,43 +529,58 @@ export default function NewServicePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
               <Label htmlFor="status">Status</Label>
-              <Select
-                value={status}
-                onValueChange={(value: string) => setStatus(value)}
-              >
-                <SelectTrigger id="status">
-                  <SelectValue placeholder="Select status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="DRAFT">Draft</SelectItem>
-                  <SelectItem value="PUBLISHED">Published</SelectItem>
-                </SelectContent>
-              </Select>
+              <Controller
+                control={control}
+                name="status"
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger id="status">
+                      <SelectValue placeholder="Select status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="DRAFT">Draft</SelectItem>
+                      <SelectItem value="PUBLISHED">Published</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+              {errors.status && (
+                <p className="text-red-500 text-sm">{errors.status.message}</p>
+              )}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="slug">URL Slug</Label>
               <Input
                 id="slug"
-                value={slug}
+                {...register("slug")}
                 onChange={handleSlugChange}
                 placeholder="service-url-slug"
                 className="w-full"
               />
+              {errors.slug && (
+                <p className="text-red-500 text-sm">{errors.slug.message}</p>
+              )}
               <p className="text-xs text-gray-500">
-                This will be used in the URL: /services/{slug}
+                This will be used in the URL: /services/{watch("slug")}
               </p>
             </div>
 
             <div className="space-y-2">
               <Label className="text-sm font-medium">Homepage Display</Label>
               <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="showOnHomepage"
-                  checked={showOnHomepage}
-                  onChange={(e) => setShowOnHomepage(e.target.checked)}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                <Controller
+                  control={control}
+                  name="showOnHomepage"
+                  render={({ field }) => (
+                    <input
+                      type="checkbox"
+                      id="showOnHomepage"
+                      checked={field.value}
+                      onChange={(e) => field.onChange(e.target.checked)}
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    />
+                  )}
                 />
                 <Label htmlFor="showOnHomepage" className="text-sm">
                   Show on Homepage

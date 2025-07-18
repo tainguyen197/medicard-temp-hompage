@@ -17,11 +17,8 @@ import {
 import ImageUpload from "@/components/ImageUpload";
 import dynamic from "next/dynamic";
 import { ROUTES } from "@/lib/router";
-
-const CKEditorComponent = dynamic(
-  () => import("@/components/CKEditorComponent"),
-  { ssr: false }
-);
+import { TextEditor } from "taitrung-super-editor";
+import "taitrung-super-editor/styles.css";
 export default function EditServicePage({
   params,
 }: {
@@ -307,9 +304,11 @@ export default function EditServicePage({
             <Label>Service Description (Vietnamese)</Label>
             <div>
               {typeof window !== "undefined" && (
-                <CKEditorComponent
-                  data={description}
-                  onChange={handleEditorChange}
+                <TextEditor
+                  value={description}
+                  onChange={(value: any) => {
+                    setDescription(value);
+                  }}
                 />
               )}
             </div>
@@ -439,9 +438,11 @@ export default function EditServicePage({
             <Label>Service Description (English)</Label>
             <div>
               {typeof window !== "undefined" && (
-                <CKEditorComponent
-                  data={descriptionEn}
-                  onChange={handleEditorChangeEn}
+                <TextEditor
+                  value={descriptionEn}
+                  onChange={(value: any) => {
+                    setDescriptionEn(value);
+                  }}
                 />
               )}
             </div>
