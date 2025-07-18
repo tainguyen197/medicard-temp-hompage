@@ -3,12 +3,16 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Loader2, Upload, X } from "lucide-react";
-import CKEditorComponent from "@/components/CKEditorComponent";
 import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/ImageUpload";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const VALID_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+const VALID_IMAGE_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/webp",
+];
 
 interface EquipmentFormProps {
   onSubmit: (formData: FormData) => void;
@@ -42,10 +46,16 @@ export default function EquipmentForm({
 }: EquipmentFormProps) {
   const [name, setName] = useState(initialData?.name || "");
   const [nameEn, setNameEn] = useState(initialData?.nameEn || "");
-  const [description, setDescription] = useState(initialData?.description || "");
-  const [descriptionEn, setDescriptionEn] = useState(initialData?.descriptionEn || "");
+  const [description, setDescription] = useState(
+    initialData?.description || ""
+  );
+  const [descriptionEn, setDescriptionEn] = useState(
+    initialData?.descriptionEn || ""
+  );
   const [status, setStatus] = useState(initialData?.status || "ACTIVE");
-  const [showOnHomepage, setShowOnHomepage] = useState<boolean>(initialData?.showOnHomepage ?? true);
+  const [showOnHomepage, setShowOnHomepage] = useState<boolean>(
+    initialData?.showOnHomepage ?? true
+  );
   const [order, setOrder] = useState(initialData?.order || 0);
 
   // New: Use image URL and ID for both languages
@@ -82,9 +92,14 @@ export default function EquipmentForm({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Vietnamese Content */}
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-slate-900 border-b pb-2">Vietnamese Content</h2>
+            <h2 className="text-xl font-semibold text-slate-900 border-b pb-2">
+              Vietnamese Content
+            </h2>
             <div className="space-y-2">
-              <label htmlFor="name" className="block text-sm font-medium text-slate-700">
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-slate-700"
+              >
                 Name (Vietnamese) <span className="text-red-500">*</span>
               </label>
               <input
@@ -97,7 +112,10 @@ export default function EquipmentForm({
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="description" className="block text-sm font-medium text-slate-700">
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-slate-700"
+              >
                 Description (Vietnamese) <span className="text-red-500">*</span>
               </label>
               <Textarea
@@ -125,9 +143,14 @@ export default function EquipmentForm({
           </div>
           {/* English Content */}
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-slate-900 border-b pb-2">English Content</h2>
+            <h2 className="text-xl font-semibold text-slate-900 border-b pb-2">
+              English Content
+            </h2>
             <div className="space-y-2">
-              <label htmlFor="nameEn" className="block text-sm font-medium text-slate-700">
+              <label
+                htmlFor="nameEn"
+                className="block text-sm font-medium text-slate-700"
+              >
                 Name (English)
               </label>
               <input
@@ -140,7 +163,10 @@ export default function EquipmentForm({
               />
             </div>
             <div className="space-y-2">
-              <label htmlFor="descriptionEn" className="block text-sm font-medium text-slate-700">
+              <label
+                htmlFor="descriptionEn"
+                className="block text-sm font-medium text-slate-700"
+              >
                 Description (English)
               </label>
               <Textarea
@@ -156,15 +182,14 @@ export default function EquipmentForm({
                 Image (English)
               </label>
               <div className="w-80 h-88">
-              <ImageUpload
-                value={imageEnUrl}
-                onChange={setImageEnUrl}
-                onMediaIdChange={setImageEnId}
-                aspectRatio={10 / 11}
-                aspectRatioText="10:11"
-              />
+                <ImageUpload
+                  value={imageEnUrl}
+                  onChange={setImageEnUrl}
+                  onMediaIdChange={setImageEnId}
+                  aspectRatio={10 / 11}
+                  aspectRatioText="10:11"
+                />
               </div>
-              
             </div>
           </div>
         </div>
@@ -173,7 +198,10 @@ export default function EquipmentForm({
           <h2 className="text-xl font-semibold text-slate-900">Settings</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
-              <label htmlFor="status" className="block text-sm font-medium text-slate-700">
+              <label
+                htmlFor="status"
+                className="block text-sm font-medium text-slate-700"
+              >
                 Status
               </label>
               <select
@@ -187,7 +215,10 @@ export default function EquipmentForm({
               </select>
             </div>
             <div className="space-y-2">
-              <label htmlFor="order" className="block text-sm font-medium text-slate-700">
+              <label
+                htmlFor="order"
+                className="block text-sm font-medium text-slate-700"
+              >
                 Display Order
               </label>
               <input
@@ -214,4 +245,4 @@ export default function EquipmentForm({
       </form>
     </div>
   );
-} 
+}
