@@ -273,14 +273,15 @@ export function useNewsForm(initialData?: Partial<NewsFormValues>) {
 
       toast.success("News article created successfully!");
       router.push(ROUTES.ADMIN_NEWS);
-      router.refresh();
     } catch (error) {
       console.error("Error creating news article:", error);
       toast.error(
         error instanceof Error ? error.message : "Failed to create news article"
       );
     } finally {
+     setTimeout(() => {
       setIsSubmitting(false);
+     }, 1000);
     }
   };
 

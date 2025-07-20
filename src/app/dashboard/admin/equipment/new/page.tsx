@@ -6,6 +6,7 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { ROUTES } from "@/lib/router";
 import EquipmentForm from "../equipment-form";
+import { toast } from "sonner";
 
 export default function NewEquipmentPage() {
   const router = useRouter();
@@ -33,12 +34,15 @@ export default function NewEquipmentPage() {
         }
         throw new Error(data.error || "Failed to create equipment");
       }
-      
+      toast.success("Equipment created successfully!");
+
       router.push(ROUTES.ADMIN_EQUIPMENT);
     } catch (err: any) {
       console.error("Error creating equipment:", err);
     } finally {
-      setIsSubmitting(false);
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 1000);
     }
   };
 

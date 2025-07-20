@@ -206,11 +206,15 @@ export default function TeamMemberForm({
         throw new Error(data.error || "Failed to save team member");
       }
 
+      toast.success("Team member saved successfully!");
+
       router.push(ROUTES.ADMIN_TEAM);
     } catch (error) {
       console.error("Error saving team member:", error);
     } finally {
-      setIsSubmitting(false);
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 1000);
     }
   };
 
