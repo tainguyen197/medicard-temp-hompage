@@ -11,11 +11,12 @@ export function getApiBaseUrl(): string {
   }
   
   // Fallback for other environments
-  return 'http://localhost:3000';
+  return 'https://dashboard.nguyentrungtai.site';
 }
 
 // Helper function to build API URLs
 export function buildApiUrl(endpoint: string): string {
   const baseUrl = getApiBaseUrl();
+  console.log('=====>>>baseUrl', baseUrl);
   return `${baseUrl}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
 } 

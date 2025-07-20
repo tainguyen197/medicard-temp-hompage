@@ -7,6 +7,7 @@ import NewsDetailContent from "./NewsDetailContent";
 import { getTranslations } from "next-intl/server";
 import { useLocale } from "next-intl";
 import { getAppointmentLink } from "@/lib/contact";
+import { getBannerDataByType, BANNER_TYPES, DEFAULT_HERO_IMAGE } from "@/lib/banner-utils";
 
 // Force dynamic rendering to avoid DYNAMIC_SERVER_USAGE error
 export const dynamic = "force-dynamic";
@@ -81,13 +82,17 @@ export default async function BlogDetailPage({
   // Fetch appointment link
   const appointmentLink = await getAppointmentLink();
 
+  // Fetch news banner data
+  const newsBanner = await getBannerDataByType(BANNER_TYPES.NEWS, locale);
+  const heroImage = newsBanner.imageUrl || DEFAULT_HERO_IMAGE;
+
   return (
     <div>
       <div className="pt-16 md:pt-24">
         {/* Hero Section with Cover Image */}
         <section className="relative w-full h-[40vh] md:h-[70vh]">
           <Image
-            src="/images/hero-section.png"
+            src={heroImage}
             alt="News Cover"
             fill
             priority

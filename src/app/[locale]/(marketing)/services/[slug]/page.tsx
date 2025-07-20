@@ -6,6 +6,7 @@ import { Metadata } from "next";
 import { getMessages } from "next-intl/server";
 import ServiceDetailContent from "./ServiceDetailContent";
 import { getAppointmentLink } from "@/lib/contact";
+import { getBannerDataByType, BANNER_TYPES, DEFAULT_HERO_IMAGE } from "@/lib/banner-utils";
 
 // Force dynamic rendering to avoid DYNAMIC_SERVER_USAGE error
 export const dynamic = "force-dynamic";
@@ -100,6 +101,10 @@ export default async function ServiceDetailPage({
   // Fetch appointment link
   const appointmentLink = await getAppointmentLink();
 
+  // Fetch service banner data
+  const serviceBanner = await getBannerDataByType(BANNER_TYPES.SERVICE, locale);
+  const heroImage = serviceBanner.imageUrl || DEFAULT_HERO_IMAGE;
+
   console.log("slug", slug);
 
   let service: Service;
@@ -157,7 +162,7 @@ export default async function ServiceDetailPage({
       <section className="relative mt-16 md:mt-20">
         <div className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
           <Image
-            src={"/images/hero-section.png"}
+            src={heroImage}
             alt="Service"
             className="object-cover object-center"
             priority
