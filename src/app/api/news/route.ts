@@ -127,6 +127,14 @@ export async function POST(request: Request) {
     const body = await request.json();
     const validatedData = newsSchema.parse(body);
 
+    // Check total items limit (30)
+    const totalNewsCount = await prisma.news.count();
+    if (totalNewsCount >= 30) {
+      return NextResponse.json(
+        { error: "Maximum limit of 30 news articles reached. Please delete some existing articles first." },
+        { status: 400 }
+      );
+    }
 
     // Generate slug if not provided
     const slug = validatedData.slug || createSlug(validatedData.title);

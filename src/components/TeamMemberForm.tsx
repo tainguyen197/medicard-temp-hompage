@@ -184,16 +184,23 @@ export default function TeamMemberForm({
         body: submitData,
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Faile 123d to save team member");
+        // Check for specific error messages
+        if (data.error && data.error.includes("Maximum limit of 30 team members")) {
+          setUploadError(data.error);
+          toast.error(data.error);
+        } else {
+          setUploadError(data.error || "Failed to save team member");
+          toast.error(data.error || "Failed to save team member");
+        }
+        throw new Error(data.error || "Failed to save team member");
       }
 
       router.push(ROUTES.ADMIN_TEAM);
     } catch (error) {
-      console.log('error', error);
       console.error("Error saving team member:", error);
-      toast.error(error instanceof Error ? error.message : "Failed to save team member");
     } finally {
       setIsSubmitting(false);
     }

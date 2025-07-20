@@ -22,15 +22,21 @@ export default function NewEquipmentPage() {
         body: formData,
       });
       
+      const data = await response.json();
+      
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to create equipment");
+        // Check for specific error messages
+        if (data.error && data.error.includes("Maximum limit of 30 equipment items")) {
+          setError(data.error);
+        } else {
+          setError(data.error || "Failed to create equipment");
+        }
+        throw new Error(data.error || "Failed to create equipment");
       }
       
       router.push(ROUTES.ADMIN_EQUIPMENT);
     } catch (err: any) {
       console.error("Error creating equipment:", err);
-      setError(err.message || "Failed to create equipment. Please try again.");
     } finally {
       setIsSubmitting(false);
     }

@@ -52,6 +52,9 @@ const s3 = isR2Available
     })
   : null;
 
+// Maximum total storage limit (500MB)
+const TOTAL_STORAGE_LIMIT = 500 * 1024 * 1024; // 500MB in bytes
+
 export async function POST(request: Request) {
   console.log("Image upload request received");
 
@@ -100,6 +103,28 @@ export async function POST(request: Request) {
       console.error(`File too large: ${file.size} bytes`);
       return NextResponse.json(
         { error: "File size exceeds 5MB limit." },
+        { status: 400, headers: corsHeaders }
+      );
+    }
+
+    // Check total storage limit (500MB)
+    const totalSizeResult = await prisma.media.aggregate({
+      _sum: {
+        fileSize: true,
+      },
+    });
+
+    const currentTotalSize = totalSizeResult._sum.fileSize || 0;
+    const newTotalSize = currentTotalSize + file.size;
+
+    if (newTotalSize > TOTAL_STORAGE_LIMIT) {
+      console.error(`Storage limit exceeded: ${newTotalSize} bytes (limit: ${TOTAL_STORAGE_LIMIT} bytes)`);
+      return NextResponse.json(
+        { 
+          error: "Storage limit of 500MB exceeded. Please delete some existing images before uploading new ones.",
+          currentUsage: Math.round(currentTotalSize / (1024 * 1024)),
+          limit: TOTAL_STORAGE_LIMIT / (1024 * 1024)
+        },
         { status: 400, headers: corsHeaders }
       );
     }

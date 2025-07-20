@@ -37,6 +37,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Check total items limit (30)
+    const totalEquipmentCount = await prisma.equipment.count();
+    if (totalEquipmentCount >= 30) {
+      return NextResponse.json(
+        { error: "Maximum limit of 30 equipment items reached. Please delete some existing items first." },
+        { status: 400 }
+      );
+    }
+
     const formData = await req.formData();
     
     // Extract basic fields
@@ -62,7 +71,7 @@ export async function POST(req: NextRequest) {
       }
       const bytes = await imageFile.arrayBuffer();
       const buffer = Buffer.from(bytes);
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3001";
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
       const uploadResponse = await fetch(`${baseUrl}/api/media/upload`, {
         method: "POST",
         headers: {

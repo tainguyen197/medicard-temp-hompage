@@ -131,6 +131,15 @@ export async function POST(request: Request) {
       );
     }
 
+    // Check total items limit (30)
+    const totalServicesCount = await prisma.service.count();
+    if (totalServicesCount >= 30) {
+      return NextResponse.json(
+        { error: "Maximum limit of 30 services reached. Please delete some existing services first." },
+        { status: 400 }
+      );
+    }
+
     // Generate slug if not provided
     const slug = validatedData.slug || createSlug(validatedData.title);
 

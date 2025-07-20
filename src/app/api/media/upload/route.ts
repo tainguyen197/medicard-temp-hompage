@@ -4,9 +4,13 @@ import { writeFile } from "fs/promises";
 import { mkdir } from "fs/promises";
 import { join, extname } from "path";
 import { authOptions } from "../../../../lib/auth";
+import prisma from "../../../../lib/prisma";
 
 // Maximum file size (5MB)
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+// Maximum total storage limit (500MB)
+const TOTAL_STORAGE_LIMIT = 500 * 1024 * 1024; // 500MB in bytes
 
 // Allowed image extensions
 const ALLOWED_EXTENSIONS = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
@@ -39,6 +43,27 @@ export async function POST(request: Request) {
     if (!ALLOWED_EXTENSIONS.includes(fileExt)) {
       return NextResponse.json(
         { error: "Invalid file type. Only images are allowed." },
+        { status: 400 }
+      );
+    }
+
+    // Check total storage limit (500MB)
+    const totalSizeResult = await prisma.media.aggregate({
+      _sum: {
+        fileSize: true,
+      },
+    });
+
+    const currentTotalSize = totalSizeResult._sum.fileSize || 0;
+    const newTotalSize = currentTotalSize + file.size;
+
+    if (newTotalSize > TOTAL_STORAGE_LIMIT) {
+      return NextResponse.json(
+        { 
+          error: "Storage limit of 500MB exceeded. Please delete some existing images before uploading new ones.",
+          currentUsage: Math.round(currentTotalSize / (1024 * 1024)),
+          limit: TOTAL_STORAGE_LIMIT / (1024 * 1024)
+        },
         { status: 400 }
       );
     }

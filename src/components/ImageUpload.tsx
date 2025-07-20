@@ -141,12 +141,19 @@ export default function ImageUpload({
         body: formData,
       });
 
+      const data = await response.json();
+      
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to upload image");
+        // Check if this is a storage limit error
+        if (data.currentUsage && data.limit) {
+          throw new Error(
+            `Storage limit reached: ${data.currentUsage}MB used of ${data.limit}MB total. Please delete some existing images.`
+          );
+        } else {
+          throw new Error(data.error || "Failed to upload image");
+        }
       }
 
-      const data = await response.json();
       onChange(data.url);
       onMediaIdChange?.(data.mediaId);
       setShowCropper(false);

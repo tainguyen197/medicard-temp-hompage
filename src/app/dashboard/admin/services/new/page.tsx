@@ -152,9 +152,18 @@ export default function NewServicePage() {
         }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to create service");
+        // Check for specific error messages
+        if (data.error && data.error.includes("Maximum limit of 30 services")) {
+          toast.error(data.error);
+        } else if (data.error && data.error.includes("Maximum of 4 services can be shown on homepage")) {
+          toast.error(data.error);
+        } else {
+          toast.error(data.error || "Failed to create service");
+        }
+        throw new Error(data.error || "Failed to create service");
       }
 
       toast.success("Service created successfully!");
@@ -162,9 +171,6 @@ export default function NewServicePage() {
       router.refresh();
     } catch (error) {
       console.error("Error creating service:", error);
-      toast.error(
-        error instanceof Error ? error.message : "Failed to create service"
-      );
     } finally {
       setIsSubmitting(false);
     }

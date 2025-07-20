@@ -95,6 +95,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    // Check total items limit (30)
+    const totalTeamMembersCount = await prisma.teamMember.count();
+    if (totalTeamMembersCount >= 30) {
+      return NextResponse.json(
+        { error: "Maximum limit of 30 team members reached. Please delete some existing members first." },
+        { status: 400 }
+      );
+    }
+
     const formData = await request.formData();
 
     const name = formData.get("name") as string;
