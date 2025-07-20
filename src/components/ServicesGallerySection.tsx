@@ -12,6 +12,7 @@ import {
 } from "@/data/services";
 import { ROUTES } from "@/lib/router";
 import { htmlToText } from "@/lib/content-utils";
+import { Link } from "@/navigation";
 
 interface ServiceItem {
   id: string;
@@ -254,6 +255,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
                 animate ? "opacity-100 scale-100" : "opacity-0 scale-95"
               }`}
             >
+              {activeService.image && (
               <Image
                 src={activeService?.image}
                 alt={activeService?.title}
@@ -261,6 +263,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
                 className="object-cover"
                 priority
               />
+              )}
             </div>
           </div>
 
@@ -286,7 +289,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
                 </p>
               </div>
               <div className="flex flex-wrap gap-4">
-                <a
+                <Link
                   href={activeService?.link}
                   className="inline-flex items-center px-4 py-2 md:px-7 md:py-3 bg-[#B1873F] hover:bg-amber-700 transition-colors rounded-xl md:rounded-full text-white font-semibold md:font-medium text-xs md:text-[16px] h-10 md:h-12"
                 >
@@ -304,7 +307,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
                       d="M9 5l7 7-7 7"
                     />
                   </svg>
-                </a>
+                </Link>
                 <a
                   href={
                     appointmentLink || "https://forms.gle/GJETkvXcnZ7hZwBr8"
@@ -364,12 +367,12 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
         </div>
 
         <div className="text-center mt-10 md:mt-14">
-          <a
+          <Link
             href={ROUTES.SERVICES}
             className="inline-block border-b border-white/50 hover:border-white transition-colors pb-1 text-white text-sm md:text-lg"
           >
             {t("exploreMore")}
-          </a>
+          </Link>
         </div>
       </div>
     </section>
