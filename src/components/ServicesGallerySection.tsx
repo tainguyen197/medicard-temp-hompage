@@ -101,7 +101,6 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
             .filter((service) => service.showOnHomepage)
             .map((service) => convertServiceToServiceItem(service, locale));
           setServices(convertedServices);
-          setActiveService(convertedServices[0]);
         } else {
           // Use fallback data if no services found
           setServices(fallbackServices);
@@ -128,7 +127,6 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
   // Use fallback services while loading or if no services available
   const displayServices = services.length > 0 ? services : fallbackServices;
 
-  console.log(services);
   const thumbnailsRef = useRef<HTMLDivElement>(null);
   const thumbnailRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -183,7 +181,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
 
   // Auto-advance service every 6 seconds if autoAdvance is true
   useEffect(() => {
-    if (!autoAdvance) return;
+    if (!autoAdvance || displayServices.length === 0) return;
 
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % displayServices.length);

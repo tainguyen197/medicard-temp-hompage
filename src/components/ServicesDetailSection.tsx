@@ -7,6 +7,7 @@ import { useLocale } from "next-intl";
 import AnimatedSection from "@/components/AnimatedSection";
 import { fetchServices } from "@/lib/api";
 import { Service } from "@/types/service";
+import { htmlToText } from "@/lib/content-utils";
 
 interface ServiceDisplayData {
   title: string;
@@ -152,12 +153,9 @@ export default function ServicesDetailSection({
                           </div>
                           <p
                             className="text-md md:text-lg text-[#909090] leading-relaxed"
-                            dangerouslySetInnerHTML={{
-                              __html:
-                                localizedContent.shortDescription ||
-                                "",
-                            }}
-                          />
+                          >
+                            {htmlToText(localizedContent.description).substring(0, 250) + "..."}
+                          </p>  
                         </div>
                       </div>
                     </div>
@@ -220,7 +218,7 @@ export default function ServicesDetailSection({
                             </button>
                           </div>
                           <p className="text-md md:text-lg text-[#909090] leading-relaxed">
-                            {service.description}
+                            {htmlToText(service.description).substring(0, 350) + "..."}
                           </p>
                         </div>
                       </div>
