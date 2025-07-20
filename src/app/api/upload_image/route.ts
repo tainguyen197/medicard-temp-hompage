@@ -73,7 +73,7 @@ export async function POST(request: Request) {
     const formData = await request.formData();
     console.log("FormData keys:", Array.from(formData.keys()));
 
-    const file = formData.get("upload") as File; // CKEditor's default field name is 'upload'
+    const file = formData.get("upload") as File; // Default field name for file uploads
 
     if (!file) {
       console.error("No file provided in request");
@@ -225,7 +225,7 @@ export async function POST(request: Request) {
 
       console.log(`Image uploaded successfully: ${media.id}`);
 
-      // CKEditor SimpleUploadAdapter expects a JSON response with a "url" property
+      // Return JSON response with URL and media ID
       const response = {
         url: publicUrl,
         mediaId: media.id,

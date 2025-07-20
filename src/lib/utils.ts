@@ -71,8 +71,8 @@ export function formatFileSize(bytes: number): string {
 }
 
 /**
- * Extract image URLs from CKEditor content
- * @param content The HTML content from CKEditor
+ * Extract image URLs from HTML content
+ * @param content The HTML content
  * @returns Array of image URLs found in the content
  */
 export function extractImagesFromContent(content: string): string[] {
@@ -90,9 +90,9 @@ export function extractImagesFromContent(content: string): string[] {
 }
 
 /**
- * Extract image URLs from CKEditor content - server-side version
+ * Extract image URLs from HTML content - server-side version
  * Uses regex to avoid DOM dependency which doesn't work on server
- * @param content The HTML content from CKEditor
+ * @param content The HTML content
  * @returns Array of image URLs found in the content
  */
 export function extractImagesFromContentServer(content: string): string[] {

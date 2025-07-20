@@ -18,9 +18,6 @@
     "seed:services": "ts-node --compiler-options {\\\"module\\\":\\\"CommonJS\\\"} prisma/seed-services.ts"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^41.4.2",
-    "@ckeditor/ckeditor5-ckbox": "^45.1.0",
-    "@ckeditor/ckeditor5-react": "^7.0.0",
     "@editorjs/code": "^2.9.3",
     "@editorjs/editorjs": "^2.30.8",
     "@editorjs/embed": "^2.7.6",
