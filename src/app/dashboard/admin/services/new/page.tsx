@@ -20,7 +20,6 @@ import {
 import ImageUpload from "@/components/ImageUpload";
 import { ROUTES } from "@/lib/router";
 import { TextEditor } from "taitrung-super-editor";
-import "taitrung-super-editor/styles.css";
 
 // Define the form schema with Zod
 const serviceFormSchema = z.object({

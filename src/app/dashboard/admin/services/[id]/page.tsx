@@ -15,10 +15,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import ImageUpload from "@/components/ImageUpload";
-import dynamic from "next/dynamic";
 import { ROUTES } from "@/lib/router";
 import { TextEditor } from "taitrung-super-editor";
-import "taitrung-super-editor/styles.css";
 export default function EditServicePage({
   params,
 }: {
