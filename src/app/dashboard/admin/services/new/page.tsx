@@ -209,22 +209,6 @@ export default function NewServicePage() {
         <h1 className="text-2xl font-bold">Create New Service</h1>
         <div className="flex space-x-2">
           <Button
-            type="button"
-            variant="outline"
-            onClick={saveDraft}
-            className="bg-green-500 text-white hover:bg-green-600"
-          >
-            Save Draft
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={loadDraft}
-            className="bg-blue-500 text-white hover:bg-blue-600"
-          >
-            Load Draft
-          </Button>
-          <Button
             className="bg-gray-500 text-white hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
             variant="outline"
             onClick={() => router.push(ROUTES.ADMIN_SERVICES)}
