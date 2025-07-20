@@ -149,20 +149,20 @@ export default function NewServicePage() {
           metaKeywords: data.metaKeywords || undefined,
           metaKeywordsEn: data.metaKeywordsEn || undefined,
         }),
-      });
+      }) as Response;
 
-      const data = await response.json();
+      const result = await response.json();
 
       if (!response.ok) {
         // Check for specific error messages
-        if (data.error && data.error.includes("Maximum limit of 30 services")) {
-          toast.error(data.error);
-        } else if (data.error && data.error.includes("Maximum of 4 services can be shown on homepage")) {
-          toast.error(data.error);
+        if (result.error && result.error.includes("Maximum limit of 30 services")) {
+          toast.error(result.error);
+        } else if (result.error && result.error.includes("Maximum of 4 services can be shown on homepage")) {
+          toast.error(result.error);
         } else {
-          toast.error(data.error || "Failed to create service");
+          toast.error(result.error || "Failed to create service");
         }
-        throw new Error(data.error || "Failed to create service");
+        throw new Error(result.error || "Failed to create service");
       }
 
       toast.success("Service created successfully!");
