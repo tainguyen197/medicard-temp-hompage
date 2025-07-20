@@ -220,7 +220,7 @@ export async function NewsDataComponent({
       <section className="container mx-auto px-4 max-w-[1040px]">
         {newsItems.map((newsItem) => (
           <article key={newsItem.id}>
-            <div className="relative flex flex-col md:flex-row items-center mb-4 md:mb-12 group justify-between">
+            <div className="relative flex flex-col md:flex-row items-start md:items-center mb-4 md:mb-12 group justify-between">
               <Link
                 href={`/news/${newsItem.slug}`}
                 className="absolute inset-0 z-1"
@@ -345,7 +345,7 @@ export async function NewsDataComponent({
           <h2 className="text-3xl md:text-5xl max-text-[51px] font-semibold text-[#1F1F1F] mb-6">
             {t.cta.heading}
           </h2>
-          <p className="text-lg md:text-xl text-black mb-10 max-w-3xl mx-auto px-16">
+          <p className="text-lg md:text-xl text-black mb-10 max-w-3xl mx-auto md:px-16">
             {t.cta.subheading}
           </p>
           <a

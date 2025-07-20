@@ -204,7 +204,7 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
                   >
                     <Link
                       href={href}
-                      className="hover:text-[#B1873F] transition-colors text-sm uppercase md:text-md"
+                      className="hover:text-[#B1873F] transition-colors text-sm md:text-md"
                     >
                       {name}
                     </Link>
@@ -329,14 +329,7 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
           <div>
             <p>{t("copyright")}</p>
           </div>
-          <div className="hidden md:flex mt-4 md:mt-0">
-            <Link href="/terms" className="hover:text-white mr-6">
-              {t("terms")}
-            </Link>
-            <Link href="/privacy" className="hover:text-white">
-              {t("privacy")}
-            </Link>
-          </div>
+         
         </div>
       </div>
     </footer>

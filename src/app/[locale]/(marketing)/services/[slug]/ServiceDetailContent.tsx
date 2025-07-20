@@ -105,13 +105,13 @@ export default async function ServiceDetailContent({
     <>
       {/* Breadcrumb */}
       <section className="container mx-auto px-4 py-4 md:py-6 max-w-7xl">
-        <div className="flex items-center text-lg">
+        <div className="block md:flex items-center text-lg">
           <Link href="/services" className="text-gray-500 hover:text-gray-700">
             {t("services") || "Dịch vụ"}
           </Link>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 mx-2 text-gray-500"
+            className="h-5 w-5 mx-2 text-gray-500 inline md:block"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

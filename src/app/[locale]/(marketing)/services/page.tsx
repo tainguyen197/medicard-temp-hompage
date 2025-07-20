@@ -86,7 +86,7 @@ export default async function ServicesPage({
           <h2 className="text-3xl md:text-5xl max-text-[51px] font-semibold text-[#1F1F1F] mb-6">
             {t.cta.heading}
           </h2>
-          <p className="text-lg md:text-xl text-black mb-10 max-w-3xl mx-auto px-16">
+          <p className="text-lg md:text-xl text-black mb-10 max-w-3xl mx-auto md:px-16">
             {t.cta.subheading}
           </p>
           <a

@@ -27,7 +27,7 @@ const CertificateItem = ({
   title: string;
 }) => (
   <div className="flex flex-col items-center h-full">
-    <div className="relative w-full h-[300px] md:h-[300px] overflow-hidden mb-4">
+    <div className="relative w-full h-[200px] md:h-[300px] overflow-hidden mb-4">
       <Image
         src={image}
         alt={title}
@@ -162,7 +162,7 @@ export default async function AboutPage({
           <h2 className="text-3xl md:text-5xl max-text-[51px] font-semibold text-[#1F1F1F] mb-6">
             {t.cta.heading}
           </h2>
-          <p className="text-lg md:text-xl text-black mb-10 max-w-3xl mx-auto px-16">
+          <p className="text-lg md:text-xl text-black mb-10 max-w-3xl mx-auto md:px-16">
             {t.cta.subheading}
           </p>
           <a

@@ -23,7 +23,7 @@ interface TestimonialSectionProps {
 export default function TestimonialSection({ t }: TestimonialSectionProps) {
   return (
     <AnimatedSection animation="zoomIn" delay={0.1} duration={0.8}>
-      <section className="relative container py-16 md:py-24 bg-white max-w-7xl mx-auto">
+      <section className="relative container pt-16 md:py-24 bg-white max-w-7xl mx-auto">
         <div className="relative mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="relative aspect-square rounded-lg overflow-hidden">
             <Image
@@ -34,7 +34,7 @@ export default function TestimonialSection({ t }: TestimonialSectionProps) {
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="mb-12 text-center">
+          <div className="mb-0 md:mb-12 text-center">
             <h2 className="font-cormorant font-bold text-2xl md:text-5xl md:max-text-[48px] leading-[140%] text-balance text-[#002447] mb-4">
               {t.testimonials.title}
             </h2>

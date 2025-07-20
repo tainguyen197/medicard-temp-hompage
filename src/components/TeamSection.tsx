@@ -386,7 +386,7 @@ const TeamSection: React.FC = () => {
                   (displayTeamMembers.length <= 4 && !isMobile) ? (
                     // Static display for 4 or fewer items (only on desktop)
                     <div className="flex justify-center">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-16 w-fit">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-16 w-fit">
                         {displayTeamMembers.map((member, index) => (
                           <div key={index}>
                             <TeamMember
