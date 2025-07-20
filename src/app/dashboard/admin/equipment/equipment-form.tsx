@@ -75,9 +75,9 @@ export default function EquipmentForm({
     formData.append("status", status);
     formData.append("showOnHomepage", showOnHomepage.toString());
     formData.append("order", order.toString());
-    // Send image IDs for backend update
-    if (imageId) formData.append("imageId", imageId);
-    if (imageEnId) formData.append("imageEnId", imageEnId);
+    // Always send image IDs (empty string means remove)
+    formData.append("imageId", imageId);
+    formData.append("imageEnId", imageEnId);
     onSubmit(formData);
   };
 

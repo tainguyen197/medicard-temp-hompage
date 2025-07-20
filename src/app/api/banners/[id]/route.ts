@@ -140,6 +140,8 @@ export async function PUT(
     const status = (formData.get("status") as string) || "ACTIVE";
     const imageFile = formData.get("imageFile") as File | null;
     const imageEnFile = formData.get("imageEnFile") as File | null;
+    const removeImage = formData.get("removeImage") === "true";
+    const removeImageEn = formData.get("removeImageEn") === "true";
 
     // Get existing banner for comparison
     const existingBanner = await prisma.banner.findUnique({
@@ -153,6 +155,14 @@ export async function PUT(
     // Handle image upload if a new image is provided
     let imageId: string | null = existingBanner.imageId;
     let imageEnId: string | null = existingBanner.imageEnId;
+
+    // Handle image removal
+    if (removeImage) {
+      imageId = null;
+    }
+    if (removeImageEn) {
+      imageEnId = null;
+    }
 
     if (imageFile && imageFile.size > 0) {
       try {
@@ -216,8 +226,8 @@ export async function PUT(
       data: {
         ...(type && { type }),
         link: link !== undefined ? link : undefined,
-        imageId: imageId !== undefined ? imageId : undefined,
-        imageEnId: imageEnId !== undefined ? imageEnId : undefined,
+        imageId, // This can now be null to remove the image
+        imageEnId, // This can now be null to remove the image
         status: status || undefined,
       },
       include: {

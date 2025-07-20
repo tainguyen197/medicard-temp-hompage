@@ -169,6 +169,14 @@ export default function BannerForm({
         submitData.append("imageEnFile", formData.imageEnFile);
       }
 
+      // Send explicit removal signals
+      if (formData.existingImageUrl === "" && !formData.imageFile) {
+        submitData.append("removeImage", "true");
+      }
+      if (formData.existingImageEnUrl === "" && !formData.imageEnFile) {
+        submitData.append("removeImageEn", "true");
+      }
+
       const url = isEditing
         ? `/api/banners/${initialData?.id}`
         : "/api/banners";

@@ -162,9 +162,9 @@ export async function NewsDataComponent({
       {/* 3. Trending Topics - Only show if we have enough posts */}
       {trendingNews.length >0 && (
         <section className="container mx-auto px-4 mb-16 md:mb-20 max-w-[1040px]">
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex flex-col md:flex-row gap-4 md:h-[480px]">
             {/* Featured post (larger) - left side */}
-            <div className="md:w-1/2">
+            <div className="h-[304px] md:h-full md:w-1/2">
               <Link
                 href={`/news/${trendingNews[0].slug}`}
                 className="group relative rounded-lg overflow-hidden block h-full"

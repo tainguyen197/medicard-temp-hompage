@@ -23,9 +23,9 @@ const newsUpdateSchema = z.object({
   shortDescription: z.string().optional(),
   shortDescriptionEn: z.string().optional().nullable(),
   featuredImage: z.string().optional(), // Accept the image URL
-  featureImageId: z.string().optional(),
+  featureImageId: z.string().optional().nullable(),
   featuredImageEn: z.string().optional(), // Accept the English image URL
-  featureImageEnId: z.string().optional(),
+  featureImageEnId: z.string().optional().nullable(),
   metaTitle: z
     .string()
     .max(65, "Meta title must be 65 characters or less")
@@ -165,6 +165,14 @@ export async function PUT(
     let featureImageId = validatedData.featureImageId;
     let featureImageEnId = validatedData.featureImageEnId;
 
+    // Handle image removal (empty string means remove)
+    if (featureImageId === "") {
+      featureImageId = null;
+    }
+    if (featureImageEnId === "") {
+      featureImageEnId = null;
+    }
+
     if (validatedData.featuredImage && !featureImageId) {
       // Try to find the media record by URL
       const media = await prisma.media.findFirst({
@@ -215,8 +223,8 @@ export async function PUT(
         metaDescriptionEn: validatedData.metaDescriptionEn,
         metaKeywords: validatedData.metaKeywords,
         metaKeywordsEn: validatedData.metaKeywordsEn,
-        ...(featureImageId && { featureImageId }), // Only add if we have an image ID
-        ...(featureImageEnId && { featureImageEnId }), // Only add if we have an English image ID
+        featureImageId, // This can now be null to remove the image
+        featureImageEnId, // This can now be null to remove the image
       },
       include: {
         featureImage: true,

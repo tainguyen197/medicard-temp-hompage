@@ -79,8 +79,21 @@ export async function PUT(req: NextRequest, { params }: Params) {
     const imageId = formData.get("imageId") as string || undefined;
     const imageEnId = formData.get("imageEnId") as string || undefined;
     
-    let updatedImageId = imageId;
-    let updatedImageEnId = imageEnId;
+    let updatedImageId = existingEquipment.imageId;
+    let updatedImageEnId = existingEquipment.imageEnId;
+    
+    // Handle image removal (empty string means remove)
+    if (imageId === "") {
+      updatedImageId = null;
+    } else if (imageId) {
+      updatedImageId = imageId;
+    }
+    
+    if (imageEnId === "") {
+      updatedImageEnId = null;
+    } else if (imageEnId) {
+      updatedImageEnId = imageEnId;
+    }
     
     // Process Vietnamese image if provided
     if (imageFile) {

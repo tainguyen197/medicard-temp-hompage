@@ -176,6 +176,14 @@ export default function TeamMemberForm({
         submitData.append("imageEnFile", formData.imageEnFile);
       }
 
+      // Send explicit removal signals
+      if (formData.existingImageUrl === "" && !formData.imageFile) {
+        submitData.append("removeImage", "true");
+      }
+      if (formData.existingImageEnUrl === "" && !formData.imageEnFile) {
+        submitData.append("removeImageEn", "true");
+      }
+
       const url = isEdit ? `/api/team/${teamMemberId}` : "/api/team";
       const method = isEdit ? "PUT" : "POST";
 

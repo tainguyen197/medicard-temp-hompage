@@ -155,9 +155,19 @@ export async function PUT(
     // Handle file uploads for images
     const imageFile = formData.get("imageFile") as File | null;
     const imageEnFile = formData.get("imageEnFile") as File | null;
+    const removeImage = formData.get("removeImage") === "true";
+    const removeImageEn = formData.get("removeImageEn") === "true";
 
     let imageId: string | null = existingTeamMember.imageId;
     let imageEnId: string | null = existingTeamMember.imageEnId;
+
+    // Handle image removal
+    if (removeImage) {
+      imageId = null;
+    }
+    if (removeImageEn) {
+      imageEnId = null;
+    }
 
     // Upload Vietnamese image if provided
     if (imageFile && imageFile.size > 0) {
@@ -222,8 +232,8 @@ export async function PUT(
         descriptionEn,
         order,
         status,
-        ...(imageId && { imageId }),
-        ...(imageEnId && { imageEnId }),
+        imageId, // This can now be null to remove the image
+        imageEnId, // This can now be null to remove the image
       },
       include: {
         image: true,
@@ -245,6 +255,18 @@ export async function PUT(
     }
     if (order !== existingTeamMember.order) {
       changes.order = { from: existingTeamMember.order, to: order };
+    }
+    if (imageId !== existingTeamMember.imageId) {
+      changes.imageId = { 
+        from: existingTeamMember.imageId, 
+        to: imageId 
+      };
+    }
+    if (imageEnId !== existingTeamMember.imageEnId) {
+      changes.imageEnId = { 
+        from: existingTeamMember.imageEnId, 
+        to: imageEnId 
+      };
     }
 
     await Logger.logCRUD({

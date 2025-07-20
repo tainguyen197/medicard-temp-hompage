@@ -7,6 +7,7 @@ import { ServicesDataComponent } from "./ServicesContent";
 import {
   getBannerDataByType,
   BANNER_TYPES,
+  DEFAULT_HERO_IMAGE,
 } from "@/lib/banner-utils";
 import { getAppointmentLink } from "@/lib/contact";
 
@@ -25,7 +26,7 @@ export default async function ServicesPage({
 
   // Fetch service banner data
   const serviceBanner = await getBannerDataByType(BANNER_TYPES.SERVICE, locale);
-  const heroImage = serviceBanner.imageUrl;
+  const heroImage = serviceBanner.imageUrl || DEFAULT_HERO_IMAGE  ;
   
   // Fetch appointment link
   const appointmentLink = await getAppointmentLink();

@@ -87,7 +87,9 @@ const convertApiTeamMemberToTeamMember = (
     title: localizedContent.title,
     description: localizedContent.description,
     image:
-      apiMember.image?.url || apiMember.imageEn?.url || "/images/doctor1.jpg", // fallback image
+      locale === "en" && apiMember.imageEn?.url
+        ? apiMember.imageEn?.url
+        : apiMember.image?.url || "/images/doctor1.jpg", // fallback image
   };
 };
 
