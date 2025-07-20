@@ -46,6 +46,7 @@ export default async function AdminLayout({
   }
 
   const isAdmin = session.user.role === "ADMIN";
+  const isSuperAdmin = session.user.role === "SUPER_ADMIN";
 
   // Define navigation items with roles
   const navItems = [
@@ -53,7 +54,7 @@ export default async function AdminLayout({
       label: "Dashboard",
       href: ROUTES.ADMIN_DASHBOARD,
       icon: <LayoutDashboard className="h-5 w-5" />,
-      roles: ["SUPER_ADMIN", "ADMIN"],
+      roles: ["SUPER_ADMIN", "ADMIN", "EDITOR"],
     },
     {
       label: "Services",
@@ -97,7 +98,6 @@ export default async function AdminLayout({
       icon: <Image className="h-5 w-5" />,
       roles: ["SUPER_ADMIN", "ADMIN", "EDITOR"],
     },
-
     {
       label: "User Management",
       href: ROUTES.ADMIN_USERS,

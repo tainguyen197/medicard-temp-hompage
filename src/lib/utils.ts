@@ -286,3 +286,62 @@ export function canAccessSystemSettings(userRole: string): boolean {
 export function canViewAuditLogs(userRole: string): boolean {
   return ["SUPER_ADMIN", "ADMIN"].includes(userRole);
 }
+
+/**
+ * Get dashboard stats based on user role
+ */
+export function getDashboardStatsForRole(userRole: string) {
+  const baseStats = ['services', 'media', 'banners'];
+  const adminStats = [...baseStats, 'team', 'equipment'];
+  const superAdminStats = [...adminStats, 'users', 'logs'];
+
+  switch (userRole) {
+    case 'SUPER_ADMIN':
+      return superAdminStats;
+    case 'ADMIN':
+      return adminStats;
+    case 'EDITOR':
+      return baseStats;
+    default:
+      return [];
+  }
+}
+
+/**
+ * Get quick actions based on user role
+ */
+export function getQuickActionsForRole(userRole: string) {
+  const baseActions = ['services', 'news'];
+  const adminActions = [...baseActions, 'team', 'equipment'];
+  const superAdminActions = [...adminActions, 'users'];
+
+  switch (userRole) {
+    case 'SUPER_ADMIN':
+      return superAdminActions;
+    case 'ADMIN':
+      return adminActions;
+    case 'EDITOR':
+      return baseActions;
+    default:
+      return [];
+  }
+}
+
+/**
+ * Check if user can view specific dashboard section
+ */
+export function canViewDashboardSection(userRole: string, section: string): boolean {
+  const sectionPermissions = {
+    services: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'],
+    news: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'],
+    media: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'],
+    banners: ['SUPER_ADMIN', 'ADMIN', 'EDITOR'],
+    team: ['SUPER_ADMIN', 'ADMIN'],
+    equipment: ['SUPER_ADMIN', 'ADMIN'],
+    users: ['SUPER_ADMIN'],
+    logs: ['SUPER_ADMIN', 'ADMIN'],
+    contact: ['SUPER_ADMIN', 'ADMIN'],
+  };
+
+  return sectionPermissions[section as keyof typeof sectionPermissions]?.includes(userRole) || false;
+}

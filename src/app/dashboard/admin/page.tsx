@@ -11,10 +11,13 @@ import {
   BarChart3,
   TrendingUp,
   Stethoscope,
+  Shield,
+  Settings,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ROUTES } from "@/lib/router";
+import { useSession } from "next-auth/react";
 
 interface DashboardStats {
   totalServices: number;
@@ -22,13 +25,17 @@ interface DashboardStats {
   totalMedia: number;
   totalBanners: number;
   totalEquipment: number;
+  totalUsers: number;
+  totalLogs: number;
 }
 
 interface DashboardData {
   stats: DashboardStats;
+  userRole: string;
 }
 
 export default function AdminDashboard() {
+  const { data: session } = useSession();
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(
     null
   );
@@ -126,50 +133,92 @@ export default function AdminDashboard() {
 
   if (!dashboardData) return null;
 
-  const { stats } = dashboardData;
+  const { stats, userRole } = dashboardData;
 
-  const statsConfig = [
-    {
-      label: "Services",
-      value: stats.totalServices,
-      icon: Flag,
-      color: "blue",
-      description: "Total services available",
-      href: ROUTES.ADMIN_SERVICES
-    },
-    {
-      label: "Team Members",
-      value: stats.totalTeamMembers,
-      icon: Users,
-      color: "green",
-      description: "Active team members",
-      href: ROUTES.ADMIN_TEAM
-    },
-    {
-      label: "Equipment",
-      value: stats.totalEquipment,
-      icon: Stethoscope,
-      color: "purple",
-      description: "Medical equipment items",
-      href: ROUTES.ADMIN_EQUIPMENT
-    },
-    {
-      label: "Media Files",
-      value: stats.totalMedia,
-      icon: FileText,
-      color: "purple",
-      description: "Files in media library",
-      href: ROUTES.ADMIN_MEDIA
-    },
-    {
-      label: "Banners",
-      value: stats.totalBanners,
-      icon: BarChart3,
-      color: "orange",
-      description: "Active banner campaigns",
-      href: ROUTES.ADMIN_BANNERS
-    },
-  ];
+  // Define stats configuration based on user role
+  const getStatsConfig = () => {
+    const baseStats = [
+      {
+        label: "Services",
+        value: stats.totalServices,
+        icon: Flag,
+        color: "blue",
+        description: "Total services available",
+        href: ROUTES.ADMIN_SERVICES,
+        roles: ["SUPER_ADMIN", "ADMIN", "EDITOR"]
+      },
+      {
+        label: "Media Files",
+        value: stats.totalMedia,
+        icon: FileText,
+        color: "purple",
+        description: "Files in media library",
+        href: ROUTES.ADMIN_MEDIA,
+        roles: ["SUPER_ADMIN", "ADMIN", "EDITOR"]
+      },
+      {
+        label: "Banners",
+        value: stats.totalBanners,
+        icon: BarChart3,
+        color: "orange",
+        description: "Active banner campaigns",
+        href: ROUTES.ADMIN_BANNERS,
+        roles: ["SUPER_ADMIN", "ADMIN", "EDITOR"]
+      },
+    ];
+
+    // Add admin-only stats
+    if (["SUPER_ADMIN", "ADMIN"].includes(userRole)) {
+      baseStats.push(
+        {
+          label: "Team Members",
+          value: stats.totalTeamMembers,
+          icon: Users,
+          color: "green",
+          description: "Active team members",
+          href: ROUTES.ADMIN_TEAM,
+          roles: ["SUPER_ADMIN", "ADMIN"]
+        },
+        {
+          label: "Equipment",
+          value: stats.totalEquipment,
+          icon: Stethoscope,
+          color: "purple",
+          description: "Medical equipment items",
+          href: ROUTES.ADMIN_EQUIPMENT,
+          roles: ["SUPER_ADMIN", "ADMIN"]
+        }
+      );
+    }
+
+    // Add super admin-only stats
+    if (userRole === "SUPER_ADMIN") {
+      baseStats.push(
+        {
+          label: "Users",
+          value: stats.totalUsers,
+          icon: Shield,
+          color: "red",
+          description: "System users",
+          href: ROUTES.ADMIN_USERS,
+          roles: ["SUPER_ADMIN"]
+        },
+        {
+          label: "Audit Logs",
+          value: stats.totalLogs,
+          icon: Settings,
+          color: "gray",
+          description: "System activity logs",
+          href: ROUTES.ADMIN_LOGS,
+          roles: ["SUPER_ADMIN", "ADMIN"]
+        }
+      );
+    }
+
+    return baseStats.filter(stat => stat.roles.includes(userRole));
+  };
+
+  const statsConfig = getStatsConfig();
 
   const getIconBgColor = (color: string) => {
     const colors = {
@@ -177,9 +226,59 @@ export default function AdminDashboard() {
       green: "bg-green-100 text-green-600", 
       purple: "bg-purple-100 text-purple-600",
       orange: "bg-orange-100 text-orange-600",
+      red: "bg-red-100 text-red-600",
+      gray: "bg-gray-100 text-gray-600",
     };
     return colors[color as keyof typeof colors];
   };
+
+  // Define quick actions based on user role
+  const getQuickActions = () => {
+    const actions = [
+      {
+        label: "Add New Service",
+        description: "Create a new healthcare service",
+        href: ROUTES.ADMIN_SERVICES + "/new",
+        icon: Flag,
+        color: "blue",
+        roles: ["SUPER_ADMIN", "ADMIN", "EDITOR"]
+      },
+      {
+        label: "Create News Article",
+        description: "Publish latest news and updates",
+        href: ROUTES.ADMIN_NEWS + "/new",
+        icon: FileText,
+        color: "green",
+        roles: ["SUPER_ADMIN", "ADMIN", "EDITOR"]
+      },
+    ];
+
+    // Add admin-only actions
+    if (["SUPER_ADMIN", "ADMIN"].includes(userRole)) {
+      actions.push(
+        {
+          label: "Add Team Member",
+          description: "Add a new doctor or staff member",
+          href: ROUTES.ADMIN_TEAM + "/new",
+          icon: Users,
+          color: "purple",
+          roles: ["SUPER_ADMIN", "ADMIN"]
+        },
+        {
+          label: "Add Equipment",
+          description: "Add new medical equipment",
+          href: ROUTES.ADMIN_EQUIPMENT + "/new",
+          icon: Stethoscope,
+          color: "cyan",
+          roles: ["SUPER_ADMIN", "ADMIN"]
+        }
+      );
+    }
+
+    return actions.filter(action => action.roles.includes(userRole));
+  };
+
+  const quickActions = getQuickActions();
 
   return (
     <div className="space-y-8">
@@ -189,6 +288,12 @@ export default function AdminDashboard() {
         <p className="text-slate-600">
           Welcome back! Here's what's happening with your healthcare platform.
         </p>
+        <div className="flex items-center space-x-2 text-sm text-slate-500">
+          <span>Role:</span>
+          <span className="px-2 py-1 bg-slate-100 rounded-md font-medium">
+            {userRole}
+          </span>
+        </div>
       </div>
 
       {/* Stats Grid */}
@@ -231,57 +336,54 @@ export default function AdminDashboard() {
         </div>
         
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <Link 
-            href={ROUTES.ADMIN_SERVICES + "/new"}
-            className="flex items-center p-4 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors duration-200 group"
-          >
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-blue-200 transition-colors">
-              <Flag className="w-5 h-5 text-blue-600" />
-            </div>
-            <div>
-              <div className="font-medium text-slate-900">Add New Service</div>
-              <div className="text-sm text-slate-600">Create a new healthcare service</div>
-            </div>
-          </Link>
-
-          <Link 
-            href={ROUTES.ADMIN_NEWS + "/new"}
-            className="flex items-center p-4 bg-green-50 rounded-xl hover:bg-green-100 transition-colors duration-200 group"
-          >
-            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-green-200 transition-colors">
-              <FileText className="w-5 h-5 text-green-600" />
-            </div>
-            <div>
-              <div className="font-medium text-slate-900">Create News Article</div>
-              <div className="text-sm text-slate-600">Publish latest news and updates</div>
-            </div>
-          </Link>
-
-          <Link 
-            href={ROUTES.ADMIN_TEAM + "/new"}
-            className="flex items-center p-4 bg-purple-50 rounded-xl hover:bg-purple-100 transition-colors duration-200 group"
-          >
-            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-purple-200 transition-colors">
-              <Users className="w-5 h-5 text-purple-600" />
-            </div>
-            <div>
-              <div className="font-medium text-slate-900">Add Team Member</div>
-              <div className="text-sm text-slate-600">Add a new doctor or staff member</div>
-            </div>
-          </Link>
-
-          <Link 
-            href={ROUTES.ADMIN_EQUIPMENT + "/new"}
-            className="flex items-center p-4 bg-cyan-50 rounded-xl hover:bg-cyan-100 transition-colors duration-200 group"
-          >
-            <div className="w-10 h-10 bg-cyan-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-cyan-200 transition-colors">
-              <Stethoscope className="w-5 h-5 text-cyan-600" />
-            </div>
-            <div>
-              <div className="font-medium text-slate-900">Add Equipment</div>
-              <div className="text-sm text-slate-600">Add new medical equipment</div>
-            </div>
-          </Link>
+          {quickActions.map((action) => {
+            const IconComponent = action.icon;
+            
+            // Define color classes based on action color
+            const getColorClasses = (color: string) => {
+              const colorMap = {
+                blue: {
+                  bg: "bg-blue-50 hover:bg-blue-100",
+                  iconBg: "bg-blue-100",
+                  iconColor: "text-blue-600"
+                },
+                green: {
+                  bg: "bg-green-50 hover:bg-green-100",
+                  iconBg: "bg-green-100",
+                  iconColor: "text-green-600"
+                },
+                purple: {
+                  bg: "bg-purple-50 hover:bg-purple-100",
+                  iconBg: "bg-purple-100",
+                  iconColor: "text-purple-600"
+                },
+                cyan: {
+                  bg: "bg-cyan-50 hover:bg-cyan-100",
+                  iconBg: "bg-cyan-100",
+                  iconColor: "text-cyan-600"
+                }
+              };
+              return colorMap[color as keyof typeof colorMap] || colorMap.blue;
+            };
+            
+            const colorClasses = getColorClasses(action.color);
+            
+            return (
+              <Link 
+                key={action.label}
+                href={action.href}
+                className={`flex items-center p-4 ${colorClasses.bg} rounded-xl transition-colors duration-200 group`}
+              >
+                <div className={`w-10 h-10 ${colorClasses.iconBg} rounded-lg flex items-center justify-center mr-4 group-hover:bg-opacity-80 transition-colors`}>
+                  <IconComponent className={`w-5 h-5 ${colorClasses.iconColor}`} />
+                </div>
+                <div>
+                  <div className="font-medium text-slate-900">{action.label}</div>
+                  <div className="text-sm text-slate-600">{action.description}</div>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </div>
 
