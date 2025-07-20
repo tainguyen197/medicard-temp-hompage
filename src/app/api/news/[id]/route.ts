@@ -18,10 +18,10 @@ const newsUpdateSchema = z.object({
   categoryId: z.string().optional(),
   categoryEnId: z.string().optional(),
   slug: z.string().optional(),
-  description: z.string().optional(),
-  descriptionEn: z.string().optional(),
+  description: z.string().optional().nullable(),
+  descriptionEn: z.string().optional().nullable(),
   shortDescription: z.string().optional(),
-  shortDescriptionEn: z.string().optional(),
+  shortDescriptionEn: z.string().optional().nullable(),
   featuredImage: z.string().optional(), // Accept the image URL
   featureImageId: z.string().optional(),
   featuredImageEn: z.string().optional(), // Accept the English image URL

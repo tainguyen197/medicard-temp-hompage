@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { ROUTES } from "@/lib/router";
 import { newsFormSchema, NewsFormValues, Category } from "./useNewsForm";
+import { cleanContentForSubmission } from "@/lib/content-utils";
 
 export function useNewsEditForm(newsId: string) {
   const router = useRouter();
@@ -261,7 +262,8 @@ export function useNewsEditForm(newsId: string) {
         body: JSON.stringify({
           ...data,
           titleEn: data.titleEn || undefined,
-          descriptionEn: data.descriptionEn || undefined,
+            description: cleanContentForSubmission(data.description),
+          descriptionEn: cleanContentForSubmission(data.descriptionEn),
           shortDescriptionEn: data.shortDescriptionEn || undefined,
           categoryId: data.categoryId || undefined,
           categoryEnId: data.categoryEnId || undefined,

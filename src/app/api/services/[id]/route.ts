@@ -17,9 +17,9 @@ const serviceUpdateSchema = z.object({
   showOnHomepage: z.boolean().optional(),
   slug: z.string().optional(),
   description: z.string().optional(),
-  descriptionEn: z.string().optional(),
+  descriptionEn: z.string().optional().nullable(),
   shortDescription: z.string().optional(),
-  shortDescriptionEn: z.string().optional(),
+  shortDescriptionEn: z.string().optional().nullable(),
   keywords: z.string().optional(),
   enKeywords: z.string().optional(),
   featuredImage: z.string().optional(), // Accept the image URL
@@ -166,6 +166,8 @@ export async function PUT(
         );
       }
     }
+
+    console.log("validatedData", validatedData.descriptionEn);
 
     // Find the media record if featuredImage URL is provided
     let featureImageId = validatedData.featureImageId;

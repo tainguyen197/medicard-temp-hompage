@@ -4,6 +4,7 @@ import Link from "next/link";
 import { News, NewsResponse } from "@/types/post";
 import { getMessages } from "next-intl/server";
 import { getAppointmentLink } from "@/lib/contact";
+import { htmlToText } from '@/lib/content-utils';
 
 // Default image fallback if no featured image
 const DEFAULT_IMAGE = "/images/default_news_ai.jpeg";
@@ -232,7 +233,7 @@ export async function NewsDataComponent({
                   {newsItem.title}
                 </h2>
                 <p className="text-gray-600 line-clamp-3 mb-4">
-                  {newsItem.shortDescription || `${newsItem.description?.substring(0, 200)}...`}
+                  {htmlToText(newsItem.shortDescription || newsItem.description?.substring(0, 200))}
                 </p>
               </div>
               <div className="mt-4 md:mt-0">

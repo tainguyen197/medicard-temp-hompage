@@ -2,11 +2,13 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { getMessages } from "next-intl/server";
+import { htmlToText } from "@/lib/content-utils";
 
 interface DisplayService {
   id: string;
   title: string;
   shortDescription: string;
+  description: string;
   image: string;
 }
 
@@ -100,7 +102,7 @@ export default function ServicesContent({
                       </button>
                     </div>
                     <p className="text-md md:text-lg text-[#909090] leading-relaxed">
-                      {service.shortDescription}
+                      {htmlToText(service.description).substring(0, 200) + "..."}
                     </p>
                   </div>
                 </div>
@@ -171,6 +173,7 @@ export async function ServicesDataComponent({
           id: service.slug || service.id, // Use slug for URL, fallback to id
           title: service.title,
           shortDescription: service.shortDescription || "",
+          description: service.description || "",
           image: service.featureImage?.url || DEFAULT_SERVICE_IMAGE, // Fallback to existing service image
         }))
       : [

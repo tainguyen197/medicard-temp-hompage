@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 import { ROUTES } from "@/lib/router";
+import { cleanContentForSubmission } from "@/lib/content-utils";
 
 // Define the Category interface
 export interface Category {
@@ -247,7 +248,8 @@ export function useNewsForm(initialData?: Partial<NewsFormValues>) {
         body: JSON.stringify({
           ...data,
           titleEn: data.titleEn || undefined,
-          descriptionEn: data.descriptionEn || undefined,
+          description: cleanContentForSubmission(data.description),
+          descriptionEn: cleanContentForSubmission(data.descriptionEn),
           shortDescriptionEn: data.shortDescriptionEn || undefined,
           categoryId: data.categoryId || undefined,
           categoryEnId: data.categoryEnId || undefined,
@@ -262,6 +264,10 @@ export function useNewsForm(initialData?: Partial<NewsFormValues>) {
 
       if (!response.ok) {
         const error = await response.json();
+        const isArray = Array.isArray(error.error);
+        if (isArray) {
+          throw new Error(error.error[0].message || "Failed to create news article");
+        }
         throw new Error(error.error || "Failed to create news article");
       }
 

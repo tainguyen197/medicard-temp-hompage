@@ -54,6 +54,7 @@ export default function NewNewsPage() {
     formState: { errors },
     watch,
   } = form;
+  
 
   return (
     <div className="">

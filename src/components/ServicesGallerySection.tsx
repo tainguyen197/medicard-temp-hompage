@@ -11,6 +11,7 @@ import {
   ServiceData,
 } from "@/data/services";
 import { ROUTES } from "@/lib/router";
+import { htmlToText } from "@/lib/content-utils";
 
 interface ServiceItem {
   id: string;
@@ -47,7 +48,7 @@ const convertServiceToServiceItem = (
   return {
     id: service.slug || service.id,
     title: localizedContent.title,
-    description: localizedContent.shortDescription || "",
+    description: localizedContent.description || "",
     details: localizedContent.details || "",
     image:
       service.featureImage?.url ||
@@ -214,7 +215,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="flex justify-center mb-8 md:mb-16">
             <h2 className="text-2xl md:text-[46px] xl:text-[51px] font-cormorant font-semibold text-[#FFF7EB] uppercase relative">
-              DỊCH VỤ
+              {t("title")}
             </h2>
           </div>
           <div className="flex justify-center items-center h-[450px]">
@@ -273,10 +274,9 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
               </h3>
               <p
                 className="text-gray-300 mb-4 md:mb-10 text-sm md:text-md leading-relaxed line-clamp-5 md:line-clamp-none  min-h-[7.25rem]"
-                dangerouslySetInnerHTML={{
-                  __html: activeService?.description,
-                }}
-              />
+              >
+                {htmlToText(activeService?.description).substring(0, 350) + "..."}
+              </p>
             </div>
             <div>
               <div className="mb-10">

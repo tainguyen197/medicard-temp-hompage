@@ -20,6 +20,7 @@ import {
 import ImageUpload from "@/components/ImageUpload";
 import { ROUTES } from "@/lib/router";
 import { TextEditor } from "taitrung-super-editor";
+import { cleanContentForSubmission } from "@/lib/content-utils";
 
 // Define the form schema with Zod
 const serviceFormSchema = z.object({
@@ -139,7 +140,8 @@ export default function NewServicePage() {
         body: JSON.stringify({
           ...data,
           titleEn: data.titleEn || undefined,
-          descriptionEn: data.descriptionEn || undefined,
+          description: cleanContentForSubmission(data.description),
+          descriptionEn: cleanContentForSubmission(data.descriptionEn),
           shortDescriptionEn: data.shortDescriptionEn || undefined,
           enKeywords: data.enKeywords || undefined,
           metaTitle: data.metaTitle || undefined,

@@ -11,10 +11,10 @@ import { createSlug, Logger, canPublishContent } from "../../../lib/utils";
 const serviceSchema = z.object({
   title: z.string().min(1, "Title is required"),
   titleEn: z.string().optional(),
-  description: z.string().optional(),
-  descriptionEn: z.string().optional(),
+  description: z.string().optional().nullable(),
+  descriptionEn: z.string().optional().nullable(),
   shortDescription: z.string().optional(),
-  shortDescriptionEn: z.string().optional(),
+  shortDescriptionEn: z.string().optional().nullable(),
   keywords: z.string().optional(),
   enKeywords: z.string().optional(),
   status: z.string().optional().default("DRAFT"),

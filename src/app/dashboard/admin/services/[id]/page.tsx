@@ -17,6 +17,7 @@ import {
 import ImageUpload from "@/components/ImageUpload";
 import { ROUTES } from "@/lib/router";
 import { TextEditor } from "taitrung-super-editor";
+import { cleanContentForSubmission } from "@/lib/content-utils";
 export default function EditServicePage({
   params,
 }: {
@@ -126,23 +127,6 @@ export default function EditServicePage({
     setIsSlugManuallyEdited(true);
   };
 
-  // Use useCallback to memoize the onChange handler to prevent re-renders
-  const handleEditorChange = useCallback(
-    (event: unknown, editor: { getData: () => string }) => {
-      const data = editor.getData();
-      setDescription(data);
-    },
-    []
-  );
-
-  const handleEditorChangeEn = useCallback(
-    (event: unknown, editor: { getData: () => string }) => {
-      const data = editor.getData();
-      setDescriptionEn(data);
-    },
-    []
-  );
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -165,10 +149,10 @@ export default function EditServicePage({
           status,
           showOnHomepage,
           slug,
-          description,
-          descriptionEn: descriptionEn || undefined,
+          description: cleanContentForSubmission(description),
+          descriptionEn: cleanContentForSubmission(descriptionEn),
           shortDescription,
-          shortDescriptionEn: shortDescriptionEn || undefined,
+          shortDescriptionEn: shortDescriptionEn,
           keywords,
           enKeywords: enKeywords || undefined,
           metaTitle: metaTitle || undefined,
@@ -444,6 +428,7 @@ export default function EditServicePage({
                 />
               )}
             </div>
+            <pre>{JSON.stringify(cleanContentForSubmission(descriptionEn), null, 2)}</pre>
           </div>
 
           {/* SEO Meta Fields - English */}
