@@ -47,7 +47,8 @@ export default async function RelatedPostsList({
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
-          next: { revalidate: 300 }, // Cache for 5 minutes
+          next: { revalidate: 0 },
+          cache: "no-store",
         }
       );
 

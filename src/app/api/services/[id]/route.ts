@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 import { authOptions } from "../../../../lib/auth";
 import prisma from "../../../../lib/prisma";
@@ -250,6 +251,11 @@ export async function PUT(
       changes: Object.keys(changes).length > 0 ? changes : undefined,
     });
 
+    // Revalidate cache for services pages
+    revalidatePath('/services');
+    revalidatePath('/[locale]/services');
+    revalidatePath('/[locale]/services/[slug]');
+
     return NextResponse.json(service);
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -303,6 +309,11 @@ export async function DELETE(
       userId: session.user.id,
       entityName: existingService.title,
     });
+
+    // Revalidate cache for services pages
+    revalidatePath('/services');
+    revalidatePath('/[locale]/services');
+    revalidatePath('/[locale]/services/[slug]');
 
     return NextResponse.json(
       { message: "Service deleted successfully" },

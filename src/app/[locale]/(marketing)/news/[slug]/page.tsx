@@ -44,7 +44,8 @@ export async function generateMetadata({
     const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/news/by-slug/${slug}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
-      next: { revalidate: 300 },
+      next: { revalidate: 0 },
+      cache: "no-store",
     });
     
     if (response.ok) {
@@ -236,7 +237,8 @@ export async function generateStaticParams() {
     const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/news?limit=100&status=PUBLISHED`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
-      next: { revalidate: 3600 }, // Cache for 1 hour
+      next: { revalidate: 0 },
+      cache: "no-store",
     });
     
     if (response.ok) {

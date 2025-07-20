@@ -55,7 +55,8 @@ export default async function ServiceDetailContent({
     const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/services/by-slug/${slug}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
-      next: { revalidate: 300 }, // Cache for 5 minutes
+      next: { revalidate: 0 },
+      cache: "no-store",
     });
 
     if (!response.ok) {

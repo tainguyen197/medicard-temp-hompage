@@ -132,7 +132,8 @@ export async function ServicesDataComponent({
     const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/services?status=PUBLISHED`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
-      next: { revalidate: 300 }, // Cache for 5 minutes
+      next: { revalidate: 0 },
+      cache: "no-store",
     });
 
     if (response.ok) {

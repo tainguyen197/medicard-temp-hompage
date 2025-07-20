@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 import { authOptions } from "../../../lib/auth";
 import prisma from "../../../lib/prisma";
@@ -257,6 +258,11 @@ export async function POST(request: Request) {
         categoryEnId: news.categoryEnId,
       },
     });
+
+    // Revalidate cache for news pages
+    revalidatePath('/news');
+    revalidatePath('/[locale]/news');
+    revalidatePath('/[locale]/news/[slug]');
 
     return NextResponse.json(news, { status: 201 });
   } catch (error) {

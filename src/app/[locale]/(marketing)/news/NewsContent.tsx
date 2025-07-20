@@ -45,7 +45,8 @@ export async function NewsDataComponent({
     const featuredResponse = await fetch(`${process.env.NEXTAUTH_URL}/api/news/featured`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
-      next: { revalidate: 300 },
+      next: { revalidate: 0 },
+      cache: "no-store",
     });
     if (featuredResponse.ok) {
       const featuredData = await featuredResponse.json();
@@ -73,7 +74,8 @@ export async function NewsDataComponent({
     const response = await fetch(`${process.env.NEXTAUTH_URL}/api/news?page=${currentPage}&limit=${postsPerPage}&status=PUBLISHED&pin=false`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
-      next: { revalidate: 300 },
+      next: { revalidate: 0 },
+      cache: "no-store",
     });
 
     if (response.ok) {

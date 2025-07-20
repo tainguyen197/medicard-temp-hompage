@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 import { authOptions } from "../../../lib/auth";
 import prisma from "../../../lib/prisma";
@@ -243,6 +244,11 @@ export async function POST(request: Request) {
         slug: service.slug,
       },
     });
+
+    // Revalidate cache for services pages
+    revalidatePath('/services');
+    revalidatePath('/[locale]/services');
+    revalidatePath('/[locale]/services/[slug]');
 
     return NextResponse.json(service, { status: 201 });
   } catch (error) {

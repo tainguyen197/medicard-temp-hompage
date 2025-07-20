@@ -25,7 +25,8 @@ async function getHomepageServices() {
         process.env.NEXTAUTH_URL || "http://localhost:3000"
       }/api/services/homepage`,
       {
-        next: { revalidate: 300 }, // Revalidate every 5 minutes
+        next: { revalidate: 0 },
+        cache: "no-store",
       }
     );
 
