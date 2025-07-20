@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { getTranslations } from "next-intl/server";
 
 // Default image fallback if no featured image

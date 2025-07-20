@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { useLocale } from "next-intl";
 import AnimatedSection from "@/components/AnimatedSection";
 import { fetchServices } from "@/lib/api";

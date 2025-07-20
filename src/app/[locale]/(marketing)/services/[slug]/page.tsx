@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { getMessages } from "next-intl/server";

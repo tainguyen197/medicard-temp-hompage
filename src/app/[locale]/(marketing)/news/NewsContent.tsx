@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { News, NewsResponse } from "@/types/post";
 import { getMessages } from "next-intl/server";
 import { getAppointmentLink } from "@/lib/contact";

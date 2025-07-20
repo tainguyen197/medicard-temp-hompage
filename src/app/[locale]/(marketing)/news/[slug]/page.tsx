@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import { Metadata } from "next";
 import { Suspense } from "react";
 // import prisma from "@/lib/prisma";
