@@ -101,8 +101,8 @@ export async function fetchNews(
 
   try {
     const response = await fetch(fullUrl, {
-      next: isDev ? { revalidate: 0 } : { revalidate: 300 }, // No cache in dev, 5 minutes in prod
-      cache: isDev ? "no-store" : undefined,
+      next: { revalidate: 0 },
+      cache: "no-store",
     });
 
     if (!response.ok) {
@@ -144,8 +144,8 @@ export async function fetchNewsItem(slug: string) {
     console.log("Fetching news item from URL:", apiUrl);
 
     const response = await fetch(apiUrl, {
-      next: isDev ? { revalidate: 0 } : { revalidate: 300 },
-      cache: isDev ? "no-store" : undefined,
+      next: { revalidate: 0 },
+      cache: "no-store",
     });
 
     if (!response.ok) {
@@ -212,8 +212,8 @@ export async function fetchServices(
 
   try {
     const response = await fetch(fullUrl, {
-      next: isDev ? { revalidate: 0 } : { revalidate: 300 }, // No cache in dev, 5 minutes in prod
-      cache: isDev ? "no-store" : undefined,
+      next: { revalidate: 0 },
+      cache: "no-store",
     });
 
     if (!response.ok) {
@@ -255,8 +255,8 @@ export async function fetchService(slug: string) {
     console.log("Fetching service from URL:", apiUrl);
 
     const response = await fetch(apiUrl, {
-      next: isDev ? { revalidate: 0 } : { revalidate: 300 },
-      cache: isDev ? "no-store" : undefined,
+      next: { revalidate: 0 },
+      cache: "no-store",
     });
 
     if (!response.ok) {
@@ -300,8 +300,8 @@ export async function fetchTeamMembers(): Promise<TeamMember[]> {
 
   try {
     const response = await fetch(fullUrl, {
-      next: isDev ? { revalidate: 0 } : { revalidate: 300 }, // No cache in dev, 5 minutes in prod
-      cache: isDev ? "no-store" : undefined,
+      next: { revalidate: 0 },
+      cache: "no-store",
     });
 
     if (!response.ok) {
