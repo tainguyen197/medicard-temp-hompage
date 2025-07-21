@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { News } from "@/types/post";
 import HomepageNewsSection from "./HomepageNewsSection";
+import { htmlToText } from "@/lib/content-utils";
 
 interface BlogPostProps {
   image: string;
@@ -16,7 +17,7 @@ interface BlogPostProps {
 const BlogPost = ({ image, title, description, slug, id }: BlogPostProps) => (
   <Link
     href={`/news/${slug}`}
-    className="group relative rounded-lg overflow-hidden max-w-[330px] mx-auto"
+    className="group relative rounded-lg overflow-hidden max-w-[330px] md:w-[330px] mx-auto"
   >
     <div className="bg-white group grid grid-cols-2 gap-4 md:block">
       <div className="relative md:aspect-square max-h-[330px] rounded-2xl overflow-hidden">
@@ -32,7 +33,7 @@ const BlogPost = ({ image, title, description, slug, id }: BlogPostProps) => (
           {title}
         </h3>
         <p className="text-gray-600 text-sm md:text-md line-clamp-2">
-          {description}
+          {htmlToText(description).substring(0, 150)}...
         </p>
       </div>
     </div>
