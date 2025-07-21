@@ -18,6 +18,34 @@ import ImageUpload from "@/components/ImageUpload";
 import { ROUTES } from "@/lib/router";
 import { TextEditor } from "taitrung-super-editor";
 import { cleanContentForSubmission } from "@/lib/content-utils";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const serviceFormSchema = z.object({
+  title: z.string().min(1, "Service title is required"),
+  titleEn: z.string().optional(),
+  status: z.enum(["DRAFT", "PUBLISHED"]),
+  showOnHomepage: z.boolean(),
+  slug: z.string().min(1, "Slug is required"),
+  description: z.string().min(1, "Description is required"),
+  descriptionEn: z.string().optional(),
+  shortDescription: z.string().min(1, "Short description is required"),
+  shortDescriptionEn: z.string().optional(),
+  keywords: z.string().min(1, "Keywords are required"),
+  enKeywords: z.string().optional(),
+  metaTitle: z.string().min(1, "Meta title is required"),
+  metaTitleEn: z.string().optional(),
+  metaDescription: z.string().min(1, "Meta description is required"),
+  metaDescriptionEn: z.string().optional(),
+  metaKeywords: z.string().min(1, "Meta keywords are required"),
+  metaKeywordsEn: z.string().optional(),
+  featuredImage: z.string().min(1, "Featured image is required"),
+  featureImageId: z.string().min(1, "Feature image ID is required"),
+  featuredImageEn: z.string().optional(),
+  featureImageEnId: z.string().optional(),
+});
+
 export default function EditServicePage({
   params,
 }: {
@@ -26,31 +54,45 @@ export default function EditServicePage({
   const router = useRouter();
   const { id } = use(params);
   const [isLoading, setIsLoading] = useState(true);
-  const [title, setTitle] = useState("");
-  const [titleEn, setTitleEn] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [status, setStatus] = useState("DRAFT");
-  const [showOnHomepage, setShowOnHomepage] = useState(false);
-  const [slug, setSlug] = useState("");
-  const [description, setDescription] = useState("");
-  const [descriptionEn, setDescriptionEn] = useState("");
-  const [shortDescription, setShortDescription] = useState("");
-  const [shortDescriptionEn, setShortDescriptionEn] = useState("");
-  const [keywords, setKeywords] = useState("");
-  const [enKeywords, setEnKeywords] = useState("");
-  const [featuredImageUrl, setFeaturedImageUrl] = useState("");
-  const [featureImageId, setFeatureImageId] = useState("");
-  const [featuredImageEnUrl, setFeaturedImageEnUrl] = useState("");
-  const [featureImageEnId, setFeatureImageEnId] = useState("");
   const [isImageUploading, setIsImageUploading] = useState(false);
   const [isImageEnUploading, setIsImageEnUploading] = useState(false);
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
-  const [metaTitle, setMetaTitle] = useState("");
-  const [metaTitleEn, setMetaTitleEn] = useState("");
-  const [metaDescription, setMetaDescription] = useState("");
-  const [metaDescriptionEn, setMetaDescriptionEn] = useState("");
-  const [metaKeywords, setMetaKeywords] = useState("");
-  const [metaKeywordsEn, setMetaKeywordsEn] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    control,
+    formState: { errors, isSubmitting: formIsSubmitting },
+    reset,
+  } = useForm({
+    resolver: zodResolver(serviceFormSchema),
+    defaultValues: {
+      title: "",
+      titleEn: "",
+      status: "DRAFT",
+      showOnHomepage: false,
+      slug: "",
+      description: "",
+      descriptionEn: "",
+      shortDescription: "",
+      shortDescriptionEn: "",
+      keywords: "",
+      enKeywords: "",
+      metaTitle: "",
+      metaTitleEn: "",
+      metaDescription: "",
+      metaDescriptionEn: "",
+      metaKeywords: "",
+      metaKeywordsEn: "",
+      featuredImage: "",
+      featureImageId: "",
+      featuredImageEn: "",
+      featureImageEnId: "",
+    },
+  });
 
   // Fetch service data
   useEffect(() => {
@@ -65,27 +107,29 @@ export default function EditServicePage({
         const service = await response.json();
 
         // Set form fields with service data including translations
-        setTitle(service.title || "");
-        setTitleEn(service.titleEn || "");
-        setStatus(service.status || "DRAFT");
-        setShowOnHomepage(service.showOnHomepage || false);
-        setSlug(service.slug || "");
-        setDescription(service.description || "");
-        setDescriptionEn(service.descriptionEn || "");
-        setShortDescription(service.shortDescription || "");
-        setShortDescriptionEn(service.shortDescriptionEn || "");
-        setKeywords(service.keywords || "");
-        setEnKeywords(service.enKeywords || "");
-        setMetaTitle(service.metaTitle || "");
-        setMetaTitleEn(service.metaTitleEn || "");
-        setMetaDescription(service.metaDescription || "");
-        setMetaDescriptionEn(service.metaDescriptionEn || "");
-        setMetaKeywords(service.metaKeywords || "");
-        setMetaKeywordsEn(service.metaKeywordsEn || "");
-        setFeaturedImageUrl(service.featureImage?.url || "");
-        setFeatureImageId(service.featureImageId || "");
-        setFeaturedImageEnUrl(service.featureImageEn?.url || "");
-        setFeatureImageEnId(service.featureImageEnId || "");
+        reset({
+          title: service.title || "",
+          titleEn: service.titleEn || "",
+          status: service.status || "DRAFT",
+          showOnHomepage: service.showOnHomepage || false,
+          slug: service.slug || "",
+          description: service.description || "",
+          descriptionEn: service.descriptionEn || "",
+          shortDescription: service.shortDescription || "",
+          shortDescriptionEn: service.shortDescriptionEn || "",
+          keywords: service.keywords || "",
+          enKeywords: service.enKeywords || "",
+          metaTitle: service.metaTitle || "",
+          metaTitleEn: service.metaTitleEn || "",
+          metaDescription: service.metaDescription || "",
+          metaDescriptionEn: service.metaDescriptionEn || "",
+          metaKeywords: service.metaKeywords || "",
+          metaKeywordsEn: service.metaKeywordsEn || "",
+          featuredImage: service.featureImage?.url || "",
+          featureImageId: service.featureImageId || "",
+          featuredImageEn: service.featureImageEn?.url || "",
+          featureImageEnId: service.featureImageEnId || "",
+        });
 
         setIsLoading(false);
       } catch (error) {
@@ -96,7 +140,7 @@ export default function EditServicePage({
     };
 
     fetchService();
-  }, [id, router]);
+  }, [id, router, reset]);
 
   // Generate slug from title
   const generateSlug = (text: string) => {
@@ -113,28 +157,21 @@ export default function EditServicePage({
   // Handle title change and auto-generate slug
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
-    setTitle(newTitle);
+    setValue("title", newTitle);
 
     // Only auto-generate slug if it hasn't been manually edited
     if (!isSlugManuallyEdited) {
-      setSlug(generateSlug(newTitle));
+      setValue("slug", generateSlug(newTitle));
     }
   };
 
   // Handle slug change
   const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSlug(e.target.value);
+    setValue("slug", e.target.value);
     setIsSlugManuallyEdited(true);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!title) {
-      toast.error("Please enter a title for your service");
-      return;
-    }
-
+  const onSubmit = async (data: any) => {
     setIsSubmitting(true);
 
     try {
@@ -144,27 +181,9 @@ export default function EditServicePage({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          title,
-          titleEn: titleEn || undefined,
-          status,
-          showOnHomepage,
-          slug,
-          description: cleanContentForSubmission(description),
-          descriptionEn: cleanContentForSubmission(descriptionEn),
-          shortDescription,
-          shortDescriptionEn: shortDescriptionEn,
-          keywords,
-          enKeywords: enKeywords || undefined,
-          metaTitle: metaTitle || undefined,
-          metaTitleEn: metaTitleEn || undefined,
-          metaDescription: metaDescription || undefined,
-          metaDescriptionEn: metaDescriptionEn || undefined,
-          metaKeywords: metaKeywords || undefined,
-          metaKeywordsEn: metaKeywordsEn || undefined,
-          featuredImage: featuredImageUrl,
-          featureImageId,
-          featuredImageEn: featuredImageEnUrl,
-          featureImageEnId,
+          ...data,
+          description: cleanContentForSubmission(data.description),
+          descriptionEn: cleanContentForSubmission(data.descriptionEn),
         }),
       });
 
@@ -220,7 +239,7 @@ export default function EditServicePage({
         </Button>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Vietnamese Content Section */}
         <fieldset className="p-4 border border-gray-200 rounded-lg">
           <legend className="text-lg font-semibold mb-4 px-2">
@@ -232,22 +251,32 @@ export default function EditServicePage({
               <Label htmlFor="title">Service Title (Vietnamese)</Label>
               <Input
                 id="title"
-                value={title}
+                {...register("title")}
                 onChange={handleTitleChange}
                 placeholder="Enter service title in Vietnamese"
                 className="w-full"
+                disabled={isSubmitting}
               />
+              {errors.title && (
+                <span className="text-red-500">{errors.title.message}</span>
+              )}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="featuredImage">Feature Image</Label>
-              <ImageUpload
-                value={featuredImageUrl}
-                onChange={setFeaturedImageUrl}
-                onImageUploading={setIsImageUploading}
-                onMediaIdChange={setFeatureImageId}
-                aspectRatio={270 / 200}
-                aspectRatioText="270:200"
+              <Controller
+                name="featuredImage"
+                control={control}
+                render={({ field }) => (
+                  <ImageUpload
+                    value={field.value}
+                    onChange={field.onChange}
+                    onImageUploading={setIsImageUploading}
+                    onMediaIdChange={(id) => setValue("featureImageId", id)}
+                    aspectRatio={270 / 200}
+                    aspectRatioText="270:200"
+                  />
+                )}
               />
               <p className="text-xs text-gray-500">
                 Recommended aspect ratio: 270:200
@@ -261,39 +290,54 @@ export default function EditServicePage({
             </Label>
             <Input
               id="shortDescription"
-              value={shortDescription}
-              onChange={(e) => setShortDescription(e.target.value)}
+              {...register("shortDescription")}
+              onChange={(e) => setValue("shortDescription", e.target.value)}
               placeholder="Brief summary of the service in Vietnamese"
               className="w-full"
+              disabled={isSubmitting}
             />
+            {errors.shortDescription && (
+              <span className="text-red-500">
+                {errors.shortDescription.message}
+              </span>
+            )}
           </div>
 
           <div className="space-y-2 mt-4">
             <Label htmlFor="keywords">Keywords (Vietnamese)</Label>
             <Input
               id="keywords"
-              value={keywords}
-              onChange={(e) => setKeywords(e.target.value)}
+              {...register("keywords")}
+              onChange={(e) => setValue("keywords", e.target.value)}
               placeholder="Thăm khám, tư vấn, chẩn đoán và điều trị các bệnh lý cơ xương khớp, Sử dụng các máy móc vật lý trị liệu, Kỹ thuật viên có tay nghề chuyên môn cao"
               className="w-full"
+              disabled={isSubmitting}
             />
             <p className="text-xs text-gray-500">
               Separate keywords with commas for better SEO
             </p>
+            {errors.keywords && (
+              <span className="text-red-500">{errors.keywords.message}</span>
+            )}
           </div>
 
           <div className="space-y-2 mt-4">
             <Label>Service Description (Vietnamese)</Label>
-            <div>
-              {typeof window !== "undefined" && (
+            <Controller
+              name="description"
+              control={control}
+              render={({ field }) => (
                 <TextEditor
-                  value={description}
-                  onChange={(value: any) => {
-                    setDescription(value);
-                  }}
+                  value={field.value}
+                  onChange={field.onChange}
                 />
               )}
-            </div>
+            />
+            {errors.description && (
+              <span className="text-red-500">
+                {errors.description.message}
+              </span>
+            )}
           </div>
 
           {/* SEO Meta Fields - Vietnamese */}
@@ -309,29 +353,41 @@ export default function EditServicePage({
                 </Label>
                 <Input
                   id="metaTitle"
-                  value={metaTitle}
-                  onChange={(e) => setMetaTitle(e.target.value)}
+                  {...register("metaTitle")}
+                  onChange={(e) => setValue("metaTitle", e.target.value)}
                   placeholder="SEO title for search engines"
                   maxLength={65}
                   className="w-full"
+                  disabled={isSubmitting}
                 />
                 <p className="text-xs text-gray-500">
-                  {metaTitle.length}/65 characters
+                  {watch("metaTitle")?.length}/65 characters
                 </p>
+                {errors.metaTitle && (
+                  <span className="text-red-500">
+                    {errors.metaTitle.message}
+                  </span>
+                )}
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="metaKeywords">Meta Keywords</Label>
                 <Input
                   id="metaKeywords"
-                  value={metaKeywords}
-                  onChange={(e) => setMetaKeywords(e.target.value)}
+                  {...register("metaKeywords")}
+                  onChange={(e) => setValue("metaKeywords", e.target.value)}
                   placeholder="keyword1, keyword2, keyword3"
                   className="w-full"
+                  disabled={isSubmitting}
                 />
                 <p className="text-xs text-gray-500">
                   Separate keywords with commas
                 </p>
+                {errors.metaKeywords && (
+                  <span className="text-red-500">
+                    {errors.metaKeywords.message}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -341,16 +397,22 @@ export default function EditServicePage({
               </Label>
               <textarea
                 id="metaDescription"
-                value={metaDescription}
-                onChange={(e) => setMetaDescription(e.target.value)}
+                {...register("metaDescription")}
+                onChange={(e) => setValue("metaDescription", e.target.value)}
                 placeholder="Brief description for search engine results"
                 maxLength={155}
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                disabled={isSubmitting}
               />
               <p className="text-xs text-gray-500">
-                {metaDescription.length}/155 characters
+                {watch("metaDescription")?.length}/155 characters
               </p>
+              {errors.metaDescription && (
+                <span className="text-red-500">
+                  {errors.metaDescription.message}
+                </span>
+              )}
             </div>
           </div>
         </fieldset>
@@ -366,22 +428,34 @@ export default function EditServicePage({
               <Label htmlFor="titleEn">Service Title (English)</Label>
               <Input
                 id="titleEn"
-                value={titleEn}
-                onChange={(e) => setTitleEn(e.target.value)}
+                {...register("titleEn")}
+                onChange={(e) => setValue("titleEn", e.target.value)}
                 placeholder="Enter service title in English"
                 className="w-full"
+                disabled={isSubmitting}
               />
+              {errors.titleEn && (
+                <span className="text-red-500">
+                  {errors.titleEn.message}
+                </span>
+              )}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="featuredImageEn">Feature Image (English)</Label>
-              <ImageUpload
-                value={featuredImageEnUrl}
-                onChange={setFeaturedImageEnUrl}
-                onImageUploading={setIsImageEnUploading}
-                onMediaIdChange={setFeatureImageEnId}
-                aspectRatio={270 / 200}
-                aspectRatioText="270:200"
+              <Controller
+                name="featuredImageEn"
+                control={control}
+                render={({ field }) => (
+                  <ImageUpload
+                    value={field.value}
+                    onChange={field.onChange}
+                    onImageUploading={setIsImageEnUploading}
+                    onMediaIdChange={(id) => setValue("featureImageEnId", id)}
+                    aspectRatio={270 / 200}
+                    aspectRatioText="270:200"
+                  />
+                )}
               />
               <p className="text-xs text-gray-500">
                 Optional: Different image for English version
@@ -395,39 +469,54 @@ export default function EditServicePage({
             </Label>
             <Input
               id="shortDescriptionEn"
-              value={shortDescriptionEn}
-              onChange={(e) => setShortDescriptionEn(e.target.value)}
+              {...register("shortDescriptionEn")}
+              onChange={(e) => setValue("shortDescriptionEn", e.target.value)}
               placeholder="Brief summary of the service in English"
               className="w-full"
+              disabled={isSubmitting}
             />
+            {errors.shortDescriptionEn && (
+              <span className="text-red-500">
+                {errors.shortDescriptionEn.message}
+              </span>
+            )}
           </div>
 
           <div className="space-y-2 mt-4">
             <Label htmlFor="enKeywords">Keywords (English)</Label>
             <Input
               id="enKeywords"
-              value={enKeywords}
-              onChange={(e) => setEnKeywords(e.target.value)}
+              {...register("enKeywords")}
+              onChange={(e) => setValue("enKeywords", e.target.value)}
               placeholder="Medical examination, consultation, diagnosis, treatment, physical therapy equipment, professional expertise"
               className="w-full"
+              disabled={isSubmitting}
             />
             <p className="text-xs text-gray-500">
               Separate keywords with commas for better SEO
             </p>
+            {errors.enKeywords && (
+              <span className="text-red-500">{errors.enKeywords.message}</span>
+            )}
           </div>
 
           <div className="space-y-2 mt-4">
             <Label>Service Description (English)</Label>
-            <div>
-              {typeof window !== "undefined" && (
+            <Controller
+              name="descriptionEn"
+              control={control}
+              render={({ field }) => (
                 <TextEditor
-                  value={descriptionEn}
-                  onChange={(value: any) => {
-                    setDescriptionEn(value);
-                  }}
+                  value={field.value}
+                  onChange={field.onChange}
                 />
               )}
-            </div>
+            />
+            {errors.descriptionEn && (
+              <span className="text-red-500">
+                {errors.descriptionEn.message}
+              </span>
+            )}
           </div>
 
           {/* SEO Meta Fields - English */}
@@ -443,29 +532,41 @@ export default function EditServicePage({
                 </Label>
                 <Input
                   id="metaTitleEn"
-                  value={metaTitleEn}
-                  onChange={(e) => setMetaTitleEn(e.target.value)}
+                  {...register("metaTitleEn")}
+                  onChange={(e) => setValue("metaTitleEn", e.target.value)}
                   placeholder="SEO title for search engines (English)"
                   maxLength={65}
                   className="w-full"
+                  disabled={isSubmitting}
                 />
                 <p className="text-xs text-gray-500">
-                  {metaTitleEn.length}/65 characters
+                  {watch("metaTitleEn")?.length}/65 characters
                 </p>
+                {errors.metaTitleEn && (
+                  <span className="text-red-500">
+                    {errors.metaTitleEn.message}
+                  </span>
+                )}
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="metaKeywordsEn">Meta Keywords</Label>
                 <Input
                   id="metaKeywordsEn"
-                  value={metaKeywordsEn}
-                  onChange={(e) => setMetaKeywordsEn(e.target.value)}
+                  {...register("metaKeywordsEn")}
+                  onChange={(e) => setValue("metaKeywordsEn", e.target.value)}
                   placeholder="keyword1, keyword2, keyword3"
                   className="w-full"
+                  disabled={isSubmitting}
                 />
                 <p className="text-xs text-gray-500">
                   Separate keywords with commas
                 </p>
+                {errors.metaKeywordsEn && (
+                  <span className="text-red-500">
+                    {errors.metaKeywordsEn.message}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -475,16 +576,22 @@ export default function EditServicePage({
               </Label>
               <textarea
                 id="metaDescriptionEn"
-                value={metaDescriptionEn}
-                onChange={(e) => setMetaDescriptionEn(e.target.value)}
+                {...register("metaDescriptionEn")}
+                onChange={(e) => setValue("metaDescriptionEn", e.target.value)}
                 placeholder="Brief description for search engine results (English)"
                 maxLength={155}
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                disabled={isSubmitting}
               />
               <p className="text-xs text-gray-500">
-                {metaDescriptionEn.length}/155 characters
+                {watch("metaDescriptionEn")?.length}/155 characters
               </p>
+              {errors.metaDescriptionEn && (
+                <span className="text-red-500">
+                  {errors.metaDescriptionEn.message}
+                </span>
+              )}
             </div>
           </div>
         </fieldset>
@@ -499,8 +606,8 @@ export default function EditServicePage({
             <div className="space-y-2">
               <Label htmlFor="status">Status</Label>
               <Select
-                value={status}
-                onValueChange={(value: string) => setStatus(value)}
+                value={watch("status")}
+                onValueChange={(value: string) => setValue("status", value)}
               >
                 <SelectTrigger id="status">
                   <SelectValue placeholder="Select status" />
@@ -510,20 +617,27 @@ export default function EditServicePage({
                   <SelectItem value="PUBLISHED">Published</SelectItem>
                 </SelectContent>
               </Select>
+              {errors.status && (
+                <span className="text-red-500">{errors.status.message}</span>
+              )}
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="slug">URL Slug</Label>
               <Input
                 id="slug"
-                value={slug}
+                {...register("slug")}
                 onChange={handleSlugChange}
                 placeholder="service-url-slug"
                 className="w-full"
+                disabled={isSubmitting}
               />
               <p className="text-xs text-gray-500">
-                This will be used in the URL: /services/{slug}
+                This will be used in the URL: /services/{watch("slug")}
               </p>
+              {errors.slug && (
+                <span className="text-red-500">{errors.slug.message}</span>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -532,9 +646,10 @@ export default function EditServicePage({
                 <input
                   type="checkbox"
                   id="showOnHomepage"
-                  checked={showOnHomepage}
-                  onChange={(e) => setShowOnHomepage(e.target.checked)}
+                  {...register("showOnHomepage")}
+                  onChange={(e) => setValue("showOnHomepage", e.target.checked)}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  disabled={isSubmitting}
                 />
                 <Label htmlFor="showOnHomepage" className="text-sm">
                   Show on Homepage
@@ -553,6 +668,7 @@ export default function EditServicePage({
             type="button"
             variant="outline"
             onClick={() => router.push(ROUTES.ADMIN_SERVICES)}
+            disabled={isSubmitting}
           >
             Cancel
           </Button>
@@ -568,3 +684,4 @@ export default function EditServicePage({
     </div>
   );
 }
+

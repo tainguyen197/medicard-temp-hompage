@@ -46,20 +46,6 @@ const serviceUpdateSchema = z.object({
   metaKeywordsEn: z.string().optional(),
 });
 
-interface MockService {
-  id: string;
-  title: string;
-  slug: string;
-  description: string;
-  createdAt: Date;
-  featureImage: {
-    id: string;
-    url: string;
-    fileName: string;
-    originalName: string;
-  };
-}
-
 // GET /api/services/[id] - Get a single service
 export async function GET(
   request: Request,
@@ -72,6 +58,7 @@ export async function GET(
       where: { id },
       include: {
         featureImage: true,
+        featureImageEn: true,
       },
     });
 
