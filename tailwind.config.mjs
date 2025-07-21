@@ -55,9 +55,7 @@ export default {
             h3: {
               color: "#222222",
             },
-            strong: {
-              color: "#222222",
-            },
+
             a: {
               color: "#B1873F",
               "&:hover": {
