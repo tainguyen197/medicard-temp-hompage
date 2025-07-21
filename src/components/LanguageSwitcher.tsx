@@ -3,7 +3,13 @@
 import { useRouter, usePathname } from "next/navigation";
 import { useLocale } from "next-intl";
 
-export default function LanguageSwitcher() {
+interface LanguageSwitcherProps {
+  isMobile?: boolean;
+}
+
+export default function LanguageSwitcher({
+  isMobile = false,
+}: LanguageSwitcherProps) {
   const router = useRouter();
   const pathname = usePathname();
   const locale = useLocale();
@@ -17,6 +23,33 @@ export default function LanguageSwitcher() {
     }`;
     router.push(newPath);
   };
+
+  if (isMobile) {
+    return (
+      <div className="flex space-x-4 mt-1">
+        <button
+          onClick={() => switchLocale("vi")}
+          className={`px-4 py-2 rounded-full border-2 ${
+            locale === "vi"
+              ? "border-amber-200 text-amber-200"
+              : "border-white text-white hover:border-amber-200 hover:text-amber-200"
+          } transition-colors`}
+        >
+          VIE
+        </button>
+        <button
+          onClick={() => switchLocale("en")}
+          className={`px-4 py-2 rounded-full border-2 ${
+            locale === "en"
+              ? "border-amber-200 text-amber-200"
+              : "border-white text-white hover:border-amber-200 hover:text-amber-200"
+          } transition-colors`}
+        >
+          ENG
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="hidden md:flex items-center justify-center w-10 h-10 rounded-full border-2 border-amber-50 cursor-pointer group relative">
