@@ -148,7 +148,7 @@ export default function NewServicePage() {
       console.error("Error creating service:", error);
     } finally {
       setTimeout(() => {
-        setIsSubmitting(false);
+        // setIsSubmitting(false);
       }, 1000);
     }
   };

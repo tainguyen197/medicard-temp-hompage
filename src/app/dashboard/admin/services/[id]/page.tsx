@@ -176,14 +176,13 @@ export default function EditServicePage({
 
       toast.success("Service updated successfully!");
       router.push(ROUTES.ADMIN_SERVICES);
-      router.refresh();
     } catch (error) {
       console.error("Error updating service:", error);
       toast.error(
         error instanceof Error ? error.message : "Failed to update service"
       );
     } finally {
-      setIsSubmitting(false);
+      // setIsSubmitting(false);
     }
   };
 
