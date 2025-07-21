@@ -428,7 +428,6 @@ export default function EditServicePage({
                 />
               )}
             </div>
-            <pre>{JSON.stringify(cleanContentForSubmission(descriptionEn), null, 2)}</pre>
           </div>
 
           {/* SEO Meta Fields - English */}
