@@ -44,3 +44,11 @@ export interface ServicesResponse {
     totalPages: number;
   };
 }
+
+export interface DisplayService {
+  id: string;
+  title: string;
+  shortDescription: string;
+  description: string;
+  image: string;
+}

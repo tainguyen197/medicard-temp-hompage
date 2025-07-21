@@ -3,43 +3,16 @@ import Image from "next/image";
 import { Link } from "@/navigation";
 import { getMessages } from "next-intl/server";
 import { htmlToText } from "@/lib/content-utils";
-
-interface DisplayService {
-  id: string;
-  title: string;
-  shortDescription: string;
-  description: string;
-  image: string;
-}
+import { Service, DisplayService   } from "@/types/service";
+import { htmlToTextAndTruncate } from "@/lib/utils";
 
 interface ServicesContentProps {
   services: DisplayService[];
   viewDetailsText: string;
 }
 
-interface Service {
-  id: string;
-  slug: string;
-  title: string;
-  titleEn?: string | null;
-  description?: string | null;
-  descriptionEn?: string | null;
-  shortDescription?: string | null;
-  shortDescriptionEn?: string | null;
-  status: string;
-  featureImageId?: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  featureImage?: {
-    id: string;
-    url: string;
-    fileName?: string | null;
-    originalName?: string | null;
-  } | null;
-}
-
 // Helper function to get localized content
-const getLocalizedServiceContent = (service: any, locale: string) => {
+const getLocalizedServiceContent = (service: Service, locale: string) => {
   const isEnglish = locale === "en";
   return {
     title: isEnglish ? service.titleEn || service.title : service.title,
@@ -49,6 +22,9 @@ const getLocalizedServiceContent = (service: any, locale: string) => {
     shortDescription: isEnglish
       ? service.shortDescriptionEn || service.shortDescription
       : service.shortDescription,
+    image: isEnglish
+      ? service.featureImageEn?.url || service.featureImage?.url
+      : service.featureImage?.url || service.featureImageEn?.url,
   };
 };
 
@@ -102,8 +78,7 @@ export default function ServicesContent({
                       </button>
                     </div>
                     <p className="text-md md:text-lg text-[#909090] leading-relaxed">
-                      {htmlToText(service.description).substring(0, 200) +
-                        "..."}
+                      {htmlToTextAndTruncate(service.description, 200)}
                     </p>
                   </div>
                 </div>
@@ -153,6 +128,7 @@ export async function ServicesDataComponent({
           title: localizedContent.title,
           description: localizedContent.description,
           shortDescription: localizedContent.shortDescription,
+          image: localizedContent.image,
           createdAt:
             typeof service.createdAt === "string"
               ? new Date(service.createdAt)
@@ -184,7 +160,7 @@ export async function ServicesDataComponent({
           title: service.title,
           shortDescription: service.shortDescription || "",
           description: service.description || "",
-          image: service.featureImage?.url || DEFAULT_SERVICE_IMAGE, // Fallback to existing service image
+          image: (service as any).image || DEFAULT_SERVICE_IMAGE, // Fallback to existing service image
         }))
       : [];
 
