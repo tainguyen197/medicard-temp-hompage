@@ -2,31 +2,15 @@ import React from "react";
 import Image from "next/image";
 import { Link } from "@/navigation";
 import { getMessages } from "next-intl/server";
-import { htmlToText } from "@/lib/content-utils";
 import { Service, DisplayService   } from "@/types/service";
 import { htmlToTextAndTruncate } from "@/lib/utils";
+import { getLocalizedServiceContent } from "@/utils";
 
 interface ServicesContentProps {
   services: DisplayService[];
   viewDetailsText: string;
 }
 
-// Helper function to get localized content
-const getLocalizedServiceContent = (service: Service, locale: string) => {
-  const isEnglish = locale === "en";
-  return {
-    title: isEnglish ? service.titleEn || service.title : service.title,
-    description: isEnglish
-      ? service.descriptionEn || service.description
-      : service.description,
-    shortDescription: isEnglish
-      ? service.shortDescriptionEn || service.shortDescription
-      : service.shortDescription,
-    image: isEnglish
-      ? service.featureImageEn?.url || service.featureImage?.url
-      : service.featureImage?.url || service.featureImageEn?.url,
-  };
-};
 
 const DEFAULT_SERVICE_IMAGE = "/images/default_image_ai.png";
 

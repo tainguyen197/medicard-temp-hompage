@@ -4,59 +4,11 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { fetchServices } from "@/lib/api";
-import { Service } from "@/types/service";
-import {
-  defaultServices,
-  getLocalizedService,
-  ServiceData,
-} from "@/data/services";
+import { DisplayService } from "@/types/service";
 import { ROUTES } from "@/lib/router";
-import { htmlToText } from "@/lib/content-utils";
 import { Link } from "@/navigation";
 import { htmlToTextAndTruncate } from "@/lib/utils";
-
-interface ServiceItem {
-  id: string;
-  title: string;
-  description: string;
-  details: string;
-  image: string;
-  link: string;
-}
-
-// Function to get localized content from Service type
-const getLocalizedServiceContent = (service: Service, locale: string) => {
-  return {
-    title: locale === "en" && service.titleEn ? service.titleEn : service.title,
-    description:
-      locale === "en" && service.descriptionEn
-        ? service.descriptionEn
-        : service.description,
-    shortDescription:
-      locale === "en" && service.shortDescriptionEn
-        ? service.shortDescriptionEn
-        : service.shortDescription,
-    details: locale === "en" && service.enKeywords ? service.enKeywords : service.keywords,
-    image: locale === "en" && service.featureImageEn?.url ? service.featureImageEn?.url : service.featureImage?.url,
-  };
-};
-
-// Convert Service type to ServiceItem for backward compatibility
-const convertServiceToServiceItem = (
-  service: Service,
-  locale: string
-): ServiceItem => {
-  const localizedContent = getLocalizedServiceContent(service, locale);
-
-  return {
-    id: service.slug || service.id,
-    title: localizedContent.title,
-    description: localizedContent.description || "",
-    details: localizedContent.details || "",
-    image: localizedContent.image || "/images/default_image_ai.png",
-    link: `/services/${service.slug || service.id}`,
-  };
-};
+import { getLocalizedServiceContent } from "@/utils";
 
 interface ServicesGallerySectionProps {
   appointmentLink?: string;
@@ -67,21 +19,22 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
 }) => {
   const locale = useLocale();
   const t = useTranslations("services.gallery");
-  const [services, setServices] = useState<ServiceItem[]>([]);
-  const [activeService, setActiveService] = useState<ServiceItem>({ 
+  const [services, setServices] = useState<DisplayService[]>([]);
+  const [activeService, setActiveService] = useState<DisplayService>({ 
     id: "",
     title: "",
     description: "",
     details: "",
     image: "",
     link: "",
+    shortDescription: "",
   });
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Get fallback services from our data file
-  const fallbackServices: ServiceItem[] = [];
+  const fallbackServices: DisplayService[] = [];
 
   // Fetch services from API
   useEffect(() => {
@@ -100,8 +53,8 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
           // Convert API services to ServiceItem format
           const convertedServices = response.services
             .filter((service) => service.showOnHomepage)
-            .map((service) => convertServiceToServiceItem(service, locale));
-          setServices(convertedServices);
+            .map((service) => getLocalizedServiceContent(service, locale));
+          setServices(convertedServices as DisplayService[]);
         } else {
           // Use fallback data if no services found
           setServices(fallbackServices);
@@ -291,7 +244,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
               </div>
               <div className="flex flex-wrap gap-4">
                 <Link
-                  href={activeService?.link}
+                  href={activeService?.link || ""}
                   className="inline-flex items-center px-4 py-2 md:px-7 md:py-3 bg-[#B1873F] hover:bg-amber-700 transition-colors rounded-xl md:rounded-full text-white font-semibold md:font-medium text-xs md:text-[16px] h-10 md:h-12"
                 >
                   {t("viewDetails")}

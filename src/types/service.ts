@@ -51,4 +51,6 @@ export interface DisplayService {
   shortDescription: string;
   description: string;
   image: string;
+  details?: string;
+  link?: string;
 }
