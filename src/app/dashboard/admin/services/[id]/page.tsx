@@ -20,31 +20,7 @@ import { TextEditor } from "taitrung-super-editor";
 import { cleanContentForSubmission } from "@/lib/content-utils";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-
-const serviceFormSchema = z.object({
-  title: z.string().min(1, "Service title is required"),
-  titleEn: z.string().optional(),
-  status: z.enum(["DRAFT", "PUBLISHED"]),
-  showOnHomepage: z.boolean(),
-  slug: z.string().min(1, "Slug is required"),
-  description: z.string().min(1, "Description is required"),
-  descriptionEn: z.string().optional(),
-  shortDescription: z.string().min(1, "Short description is required"),
-  shortDescriptionEn: z.string().optional(),
-  keywords: z.string().min(1, "Keywords are required"),
-  enKeywords: z.string().optional(),
-  metaTitle: z.string().min(1, "Meta title is required"),
-  metaTitleEn: z.string().optional(),
-  metaDescription: z.string().min(1, "Meta description is required"),
-  metaDescriptionEn: z.string().optional(),
-  metaKeywords: z.string().min(1, "Meta keywords are required"),
-  metaKeywordsEn: z.string().optional(),
-  featuredImage: z.string().min(1, "Featured image is required"),
-  featureImageId: z.string().min(1, "Feature image ID is required"),
-  featuredImageEn: z.string().optional(),
-  featureImageEnId: z.string().optional(),
-});
+import { serviceFormSchema } from "@/utils/services";
 
 export default function EditServicePage({
   params,
@@ -278,6 +254,11 @@ export default function EditServicePage({
                   />
                 )}
               />
+              {errors.featuredImage && (
+                <span className="text-red-500">
+                  {errors.featuredImage.message}
+                </span>
+              )}
               <p className="text-xs text-gray-500">
                 Recommended aspect ratio: 270:200
               </p>
@@ -323,20 +304,17 @@ export default function EditServicePage({
 
           <div className="space-y-2 mt-4">
             <Label>Service Description (Vietnamese)</Label>
-            <Controller
-              name="description"
-              control={control}
-              render={({ field }) => (
-                <TextEditor
-                  value={field.value}
-                  onChange={field.onChange}
-                />
-              )}
-            />
+            {typeof window !== "undefined" && (
+              <Controller
+                name="description"
+                control={control}
+                render={({ field }) => (
+                  <TextEditor value={field.value} onChange={field.onChange} />
+                )}
+              />
+            )}
             {errors.description && (
-              <span className="text-red-500">
-                {errors.description.message}
-              </span>
+              <span className="text-red-500">{errors.description.message}</span>
             )}
           </div>
 
@@ -434,11 +412,7 @@ export default function EditServicePage({
                 className="w-full"
                 disabled={isSubmitting}
               />
-              {errors.titleEn && (
-                <span className="text-red-500">
-                  {errors.titleEn.message}
-                </span>
-              )}
+            
             </div>
 
             <div className="space-y-2">
@@ -457,6 +431,7 @@ export default function EditServicePage({
                   />
                 )}
               />
+           
               <p className="text-xs text-gray-500">
                 Optional: Different image for English version
               </p>
@@ -506,17 +481,10 @@ export default function EditServicePage({
               name="descriptionEn"
               control={control}
               render={({ field }) => (
-                <TextEditor
-                  value={field.value}
-                  onChange={field.onChange}
-                />
+                <TextEditor value={field.value} onChange={field.onChange} />
               )}
             />
-            {errors.descriptionEn && (
-              <span className="text-red-500">
-                {errors.descriptionEn.message}
-              </span>
-            )}
+           
           </div>
 
           {/* SEO Meta Fields - English */}
@@ -684,4 +652,3 @@ export default function EditServicePage({
     </div>
   );
 }
-

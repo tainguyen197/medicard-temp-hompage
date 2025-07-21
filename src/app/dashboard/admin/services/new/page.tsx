@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useForm, Controller } from "react-hook-form";
@@ -21,31 +21,7 @@ import ImageUpload from "@/components/ImageUpload";
 import { ROUTES } from "@/lib/router";
 import { TextEditor } from "taitrung-super-editor";
 import { cleanContentForSubmission } from "@/lib/content-utils";
-
-// Define the form schema with Zod
-const serviceFormSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  titleEn: z.string().optional(),
-  status: z.enum(["DRAFT", "PUBLISHED"]),
-  showOnHomepage: z.boolean(),
-  description: z.string().min(1, "Description is required"),
-  descriptionEn: z.string().optional(),
-  shortDescription: z.string().optional(),
-  shortDescriptionEn: z.string().optional(),
-  keywords: z.string().optional(),
-  enKeywords: z.string().optional(),
-  slug: z.string().min(1, "Slug is required"),
-  featuredImage: z.string().optional().nullable(),
-  featureImageId: z.string().optional().nullable(),
-  featuredImageEn: z.string().optional().nullable(),
-  featureImageEnId: z.string().optional().nullable(),
-  metaTitle: z.string().optional(),
-  metaTitleEn: z.string().optional(),
-  metaDescription: z.string().optional(),
-  metaDescriptionEn: z.string().optional(),
-  metaKeywords: z.string().optional(),
-  metaKeywordsEn: z.string().optional(),
-});
+import { serviceFormSchema } from "@/utils/services";
 
 type ServiceFormValues = z.infer<typeof serviceFormSchema>;
 
@@ -63,6 +39,7 @@ export default function NewServicePage() {
     control,
     setValue,
     watch,
+    reset,
     formState: { errors },
   } = useForm<ServiceFormValues>({
     resolver: zodResolver(serviceFormSchema),
@@ -91,8 +68,6 @@ export default function NewServicePage() {
     },
   });
 
-  // Watch title for slug generation
-  const title = watch("title");
 
   // Generate slug from title
   const generateSlug = (text: string) => {
@@ -178,30 +153,15 @@ export default function NewServicePage() {
     }
   };
 
-  // Save draft to local storage
-  const saveDraft = useCallback(() => {
-    const formData = watch();
-    localStorage.setItem("service-draft", JSON.stringify(formData));
-    toast.success("Draft saved");
-  }, [watch]);
-
-  // Load draft from local storage
-  const loadDraft = useCallback(() => {
-    const savedDraft = localStorage.getItem("service-draft");
-    if (savedDraft) {
-      try {
-        const draftData = JSON.parse(savedDraft);
-        Object.entries(draftData).forEach(([key, value]) => {
-          setValue(key as any, value as any);
-        });
-        toast.success("Draft loaded");
-      } catch (error) {
-        toast.error("Failed to load draft");
-      }
-    } else {
-      toast.error("No draft found");
-    }
-  }, [setValue]);
+  React.useEffect(() => {
+   //reset value of description to empty string
+  setTimeout(() => {
+    reset({
+    description: "",
+    descriptionEn: "",
+   });
+  }, 1000);
+  }, []);
 
   return (
     <div className="container mx-auto p-8 bg-white rounded-md">
@@ -258,6 +218,9 @@ export default function NewServicePage() {
                   />
                 )}
               />
+              {errors.featuredImage && (
+                <p className="text-red-500 text-sm">{errors.featuredImage.message}</p>
+              )}
               <p className="text-xs text-gray-500">
                 Recommended aspect ratio: 270:200
               </p>
@@ -274,6 +237,9 @@ export default function NewServicePage() {
               placeholder="Brief summary of the service in Vietnamese"
               className="w-full"
             />
+            {errors.shortDescription && (
+              <p className="text-red-500 text-sm">{errors.shortDescription.message}</p>
+            )}
           </div>
 
           <div className="space-y-2 mt-4">
@@ -287,29 +253,27 @@ export default function NewServicePage() {
             <p className="text-xs text-gray-500">
               Separate keywords with commas for better SEO
             </p>
+            {errors.keywords && (
+              <p className="text-red-500 text-sm">{errors.keywords.message}</p>
+            )}
           </div>
 
           <div className="space-y-2 mt-4">
             <Label>Service Description (Vietnamese)</Label>
             <div>
               {typeof window !== "undefined" && (
-                <Controller
-                  control={control}
-                  name="description"
-                  render={({ field }) => (
-                    <TextEditor
-                      value={field.value || ""}
-                      onChange={(value: any) => {
-                        field.onChange(value);
-                      }}
-                    />
-                  )}
-                />
+              <Controller
+                name="description"
+                control={control}
+                render={({ field }) => (
+                  <TextEditor value={field.value} onChange={field.onChange} />
+                )}
+              />
               )}
               {errors.description && (
-                <p className="text-red-500 text-sm">
+                <span className="text-red-500">
                   {errors.description.message}
-                </p>
+                </span>
               )}
             </div>
           </div>
@@ -335,6 +299,9 @@ export default function NewServicePage() {
                 <p className="text-xs text-gray-500">
                   {(watch("metaTitle") || "").length}/65 characters
                 </p>
+                {errors.metaTitle && (
+                  <p className="text-red-500 text-sm">{errors.metaTitle.message}</p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -348,6 +315,9 @@ export default function NewServicePage() {
                 <p className="text-xs text-gray-500">
                   Separate keywords with commas
                 </p>
+                {errors.metaKeywords && (
+                  <p className="text-red-500 text-sm">{errors.metaKeywords.message}</p>
+                )}
               </div>
             </div>
 
@@ -366,6 +336,9 @@ export default function NewServicePage() {
               <p className="text-xs text-gray-500">
                 {(watch("metaDescription") || "").length}/155 characters
               </p>
+              {errors.metaDescription && (
+                <p className="text-red-500 text-sm">{errors.metaDescription.message}</p>
+              )}
             </div>
           </div>
         </fieldset>
@@ -405,7 +378,8 @@ export default function NewServicePage() {
                   />
                 )}
               />
-              <p className="text-xs text-gray-500">
+             
+                <p className="text-xs text-gray-500">
                 Optional: Different image for English version
               </p>
             </div>
@@ -440,19 +414,18 @@ export default function NewServicePage() {
             <Label>Service Description (English)</Label>
             <div>
               {typeof window !== "undefined" && (
-                <Controller
-                  control={control}
-                  name="descriptionEn"
-                  render={({ field }) => (
-                    <TextEditor
-                      value={field.value || ""}
-                      onChange={(value: any) => {
-                        field.onChange(value);
-                      }}
-                    />
-                  )}
-                />
+             <Controller
+             name="descriptionEn"
+             control={control}
+             render={({ field }) => (
+               <TextEditor
+                 value={field.value}
+                 onChange={field.onChange}
+               />
+             )}
+           />
               )}
+              
             </div>
           </div>
 
