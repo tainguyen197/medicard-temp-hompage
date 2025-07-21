@@ -7,7 +7,8 @@ import { useLocale } from "next-intl";
 import AnimatedSection from "@/components/AnimatedSection";
 import { fetchServices } from "@/lib/api";
 import { Service } from "@/types/service";
-import { htmlToText } from "@/lib/content-utils";
+import { getLocalizedServiceContent } from "@/utils/services";
+import { htmlToTextAndTruncate } from "@/lib/utils";
 
 interface ServiceDisplayData {
   title: string;
@@ -22,21 +23,6 @@ interface ServicesDetailSectionProps {
       exploreMore: string;
       services: ServiceDisplayData[];
     };
-  };
-}
-
-// Utility function to get localized content from service
-function getLocalizedServiceContent(service: Service, locale: string) {
-  return {
-    title: locale === "en" ? service.titleEn || service.title : service.title,
-    description:
-      locale === "en"
-        ? service.descriptionEn || service.description
-        : service.description,
-    shortDescription:
-      locale === "en"
-        ? service.shortDescriptionEn || service.shortDescription
-        : service.shortDescription,
   };
 }
 
@@ -121,8 +107,8 @@ export default function ServicesDetailSection({
                       <div className="flex flex-col md:flex-row md:gap-x-10 md:pb-10 md:border-b border-[#E2E2E2] cursor-pointer">
                         <div className="h-52 aspect-270/200  relative rounded-2xl overflow-hidden">
                           <Image
-                            src={service.featureImage?.url || fallbackImages[0]}
-                            alt={localizedContent.title || "Service"}
+                            src={localizedContent.image || fallbackImages[0]}
+                            alt={localizedContent.title || ""}
                             className="object-cover w-full"
                             fill
                           />
@@ -154,7 +140,7 @@ export default function ServicesDetailSection({
                           <p
                             className="text-md md:text-lg text-[#909090] leading-relaxed"
                           >
-                            {htmlToText(localizedContent.description).substring(0, 250) + "..."}
+                            {htmlToTextAndTruncate(localizedContent.description || "", 250)}
                           </p>  
                         </div>
                       </div>
@@ -218,7 +204,7 @@ export default function ServicesDetailSection({
                             </button>
                           </div>
                           <p className="text-md md:text-lg text-[#909090] leading-relaxed">
-                            {htmlToText(service.description).substring(0, 350) + "..."}
+                            {htmlToTextAndTruncate(service.description || "", 350)}
                           </p>
                         </div>
                       </div>
