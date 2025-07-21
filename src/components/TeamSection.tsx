@@ -11,7 +11,7 @@ import {
   TeamMemberData,
 } from "@/data/team";
 // Import Slick components
-import Slider, { Settings } from "react-slick";
+import Slider from "react-slick";
 // CSS is already imported in the layout.tsx file
 
 interface TeamMember {
@@ -197,9 +197,7 @@ const TeamSection: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
   const sliderRef = useRef<Slider | null>(null);
 
-  const [currentSliderSettings, setCurrentSliderSettings] = useState<Settings>(
-    {}
-  );
+  const [currentSliderSettings, setCurrentSliderSettings] = useState({});
   const [dynamicCardWidth, setDynamicCardWidth] = useState<string | undefined>(
     undefined
   );
@@ -258,78 +256,51 @@ const TeamSection: React.FC = () => {
   };
 
   useEffect(() => {
-    const getSettingsAndCardWidth = (): {
-      settings: Settings;
-      cardWidth: string | undefined;
-    } => {
-      const screenWidth = window.innerWidth;
-      const cardWidth: string | undefined = undefined;
-      const currentTeamSize = displayTeamMembers.length;
-
-      const commonProps: Partial<Settings> = {
+    const getSettingsAndCardWidth = () => {
+      const commonProps: any = {
         dots: false,
         speed: 500,
         pauseOnHover: true,
       };
 
-      if (screenWidth < 768) {
-        // Mobile handling
-        return {
-          settings: {
-            ...commonProps,
-            slidesToShow: 1,
-            slidesToScroll: 1,
-            centerMode: true,
-            centerPadding: "0px",
-            infinite: currentTeamSize > 1,
-            autoplay: currentTeamSize > 1,
-            autoplaySpeed: 3000,
-            arrows: currentTeamSize > 1,
-            prevArrow: <PrevArrow />,
-            nextArrow: <NextArrow />,
-            draggable: currentTeamSize > 1,
-            swipe: currentTeamSize > 1,
-            touchMove: currentTeamSize > 1,
-            responsive: [],
+      // Desktop/Tablet - Slider settings for more than 4 items
+      return {
+        ...commonProps,
+        infinite: true,
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 3000,
+        arrows: true,
+        prevArrow: <PrevArrow />,
+        nextArrow: <NextArrow />,
+        draggable: true,
+        swipe: true,
+        touchMove: true,
+        responsive: [
+          {
+            breakpoint: 768,
+            settings: {
+              slidesToShow: 1,
+              arrows: false,
+            },
           },
-          cardWidth: undefined,
-        };
-      } else {
-        // Desktop/Tablet - Slider settings for more than 4 items
-        return {
-          settings: {
-            ...commonProps,
-            infinite: true,
-            slidesToShow: 4,
-            slidesToScroll: 1,
-            autoplay: true,
-            autoplaySpeed: 3000,
-            arrows: true,
-            prevArrow: <PrevArrow />,
-            nextArrow: <NextArrow />,
-            draggable: true,
-            swipe: true,
-            touchMove: true,
-            responsive: [
-              {
-                breakpoint: 1280, // for screens < 1280px
-                settings: {
-                  slidesToShow: 3,
-                  arrows: true,
-                },
-              },
-              {
-                breakpoint: 1024, // for screens < 1024px
-                settings: {
-                  slidesToShow: 2,
-                  arrows: true,
-                },
-              },
-            ],
+          {
+            breakpoint: 1280, // for screens < 1280px
+            settings: {
+              slidesToShow: 3,
+              arrows: true,
+            },
           },
-          cardWidth: undefined,
-        };
-      }
+          {
+            breakpoint: 1024, // for screens < 1024px
+            settings: {
+              slidesToShow: 2,
+              arrows: true,
+            },
+          },
+        ],
+      };
     };
 
     const updateLayout = () => {
@@ -343,9 +314,9 @@ const TeamSection: React.FC = () => {
         });
         setDynamicCardWidth(undefined);
       } else {
-        const { settings, cardWidth } = getSettingsAndCardWidth();
+        const settings = getSettingsAndCardWidth();
         setCurrentSliderSettings(settings);
-        setDynamicCardWidth(cardWidth);
+        setDynamicCardWidth(undefined);
       }
     };
 
@@ -385,7 +356,7 @@ const TeamSection: React.FC = () => {
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#002447]"></div>
                   </div>
                 ) : displayTeamMembers.length > 0 ? (
-                  (displayTeamMembers.length <= 4 && !isMobile) ? (
+                  displayTeamMembers.length <= 4 && !isMobile ? (
                     // Static display for 4 or fewer items (only on desktop)
                     <div className="flex justify-center">
                       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-16 w-fit">
@@ -401,17 +372,21 @@ const TeamSection: React.FC = () => {
                       </div>
                     </div>
                   ) : (
-                    // Slider for more than 4 items or on mobile
                     <Slider
                       key={`slider-${displayTeamMembers.length}`}
                       ref={sliderRef}
-                      {...currentSliderSettings}
+                      {...(currentSliderSettings || {})}
                       autoplay={true}
                       infinite={true}
                       autoplaySpeed={3000}
                       className="team-slider"
                     >
-                      {[...displayTeamMembers, ...displayTeamMembers, ...displayTeamMembers, ...displayTeamMembers].map((member, index) => (
+                      {[
+                        ...displayTeamMembers,
+                        ...displayTeamMembers,
+                        ...displayTeamMembers,
+                        ...displayTeamMembers,
+                      ].map((member, index) => (
                         <div key={index} className="px-2">
                           <TeamMember
                             {...member}
