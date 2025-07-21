@@ -54,7 +54,7 @@ export default async function AboutPage({
   // Fetch about banner data
   const aboutBanner = await getBannerDataByType(BANNER_TYPES.ABOUT, locale);
   const heroImage = aboutBanner.imageUrl || DEFAULT_HERO_IMAGE;
-  
+
   // Fetch appointment link
   const appointmentLink = await getAppointmentLink();
 
@@ -71,7 +71,7 @@ export default async function AboutPage({
   return (
     <div className="pt-[72px] md:pt-[96px]">
       {/* 1. Hero Section */}
-      <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
+      <section className="relative w-full h-full aspect-[21/9]">
         <div className="absolute inset-0">
           {aboutBanner.link ? (
             <Link

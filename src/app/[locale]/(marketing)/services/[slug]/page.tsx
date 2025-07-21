@@ -6,7 +6,11 @@ import { Metadata } from "next";
 import { getMessages } from "next-intl/server";
 import ServiceDetailContent from "./ServiceDetailContent";
 import { getAppointmentLink } from "@/lib/contact";
-import { getBannerDataByType, BANNER_TYPES, DEFAULT_HERO_IMAGE } from "@/lib/banner-utils";
+import {
+  getBannerDataByType,
+  BANNER_TYPES,
+  DEFAULT_HERO_IMAGE,
+} from "@/lib/banner-utils";
 
 // Force dynamic rendering to avoid DYNAMIC_SERVER_USAGE error
 export const dynamic = "force-dynamic";
@@ -55,12 +59,17 @@ export async function generateMetadata({
   const t = messages.services.notFound;
 
   try {
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/services/by-slug/${slug}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      next: { revalidate: 0 },
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `${
+        process.env.NEXTAUTH_URL || "http://localhost:3000"
+      }/api/services/by-slug/${slug}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        next: { revalidate: 0 },
+        cache: "no-store",
+      }
+    );
 
     if (response.ok) {
       const service = await response.json();
@@ -97,7 +106,7 @@ export default async function ServiceDetailPage({
   const { slug, locale } = await params;
   const messages = await getMessages();
   const t = messages.services;
-  
+
   // Fetch appointment link
   const appointmentLink = await getAppointmentLink();
 
@@ -113,21 +122,24 @@ export default async function ServiceDetailPage({
     if (!slug) {
       console.error("No slug provided");
       notFound();
-      return;
     }
-    
+
     // Fetch service by slug from API
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/services/by-slug/${slug}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      next: { revalidate: 0 },
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `${
+        process.env.NEXTAUTH_URL || "http://localhost:3000"
+      }/api/services/by-slug/${slug}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        next: { revalidate: 0 },
+        cache: "no-store",
+      }
+    );
 
     if (!response.ok) {
       console.error(`Service not found: ${slug}, status: ${response.status}`);
       notFound();
-      return;
     }
 
     service = await response.json();
@@ -160,7 +172,7 @@ export default async function ServiceDetailPage({
     <>
       {/* Hero Section */}
       <section className="relative mt-16 md:mt-20">
-        <div className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
+        <div className="relative w-full h-full aspect-[21/9]">
           <Image
             src={heroImage}
             alt="Service"
@@ -172,7 +184,9 @@ export default async function ServiceDetailPage({
       </section>
 
       {/* Dynamic Content with Suspense */}
-      <Suspense fallback={<ServiceDetailLoading appointmentLink={appointmentLink} />}>
+      <Suspense
+        fallback={<ServiceDetailLoading appointmentLink={appointmentLink} />}
+      >
         <ServiceDetailContent slug={slug || ""} locale={locale} />
       </Suspense>
 
@@ -210,7 +224,11 @@ export default async function ServiceDetailPage({
   );
 }
 
-async function ServiceDetailLoading({ appointmentLink }: { appointmentLink: string }) {
+async function ServiceDetailLoading({
+  appointmentLink,
+}: {
+  appointmentLink: string;
+}) {
   const messages = await getMessages();
   const t = messages.services;
 
@@ -304,20 +322,27 @@ async function ServiceDetailLoading({ appointmentLink }: { appointmentLink: stri
 // Generate static params for better performance (optional)
 export async function generateStaticParams() {
   try {
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/services?limit=100&status=PUBLISHED`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      next: { revalidate: 0 },
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `${
+        process.env.NEXTAUTH_URL || "http://localhost:3000"
+      }/api/services?limit=100&status=PUBLISHED`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        next: { revalidate: 0 },
+        cache: "no-store",
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();
-      return data.services?.map((service: any) => ({ slug: service.slug })) || [];
+      return (
+        data.services?.map((service: any) => ({ slug: service.slug })) || []
+      );
     }
   } catch (error) {
     console.error("Failed to generate static params:", error);
   }
-  
+
   return [];
 }

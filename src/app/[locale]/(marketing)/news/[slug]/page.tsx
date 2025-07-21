@@ -7,7 +7,11 @@ import NewsDetailContent from "./NewsDetailContent";
 import { getTranslations } from "next-intl/server";
 import { useLocale } from "next-intl";
 import { getAppointmentLink } from "@/lib/contact";
-import { getBannerDataByType, BANNER_TYPES, DEFAULT_HERO_IMAGE } from "@/lib/banner-utils";
+import {
+  getBannerDataByType,
+  BANNER_TYPES,
+  DEFAULT_HERO_IMAGE,
+} from "@/lib/banner-utils";
 
 // Force dynamic rendering to avoid DYNAMIC_SERVER_USAGE error
 export const dynamic = "force-dynamic";
@@ -42,20 +46,29 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "newsDetail.metadata" });
 
   try {
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/news/by-slug/${slug}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      next: { revalidate: 0 },
-      cache: "no-store",
-    });
-    
+    const response = await fetch(
+      `${
+        process.env.NEXTAUTH_URL || "http://localhost:3000"
+      }/api/news/by-slug/${slug}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        next: { revalidate: 0 },
+        cache: "no-store",
+      }
+    );
+
     if (response.ok) {
       const news = await response.json();
       const title = locale === "en" ? news.titleEn || news.title : news.title;
-      const description = locale === "en" 
-        ? news.shortDescriptionEn || news.shortDescription || news.descriptionEn || news.description
-        : news.shortDescription || news.description;
-      
+      const description =
+        locale === "en"
+          ? news.shortDescriptionEn ||
+            news.shortDescription ||
+            news.descriptionEn ||
+            news.description
+          : news.shortDescription || news.description;
+
       return {
         title: `${title} | Healthcare Therapy Center`,
         description: description ? description.substring(0, 155) : "",
@@ -78,7 +91,7 @@ export default async function BlogDetailPage({
 }) {
   const { slug, locale } = await params;
   const t = await getTranslations({ locale, namespace: "newsDetail.cta" });
-  
+
   // Fetch appointment link
   const appointmentLink = await getAppointmentLink();
 
@@ -90,7 +103,7 @@ export default async function BlogDetailPage({
     <div>
       <div className="pt-16 md:pt-24">
         {/* Hero Section with Cover Image */}
-        <section className="relative w-full h-[40vh] md:h-[70vh]">
+        <section className="relative w-full h-full aspect-[21/9]">
           <Image
             src={heroImage}
             alt="News Cover"
@@ -239,13 +252,18 @@ async function NewsDetailSkeletonContent({ locale }: { locale: string }) {
 // Generate static params for better performance (optional)
 export async function generateStaticParams() {
   try {
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/news?limit=100&status=PUBLISHED`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      next: { revalidate: 0 },
-      cache: "no-store",
-    });
-    
+    const response = await fetch(
+      `${
+        process.env.NEXTAUTH_URL || "http://localhost:3000"
+      }/api/news?limit=100&status=PUBLISHED`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        next: { revalidate: 0 },
+        cache: "no-store",
+      }
+    );
+
     if (response.ok) {
       const data = await response.json();
       return data.news?.map((n: any) => ({ slug: n.slug })) || [];
@@ -253,6 +271,6 @@ export async function generateStaticParams() {
   } catch (error) {
     console.error("Error fetching news for static params:", error);
   }
-  
+
   return [];
 }

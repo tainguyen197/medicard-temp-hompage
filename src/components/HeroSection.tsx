@@ -27,7 +27,7 @@ const HeroSection = ({
   );
 
   return (
-    <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
+    <section className="relative w-full h-full aspect-[21/9]">
       <div className="absolute inset-0">
         {link ? (
           <Link

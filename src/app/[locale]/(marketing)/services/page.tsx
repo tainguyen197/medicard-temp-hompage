@@ -26,11 +26,10 @@ export default async function ServicesPage({
 
   // Fetch service banner data
   const serviceBanner = await getBannerDataByType(BANNER_TYPES.SERVICE, locale);
-  const heroImage = serviceBanner.imageUrl || DEFAULT_HERO_IMAGE  ;
-  
+  const heroImage = serviceBanner.imageUrl || DEFAULT_HERO_IMAGE;
+
   // Fetch appointment link
   const appointmentLink = await getAppointmentLink();
-
 
   const imageElement = heroImage ? (
     <Image
@@ -45,7 +44,7 @@ export default async function ServicesPage({
   return (
     <div className="pt-[72px] md:pt-[96px]">
       {/* Hero Section */}
-      <section className="relative w-full h-[40vh] md:h-[60vh] lg:h-[70vh]">
+      <section className="relative w-full h-full aspect-[21/9]">
         <div className="absolute inset-0">
           {serviceBanner.link ? (
             <Link

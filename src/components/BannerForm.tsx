@@ -14,7 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Upload, X } from "lucide-react";
+import { Loader2, Upload, X, Info } from "lucide-react";
 import { toast } from "sonner";
 
 interface BannerFormProps {
@@ -320,6 +320,21 @@ export default function BannerForm({
           </CardContent>
         </Card>
 
+        {/* Image Aspect Ratio Tip */}
+        <div className="bg-blue-50 border border-blue-200 rounded-md p-4 flex items-start gap-3">
+          <Info className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
+          <div>
+            <h3 className="text-sm font-medium text-blue-800">
+              Banner Image Recommendation
+            </h3>
+            <p className="text-sm text-blue-600 mt-1">
+              For optimal display across all devices, please use images with a{" "}
+              <strong>21:9 aspect ratio</strong> (widescreen format). This
+              ensures your banners will look professional on all screen sizes.
+            </p>
+          </div>
+        </div>
+
         {/* Vietnamese Banner Image */}
         <Card>
           <CardHeader>
@@ -327,20 +342,22 @@ export default function BannerForm({
               Vietnamese Banner Image
             </CardTitle>
             <p className="text-sm text-gray-600">
-              Main banner image (required). This will be used as fallback for both languages if English image is not provided.
+              Main banner image (required). This will be used as fallback for
+              both languages if English image is not provided.
             </p>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {currentImage ? (
                 <div className="relative">
-                  <Image
-                    src={currentImage}
-                    alt="Vietnamese banner image"
-                    width={400}
-                    height={200}
-                    className="rounded-lg object-cover"
-                  />
+                  <div className="relative aspect-[21/9] w-full overflow-hidden rounded-lg">
+                    <Image
+                      src={currentImage}
+                      alt="Vietnamese banner image"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                   <Button
                     type="button"
                     variant="destructive"
@@ -365,14 +382,17 @@ export default function BannerForm({
               ) : (
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
                   <div className="text-center">
-                    <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                    <div className="mx-auto w-full max-w-md aspect-[21/9] bg-gray-100 rounded flex items-center justify-center mb-4">
+                      <Upload className="h-12 w-12 text-gray-400" />
+                    </div>
                     <div className="mt-4">
                       <Label htmlFor="image-upload" className="cursor-pointer">
                         <span className="mt-2 block text-sm font-medium text-gray-900">
                           Upload Vietnamese banner image
                         </span>
                         <span className="mt-1 block text-sm text-gray-500">
-                          PNG, JPG, GIF up to 10MB
+                          PNG, JPG, GIF up to 10MB (21:9 aspect ratio
+                          recommended)
                         </span>
                       </Label>
                       <Input
@@ -401,20 +421,22 @@ export default function BannerForm({
               English Banner Image (Optional)
             </CardTitle>
             <p className="text-sm text-gray-600">
-              Optional English version of the banner. If not provided, the Vietnamese image will be used for both languages.
+              Optional English version of the banner. If not provided, the
+              Vietnamese image will be used for both languages.
             </p>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               {currentEnImage ? (
                 <div className="relative">
-                  <Image
-                    src={currentEnImage}
-                    alt="English banner image"
-                    width={400}
-                    height={200}
-                    className="rounded-lg object-cover"
-                  />
+                  <div className="relative aspect-[21/9] w-full overflow-hidden rounded-lg">
+                    <Image
+                      src={currentEnImage}
+                      alt="English banner image"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                   <Button
                     type="button"
                     variant="destructive"
@@ -439,14 +461,20 @@ export default function BannerForm({
               ) : (
                 <div className="border-2 border-dashed border-gray-200 rounded-lg p-6">
                   <div className="text-center">
-                    <Upload className="mx-auto h-12 w-12 text-gray-300" />
+                    <div className="mx-auto w-full max-w-md aspect-[21/9] bg-gray-100 rounded flex items-center justify-center mb-4">
+                      <Upload className="h-12 w-12 text-gray-300" />
+                    </div>
                     <div className="mt-4">
-                      <Label htmlFor="image-en-upload" className="cursor-pointer">
+                      <Label
+                        htmlFor="image-en-upload"
+                        className="cursor-pointer"
+                      >
                         <span className="mt-2 block text-sm font-medium text-gray-900">
                           Upload English banner image
                         </span>
                         <span className="mt-1 block text-sm text-gray-500">
-                          PNG, JPG, GIF up to 10MB (Optional)
+                          PNG, JPG, GIF up to 10MB (21:9 aspect ratio
+                          recommended)
                         </span>
                       </Label>
                       <Input

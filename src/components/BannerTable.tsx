@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Edit, Trash2, ExternalLink } from "lucide-react";
+import { toast } from "sonner";
 
 interface Banner {
   id: string;
@@ -90,11 +91,13 @@ export default function BannerTable({ banners, onUpdate }: BannerTableProps) {
         throw new Error(error.error || "Failed to delete banner");
       }
 
-      alert("Banner deleted successfully");
+      toast.success("Banner deleted successfully");
       onUpdate();
     } catch (error) {
       console.error("Delete error:", error);
-      alert(error instanceof Error ? error.message : "Failed to delete banner");
+      toast.error(
+        error instanceof Error ? error.message : "Failed to delete banner"
+      );
     } finally {
       setDeleteLoading(null);
     }
@@ -155,23 +158,34 @@ export default function BannerTable({ banners, onUpdate }: BannerTableProps) {
             <tr key={banner.id} className="hover:bg-gray-50">
               <td className="px-6 py-4 whitespace-nowrap">
                 {banner.image ? (
-                  <div className="relative h-12 w-20 rounded-md overflow-hidden">
+                  <div
+                    className="relative h-12 w-28 rounded-md overflow-hidden"
+                    style={{ aspectRatio: "21/9" }}
+                  >
                     <Image
                       src={banner.image.url}
-                      alt={`${getBannerTypeLabel(banner.type)} Vietnamese banner`}
+                      alt={`${getBannerTypeLabel(
+                        banner.type
+                      )} Vietnamese banner`}
                       fill
                       className="object-cover"
                     />
                   </div>
                 ) : (
-                  <div className="h-12 w-20 bg-gray-100 rounded-md flex items-center justify-center">
+                  <div
+                    className="h-12 w-28 bg-gray-100 rounded-md flex items-center justify-center"
+                    style={{ aspectRatio: "21/9" }}
+                  >
                     <span className="text-xs text-gray-400">No image</span>
                   </div>
                 )}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 {banner.imageEn ? (
-                  <div className="relative h-12 w-20 rounded-md overflow-hidden">
+                  <div
+                    className="relative h-12 w-28 rounded-md overflow-hidden"
+                    style={{ aspectRatio: "21/9" }}
+                  >
                     <Image
                       src={banner.imageEn.url}
                       alt={`${getBannerTypeLabel(banner.type)} English banner`}
@@ -180,7 +194,10 @@ export default function BannerTable({ banners, onUpdate }: BannerTableProps) {
                     />
                   </div>
                 ) : (
-                  <div className="h-12 w-20 bg-gray-100 rounded-md flex items-center justify-center">
+                  <div
+                    className="h-12 w-28 bg-gray-100 rounded-md flex items-center justify-center"
+                    style={{ aspectRatio: "21/9" }}
+                  >
                     <span className="text-xs text-gray-400">No EN image</span>
                   </div>
                 )}
