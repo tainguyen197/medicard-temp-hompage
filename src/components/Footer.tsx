@@ -21,9 +21,7 @@ interface FooterProps {
 async function getHomepageServices() {
   try {
     const response = await fetch(
-      `${
-        process.env.NEXTAUTH_URL || "http://localhost:3000"
-      }/api/services/homepage`,
+      `${process.env.NEXTAUTH_URL}/api/services/homepage`,
       {
         next: { revalidate: 0 },
         cache: "no-store",
@@ -220,7 +218,10 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
             <h4 className="hidden md:block text-xl font-medium mb-4">
               {t("hotline")}
             </h4>
-            <div className="md:mb-6 md:mt-0" style={{marginTop: '0 !important '}}>
+            <div
+              className="md:mb-6 md:mt-0"
+              style={{ marginTop: "0 !important " }}
+            >
               <Link
                 href={`tel:${contact.phone}`}
                 className="inline-flex items-center px-1 py-2 md:px-6 md:py-3 border border-[#B1873F] hover:bg-[#B1873F]/10 transition-colors rounded-xl md:rounded-full text-[#B1873F] font-bold text-xs md:text-md"
@@ -242,7 +243,10 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
               </Link>
             </div>
 
-            <div className="flex space-x-2 md:space-x-4 ml-8 md:ml-0" style={{marginTop: '0 !important '}}>
+            <div
+              className="flex space-x-2 md:space-x-4 ml-8 md:ml-0"
+              style={{ marginTop: "0 !important " }}
+            >
               {contact.facebookUrl && (
                 <a
                   href={contact.facebookUrl}
@@ -330,7 +334,6 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
           <div>
             <p>{t("copyright")}</p>
           </div>
-         
         </div>
       </div>
     </footer>

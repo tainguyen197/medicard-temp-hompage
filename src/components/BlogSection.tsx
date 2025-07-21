@@ -51,13 +51,16 @@ const BlogSection = async ({ locale = "vi" }: { locale?: string }) => {
 
   try {
     // Fetch news that are marked for homepage display
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/news/homepage`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      next: { revalidate: 0 },
-      cache: "no-store",
-    });
-    
+    const response = await fetch(
+      `${process.env.NEXTAUTH_URL}/api/news/homepage`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        next: { revalidate: 0 },
+        cache: "no-store",
+      }
+    );
+
     if (response.ok) {
       const data = await response.json();
       homepageNews = data.news || [];
@@ -78,14 +81,23 @@ const BlogSection = async ({ locale = "vi" }: { locale?: string }) => {
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-16">
             {homepageNews.map((newsItem) => {
               // Handle localization
-              const title = locale === "en" && newsItem.titleEn ? newsItem.titleEn : newsItem.title;
-              const description = locale === "en" && newsItem.shortDescriptionEn 
-                ? newsItem.shortDescriptionEn 
-                : newsItem.shortDescription || (newsItem.description ? `${newsItem.description.substring(0, 150)}...` : '');
-              const image = locale === "en" && newsItem.featureImageEn
-                ? newsItem.featureImageEn.url
-                : newsItem.featureImage?.url || "/images/default_news_ai.jpeg";
-                
+              const title =
+                locale === "en" && newsItem.titleEn
+                  ? newsItem.titleEn
+                  : newsItem.title;
+              const description =
+                locale === "en" && newsItem.shortDescriptionEn
+                  ? newsItem.shortDescriptionEn
+                  : newsItem.shortDescription ||
+                    (newsItem.description
+                      ? `${newsItem.description.substring(0, 150)}...`
+                      : "");
+              const image =
+                locale === "en" && newsItem.featureImageEn
+                  ? newsItem.featureImageEn.url
+                  : newsItem.featureImage?.url ||
+                    "/images/default_news_ai.jpeg";
+
               return (
                 <BlogPost
                   key={newsItem.id}
@@ -93,7 +105,7 @@ const BlogSection = async ({ locale = "vi" }: { locale?: string }) => {
                   id={newsItem.id}
                   image={image}
                   title={title}
-                  description={description || ''}
+                  description={description || ""}
                 />
               );
             })}

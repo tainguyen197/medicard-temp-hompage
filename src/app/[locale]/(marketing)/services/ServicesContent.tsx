@@ -102,7 +102,8 @@ export default function ServicesContent({
                       </button>
                     </div>
                     <p className="text-md md:text-lg text-[#909090] leading-relaxed">
-                      {htmlToText(service.description).substring(0, 200) + "..."}
+                      {htmlToText(service.description).substring(0, 200) +
+                        "..."}
                     </p>
                   </div>
                 </div>
@@ -131,16 +132,19 @@ export async function ServicesDataComponent({
     // Fetch services from API
     console.log("Fetching services from API...");
 
-    const response = await fetch(`${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/services?status=PUBLISHED`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-      next: { revalidate: 0 },
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `${process.env.NEXTAUTH_URL}/api/services?status=PUBLISHED`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        next: { revalidate: 0 },
+        cache: "no-store",
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();
-      
+
       // Convert API results to Service type with localized content
       services = (data.services || []).map((service: any) => {
         const localizedContent = getLocalizedServiceContent(service, locale);
@@ -149,8 +153,14 @@ export async function ServicesDataComponent({
           title: localizedContent.title,
           description: localizedContent.description,
           shortDescription: localizedContent.shortDescription,
-          createdAt: typeof service.createdAt === 'string' ? new Date(service.createdAt) : service.createdAt,
-          updatedAt: typeof service.updatedAt === 'string' ? new Date(service.updatedAt) : service.updatedAt,
+          createdAt:
+            typeof service.createdAt === "string"
+              ? new Date(service.createdAt)
+              : service.createdAt,
+          updatedAt:
+            typeof service.updatedAt === "string"
+              ? new Date(service.updatedAt)
+              : service.updatedAt,
         };
       }) as Service[];
 
@@ -176,8 +186,7 @@ export async function ServicesDataComponent({
           description: service.description || "",
           image: service.featureImage?.url || DEFAULT_SERVICE_IMAGE, // Fallback to existing service image
         }))
-      : [
-        ];
+      : [];
 
   console.log(
     `Using ${

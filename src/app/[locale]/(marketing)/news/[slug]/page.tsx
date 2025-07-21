@@ -47,9 +47,7 @@ export async function generateMetadata({
 
   try {
     const response = await fetch(
-      `${
-        process.env.NEXTAUTH_URL || "http://localhost:3000"
-      }/api/news/by-slug/${slug}`,
+      `${process.env.NEXTAUTH_URL}/api/news/by-slug/${slug}`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -253,9 +251,7 @@ async function NewsDetailSkeletonContent({ locale }: { locale: string }) {
 export async function generateStaticParams() {
   try {
     const response = await fetch(
-      `${
-        process.env.NEXTAUTH_URL || "http://localhost:3000"
-      }/api/news?limit=100&status=PUBLISHED`,
+      `${process.env.NEXTAUTH_URL}/api/news?limit=100&status=PUBLISHED`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },

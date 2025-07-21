@@ -60,9 +60,7 @@ export async function generateMetadata({
 
   try {
     const response = await fetch(
-      `${
-        process.env.NEXTAUTH_URL || "http://localhost:3000"
-      }/api/services/by-slug/${slug}`,
+      `${process.env.NEXTAUTH_URL}/api/services/by-slug/${slug}`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -126,9 +124,7 @@ export default async function ServiceDetailPage({
 
     // Fetch service by slug from API
     const response = await fetch(
-      `${
-        process.env.NEXTAUTH_URL || "http://localhost:3000"
-      }/api/services/by-slug/${slug}`,
+      `${process.env.NEXTAUTH_URL}/api/services/by-slug/${slug}`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -323,9 +319,7 @@ async function ServiceDetailLoading({
 export async function generateStaticParams() {
   try {
     const response = await fetch(
-      `${
-        process.env.NEXTAUTH_URL || "http://localhost:3000"
-      }/api/services?limit=100&status=PUBLISHED`,
+      `${process.env.NEXTAUTH_URL}/api/services?limit=100&status=PUBLISHED`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
