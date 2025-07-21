@@ -17,6 +17,7 @@ interface FetchServicesParams {
   limit?: number;
   status?: string;
   search?: string;
+  showOnHomepage?: boolean;
 }
 
 interface TeamMember {
@@ -167,13 +168,14 @@ export const fetchPost = fetchNewsItem;
 export async function fetchServices(
   params: FetchServicesParams = {}
 ): Promise<ServicesResponse> {
-  const { page = 1, limit = 10, status = "PUBLISHED", search } = params;
+  const { page = 1, limit = 10, status = "PUBLISHED", search, showOnHomepage } = params;
 
   console.log("fetchServices called with params:", {
     page,
     limit,
     status,
     search,
+    showOnHomepage,
   });
 
   const searchParams = new URLSearchParams({
@@ -187,6 +189,10 @@ export async function fetchServices(
 
   if (search) {
     searchParams.append("search", search);
+  }
+
+  if (showOnHomepage) {
+    searchParams.append("showOnHomepage", showOnHomepage.toString());
   }
 
   // Add cache-busting parameter in development

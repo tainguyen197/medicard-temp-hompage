@@ -13,6 +13,7 @@ import {
 import { ROUTES } from "@/lib/router";
 import { htmlToText } from "@/lib/content-utils";
 import { Link } from "@/navigation";
+import { htmlToTextAndTruncate } from "@/lib/utils";
 
 interface ServiceItem {
   id: string;
@@ -36,6 +37,7 @@ const getLocalizedServiceContent = (service: Service, locale: string) => {
         ? service.shortDescriptionEn
         : service.shortDescription,
     details: locale === "en" && service.enKeywords ? service.enKeywords : service.keywords,
+    image: locale === "en" && service.featureImageEn?.url ? service.featureImageEn?.url : service.featureImage?.url,
   };
 };
 
@@ -51,10 +53,7 @@ const convertServiceToServiceItem = (
     title: localizedContent.title,
     description: localizedContent.description || "",
     details: localizedContent.details || "",
-    image:
-      service.featureImage?.url ||
-      service.featureImageEn?.url ||
-      "/images/default_image_ai.png",
+    image: localizedContent.image || "/images/default_image_ai.png",
     link: `/services/${service.slug || service.id}`,
   };
 };
@@ -94,6 +93,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
         const response = await fetchServices({
           status: "PUBLISHED",
           limit: 10, // Get more services to have options
+          showOnHomepage: true,
         });
 
         if (response.services && response.services.length > 0) {
@@ -229,6 +229,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
     return <></>;
   }
 
+
   return (
     <section id="services" className="py-10 md:py-16   bg-[#182134] text-white">
       <div className="container mx-auto px-4 max-w-7xl">
@@ -276,7 +277,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
               <p
                 className="text-gray-300 mb-4 md:mb-10 text-sm md:text-md leading-relaxed line-clamp-5 md:line-clamp-none  min-h-[7.25rem]"
               >
-                {htmlToText(activeService?.description).substring(0, 350) + "..."}
+                {htmlToTextAndTruncate(activeService?.description, 350)}
               </p>
             </div>
             <div>

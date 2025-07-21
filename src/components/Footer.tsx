@@ -104,7 +104,6 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
     ));
   };
 
-  console.log(homepageServices);
 
   // Use homepage services if available, otherwise fall back to hardcoded links
   const servicesToDisplay =

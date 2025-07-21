@@ -41,6 +41,19 @@ export function truncateText(text: string, maxLength: number): string {
 }
 
 /**
+ * Converts HTML content to plain text and truncates it to a maximum length
+ * @param content The HTML content
+ * @param length The maximum length of the output string
+ * @returns Truncated plain text string
+ */
+export function htmlToTextAndTruncate(content: string, length: number): string {
+  // Remove HTML tags using a regex
+  const text = content.replace(/<[^>]+>/g, "");
+  if (text.length <= length) return text;
+  return text.substring(0, length) + "...";
+}
+
+/**
  * Checks if a user has the required role
  */
 export function hasRequiredRole(

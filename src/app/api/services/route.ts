@@ -53,7 +53,7 @@ export async function GET(request: Request) {
   const limit = parseInt(searchParams.get("limit") || "10");
   const search = searchParams.get("search");
   const status = searchParams.get("status");
-
+  const showOnHomepage = searchParams.get("showOnHomepage");
   // Build filter object
   const where: {
     status?: string;
@@ -63,6 +63,7 @@ export async function GET(request: Request) {
       description?: { contains: string; mode: "insensitive" };
       descriptionEn?: { contains: string; mode: "insensitive" };
     }>;
+    showOnHomepage?: boolean;
   } = {};
 
   if (status) {
@@ -78,6 +79,10 @@ export async function GET(request: Request) {
     ];
   }
 
+  if (showOnHomepage) {
+    where.showOnHomepage = showOnHomepage === "true" ? true : false;
+  }
+
   try {
     // Get total count for pagination
     const total = await prisma.service.count({ where });
@@ -90,6 +95,7 @@ export async function GET(request: Request) {
       take: limit,
       include: {
         featureImage: true, // Include the related Media record
+        featureImageEn: true, // Include the related Media record
       },
     });
 
