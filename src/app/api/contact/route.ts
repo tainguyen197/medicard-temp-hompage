@@ -17,7 +17,6 @@ const contactSchema = z.object({
   zaloUrl: z.string().url().optional().or(z.literal("")),
   instagramUrl: z.string().url().optional().or(z.literal("")),
   appointmentLink: z.string().url().optional().or(z.literal("")),
-  status: z.enum(["ACTIVE", "INACTIVE"]).default("ACTIVE"),
 });
 
 // GET /api/contact - Get contact information
@@ -25,7 +24,6 @@ export async function GET() {
   try {
     // Get the first (and should be only) contact record
     const contact = await prisma.contact.findFirst({
-      where: { status: "ACTIVE" },
       orderBy: { createdAt: "desc" },
     });
 
@@ -170,7 +168,6 @@ export async function PUT(request: Request) {
         zaloUrl: validatedData.zaloUrl,
         instagramUrl: validatedData.instagramUrl,
         appointmentLink: validatedData.appointmentLink,
-        status: validatedData.status,
       } as any,
       create: {
         phone: validatedData.phone,
@@ -183,7 +180,6 @@ export async function PUT(request: Request) {
         zaloUrl: validatedData.zaloUrl,
         instagramUrl: validatedData.instagramUrl,
         appointmentLink: validatedData.appointmentLink,
-        status: validatedData.status,
       } as any,
     });
 

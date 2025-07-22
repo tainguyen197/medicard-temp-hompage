@@ -17,9 +17,7 @@ import {
   Loader2,
   Phone,
   MapPin,
-  Clock,
   Facebook,
-  Instagram,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -35,7 +33,6 @@ interface Contact {
   zaloUrl: string | null;
   instagramUrl: string | null;
   appointmentLink: string | null;
-  status: string;
   createdAt: any;
   updatedAt: any;
 }
@@ -45,7 +42,6 @@ interface ContactFormProps {
 }
 
 export default function ContactForm({ contact }: ContactFormProps) {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     phone: contact?.phone || "",
@@ -58,7 +54,6 @@ export default function ContactForm({ contact }: ContactFormProps) {
     zaloUrl: contact?.zaloUrl || "",
     instagramUrl: contact?.instagramUrl || "",
     appointmentLink: contact?.appointmentLink || "",
-    status: contact?.status || "ACTIVE",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -80,8 +75,6 @@ export default function ContactForm({ contact }: ContactFormProps) {
       }
 
       toast.success("Contact information updated successfully");
-
-      router.refresh();
     } catch (error) {
       console.error("Error saving contact:", error);
       toast.error(
@@ -143,24 +136,6 @@ export default function ContactForm({ contact }: ContactFormProps) {
                 placeholder="healthcaretherapycenter.89@gmail.com"
                 required
               />
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="status" className="block text-sm font-medium">
-                Trạng thái
-              </label>
-              <Select
-                value={formData.status}
-                onValueChange={(value) => handleInputChange("status", value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Chọn trạng thái" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="ACTIVE">Hoạt động</SelectItem>
-                  <SelectItem value="INACTIVE">Không hoạt động</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
           </div>
 
