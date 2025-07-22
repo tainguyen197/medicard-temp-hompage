@@ -7,43 +7,29 @@ import {
   Clock,
   Archive,
   ChevronDown,
-  MoreVertical,
 } from "lucide-react";
 import DeleteNewsModal from "./DeleteNewsModal";
 import { ROUTES } from "@/lib/router";
 import Image from "next/image";
-
-interface News {
-  id: string;
-  title: string;
-  slug: string;
-  status: string;
-  showOnHomepage?: boolean;
-  pin?: boolean;
-  createdAt: Date | string;
-  shortDescription: string;
-  featureImage?: {
-    id: string;
-    url: string;
-    fileName?: string | null;
-    originalName?: string | null;
-  } | null;
-}
+import { News } from "@/types/post";
+import { getLocalizedNews } from "@/utils/news";
 
 interface NewsTableRowProps {
+  loading: boolean;
   news: News;
   formatDate: (date: Date | string) => string;
   onNewsDeleted?: () => void;
   onStatusChange?: (newsId: string, newStatus: string) => Promise<void>;
+  selectedLanguage: string;
 }
 
-const DEFAULT_NEWS_IMAGE = "/images/default_news_ai.jpeg";
-
 export default function NewsTableRow({
+  loading,
   news,
   formatDate,
   onNewsDeleted,
   onStatusChange,
+  selectedLanguage,
 }: NewsTableRowProps) {
   const [isStatusMenuOpen, setIsStatusMenuOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -164,29 +150,31 @@ export default function NewsTableRow({
     );
   };
 
+  const localizedNews = getLocalizedNews(news, selectedLanguage);
+
   return (
-    <tr key={news.id} className="hover:bg-gray-50">
+    <tr key={news.id} className={`hover:bg-gray-50 ${loading ? "opacity-50" : ""}`}>
       <td className="px-6 py-4 whitespace-nowrap align-middle">
-        <div className="flex items-center justify-center">
-            <div className="w-16 aspect-[200/200] relative rounded-md overflow-hidden">
-              <Image
-                src={news?.featureImage?.url || DEFAULT_NEWS_IMAGE}
-                alt={news.title}
-                className="w-full h-full object-cover"
-                fill
+        <div className="flex flex-col items-center justify-center gap-2">
+          <div className="w-16 aspect-[200/200] relative rounded-md overflow-hidden">
+            <Image
+              src={localizedNews.image}
+              alt={localizedNews.title || ""}
+              className="w-full h-full object-cover"
+              fill
             />
           </div>
         </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap align-middle">
         <div>
-          <div className="text-sm font-medium text-gray-900">{news.title}</div>
-          <div className="text-sm text-gray-500">/news/{news.slug}</div>
+          <div className="text-sm font-medium text-gray-900">{localizedNews.title}</div>
+          <div className="text-sm text-gray-500">/news/{localizedNews.slug}</div>
         </div>
       </td>
       <td className="px-6 py-4 whitespace-wrap text-sm text-gray-500">
         <span className="text-justify text-xs line-clamp-3">
-          {news.shortDescription}
+          {localizedNews.shortDescription}
         </span>
       </td>
       <td className="px-6 py-4 whitespace-nowrap align-middle">
@@ -231,7 +219,7 @@ export default function NewsTableRow({
         <DeleteNewsModal
           news={{
             id: news.id,
-            title: news.title,
+            title: localizedNews.title || "",
           }}
           onNewsDeleted={onNewsDeleted}
         >

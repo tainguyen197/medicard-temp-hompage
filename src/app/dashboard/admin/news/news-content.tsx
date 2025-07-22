@@ -22,8 +22,12 @@ export default async function NewsContent({
 }) {
   // Check authentication
   const session = await getServerSession(authOptions);
+
+
   if (!session?.user) {
-    redirect("/auth/login");
+    alert("You are not authorized to access this page...");
+
+    redirect("/auth/logout");
   }
 
   const { page = "1", limit = "10", search, status } = await searchParams;
@@ -47,6 +51,7 @@ export default async function NewsContent({
     where,
     orderBy: [
       { pin: "desc" }, // Show pinned items first
+      { showOnHomepage: "desc" }, // Show pinned items first
       { createdAt: "desc" }
     ],
     skip: (Number(page) - 1) * Number(limit),
@@ -54,20 +59,16 @@ export default async function NewsContent({
     select: {
       id: true,
       title: true,
+      titleEn: true,
       slug: true,
       status: true,
       showOnHomepage: true,
       pin: true,
       createdAt: true,
       shortDescription: true,
-      featureImage: {
-        select: {
-          id: true,
-          url: true,
-          fileName: true,
-          originalName: true,
-        },
-      },
+      shortDescriptionEn: true,
+      featureImage: true,
+      featureImageEn: true,
     },
   });
 

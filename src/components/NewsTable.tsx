@@ -4,23 +4,10 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import NewsTableRow from "@/components/NewsTableRow";
+import { News } from "@/types/post";
+import { formatDate, LANGUAGE_OPTIONS } from "@/utils/common";
 
-interface News {
-  id: string;
-  title: string;
-  slug: string;
-  status: string;
-  showOnHomepage?: boolean;
-  pin?: boolean;
-  createdAt: Date | string;
-  shortDescription: string;
-  featureImage?: {
-    id: string;
-    url: string;
-    fileName?: string | null;
-    originalName?: string | null;
-  } | null;
-}
+
 
 interface NewsTableProps {
   news: News[];
@@ -30,6 +17,7 @@ export default function NewsTable({ news }: NewsTableProps) {
   const router = useRouter();
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
   const [localNews, setLocalNews] = useState<News[]>(news);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("vi");
 
   // Update local news when props change
   useEffect(() => {
@@ -44,8 +32,6 @@ export default function NewsTable({ news }: NewsTableProps) {
     setUpdatingStatus(newsId);
 
     try {
-      console.log(`Updating news ${newsId} to status ${newStatus}`);
-
       const response = await fetch(`/api/news/${newsId}/status`, {
         method: "POST",
         headers: {
@@ -56,10 +42,7 @@ export default function NewsTable({ news }: NewsTableProps) {
         cache: "no-store",
       });
 
-      console.log("Response status:", response.status);
-
       const data = await response.json();
-      console.log("Response data:", data);
 
       if (!response.ok) {
         throw new Error(data.error || "Failed to update status");
@@ -73,14 +56,6 @@ export default function NewsTable({ news }: NewsTableProps) {
       );
 
       toast.success("Status updated successfully");
-
-      // Force a server refresh with cache invalidation
-      router.refresh();
-
-      // Force a hard navigation to the same page to clear cache completely
-      setTimeout(() => {
-        window.location.href = window.location.href;
-      }, 300);
     } catch (error) {
       console.error("Error updating status:", error);
       toast.error(
@@ -93,18 +68,21 @@ export default function NewsTable({ news }: NewsTableProps) {
     }
   };
 
-  // Client-side date formatting function
-  const formatDate = (date: Date | string): string => {
-    const dateObj = typeof date === "string" ? new Date(date) : date;
-    return dateObj.toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
 
   return (
     <div className="bg-white rounded-md shadow overflow-x-auto">
+      <div className="flex items-center justify-end p-4">
+        <label className="mr-2 text-sm font-medium">Language:</label>
+        <select
+          className="px-2 py-1 text-sm border rounded"
+          value={selectedLanguage}
+          onChange={e => setSelectedLanguage(e.target.value)}
+        >
+          {LANGUAGE_OPTIONS.map(opt => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
+      </div>
       <div className="shadow border-b border-gray-200 sm:rounded-lg">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -148,11 +126,13 @@ export default function NewsTable({ news }: NewsTableProps) {
             ) : (
               localNews.map((article) => (
                 <NewsTableRow
+                  loading={!!updatingStatus}
                   key={`${article.id}-${article.status}`}
                   news={article}
                   formatDate={formatDate}
                   onNewsDeleted={handleNewsDeleted}
                   onStatusChange={handleStatusChange}
+                  selectedLanguage={selectedLanguage}
                 />
               ))
             )}
