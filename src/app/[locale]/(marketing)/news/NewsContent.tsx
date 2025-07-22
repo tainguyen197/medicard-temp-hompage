@@ -61,10 +61,10 @@ export async function NewsDataComponent({
       const data: NewsResponse = await response.json();
       totalNews = data.meta?.total || 0;
       newsItems = (data.news || []).map((newsItem: News) => {
-        const localizedContent = getLocalizedNews(newsItem, locale);
+        const localizedContent: any = getLocalizedNews(newsItem, locale);
           return {
             ...localizedContent,
-          } as DisplayNews;
+          } 
       });
     }
   } catch (error) {
