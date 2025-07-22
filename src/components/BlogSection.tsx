@@ -1,10 +1,10 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { News } from "@/types/post";
-import HomepageNewsSection from "./HomepageNewsSection";
-import { htmlToText } from "@/lib/content-utils";
+import { getLocalizedNews } from "@/utils";
+import { Link } from "@/navigation";
+import { htmlToTextAndTruncate } from "@/lib/utils";
 
 interface BlogPostProps {
   image: string;
@@ -33,7 +33,7 @@ const BlogPost = ({ image, title, description, slug, id }: BlogPostProps) => (
           {title}
         </h3>
         <p className="text-gray-600 text-sm md:text-md line-clamp-2">
-          {htmlToText(description).substring(0, 150)}...
+         {htmlToTextAndTruncate(description, 150)}
         </p>
       </div>
     </div>
@@ -57,7 +57,6 @@ const BlogSection = async ({ locale = "vi" }: { locale?: string }) => {
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
-        next: { revalidate: 0 },
         cache: "no-store",
       }
     );
@@ -81,31 +80,15 @@ const BlogSection = async ({ locale = "vi" }: { locale?: string }) => {
         {homepageNews.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-16">
             {homepageNews.map((newsItem) => {
-              // Handle localization
-              const title =
-                locale === "en" && newsItem.titleEn
-                  ? newsItem.titleEn
-                  : newsItem.title;
-              const description =
-                locale === "en" && newsItem.shortDescriptionEn
-                  ? newsItem.shortDescriptionEn
-                  : newsItem.shortDescription ||
-                    (newsItem.description
-                      ? `${newsItem.description.substring(0, 150)}...`
-                      : "");
-              const image =
-                locale === "en" && newsItem.featureImageEn
-                  ? newsItem.featureImageEn.url
-                  : newsItem.featureImage?.url ||
-                    "/images/default_news_ai.jpeg";
+              const { title, description, image, slug, id } = getLocalizedNews(newsItem, locale); 
 
               return (
                 <BlogPost
-                  key={newsItem.id}
-                  slug={newsItem.slug}
-                  id={newsItem.id}
+                  key={id}
+                  slug={slug}
+                  id={id}
                   image={image}
-                  title={title}
+                  title={title || ""}
                   description={description || ""}
                 />
               );
