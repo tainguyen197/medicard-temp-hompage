@@ -6,7 +6,14 @@ import { ArrowLeftIcon, ImageIcon, XIcon } from "lucide-react";
 import Link from "next/link";
 import { ROUTES } from "@/lib/router";
 import { toast } from "sonner";
-
+import { useForm, Controller } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  teamMemberSchema,
+  MAX_DESCRIPTION_LENGTH,
+  MAX_FILE_SIZE,
+} from "@/utils";
 interface TeamMemberFormData {
   name: string;
   nameEn: string;
@@ -28,9 +35,6 @@ interface TeamMemberFormProps {
   isEdit?: boolean;
 }
 
-const MAX_DESCRIPTION_LENGTH = 300; // Based on longest current description
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
-
 export default function TeamMemberForm({
   initialData,
   teamMemberId,
@@ -41,37 +45,29 @@ export default function TeamMemberForm({
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageEnPreview, setImageEnPreview] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string>("");
-  const [formData, setFormData] = useState<TeamMemberFormData>({
-    name: initialData?.name || "",
-    nameEn: initialData?.nameEn || "",
-    title: initialData?.title || "",
-    titleEn: initialData?.titleEn || "",
-    description: initialData?.description || "",
-    descriptionEn: initialData?.descriptionEn || "",
-    order: initialData?.order || 0,
-    status: initialData?.status || "ACTIVE",
-    existingImageUrl: initialData?.existingImageUrl || "",
-    existingImageEnUrl: initialData?.existingImageEnUrl || "",
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    formState: { errors },
+    watch,
+  } = useForm<TeamMemberFormData>({
+    resolver: zodResolver(teamMemberSchema),
+    defaultValues: {
+      name: initialData?.name || "",
+      nameEn: initialData?.nameEn || "",
+      title: initialData?.title || "",
+      titleEn: initialData?.titleEn || "",
+      description: initialData?.description || "",
+      descriptionEn: initialData?.descriptionEn || "",
+      order: initialData?.order || 0,
+      status: initialData?.status || "ACTIVE",
+      existingImageUrl: initialData?.existingImageUrl || "",
+      existingImageEnUrl: initialData?.existingImageEnUrl || "",
+    },
   });
-
-  const handleInputChange = (
-    field: keyof TeamMemberFormData,
-    value: string | number
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
-  const handleDescriptionChange = (
-    field: "description" | "descriptionEn",
-    value: string
-  ) => {
-    if (value.length <= MAX_DESCRIPTION_LENGTH) {
-      handleInputChange(field, value);
-    }
-  };
 
   const validateFile = (file: File): string | null => {
     if (file.size > MAX_FILE_SIZE) {
@@ -99,39 +95,33 @@ export default function TeamMemberForm({
     file: File | null
   ) => {
     setUploadError("");
-
     if (!file) {
-      setFormData((prev) => ({
-        ...prev,
-        [field]: undefined,
-      }));
+      setValue(field, undefined);
 
       if (field === "imageFile") {
         setImagePreview(null);
+        setValue("existingImageUrl", "");
       } else {
         setImageEnPreview(null);
+        setValue("existingImageEnUrl", "");
       }
       return;
     }
-
     const error = validateFile(file);
     if (error) {
       setUploadError(error);
       return;
     }
-
     try {
       const preview = await createImagePreview(file);
-
-      setFormData((prev) => ({
-        ...prev,
-        [field]: file,
-      }));
+      setValue(field, file);
 
       if (field === "imageFile") {
         setImagePreview(preview);
+        setValue("existingImageUrl", preview);
       } else {
         setImageEnPreview(preview);
+        setValue("existingImageEnUrl", preview);
       }
     } catch (error) {
       setUploadError("Failed to process image");
@@ -139,82 +129,51 @@ export default function TeamMemberForm({
   };
 
   const removeImage = (field: "imageFile" | "imageEnFile") => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: undefined,
-      // Also clear existing image URL when removing
-      ...(field === "imageFile" && { existingImageUrl: "" }),
-      ...(field === "imageEnFile" && { existingImageEnUrl: "" }),
-    }));
-
+    setValue(field, undefined);
     if (field === "imageFile") {
+      setValue("existingImageUrl", "");
       setImagePreview(null);
     } else {
+      setValue("existingImageEnUrl", "");
       setImageEnPreview(null);
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: TeamMemberFormData) => {
     setIsSubmitting(true);
-
     try {
       const submitData = new FormData();
-
-      // Add form fields
-      Object.entries(formData).forEach(([key, value]) => {
+      Object.entries(data).forEach(([key, value]) => {
         if (key !== "imageFile" && key !== "imageEnFile") {
-          submitData.append(key, value.toString());
+          submitData.append(key, value?.toString() ?? "");
         }
       });
-
-      // Add files if present and valid
-      if (formData.imageFile && formData.imageFile.size > 0) {
-        submitData.append("imageFile", formData.imageFile);
+      if (data.imageFile && data.imageFile.size > 0) {
+        submitData.append("imageFile", data.imageFile);
       }
-      if (formData.imageEnFile && formData.imageEnFile.size > 0) {
-        submitData.append("imageEnFile", formData.imageEnFile);
+      if (data.imageEnFile && data.imageEnFile.size > 0) {
+        submitData.append("imageEnFile", data.imageEnFile);
       }
-
-      // Send explicit removal signals
-      if (formData.existingImageUrl === "" && !formData.imageFile) {
+      if (data.existingImageUrl === "" && !data.imageFile) {
         submitData.append("removeImage", "true");
       }
-      if (formData.existingImageEnUrl === "" && !formData.imageEnFile) {
+      if (data.existingImageEnUrl === "" && !data.imageEnFile) {
         submitData.append("removeImageEn", "true");
       }
-
       const url = isEdit ? `/api/team/${teamMemberId}` : "/api/team";
       const method = isEdit ? "PUT" : "POST";
-
-      const response = await fetch(url, {
-        method,
-        body: submitData,
-      });
-
-      const data = await response.json();
-
+      const response = await fetch(url, { method, body: submitData });
+      const respData = await response.json();
       if (!response.ok) {
-        // Check for specific error messages
-        if (data.error && data.error.includes("Maximum limit of 30 team members")) {
-          setUploadError(data.error);
-          toast.error(data.error);
-        } else {
-          setUploadError(data.error || "Failed to save team member");
-          toast.error(data.error || "Failed to save team member");
-        }
-        throw new Error(data.error || "Failed to save team member");
+        setUploadError(respData.error || "Failed to save team member");
+        toast.error(respData.error || "Failed to save team member");
+        throw new Error(respData.error || "Failed to save team member");
       }
-
       toast.success("Team member saved successfully!");
-
       router.push(ROUTES.ADMIN_TEAM);
     } catch (error) {
       console.error("Error saving team member:", error);
     } finally {
-      setTimeout(() => {
-        setIsSubmitting(false);
-      }, 1000);
     }
   };
 
@@ -253,13 +212,13 @@ export default function TeamMemberForm({
             >
               <XIcon size={16} />
             </button>
-            {formData[field] && (
+            {watch(field) && (
               <div className="mt-2 text-sm text-gray-600">
-                {formData[field]?.name} (
-                {((formData[field]?.size || 0) / 1024 / 1024).toFixed(2)} MB)
+                {watch(field)?.name} (
+                {((watch(field)?.size || 0) / 1024 / 1024).toFixed(2)} MB)
               </div>
             )}
-            {!formData[field] && existingImageUrl && (
+            {!watch(field) && existingImageUrl && (
               <div className="mt-2 text-sm text-gray-600">Current image</div>
             )}
           </div>
@@ -320,7 +279,7 @@ export default function TeamMemberForm({
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Vietnamese Content Section */}
         <fieldset className="p-4 border border-gray-200 rounded-lg">
           <legend className="text-lg font-semibold mb-4 px-2">
@@ -335,12 +294,15 @@ export default function TeamMemberForm({
                 </label>
                 <input
                   type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  {...register("name")}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter full name in Vietnamese"
                 />
+                {errors.name && (
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors.name.message}
+                  </p>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -349,42 +311,53 @@ export default function TeamMemberForm({
                 </label>
                 <input
                   type="text"
-                  required
-                  value={formData.title}
-                  onChange={(e) => handleInputChange("title", e.target.value)}
+                  {...register("title")}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="e.g., BS. CK, THS. BS"
                 />
+                {errors.title && (
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors.title.message}
+                  </p>
+                )}
               </div>
             </div>
 
-            <FileUploadSection
-              field="imageFile"
-              label="Profile Photo (Vietnamese)"
-              preview={imagePreview}
-              inputId="image-upload"
-              existingImageUrl={formData.existingImageUrl}
-            />
+            <div>
+              <FileUploadSection
+                field="imageFile"
+                label="Profile Photo (Vietnamese)"
+                preview={imagePreview}
+                inputId="image-upload"
+                existingImageUrl={watch("existingImageUrl")}
+              />
+              {errors.existingImageUrl && (
+                <p className="text-xs text-red-500 mt-1">
+                  {errors.existingImageUrl.message}
+                </p>
+              )}
+            </div>
           </div>
 
           <div className="space-y-2 mt-4">
             <label className="block text-sm font-medium text-gray-700">
               Professional Description (Vietnamese) *
               <span className="text-xs text-gray-500 ml-2">
-                {formData.description.length}/{MAX_DESCRIPTION_LENGTH}{" "}
+                {watch("description").length}/{MAX_DESCRIPTION_LENGTH}{" "}
                 characters
               </span>
             </label>
             <textarea
-              required
+              {...register("description")}
               rows={4}
-              value={formData.description}
-              onChange={(e) =>
-                handleDescriptionChange("description", e.target.value)
-              }
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter professional background and experience in Vietnamese"
             />
+            {errors.description && (
+              <p className="text-xs text-red-500 mt-1">
+                {errors.description.message}
+              </p>
+            )}
           </div>
         </fieldset>
 
@@ -402,8 +375,7 @@ export default function TeamMemberForm({
                 </label>
                 <input
                   type="text"
-                  value={formData.nameEn}
-                  onChange={(e) => handleInputChange("nameEn", e.target.value)}
+                  {...register("nameEn")}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Enter full name in English"
                 />
@@ -415,8 +387,7 @@ export default function TeamMemberForm({
                 </label>
                 <input
                   type="text"
-                  value={formData.titleEn}
-                  onChange={(e) => handleInputChange("titleEn", e.target.value)}
+                  {...register("titleEn")}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="e.g., MD. Specialist, MSc. MD"
                 />
@@ -428,7 +399,7 @@ export default function TeamMemberForm({
               label="Profile Photo (English)"
               preview={imageEnPreview}
               inputId="image-en-upload"
-              existingImageUrl={formData.existingImageEnUrl}
+              existingImageUrl={watch("existingImageEnUrl")}
             />
           </div>
 
@@ -436,16 +407,13 @@ export default function TeamMemberForm({
             <label className="block text-sm font-medium text-gray-700">
               Professional Description (English)
               <span className="text-xs text-gray-500 ml-2">
-                {formData.descriptionEn.length}/{MAX_DESCRIPTION_LENGTH}{" "}
+                {watch("descriptionEn").length}/{MAX_DESCRIPTION_LENGTH}{" "}
                 characters
               </span>
             </label>
             <textarea
+              {...register("descriptionEn")}
               rows={4}
-              value={formData.descriptionEn}
-              onChange={(e) =>
-                handleDescriptionChange("descriptionEn", e.target.value)
-              }
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter professional background and experience in English"
             />
@@ -464,13 +432,17 @@ export default function TeamMemberForm({
                 Status
               </label>
               <select
-                value={formData.status}
-                onChange={(e) => handleInputChange("status", e.target.value)}
+                {...register("status")}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="ACTIVE">Active</option>
                 <option value="INACTIVE">Inactive</option>
               </select>
+              {errors.status && (
+                <p className="text-xs text-red-500 mt-1">
+                  {errors.status.message}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -479,14 +451,16 @@ export default function TeamMemberForm({
               </label>
               <input
                 type="number"
+                {...register("order", { valueAsNumber: true })}
                 min="0"
-                value={formData.order}
-                onChange={(e) =>
-                  handleInputChange("order", parseInt(e.target.value) || 0)
-                }
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="0"
               />
+              {errors.order && (
+                <p className="text-xs text-red-500 mt-1">
+                  {errors.order.message}
+                </p>
+              )}
               <p className="text-xs text-gray-500">
                 Lower numbers appear first in the team section
               </p>
