@@ -7,7 +7,7 @@ export const getLocalizedServiceContent = (service: Service, locale: string) => 
     title: locale === "en" ? service.titleEn || service.title : service.title || service.titleEn,
     description: locale === "en" ? service.descriptionEn || service.description : service.description || service.descriptionEn,
     shortDescription: locale === "en" ? service.shortDescriptionEn || service.shortDescription : service.shortDescription || service.shortDescriptionEn,
-    image: locale === "en" ? service.featureImageEn?.url || service.featureImage?.url : service.featureImage?.url || service.featureImageEn?.url || "/images/default_image_ai.png",
+    image: (locale === "en" ? service.featureImageEn?.url || service.featureImage?.url : service.featureImage?.url || service.featureImageEn?.url) || DEFAULT_SERVICE_IMAGE,
     details: locale === "en" ? service.enKeywords || service.keywords : service.keywords || service.enKeywords,
     link: `/services/${service.slug || service.id}`,
   };
@@ -37,3 +37,5 @@ export const serviceFormSchema = z.object({
     featuredImageEn: z.string().optional(),
     featureImageEnId: z.string().optional(),
   });
+
+  export const DEFAULT_SERVICE_IMAGE = "/images/default_image_ai.png";

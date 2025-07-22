@@ -52,18 +52,16 @@ export default async function ServicesContent({
       id: true,
       title: true,
       slug: true,
+      titleEn: true,
+      description: true,
+      descriptionEn: true,
       status: true,
       showOnHomepage: true,
       createdAt: true,
       shortDescription: true,
-      featureImage: {
-        select: {
-          id: true,
-          url: true,
-          fileName: true,
-          originalName: true,
-        },
-      },
+      shortDescriptionEn: true,
+      featureImage: true,
+      featureImageEn: true,
     },
   });
 

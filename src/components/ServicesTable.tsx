@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import ServiceTableRow from "@/components/ServiceTableRow";
+import { LANGUAGE_OPTIONS } from "@/utils/common";
+import { getLocalizedServiceContent } from "@/utils/services";
 
 interface Service {
   id: string;
@@ -12,6 +14,7 @@ interface Service {
   status: string;
   showOnHomepage: boolean;
   createdAt: Date | string;
+  updatedAt: Date | string; // not optional
   shortDescription: string;
   featureImage?: {
     id: string;
@@ -29,7 +32,8 @@ export default function ServicesTable({ services }: ServicesTableProps) {
   const router = useRouter();
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
   const [localServices, setLocalServices] = useState<Service[]>(services);
-
+  const [selectedLanguage, setSelectedLanguage] = useState<string>("vi");
+  
   // Update local services when props change
   useEffect(() => {
     setLocalServices(services);
@@ -72,14 +76,7 @@ export default function ServicesTable({ services }: ServicesTableProps) {
       );
 
       toast.success("Status updated successfully");
-
-      // Force a server refresh with cache invalidation
-      router.refresh();
-
-      // Force a hard navigation to the same page to clear cache completely
-      setTimeout(() => {
-        window.location.href = window.location.href;
-      }, 300);
+  
     } catch (error) {
       console.error("Error updating status:", error);
       toast.error(
@@ -104,6 +101,18 @@ export default function ServicesTable({ services }: ServicesTableProps) {
 
   return (
     <div className="bg-white rounded-md shadow overflow-x-auto">
+      <div className="flex items-center justify-end p-4">
+        <label className="mr-2 text-sm font-medium">Language:</label>
+        <select
+          className="px-2 py-1 text-sm border rounded"
+          value={selectedLanguage}
+          onChange={e => setSelectedLanguage(e.target.value)}
+        >
+          {LANGUAGE_OPTIONS.map(opt => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
+      </div>
       <div className="shadow border-b border-gray-200 sm:rounded-lg">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
@@ -142,15 +151,20 @@ export default function ServicesTable({ services }: ServicesTableProps) {
                 </td>
               </tr>
             ) : (
-              localServices.map((service) => (
-                <ServiceTableRow
-                  key={`${service.id}-${service.status}`}
-                  service={service}
-                  formatDate={formatDate}
-                  onServiceDeleted={handleServiceDeleted}
-                  onStatusChange={handleStatusChange}
-                />
-              ))
+              localServices.map((service) => {
+
+                return (
+                  <ServiceTableRow
+                    loading={!!updatingStatus}
+                    key={`${service.id}-${service.status}`}
+                    service={service as Service}
+                    formatDate={formatDate}
+                    onServiceDeleted={handleServiceDeleted}
+                    onStatusChange={handleStatusChange}
+                    selectedLanguage={selectedLanguage}
+                  />
+                );
+              })
             )}
           </tbody>
         </table>

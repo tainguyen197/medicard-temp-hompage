@@ -12,37 +12,26 @@ import {
 import DeleteServiceModal from "./DeleteServiceModal";
 import { ROUTES } from "@/lib/router";
 import Image from "next/image";
+import { Service } from "@/types/service";
+import { getLocalizedServiceContent, DEFAULT_SERVICE_IMAGE } from "@/utils/services";
 
-interface Service {
-  id: string;
-  title: string;
-  slug: string;
-  status: string;
-  showOnHomepage: boolean;
-  createdAt: Date | string;
-  shortDescription: string;
-  featureImage?: {
-    id: string;
-    url: string;
-    fileName?: string | null;
-    originalName?: string | null;
-  } | null;
-}
 
 interface ServiceTableRowProps {
   service: Service;
   formatDate: (date: Date | string) => string;
   onServiceDeleted?: () => void;
   onStatusChange?: (serviceId: string, newStatus: string) => Promise<void>;
+  loading?: boolean;
+  selectedLanguage: string;
 }
-
-const DEFAULT_SERVICE_IMAGE = "/images/default_image_ai.png";
 
 export default function ServiceTableRow({
   service,
   formatDate,
   onServiceDeleted,
   onStatusChange,
+  loading,
+  selectedLanguage,
 }: ServiceTableRowProps) {
   const [isStatusMenuOpen, setIsStatusMenuOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -163,14 +152,16 @@ export default function ServiceTableRow({
     );
   };
 
+  const localizedService = getLocalizedServiceContent(service, selectedLanguage);
+
   return (
-    <tr key={service.id} className="hover:bg-gray-50">
+    <tr key={service.id} className={`hover:bg-gray-50 ${loading ? "opacity-50" : ""}`}>
       <td className="px-6 py-4 whitespace-nowrap align-middle">
         <div className="flex items-center justify-center">
           <div className="w-16 aspect-[270/200] relative rounded-md overflow-hidden">
             <Image
-              src={service.featureImage?.url || DEFAULT_SERVICE_IMAGE}
-                alt={service.title}
+              src={localizedService.image || ""}
+                alt={localizedService.title || ""}
                 className="w-full h-full object-cover"
                 fill
               />
@@ -180,14 +171,14 @@ export default function ServiceTableRow({
       <td className="px-6 py-4 whitespace-nowrap align-middle">
         <div>
           <div className="text-sm font-medium text-gray-900">
-            {service.title}
+            {localizedService.title}
           </div>
           <div className="text-sm text-gray-500">/services/{service.slug}</div>
         </div>
       </td>
       <td className="px-6 py-4 whitespace-wrap text-sm text-gray-500">
         <span className="text-justify text-xs line-clamp-3">
-          {service.shortDescription}
+          {localizedService.shortDescription}
         </span>
       </td>
       <td className="px-6 py-4 whitespace-nowrap align-middle">
