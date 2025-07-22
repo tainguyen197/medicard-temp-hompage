@@ -37,10 +37,8 @@ export async function NewsDataComponent({
     if (featuredResponse.ok) {
       const featuredData = await featuredResponse.json();
       trendingNews = (featuredData.posts || []).map((newsItem: any) => {
-        const localizedContent = getLocalizedNews(newsItem, locale);
-        return {
-          ...localizedContent,
-        } as DisplayNews;
+        const localizedContent: any = getLocalizedNews(newsItem, locale);
+       return localizedContent;
       });
     }
   } catch (error) {

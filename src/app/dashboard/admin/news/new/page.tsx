@@ -116,7 +116,7 @@ export default function NewNewsPage() {
             <div className="space-y-2">
               <Label htmlFor="featuredImage">Feature Image</Label>
               <Controller
-                control={control}
+                control={control} 
                 name="featuredImage"
                 render={({ field }) => (
                   <ImageUpload
@@ -377,7 +377,7 @@ export default function NewNewsPage() {
                   control={control}
                   name="categoryEnId"
                   render={({ field }) => (
-                    <Select value={field.value} onValueChange={field.onChange}>
+                    <Select value={field.value || ""} onValueChange={field.onChange}>
                       <SelectTrigger id="categoryEnId">
                         <SelectValue placeholder="Select a category for English" />
                       </SelectTrigger>
