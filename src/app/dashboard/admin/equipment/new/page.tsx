@@ -16,7 +16,7 @@ export default function NewEquipmentPage() {
   const handleSubmit = async (formData: FormData) => {
     setIsSubmitting(true);
     setError(null);
-    
+
     try {
       const response = await fetch("/api/equipment", {
         method: "POST",
@@ -40,9 +40,6 @@ export default function NewEquipmentPage() {
     } catch (err: any) {
       console.error("Error creating equipment:", err);
     } finally {
-      setTimeout(() => {
-        setIsSubmitting(false);
-      }, 1000);
     }
   };
 

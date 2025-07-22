@@ -3,27 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Eye, Edit, Trash2, CheckCircle, XCircle } from "lucide-react";
+import { CheckCircle, XCircle } from "lucide-react";
 import { ROUTES } from "@/lib/router";
-
-interface Equipment {
-  id: string;
-  name: string;
-  nameEn?: string;
-  description: string;
-  descriptionEn?: string;
-  status: string;
-  showOnHomepage: boolean;
-  order: number;
-  image?: {
-    url: string;
-  };
-  imageEn?: {
-    url: string;
-  };
-  createdAt: string;
-  updatedAt: string;
-}
+import { Equipment } from "@/types/equiment";
 
 interface EquipmentTableProps {
   equipment: Equipment[];
@@ -64,29 +46,6 @@ export default function EquipmentTable({ equipment }: EquipmentTableProps) {
       setDeleteError("Failed to delete equipment. Please try again.");
     } finally {
       setIsDeleting(false);
-    }
-  };
-
-  const handleStatusToggle = async (id: string, currentStatus: string) => {
-    const newStatus = currentStatus === "ACTIVE" ? "INACTIVE" : "ACTIVE";
-
-    try {
-      const response = await fetch(`/api/equipment/${id}/status`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status: newStatus }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update equipment status");
-      }
-
-      // Refresh the page to show updated status
-      window.location.reload();
-    } catch (err) {
-      console.error("Error updating equipment status:", err);
     }
   };
 
@@ -156,7 +115,6 @@ export default function EquipmentTable({ equipment }: EquipmentTableProps) {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <button
-                    onClick={() => handleStatusToggle(item.id, item.status)}
                     className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                       item.status === "ACTIVE"
                         ? "bg-green-100 text-green-800"
@@ -178,7 +136,7 @@ export default function EquipmentTable({ equipment }: EquipmentTableProps) {
                   <div className="flex items-center justify-end space-x-3">
                     <Link
                       href={`${ROUTES.ADMIN_EQUIPMENT}/${item.id}`}
-                      className="text-amber-600 hover:text-amber-900"
+                      className="text-blue-600 hover:text-blue-900"
                     >
                       Edit
                     </Link>
@@ -198,7 +156,7 @@ export default function EquipmentTable({ equipment }: EquipmentTableProps) {
 
       {/* Delete Confirmation Modal */}
       {deleteModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/70 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full">
             <h3 className="text-lg font-medium text-slate-900 mb-4">
               Delete Equipment

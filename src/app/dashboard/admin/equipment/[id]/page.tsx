@@ -6,6 +6,7 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { ROUTES } from "@/lib/router";
 import EquipmentForm from "../equipment-form";
+import { toast } from "sonner";
 
 interface EquipmentPageProps {
   params: Promise<{
@@ -60,13 +61,12 @@ export default function EditEquipmentPage({ params }: EquipmentPageProps) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Failed to update equipment");
       }
-      
+      toast.success("Equipment updated successfully!");
       router.push(ROUTES.ADMIN_EQUIPMENT);
     } catch (err: any) {
       console.error("Error updating equipment:", err);
       setError(err.message || "Failed to update equipment. Please try again.");
     } finally {
-      setIsSubmitting(false);
     }
   };
 

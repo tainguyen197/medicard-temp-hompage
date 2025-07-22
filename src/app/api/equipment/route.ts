@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
       }
       const bytes = await imageEnFile.arrayBuffer();
       const buffer = Buffer.from(bytes);
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3001";
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
       const uploadResponse = await fetch(`${baseUrl}/api/media/upload`, {
         method: "POST",
         headers: {
