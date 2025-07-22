@@ -17,10 +17,10 @@ interface BlogPostProps {
 const BlogPost = ({ image, title, description, slug, id }: BlogPostProps) => (
   <Link
     href={`/news/${slug}`}
-    className="group relative rounded-lg overflow-hidden max-w-[330px] md:w-[330px] mx-auto"
+    className="group relative rounded-lg overflow-hidden  md:w-[330px] mx-auto"
   >
     <div className="bg-white group grid grid-cols-2 gap-4 md:block">
-      <div className="relative md:aspect-square max-h-[330px] rounded-2xl overflow-hidden">
+      <div className="relative aspect-square max-h-[330px] rounded-2xl overflow-hidden">
         <Image
           src={image}
           alt={title}

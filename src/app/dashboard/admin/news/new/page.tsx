@@ -17,6 +17,7 @@ import ImageUpload from "@/components/ImageUpload";
 import { ROUTES } from "@/lib/router";
 import { useNewsForm } from "@/hooks/useNewsForm";
 import { TextEditor } from "taitrung-super-editor";
+import React from "react";
 
 export default function NewNewsPage() {
   const router = useRouter();
@@ -44,8 +45,6 @@ export default function NewNewsPage() {
     handleCreateCategory,
     handleCreateCategoryEn,
     onSubmit,
-    saveDraft,
-    loadDraft,
   } = useNewsForm();
 
   const {
@@ -54,6 +53,18 @@ export default function NewNewsPage() {
     formState: { errors },
     watch,
   } = form;
+
+  const description = watch("description");
+  const descriptionEn = watch("descriptionEn");
+
+  React.useEffect(() => {
+    if (description === "<p>&nbsp;</p>") {
+      form.setValue("description", "");
+    }
+    if (descriptionEn === "<p>&nbsp;</p>") {
+      form.setValue("descriptionEn", "");
+    }
+  }, [description, descriptionEn]);
   
 
   return (
@@ -70,7 +81,7 @@ export default function NewNewsPage() {
           </Button>
         </div>
       </div>
-
+   
       <form onSubmit={onSubmit} className="space-y-6">
         {/* Vietnamese Content Section */}
         <fieldset className="p-4 border border-gray-200 rounded-lg">
@@ -81,12 +92,21 @@ export default function NewNewsPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
             <div className="md:col-span-2 space-y-2">
               <Label htmlFor="title">News Title (Vietnamese)</Label>
-              <Input
-                id="title"
-                {...register("title")}
-                onChange={(e) => handleTitleChange(e.target.value)}
-                placeholder="Enter news title in Vietnamese"
-                className="w-full"
+              <Controller
+                control={control}
+                name="title"
+                render={({ field }) => (
+                  <Input
+                    id="title"
+                    {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      handleTitleChange(e.target.value);
+                    }}
+                    placeholder="Enter news title in Vietnamese"
+                    className="w-full"
+                  />
+                )}
               />
               {errors.title && (
                 <p className="text-red-500 text-sm">{errors.title.message}</p>
@@ -113,6 +133,11 @@ export default function NewNewsPage() {
                   />
                 )}
               />
+              {errors.featuredImage && (
+                <p className="text-red-500 text-sm">
+                  {errors.featuredImage.message}
+                </p>
+              )}
               <p className="text-xs text-gray-500">
                 Recommended aspect ratio: 1:1
               </p>
@@ -141,6 +166,11 @@ export default function NewNewsPage() {
                     </Select>
                   )}
                 />
+                {errors.categoryId && (
+                  <p className="text-red-500 text-sm">
+                    {errors.categoryId.message}
+                  </p>
+                )}
 
                 {!showNewCategoryInput ? (
                   <Button
@@ -192,6 +222,11 @@ export default function NewNewsPage() {
                 placeholder="Brief summary of the news article in Vietnamese"
                 className="w-full"
               />
+              {errors.shortDescription && (
+                <p className="text-red-500 text-sm">
+                  {errors.shortDescription.message}
+                </p>
+              )}
             </div>
           </div>
 
@@ -204,7 +239,7 @@ export default function NewNewsPage() {
                   name="description"
                   render={({ field }) => (
                     <TextEditor
-                      value={field.value || ""}
+                      value={field.value}
                       onChange={(value: any) => {
                         field.onChange(value);
                       }}
@@ -238,6 +273,11 @@ export default function NewNewsPage() {
                   maxLength={65}
                   className="w-full"
                 />
+                {errors.metaTitle && (
+                  <p className="text-red-500 text-sm">
+                    {errors.metaTitle.message}
+                  </p>
+                )}
                 <p className="text-xs text-gray-500">
                   {(watch("metaTitle") || "").length}/65 characters
                 </p>
@@ -251,6 +291,11 @@ export default function NewNewsPage() {
                   placeholder="keyword1, keyword2, keyword3"
                   className="w-full"
                 />
+                {errors.metaKeywords && (
+                  <p className="text-red-500 text-sm">
+                    {errors.metaKeywords.message}
+                  </p>
+                )}
                 <p className="text-xs text-gray-500">
                   Separate keywords with commas
                 </p>
@@ -269,6 +314,11 @@ export default function NewNewsPage() {
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+              {errors.metaDescription && (
+                <p className="text-red-500 text-sm">
+                  {errors.metaDescription.message}
+                </p>
+              )}
               <p className="text-xs text-gray-500">
                 {(watch("metaDescription") || "").length}/155 characters
               </p>
@@ -502,12 +552,21 @@ export default function NewNewsPage() {
 
             <div className="space-y-2">
               <Label htmlFor="slug">URL Slug</Label>
-              <Input
-                id="slug"
-                {...register("slug")}
-                onChange={handleSlugChange}
-                placeholder="news-article-url-slug"
-                className="w-full"
+              <Controller
+                control={control}
+                name="slug"
+                render={({ field }) => (
+                  <Input
+                    id="slug"
+                    {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      handleSlugChange(e);
+                    }}
+                    placeholder="news-article-url-slug"
+                    className="w-full"
+                  />
+                )}
               />
               {errors.slug && (
                 <p className="text-red-500 text-sm">{errors.slug.message}</p>

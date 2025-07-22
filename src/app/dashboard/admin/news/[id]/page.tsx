@@ -19,6 +19,7 @@ import { ROUTES } from "@/lib/router";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import { useNewsEditForm } from "@/hooks/useNewsEditForm";
 import { TextEditor } from "taitrung-super-editor";
+import React from "react";
 
 export default function EditNewsPage({
   params,
@@ -62,6 +63,19 @@ export default function EditNewsPage({
     watch,
   } = form;
 
+  const description = watch("description");
+  const descriptionEn = watch("descriptionEn");
+
+  React.useEffect(() => {
+
+    if (description === "<p>&nbsp;</p>") {
+      form.setValue("description", "");
+    }
+    if (descriptionEn === "<p>&nbsp;</p>") {
+      form.setValue("descriptionEn", "");
+    }
+  }, [description, descriptionEn]);
+
   if (isLoading) {
     return (
       <div className="container mx-auto p-8 bg-white rounded-md">
@@ -86,8 +100,10 @@ export default function EditNewsPage({
           </Button>
         </div>
 
+
         <form onSubmit={onSubmit} className="space-y-6">
           {/* Vietnamese Content Section */}
+
           <fieldset className="p-4 border border-gray-200 rounded-lg">
             <legend className="text-lg font-semibold mb-4 px-2">
               Vietnamese Content (Default)
@@ -96,12 +112,21 @@ export default function EditNewsPage({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
               <div className="md:col-span-2 space-y-2">
                 <Label htmlFor="title">News Title (Vietnamese)</Label>
-                <Input
-                  id="title"
-                  {...register("title")}
-                  onChange={(e) => handleTitleChange(e.target.value)}
-                  placeholder="Enter news title in Vietnamese"
-                  className="w-full"
+                <Controller
+                  control={control}
+                  name="title"
+                  render={({ field }) => (
+                    <Input
+                      id="title"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        handleTitleChange(e.target.value);
+                      }}
+                      placeholder="Enter news title in Vietnamese"
+                      className="w-full"
+                    />
+                  )}
                 />
                 {errors.title && (
                   <p className="text-red-500 text-sm">{errors.title.message}</p>
@@ -128,6 +153,11 @@ export default function EditNewsPage({
                     />
                   )}
                 />
+                {errors.featuredImage && (
+                  <p className="text-red-500 text-sm">
+                    {errors.featuredImage.message}
+                  </p>
+                )}
                 <p className="text-xs text-gray-500">
                   Recommended aspect ratio: 1:1
                 </p>
@@ -159,7 +189,6 @@ export default function EditNewsPage({
                       </Select>
                     )}
                   />
-
                   {!showNewCategoryInput ? (
                     <Button
                       type="button"
@@ -200,16 +229,32 @@ export default function EditNewsPage({
                     </div>
                   )}
                 </div>
+                {errors.categoryId && (
+                  <p className="text-red-500 text-sm">
+                    {errors.categoryId.message}
+                  </p>
+                )}
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="shortDescription">Excerpt (Vietnamese)</Label>
-                <Input
-                  id="shortDescription"
-                  {...register("shortDescription")}
-                  placeholder="Brief summary of the news article in Vietnamese"
-                  className="w-full"
+                <Controller
+                  control={control}
+                  name="shortDescription"
+                  render={({ field }) => (
+                    <Input
+                      id="shortDescription"
+                      {...field}
+                      placeholder="Brief summary of the news article in Vietnamese"
+                      className="w-full"
+                    />
+                  )}
                 />
+                {errors.shortDescription && (
+                  <p className="text-red-500 text-sm">
+                    {errors.shortDescription.message}
+                  </p>
+                )}
               </div>
             </div>
 
@@ -222,7 +267,7 @@ export default function EditNewsPage({
                     name="description"
                     render={({ field }) => (
                       <TextEditor
-                        value={field.value || ""}
+                        value={field.value}
                         onChange={(value: any) => {
                           field.onChange(value);
                         }}
@@ -249,13 +294,24 @@ export default function EditNewsPage({
                   <Label htmlFor="metaTitle">
                     Meta Title (up to 65 characters)
                   </Label>
-                  <Input
-                    id="metaTitle"
-                    {...register("metaTitle")}
-                    placeholder="SEO title for search engines"
-                    maxLength={65}
-                    className="w-full"
+                  <Controller
+                    control={control}
+                    name="metaTitle"
+                    render={({ field }) => (
+                      <Input
+                        id="metaTitle"
+                        {...field}
+                        placeholder="SEO title for search engines"
+                        maxLength={65}
+                        className="w-full"
+                      />
+                    )}
                   />
+                  {errors.metaTitle && (
+                    <p className="text-red-500 text-sm">
+                      {errors.metaTitle.message}
+                    </p>
+                  )}
                   <p className="text-xs text-gray-500">
                     {(watch("metaTitle") || "").length}/65 characters
                   </p>
@@ -263,12 +319,23 @@ export default function EditNewsPage({
 
                 <div className="space-y-2">
                   <Label htmlFor="metaKeywords">Meta Keywords</Label>
-                  <Input
-                    id="metaKeywords"
-                    {...register("metaKeywords")}
-                    placeholder="keyword1, keyword2, keyword3"
-                    className="w-full"
+                  <Controller
+                    control={control}
+                    name="metaKeywords"
+                    render={({ field }) => (
+                      <Input
+                        id="metaKeywords"
+                        {...field}
+                        placeholder="keyword1, keyword2, keyword3"
+                        className="w-full"
+                      />
+                    )}
                   />
+                  {errors.metaKeywords && (
+                    <p className="text-red-500 text-sm">
+                      {errors.metaKeywords.message}
+                    </p>
+                  )}
                   <p className="text-xs text-gray-500">
                     Separate keywords with commas
                   </p>
@@ -279,14 +346,25 @@ export default function EditNewsPage({
                 <Label htmlFor="metaDescription">
                   Meta Description (up to 155 characters)
                 </Label>
-                <textarea
-                  id="metaDescription"
-                  {...register("metaDescription")}
-                  placeholder="Brief description for search engine results"
-                  maxLength={155}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                <Controller
+                  control={control}
+                  name="metaDescription"
+                  render={({ field }) => (
+                    <textarea
+                      id="metaDescription"
+                      {...field}
+                      placeholder="Brief description for search engine results"
+                      maxLength={155}
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  )}
                 />
+                {errors.metaDescription && (
+                  <p className="text-red-500 text-sm">
+                    {errors.metaDescription.message}
+                  </p>
+                )}
                 <p className="text-xs text-gray-500">
                   {(watch("metaDescription") || "").length}/155 characters
                 </p>
@@ -334,6 +412,7 @@ export default function EditNewsPage({
                 <p className="text-xs text-gray-500">
                   Optional: Different image for English version
                 </p>
+             
               </div>
             </div>
 
@@ -346,7 +425,7 @@ export default function EditNewsPage({
                     name="categoryEnId"
                     render={({ field }) => (
                       <Select
-                        value={field.value}
+                        value={field.value || ""}
                         onValueChange={field.onChange}
                       >
                         <SelectTrigger id="categoryEnId">

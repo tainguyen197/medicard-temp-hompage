@@ -22,38 +22,38 @@ export const getLocalizedNews = (news: News, locale: string) => {
 export const newsFormSchema = z.object({
   title: z.string().min(1, "Title is required"),
   titleEn: z.string().optional(),
-  description: z.string().optional().nullable(),
+  description: z.string().min(1, "Content is required"),
   descriptionEn: z.string().optional().nullable(),
-  shortDescription: z.string().optional().nullable(),
-  shortDescriptionEn: z.string().optional().nullable(),
+  shortDescription: z.string().min(1, "Short description is required"),
+  shortDescriptionEn: z.string().optional(),
   status: z.string().optional().default("DRAFT"),
   showOnHomepage: z.boolean().optional().default(false),
   pin: z.boolean().optional().default(false),
-  categoryId: z.string().optional(),
-  categoryEnId: z.string().optional(),
-  slug: z.string().optional(),
-  featuredImage: z.string().optional(), // Accept the image URL
-  featureImageId: z.string().optional(),
-  featuredImageEn: z.string().optional(), // Accept the English image URL
-  featureImageEnId: z.string().optional(),
+  categoryId: z.string().min(1, "Category is required"),
+  categoryEnId: z.string().optional().nullable(),
+  slug: z.string().min(1, "Slug is required"),
+  featuredImage: z.string().min(1, "Image is required"), // Accept the image URL
+  featureImageId: z.string(),
+  featuredImageEn: z.string().optional().nullable(), // Accept the English image URL
+  featureImageEnId: z.string().optional().nullable(),
   metaTitle: z
     .string()
     .max(65, "Meta title must be 65 characters or less")
-    .optional(),
+    .min(1, "Meta title is required"),
   metaTitleEn: z
     .string()
     .max(65, "Meta title (English) must be 65 characters or less")
-    .optional(),
+    .optional().nullable(),
   metaDescription: z
     .string()
     .max(155, "Meta description must be 155 characters or less")
-    .optional(),
+    .min(1, "Meta description is required"),
   metaDescriptionEn: z
     .string()
     .max(155, "Meta description (English) must be 155 characters or less")
-    .optional(),
-  metaKeywords: z.string().optional(),
-  metaKeywordsEn: z.string().optional(),
+    .optional().nullable(),
+  metaKeywords: z.string().min(1, "Meta keywords is required"),
+  metaKeywordsEn: z.string().optional().nullable(),
 });
 
  export const DEFAULT_NEWS_IMAGE = "/images/default_news_ai.jpeg";

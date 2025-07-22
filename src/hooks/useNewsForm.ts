@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { ROUTES } from "@/lib/router";
 import { cleanContentForSubmission } from "@/lib/content-utils";
+import { newsFormSchema } from "@/utils/news";
 
 // Define the Category interface
 export interface Category {
@@ -15,31 +16,6 @@ export interface Category {
   language: string;
 }
 
-// Define the form schema with Zod
-export const newsFormSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  titleEn: z.string().optional(),
-  status: z.enum(["DRAFT", "PUBLISHED"]),
-  showOnHomepage: z.boolean(),
-  pin: z.boolean(),
-  description: z.string().min(1, "Content is required"),
-  descriptionEn: z.string().optional(),
-  shortDescription: z.string().optional(),
-  shortDescriptionEn: z.string().optional(),
-  slug: z.string().min(1, "Slug is required"),
-  categoryId: z.string().optional(),
-  categoryEnId: z.string().optional(),
-  featuredImage: z.string().optional().nullable(),
-  featureImageId: z.string().optional().nullable(),
-  featuredImageEn: z.string().optional().nullable(),
-  featureImageEnId: z.string().optional().nullable(),
-  metaTitle: z.string().optional(),
-  metaTitleEn: z.string().optional(),
-  metaDescription: z.string().optional(),
-  metaDescriptionEn: z.string().optional(),
-  metaKeywords: z.string().optional(),
-  metaKeywordsEn: z.string().optional(),
-});
 
 export type NewsFormValues = z.infer<typeof newsFormSchema>;
 
@@ -232,11 +208,6 @@ export function useNewsForm(initialData?: Partial<NewsFormValues>) {
 
   // Handle form submission
   const onSubmit = async (data: NewsFormValues) => {
-    if (data.description === "<p><br></p>") {
-      toast.error("Please add content to your news article");
-      return;
-    }
-
     setIsSubmitting(true);
 
     try {

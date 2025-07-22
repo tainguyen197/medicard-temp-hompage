@@ -67,11 +67,11 @@ export default async function RelatedPostsList({
           <Link
             key={news.id}
             href={`/news/${news.slug}`}
-            className="flex flex-col md:flex-row gap-6 pb-6 border-b border-gray-200"
+            className="grid grid-cols-5 md:flex md:flex-row gap-6 pb-6 border-b border-gray-200"
           >
             {/* Image */}
-            <div className="rounded-lg overflow-hidden">
-              <div className="block relative rounded-xl overflow-hidden aspect-square md:h-44">
+            <div className="rounded-lg overflow-hidden col-span-2">
+              <div className="block relative rounded-xl overflow-hidden aspect-square h-32 md:h-44">
                 <Image
                   src={localizedContent.image || ""}
                   alt={localizedContent.title || ""}
@@ -82,7 +82,7 @@ export default async function RelatedPostsList({
             </div>
 
             {/* Title */}
-            <div className="md:w-3/4 my-auto">
+            <div className="md:w-3/4 my-auto col-span-3">
               <h3 className="text-md md:text-[20px] font-medium text-[#222222] hover:text-[#B1873F] transition-colors">
                 {localizedContent.title}
               </h3>

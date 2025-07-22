@@ -47,7 +47,7 @@ export default async function NewsDetailContent({
       <>
         {/* Breadcrumb */}
         <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center space-x-2">
+          <div className="inline md:flex items-center space-x-2">
             <Link
               href="/news"
               className="text-gray-500 hover:text-gray-700 text-sm md:text-base"
@@ -55,6 +55,7 @@ export default async function NewsDetailContent({
               {t("breadcrumb.news")}
             </Link>
             <svg
+              className="inline md:block"
               width="16"
               height="16"
               viewBox="0 0 24 24"

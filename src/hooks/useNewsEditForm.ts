@@ -3,10 +3,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { z } from "zod";
 import { ROUTES } from "@/lib/router";
-import { newsFormSchema, NewsFormValues, Category } from "./useNewsForm";
+import {  NewsFormValues, Category } from "./useNewsForm";
 import { cleanContentForSubmission } from "@/lib/content-utils";
+import { newsFormSchema } from "@/utils/news";
 
 export function useNewsEditForm(newsId: string) {
   const router = useRouter();
