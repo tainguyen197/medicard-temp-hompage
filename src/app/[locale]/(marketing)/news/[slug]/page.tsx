@@ -5,13 +5,13 @@ import { Suspense } from "react";
 // import prisma from "@/lib/prisma";
 import NewsDetailContent from "./NewsDetailContent";
 import { getTranslations } from "next-intl/server";
-import { useLocale } from "next-intl";
-import { getAppointmentLink } from "@/lib/contact";
+import { getAppointmentLink, getContactData } from "@/lib/contact";
 import {
   getBannerDataByType,
   BANNER_TYPES,
   DEFAULT_HERO_IMAGE,
 } from "@/lib/banner-utils";
+import { getLocalizedNews } from "@/utils";
 
 // Force dynamic rendering to avoid DYNAMIC_SERVER_USAGE error
 export const dynamic = "force-dynamic";
@@ -21,18 +21,6 @@ type Params = {
   locale: string;
 };
 
-// Category item type definition
-interface CategoryItem {
-  category: {
-    id: string;
-    name: string;
-    slug: string;
-    description?: string;
-  };
-}
-
-// Default image fallback if no featured image
-const DEFAULT_IMAGE = "/images/news/news-image-1.jpg";
 
 // Generate metadata for the page
 export async function generateMetadata({
@@ -42,7 +30,6 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug, locale } = await params;
 
-  console.log(locale, slug);
   const t = await getTranslations({ locale, namespace: "newsDetail.metadata" });
 
   try {
@@ -51,21 +38,15 @@ export async function generateMetadata({
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
-        next: { revalidate: 0 },
         cache: "no-store",
       }
     );
 
     if (response.ok) {
       const news = await response.json();
-      const title = locale === "en" ? news.titleEn || news.title : news.title;
-      const description =
-        locale === "en"
-          ? news.shortDescriptionEn ||
-            news.shortDescription ||
-            news.descriptionEn ||
-            news.description
-          : news.shortDescription || news.description;
+      const localizedNews = getLocalizedNews(news, locale);
+      const title = localizedNews.title;
+      const description = localizedNews.description;
 
       return {
         title: `${title} | Healthcare Therapy Center`,
@@ -90,8 +71,7 @@ export default async function BlogDetailPage({
   const { slug, locale } = await params;
   const t = await getTranslations({ locale, namespace: "newsDetail.cta" });
 
-  // Fetch appointment link
-  const appointmentLink = await getAppointmentLink();
+  const contact = await getContactData();
 
   // Fetch news banner data
   const newsBanner = await getBannerDataByType(BANNER_TYPES.NEWS, locale);
@@ -126,7 +106,7 @@ export default async function BlogDetailPage({
             {t("subheading")}
           </p>
           <a
-            href={appointmentLink}
+            href={contact?.appointmentLink || ""}
             target="_blank"
             className="inline-flex items-center justify-center px-8 py-3 bg-[#B1873F] text-white rounded-full text-base md:text-lg font-semibold transition-all hover:bg-[#9A7435]"
           >
@@ -255,7 +235,6 @@ export async function generateStaticParams() {
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
-        next: { revalidate: 0 },
         cache: "no-store",
       }
     );

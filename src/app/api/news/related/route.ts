@@ -38,7 +38,7 @@ export async function GET(request: Request) {
     if (locale === "en") {
       where.OR = [
         { categoryEnId: categoryId },
-        { categoryId: categoryId } // Fallback to Vietnamese category if no English matches
+        { categoryId: categoryId } 
       ];
     } else {
       where.OR = [

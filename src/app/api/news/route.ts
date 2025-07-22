@@ -5,45 +5,9 @@ import { revalidatePath } from "next/cache";
 
 import { authOptions } from "../../../lib/auth";
 import prisma from "../../../lib/prisma";
-import { createSlug, Logger, canPublishContent } from "../../../lib/utils";
+import { createSlug, Logger } from "../../../lib/utils";
+import { newsFormSchema } from "@/utils";
 
-// Schema for news creation/update
-const newsSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  titleEn: z.string().optional(),
-  description: z.string().optional().nullable(),
-  descriptionEn: z.string().optional().nullable(),
-  shortDescription: z.string().optional().nullable(),
-  shortDescriptionEn: z.string().optional().nullable(),
-  status: z.string().optional().default("DRAFT"),
-  showOnHomepage: z.boolean().optional().default(false),
-  pin: z.boolean().optional().default(false),
-  categoryId: z.string().optional(),
-  categoryEnId: z.string().optional(),
-  slug: z.string().optional(),
-  featuredImage: z.string().optional(), // Accept the image URL
-  featureImageId: z.string().optional(),
-  featuredImageEn: z.string().optional(), // Accept the English image URL
-  featureImageEnId: z.string().optional(),
-  metaTitle: z
-    .string()
-    .max(65, "Meta title must be 65 characters or less")
-    .optional(),
-  metaTitleEn: z
-    .string()
-    .max(65, "Meta title (English) must be 65 characters or less")
-    .optional(),
-  metaDescription: z
-    .string()
-    .max(155, "Meta description must be 155 characters or less")
-    .optional(),
-  metaDescriptionEn: z
-    .string()
-    .max(155, "Meta description (English) must be 155 characters or less")
-    .optional(),
-  metaKeywords: z.string().optional(),
-  metaKeywordsEn: z.string().optional(),
-});
 
 // GET /api/news - Get all news with pagination
 export async function GET(request: Request) {
@@ -132,7 +96,7 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const validatedData = newsSchema.parse(body);
+    const validatedData = newsFormSchema.parse(body);
 
     // Check total items limit (30)
     const totalNewsCount = await prisma.news.count();

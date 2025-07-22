@@ -3,44 +3,7 @@ import { Link } from "@/navigation";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import RelatedPostsList from "./RelatedPostsList";
-
-// Default image fallback if no featured image
-const DEFAULT_IMAGE = "/images/news/news-image-1.jpg";
-
-// Helper function to get localized content
-const getLocalizedContent = (news: any, locale: string) => {
-  const isEnglish = locale === "en";
-  return {
-    title: isEnglish ? news.titleEn || news.title : news.title,
-    description: isEnglish
-      ? news.descriptionEn || news.description
-      : news.description,
-    shortDescription: isEnglish
-      ? news.shortDescriptionEn || news.shortDescription
-      : news.shortDescription,
-    category: isEnglish && news.categoryEn ? news.categoryEn : news.category,
-    categoryId:
-      isEnglish && news.categoryEnId ? news.categoryEnId : news.categoryId,
-  };
-};
-
-// Helper function to get localized image
-const getLocalizedImage = (news: any, locale: string) => {
-  const isEnglish = locale === "en";
-  return isEnglish && news.featureImageEn
-    ? news.featureImageEn
-    : news.featureImage;
-};
-
-// Category item type definition
-interface CategoryItem {
-  category: {
-    id: string;
-    name: string;
-    slug: string;
-    description?: string;
-  };
-}
+import { getLocalizedNews } from "@/utils";
 
 export default async function NewsDetailContent({
   slug,
@@ -68,8 +31,7 @@ export default async function NewsDetailContent({
     }
 
     const news = await response.json();
-    const localizedContent = getLocalizedContent(news, locale);
-    const localizedImage = getLocalizedImage(news, locale);
+    const localizedContent = getLocalizedNews(news, locale);
 
     // Format date
     const formatDate = (dateString: string) => {
@@ -119,7 +81,7 @@ export default async function NewsDetailContent({
             {localizedContent.title}
           </h1>
           <div className="flex items-center text-gray-500 text-sm md:text-base mb-8">
-            <span>{formatDate(news.createdAt)}</span>
+            <span>{formatDate(localizedContent.createdAt)}</span>
             {localizedContent.category && (
               <>
                 <span className="mx-2">•</span>
@@ -135,7 +97,7 @@ export default async function NewsDetailContent({
             <div className="prose prose-lg max-w-none">
               {localizedContent.description && (
                 <div
-                  className="text-base md:text-lg text-gray-800 leading-relaxed space-y-6 [&_p]:mb-6 [&_p]:leading-relaxed [&_figcaption]:text-center [&_figcaption]:italic [&_figcaption]:text-gray-600 [&_figcaption]:mt-2 [&_figcaption]:text-sm [&_img]:mx-auto [&_img]:block [&_img]:rounded-lg [&_img]:shadow-md [&_figure]:text-center [&_figure]:mx-auto [&_figure]:mb-8 [&_h1]:text-3xl [&_h1]:md:text-4xl [&_h1]:font-bold [&_h1]:text-[#222222] [&_h1]:mb-6 [&_h1]:mt-12 [&_h1]:leading-tight [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-semibold [&_h2]:text-[#222222] [&_h2]:mb-4 [&_h2]:mt-10 [&_h2]:leading-tight [&_h3]:text-xl [&_h3]:md:text-2xl [&_h3]:font-medium [&_h3]:text-[#222222] [&_h3]:mb-3 [&_h3]:mt-8 [&_h3]:leading-tight"
+                  className="text-base md:text-lg leading-relaxed space-y-6 [&_p]:mb-6 [&_p]:leading-relaxed [&_figcaption]:text-center [&_figcaption]:italic [&_figcaption]:mt-2 [&_figcaption]:text-sm [&_img]:mx-auto [&_img]:block [&_img]:rounded-lg [&_img]:shadow-md [&_figure]:text-center [&_figure]:mx-auto [&_figure]:mb-8 [&_h1]:text-3xl [&_h1]:md:text-4xl [&_h1]:font-bold [&_h1]:mb-6 [&_h1]:mt-12 [&_h1]:leading-tight [&_h2]:text-2xl [&_h2]:md:text-3xl [&_h2]:font-semibold [&_h2]:mb-4 [&_h2]:mt-10 [&_h2]:leading-tight [&_h3]:text-xl [&_h3]:md:text-2xl [&_h3]:font-medium [&_h3]:mb-3 [&_h3]:mt-8 [&_h3]:leading-tight"
                   dangerouslySetInnerHTML={{
                     __html: localizedContent.description,
                   }}

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { ROUTES } from "@/lib/router";
-import { getContactData, fallbackContactData } from "@/lib/contact";
+import { getContactData } from "@/lib/contact";
 import { Link } from "@/navigation";
 
 interface Service {
@@ -53,39 +53,30 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
   // Use database data if available, otherwise fall back to hardcoded values
   // Handle locale-specific content
   const contact = {
-    phone: contactData?.phone || fallbackContactData.phone || "0901 430 077",
+    phone: contactData?.phone || "_",
     address:
       locale === "en"
         ? contactData?.addressEn ||
           contactData?.address ||
-          fallbackContactData.addressEn ||
-          fallbackContactData.address ||
-          "327 Nguyen Trong Tuyen Street, Ward 10, Phu Nhuan District, Ho Chi Minh City"
+          "_"
         : contactData?.address ||
-          fallbackContactData.address ||
-          "327 đường Nguyễn Trọng Tuyển, Phường 10, Quận Phú Nhuận, TP.HCM",
+          "_",
     businessHours:
       locale === "en"
         ? contactData?.businessHoursEn ||
           contactData?.businessHours ||
-          fallbackContactData.businessHoursEn ||
-          fallbackContactData.businessHours ||
-          "Monday - Saturday: 8:00 AM - 7:00 PM\nSunday: 8:00 AM - 6:00 PM"
+          "_"
         : contactData?.businessHours ||
-          fallbackContactData.businessHours ||
-          "Thứ 2 - Thứ 7: 8h00 - 19h00\nChủ nhật: 8h00 - 18h00",
+          "_",
     facebookUrl:
       contactData?.facebookUrl ||
-      fallbackContactData.facebookUrl ||
-      "https://www.facebook.com/htcwellness/",
+      "_",
     zaloUrl:
       contactData?.zaloUrl ||
-      fallbackContactData.zaloUrl ||
-      "https://zalo.me/0901430077",
+      "_",
     instagramUrl:
       contactData?.instagramUrl ||
-      fallbackContactData.instagramUrl ||
-      "https://www.instagram.com/healthcaretherapycenter/",
+      "_",
   };
 
   // Format business hours for display

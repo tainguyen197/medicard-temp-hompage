@@ -77,6 +77,9 @@ export interface News {
     name: string;
     slug: string;
     description?: string;
+    nameEn?: string;
+    idEn?: string;
+    slugEn?: string;
   } | null;
   featureImage?: {
     id: string;
@@ -92,6 +95,13 @@ export interface News {
   } | null;
   // UI/helper fields that get added during frontend processing
   featuredImage?: string;
+  categoryEn?: {
+    id: string;
+    name: string;
+    slug: string;
+    description?: string;
+  } | null;
+  categoryEnId?: string | null;
 }
 
 export interface PostsResponse {
@@ -122,4 +132,8 @@ export interface DisplayNews {
   image: string;
   slug: string;
   id: string;
+  createdAt: string;
+  updatedAt: string;
+  category: string;
+  categoryId: string;
 }

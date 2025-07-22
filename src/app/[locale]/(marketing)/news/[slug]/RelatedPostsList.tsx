@@ -1,28 +1,7 @@
 import Image from "next/image";
 import { Link } from "@/navigation";
 import { getTranslations } from "next-intl/server";
-
-// Default image fallback if no featured image
-const DEFAULT_IMAGE = "/images/news/news-image-1.jpg";
-
-// Helper function to get localized content
-const getLocalizedContent = (news: any, locale: string) => {
-  const isEnglish = locale === "en";
-  return {
-    title: isEnglish ? news.titleEn || news.title : news.title,
-    shortDescription: isEnglish
-      ? news.shortDescriptionEn || news.shortDescription
-      : news.shortDescription,
-  };
-};
-
-// Helper function to get localized image
-const getLocalizedImage = (news: any, locale: string) => {
-  const isEnglish = locale === "en";
-  return isEnglish && news.featureImageEn
-    ? news.featureImageEn
-    : news.featureImage;
-};
+import { getLocalizedNews } from "@/utils";
 
 interface RelatedPostsListProps {
   categoryId: string;
@@ -47,7 +26,6 @@ export default async function RelatedPostsList({
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
-          next: { revalidate: 0 },
           cache: "no-store",
         }
       );
@@ -83,8 +61,7 @@ export default async function RelatedPostsList({
   return (
     <div className="space-y-4">
       {relatedNews.slice(0, 3).map((news) => {
-        const localizedContent = getLocalizedContent(news, locale);
-        const localizedImage = getLocalizedImage(news, locale);
+        const localizedContent = getLocalizedNews(news, locale);
 
         return (
           <Link
@@ -96,8 +73,8 @@ export default async function RelatedPostsList({
             <div className="rounded-lg overflow-hidden">
               <div className="block relative rounded-xl overflow-hidden aspect-square md:h-44">
                 <Image
-                  src={localizedImage?.url || DEFAULT_IMAGE}
-                  alt={localizedContent.title}
+                  src={localizedContent.image || ""}
+                  alt={localizedContent.title || ""}
                   fill
                   className="object-cover"
                 />

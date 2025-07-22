@@ -4,7 +4,7 @@ import Link from "next/link";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getMessages } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
-import { getContactData, fallbackContactData, getContactEmail, getAppointmentLink } from "@/lib/contact";
+import { getContactData, getContactEmail, getAppointmentLink } from "@/lib/contact";
 import {
   getBannerDataByType,
   BANNER_TYPES,
@@ -31,22 +31,20 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
 
   // Use database data if available, otherwise fall back to hardcoded values
   const contact = {
-    phone: contactData?.phone || fallbackContactData.phone || "0901 430 077",
+    phone: contactData?.phone || "_",
     email: contactEmail,
     address:
       locale === "en"
         ? contactData?.addressEn ||
           contactData?.address ||
-          fallbackContactData.addressEn ||
-          fallbackContactData.address
-        : contactData?.address || fallbackContactData.address,
+          "_"
+        : contactData?.address || "_",
     businessHours:
       locale === "en"
         ? contactData?.businessHoursEn ||
           contactData?.businessHours ||
-          fallbackContactData.businessHoursEn ||
-          fallbackContactData.businessHours
-        : contactData?.businessHours || fallbackContactData.businessHours,
+          "_"
+        : contactData?.businessHours || "_",
   };
 
   // Format business hours for display (handle both \n and <br/> tags)

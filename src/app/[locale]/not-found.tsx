@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
-import { fallbackContactData } from "@/lib/contact";
 
 // This is a Server Component
 export default async function LocalizedNotFound({
@@ -15,12 +14,11 @@ export default async function LocalizedNotFound({
   
   // Fetch contact data
   const contact = await prisma.contact.findFirst({
-    where: { status: "ACTIVE" },
     orderBy: { createdAt: "desc" },
   });
   
   // Use contact phone or fallback
-  const phone = contact?.phone || fallbackContactData.phone || "0901 430 077";
+  const phone = contact?.phone || "_";
   
   // Replace placeholder in translation
   const description = t("description", { phone });
