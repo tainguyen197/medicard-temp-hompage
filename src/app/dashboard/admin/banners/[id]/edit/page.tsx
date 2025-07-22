@@ -4,27 +4,8 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import BannerForm from "@/components/BannerForm";
+import { Banner } from "@/types/banner";
 
-interface Banner {
-  id: string;
-  title: string;
-  titleEn?: string;
-  description?: string;
-  descriptionEn?: string;
-  link?: string;
-  linkEn?: string;
-  type: "HOMEPAGE" | "SERVICE" | "NEWS";
-  order: number;
-  status: "ACTIVE" | "INACTIVE";
-  image?: {
-    id: string;
-    url: string;
-  };
-  imageEn?: {
-    id: string;
-    url: string;
-  };
-}
 
 export default function EditBannerPage() {
   const params = useParams();
@@ -82,11 +63,7 @@ export default function EditBannerPage() {
   return (
     <BannerForm
       initialData={{
-        link: banner.link || "",
-        type: banner.type,
-        status: banner.status,
-        id: banner.id,
-        image: banner.image as any,
+        ...banner,
       }}
       isEditing={true}
     />

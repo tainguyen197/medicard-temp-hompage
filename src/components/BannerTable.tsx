@@ -6,25 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Edit, Trash2, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
+import { Banner } from "@/types/banner";
 
-interface Banner {
-  id: string;
-  type: string;
-  link?: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-  image?: {
-    id: string;
-    url: string;
-    filename: string;
-  };
-  imageEn?: {
-    id: string;
-    url: string;
-    filename: string;
-  };
-}
 
 interface BannerTableProps {
   banners: Banner[];
@@ -255,10 +238,10 @@ export default function BannerTable({ banners, onUpdate }: BannerTableProps) {
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => handleEdit(banner.id)}
-                    className="text-indigo-600 hover:text-indigo-900 inline-flex items-center"
+                    className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium align-middle text-blue-600 hover:text-blue-900"
                     title="Edit banner"
                   >
-                    <Edit className="h-4 w-4" />
+                  Edit
                   </button>
                   <button
                     onClick={() => handleDelete(banner.id, banner.type)}
@@ -266,7 +249,7 @@ export default function BannerTable({ banners, onUpdate }: BannerTableProps) {
                     className="text-red-600 hover:text-red-900 inline-flex items-center disabled:opacity-50"
                     title="Delete banner"
                   >
-                    <Trash2 className="h-4 w-4" />
+                    Delete
                   </button>
                 </div>
               </td>

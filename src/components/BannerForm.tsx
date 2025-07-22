@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -16,24 +16,16 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Upload, X, Info } from "lucide-react";
 import { toast } from "sonner";
+import { Banner } from "@/types/banner";
+import { useForm, Controller } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { bannerSchema } from "@/utils/banner";
+
+type BannerFormValues = z.infer<typeof bannerSchema>;
 
 interface BannerFormProps {
-  initialData?: {
-    id?: string;
-    type: string;
-    link?: string;
-    status: string;
-    image?: {
-      id: string;
-      url: string;
-      filename: string;
-    };
-    imageEn?: {
-      id: string;
-      url: string;
-      filename: string;
-    };
-  };
+  initialData?: Banner;
   isEditing?: boolean;
 }
 
@@ -46,15 +38,29 @@ export default function BannerForm({
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageEnPreview, setImageEnPreview] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState({
-    type: initialData?.type || "",
-    link: initialData?.link || "",
-    status: initialData?.status || "ACTIVE",
-    imageFile: null as File | null,
-    imageEnFile: null as File | null,
-    existingImageUrl: initialData?.image?.url || "",
-    existingImageEnUrl: initialData?.imageEn?.url || "",
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    control,
+    getValues,
+    setError,
+    formState: { errors },
+  } = useForm<BannerFormValues>({
+    resolver: zodResolver(bannerSchema),
+    defaultValues: {
+      type: initialData?.type || "",
+      link: initialData?.link || "",
+      status: (initialData?.status as "ACTIVE" | "INACTIVE") || "ACTIVE",
+      imageUrl: initialData?.image?.url || "",
+      imageEnUrl: initialData?.imageEn?.url || "",
+    },
   });
+
+  // For image removal logic
+  const [existingImageUrl, setExistingImageUrl] = useState(initialData?.image?.url || "");
+  const [existingImageEnUrl, setExistingImageEnUrl] = useState(initialData?.imageEn?.url || "");
 
   const createImagePreview = (file: File): Promise<string> => {
     return new Promise((resolve) => {
@@ -66,17 +72,16 @@ export default function BannerForm({
 
   const handleFileChange = async (file: File | null) => {
     if (!file) {
-      setFormData((prev) => ({ ...prev, imageFile: null }));
+      setValue("imageFile", "");
+      setValue("imageUrl", "");
       setImagePreview(null);
       return;
     }
-
     const maxFileSize = 10 * 1024 * 1024;
     if (file.size > maxFileSize) {
       toast.error("File size must be less than 10MB");
       return;
     }
-
     const validTypes = [
       "image/jpeg",
       "image/jpg",
@@ -88,10 +93,10 @@ export default function BannerForm({
       toast.error("File must be a valid image (JPEG, PNG, WebP, GIF)");
       return;
     }
-
     try {
       const preview = await createImagePreview(file);
-      setFormData((prev) => ({ ...prev, imageFile: file }));
+      setValue("imageFile", file);
+      setValue("imageUrl", preview);
       setImagePreview(preview);
     } catch (error) {
       toast.error("Failed to process image");
@@ -100,17 +105,16 @@ export default function BannerForm({
 
   const handleEnFileChange = async (file: File | null) => {
     if (!file) {
-      setFormData((prev) => ({ ...prev, imageEnFile: null }));
+      setValue("imageEnFile", undefined);
       setImageEnPreview(null);
+      setValue("imageEnUrl", "");
       return;
     }
-
     const maxFileSize = 10 * 1024 * 1024;
     if (file.size > maxFileSize) {
       toast.error("File size must be less than 10MB");
       return;
     }
-
     const validTypes = [
       "image/jpeg",
       "image/jpg",
@@ -122,10 +126,10 @@ export default function BannerForm({
       toast.error("File must be a valid image (JPEG, PNG, WebP, GIF)");
       return;
     }
-
     try {
       const preview = await createImagePreview(file);
-      setFormData((prev) => ({ ...prev, imageEnFile: file }));
+      setValue("imageEnFile", file);
+      setValue("imageEnUrl", preview);
       setImageEnPreview(preview);
     } catch (error) {
       toast.error("Failed to process English image");
@@ -133,67 +137,52 @@ export default function BannerForm({
   };
 
   const handleRemoveImage = () => {
-    setFormData((prev) => ({
-      ...prev,
-      imageFile: null,
-      existingImageUrl: "",
-    }));
+    setValue("imageFile", "");
+    setValue("imageUrl", "");
+    setExistingImageUrl("");
     setImagePreview(null);
   };
 
   const handleRemoveEnImage = () => {
-    setFormData((prev) => ({
-      ...prev,
-      imageEnFile: null,
-      existingImageEnUrl: "",
-    }));
+    setValue("imageEnFile", "");
+    setValue("imageEnUrl", "");
+    setExistingImageEnUrl("");
     setImageEnPreview(null);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: BannerFormValues) => {
     setIsSubmitting(true);
-
     try {
       const submitData = new FormData();
-
-      submitData.append("type", formData.type);
-      submitData.append("link", formData.link);
-      submitData.append("status", formData.status);
-
-      if (formData.imageFile) {
-        submitData.append("imageFile", formData.imageFile);
+      submitData.append("type", data.type);
+      submitData.append("link", data.link || "");
+      submitData.append("status", data.status);
+      if (data.imageFile) {
+        submitData.append("imageFile", data.imageFile);
       }
-
-      if (formData.imageEnFile) {
-        submitData.append("imageEnFile", formData.imageEnFile);
+      if (data.imageEnFile) {
+        submitData.append("imageEnFile", data.imageEnFile);
       }
-
       // Send explicit removal signals
-      if (formData.existingImageUrl === "" && !formData.imageFile) {
+      if (existingImageUrl === "" && !data.imageFile) {
         submitData.append("removeImage", "true");
       }
-      if (formData.existingImageEnUrl === "" && !formData.imageEnFile) {
+      if (existingImageEnUrl === "" && !data.imageEnFile) {
         submitData.append("removeImageEn", "true");
       }
-
       const url = isEditing
         ? `/api/banners/${initialData?.id}`
         : "/api/banners";
       const method = isEditing ? "PUT" : "POST";
-
       const response = await fetch(url, {
         method,
         body: submitData,
       });
-
       if (!response.ok) {
         const error = await response.json();
         throw new Error(error.error || "Failed to save banner");
       }
-
       toast.success(`Banner ${isEditing ? "updated" : "created"} successfully`);
-
       router.push("/admin/banners");
       router.refresh();
     } catch (error) {
@@ -202,7 +191,7 @@ export default function BannerForm({
         error instanceof Error ? error.message : "Failed to save banner"
       );
     } finally {
-      setIsSubmitting(false);
+      // setIsSubmitting(false);
     }
   };
 
@@ -236,12 +225,17 @@ export default function BannerForm({
     }
   };
 
-  const currentImage = imagePreview || formData.existingImageUrl;
-  const currentEnImage = imageEnPreview || formData.existingImageEnUrl;
+  const type = watch("type");
+  const status = watch("status");
+  const imageFile = watch("imageFile");
+  const imageEnFile = watch("imageEnFile");
+  const currentImage = imagePreview || existingImageUrl;
+  const currentEnImage = imageEnPreview || existingImageEnUrl;
+
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Banner Settings */}
         <Card>
           <CardHeader>
@@ -253,73 +247,82 @@ export default function BannerForm({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="type">Banner Type *</Label>
-                <Select
-                  value={formData.type}
-                  onValueChange={(value) =>
-                    setFormData((prev) => ({ ...prev, type: value }))
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select banner type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="HOMEPAGE">Homepage</SelectItem>
-                    <SelectItem value="SERVICE">Service</SelectItem>
-                    <SelectItem value="NEWS">News</SelectItem>
-                    <SelectItem value="ABOUT">About</SelectItem>
-                    <SelectItem value="CONTACT">Contact</SelectItem>
-                  </SelectContent>
-                </Select>
-                {formData.type && (
+                <Controller
+                  name="type"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select banner type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="HOMEPAGE">Homepage</SelectItem>
+                        <SelectItem value="SERVICE">Service</SelectItem>
+                        <SelectItem value="NEWS">News</SelectItem>
+                        <SelectItem value="ABOUT">About</SelectItem>
+                        <SelectItem value="CONTACT">Contact</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                {errors.type && (
+                  <p className="text-sm text-red-500 mt-1">{errors.type.message}</p>
+                )}
+                {type && (
                   <p className="text-sm text-gray-500 mt-1">
                     Only one banner per type is allowed. Creating this will
                     replace any existing{" "}
                     <span
-                      className={`px-1 rounded ${getBannerTypeColor(
-                        formData.type
-                      )}`}
+                      className={`px-1 rounded ${getBannerTypeColor(type)}`}
                     >
-                      {getBannerTypeLabel(formData.type)}
+                      {getBannerTypeLabel(type)}
                     </span>{" "}
                     banner.
                   </p>
                 )}
               </div>
-
               <div>
                 <Label htmlFor="status">Status</Label>
-                <Select
-                  value={formData.status}
-                  onValueChange={(value) =>
-                    setFormData((prev) => ({ ...prev, status: value }))
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ACTIVE">Active</SelectItem>
-                    <SelectItem value="INACTIVE">Inactive</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Controller
+                  name="status"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ACTIVE">Active</SelectItem>
+                        <SelectItem value="INACTIVE">Inactive</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                {errors.status && (
+                  <p className="text-sm text-red-500 mt-1">{errors.status.message}</p>
+                )}
               </div>
             </div>
-
             <div>
               <Label htmlFor="link">Link URL</Label>
               <Input
                 id="link"
                 type="url"
-                value={formData.link}
-                onChange={(e) =>
-                  setFormData((prev) => ({ ...prev, link: e.target.value }))
-                }
+                {...register("link")}
                 placeholder="https://example.com"
               />
+              {errors.link && (
+                <p className="text-sm text-red-500 mt-1">{errors.link.message}</p>
+              )}
             </div>
           </CardContent>
         </Card>
-
         {/* Image Aspect Ratio Tip */}
         <div className="bg-blue-50 border border-blue-200 rounded-md p-4 flex items-start gap-3">
           <Info className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
@@ -334,7 +337,6 @@ export default function BannerForm({
             </p>
           </div>
         </div>
-
         {/* Vietnamese Banner Image */}
         <Card>
           <CardHeader>
@@ -367,13 +369,13 @@ export default function BannerForm({
                   >
                     <X className="h-4 w-4" />
                   </Button>
-                  {formData.imageFile && (
+                  {imageFile && (
                     <div className="mt-2 text-sm text-gray-600">
-                      {formData.imageFile.name} (
-                      {(formData.imageFile.size / 1024 / 1024).toFixed(2)} MB)
+                      {imageFile.name} (
+                      {(imageFile.size / 1024 / 1024).toFixed(2)} MB)
                     </div>
                   )}
-                  {!formData.imageFile && formData.existingImageUrl && (
+                  {!imageFile && existingImageUrl && (
                     <div className="mt-2 text-sm text-gray-600">
                       Current Vietnamese image
                     </div>
@@ -410,10 +412,12 @@ export default function BannerForm({
                   </div>
                 </div>
               )}
+              {errors.imageUrl && (
+                <p className="text-sm text-red-500 mt-1">{errors.imageUrl.message as string}</p>
+              )}
             </div>
           </CardContent>
         </Card>
-
         {/* English Banner Image */}
         <Card>
           <CardHeader>
@@ -446,13 +450,13 @@ export default function BannerForm({
                   >
                     <X className="h-4 w-4" />
                   </Button>
-                  {formData.imageEnFile && (
+                  {imageEnFile && (
                     <div className="mt-2 text-sm text-gray-600">
-                      {formData.imageEnFile.name} (
-                      {(formData.imageEnFile.size / 1024 / 1024).toFixed(2)} MB)
+                      {imageEnFile.name} (
+                      {(imageEnFile.size / 1024 / 1024).toFixed(2)} MB)
                     </div>
                   )}
-                  {!formData.imageEnFile && formData.existingImageEnUrl && (
+                  {!imageEnFile && existingImageEnUrl && (
                     <div className="mt-2 text-sm text-gray-600">
                       Current English image
                     </div>
@@ -492,10 +496,12 @@ export default function BannerForm({
                   </div>
                 </div>
               )}
+              {errors.imageEnFile && (
+                <p className="text-sm text-red-500 mt-1">{errors.imageEnFile.message as string}</p>
+              )}
             </div>
           </CardContent>
         </Card>
-
         {/* Submit Buttons */}
         <div className="flex justify-end space-x-4">
           <Button
@@ -506,7 +512,7 @@ export default function BannerForm({
           >
             Cancel
           </Button>
-          <Button type="submit" disabled={isSubmitting || !formData.type}>
+          <Button className="bg-blue-600 hover:bg-blue-700 text-white" type="submit" disabled={isSubmitting}>
             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {isEditing ? "Update" : "Create"} Banner
           </Button>

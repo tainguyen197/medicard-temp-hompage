@@ -4,25 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { PlusIcon } from "lucide-react";
 import BannerTable from "@/components/BannerTable";
-
-interface Banner {
-  id: string;
-  type: string;
-  link?: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-  image?: {
-    id: string;
-    url: string;
-    filename: string;
-  };
-  imageEn?: {
-    id: string;
-    url: string;
-    filename: string;
-  };
-}
+import { Banner } from "@/types/banner";
 
 export default function BannerContent() {
   const [banners, setBanners] = useState<Banner[]>([]);
