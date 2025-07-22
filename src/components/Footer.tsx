@@ -209,8 +209,7 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
               {t("hotline")}
             </h4>
             <div
-              className="md:mb-6 md:mt-0"
-              style={{ marginTop: "0 !important " }}
+              className="md:mb-6 !mt-0"
             >
               <Link
                 href={`tel:${contact.phone}`}
@@ -234,8 +233,7 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
             </div>
 
             <div
-              className="flex space-x-2 md:space-x-4 ml-8 md:ml-0"
-              style={{ marginTop: "0 !important " }}
+              className="flex space-x-2 md:space-x-4 ml-8 md:ml-0 !mt-0"
             >
               {contact.facebookUrl && (
                 <a
