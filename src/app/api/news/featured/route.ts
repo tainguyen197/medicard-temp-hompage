@@ -16,8 +16,6 @@ export async function GET() {
       include: {
         featureImage: true,
         featureImageEn: true,
-        category: true,
-        categoryEn: true,
       },
     });
 

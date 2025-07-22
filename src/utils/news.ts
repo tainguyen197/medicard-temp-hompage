@@ -7,5 +7,6 @@ export const getLocalizedNews = (news: News, locale: string) => {
     image: (locale === "en" ? news.featureImageEn?.url || news.featureImage?.url : news.featureImage?.url || news.featureImageEn?.url) || "/images/default_news_ai.jpeg",
     slug: news.slug,
     id: news.id,
+    shortDescription: locale === "en" ? news.shortDescriptionEn || news.shortDescription : news.shortDescription || news.shortDescriptionEn,
   };
 };

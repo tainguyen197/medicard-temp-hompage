@@ -1,26 +1,12 @@
 import React from "react";
 import Image from "next/image";
 import { Link } from "@/navigation";
-import { News, NewsResponse } from "@/types/post";
+import { DisplayNews, News, NewsResponse } from "@/types/post";
 import { getMessages } from "next-intl/server";
 import { getAppointmentLink } from "@/lib/contact";
-import { htmlToText } from '@/lib/content-utils';
+import { getLocalizedNews } from "@/utils";
+import { htmlToTextAndTruncate } from "@/lib/utils";
 
-// Default image fallback if no featured image
-const DEFAULT_IMAGE = "/images/default_news_ai.jpeg";
-
-const getLocalizedContent = (news: any, locale: string) => {
-  const isEnglish = locale === "en";
-  return {
-    title: isEnglish ? news.titleEn || news.title : news.title,
-    description: isEnglish ? news.descriptionEn || news.description : news.description,
-    shortDescription: isEnglish ? news.shortDescriptionEn || news.shortDescription : news.shortDescription,
-    category: isEnglish && news.categoryEn ? news.categoryEn : news.category,
-    featuredImage: isEnglish && news.featureImageEn?.url ? news.featureImageEn.url : news.featureImage?.url,
-  };
-};
-
-// Extract data fetching into a separate component
 export async function NewsDataComponent({
   searchParams,
   params,
@@ -41,27 +27,20 @@ export async function NewsDataComponent({
   const postsPerPage = 10;
 
   // 1. Fetch trending (pinned) news
-  let trendingNews: News[] = [];
+  let trendingNews: DisplayNews[] = [];
   try {
     const featuredResponse = await fetch(`${process.env.NEXTAUTH_URL}/api/news/featured`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
-      next: { revalidate: 0 },
       cache: "no-store",
     });
     if (featuredResponse.ok) {
       const featuredData = await featuredResponse.json();
       trendingNews = (featuredData.posts || []).map((newsItem: any) => {
-        const localizedContent = getLocalizedContent(newsItem, locale);
+        const localizedContent = getLocalizedNews(newsItem, locale);
         return {
-          ...newsItem,
-          title: localizedContent.title,
-          description: localizedContent.description,
-          shortDescription: localizedContent.shortDescription,
-          featuredImage: localizedContent.featuredImage,
-          createdAt: newsItem.createdAt,
-          updatedAt: newsItem.updatedAt,
-        } as News;
+          ...localizedContent,
+        } as DisplayNews;
       });
     }
   } catch (error) {
@@ -69,13 +48,12 @@ export async function NewsDataComponent({
   }
 
   // 2. Fetch non-pinned news with pagination
-  let newsItems: News[] = [];
+  let newsItems: DisplayNews[] = [];
   let totalNews = 0;
   try {
     const response = await fetch(`${process.env.NEXTAUTH_URL}/api/news?page=${currentPage}&limit=${postsPerPage}&status=PUBLISHED&pin=false`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
-      next: { revalidate: 0 },
       cache: "no-store",
     });
 
@@ -83,16 +61,10 @@ export async function NewsDataComponent({
       const data: NewsResponse = await response.json();
       totalNews = data.meta?.total || 0;
       newsItems = (data.news || []).map((newsItem: News) => {
-        const localizedContent = getLocalizedContent(newsItem, locale);
-        return {
-          ...newsItem,
-          title: localizedContent.title,
-          description: localizedContent.description,
-          shortDescription: localizedContent.shortDescription,
-          featuredImage: localizedContent.featuredImage,
-          createdAt: newsItem.createdAt,
-          updatedAt: newsItem.updatedAt,
-        };
+        const localizedContent = getLocalizedNews(newsItem, locale);
+          return {
+            ...localizedContent,
+          } as DisplayNews;
       });
     }
   } catch (error) {
@@ -109,13 +81,6 @@ export async function NewsDataComponent({
       </section>
     );
   }
-
-  console.log("Rendering news page with content");
-
-  // Filter newsItems to exclude any items that are present in trendingNews
-  newsItems = newsItems.filter(
-    (item) => !trendingNews.some((trending) => trending.id === item.id)
-  );
 
   // Calculate total pages for pagination
   const totalPages = Math.ceil(totalNews / postsPerPage);
@@ -160,7 +125,7 @@ export async function NewsDataComponent({
   return (
     <>
       {/* 3. Trending Topics - Only show if we have enough posts */}
-      {trendingNews.length >0 && (
+      {trendingNews.length > 0 && (
         <section className="container mx-auto px-4 mb-16 md:mb-20 max-w-[1040px]">
           <div className="flex flex-col md:flex-row gap-4 md:h-[480px]">
             {/* Featured post (larger) - left side */}
@@ -171,7 +136,7 @@ export async function NewsDataComponent({
               >
                 <div className="aspect-auto h-full relative">
                   <Image
-                    src={trendingNews[0].featuredImage || DEFAULT_IMAGE}
+                    src={trendingNews[0].image}
                     alt={trendingNews[0].title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -198,7 +163,7 @@ export async function NewsDataComponent({
                   >
                     <div className="aspect-square relative">
                       <Image
-                        src={newsItem.featuredImage || DEFAULT_IMAGE}
+                        src={newsItem.image}
                         alt={newsItem.title}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -233,7 +198,7 @@ export async function NewsDataComponent({
                   {newsItem.title}
                 </h2>
                 <p className="text-gray-600 line-clamp-3 mb-4">
-                  {htmlToText(newsItem.shortDescription || newsItem.description?.substring(0, 200))}
+                 {htmlToTextAndTruncate(newsItem.description, 200)}
                 </p>
               </div>
               <div className="mt-4 md:mt-0">
@@ -242,7 +207,7 @@ export async function NewsDataComponent({
                   className="block relative rounded-xl overflow-hidden aspect-square md:h-44"
                 >
                   <Image
-                    src={newsItem.featuredImage || DEFAULT_IMAGE}
+                    src={newsItem.image}
                     alt={newsItem.title}
                     fill
                     className="object-cover"

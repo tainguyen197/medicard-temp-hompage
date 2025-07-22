@@ -54,11 +54,13 @@ export async function GET(request: Request) {
   const limit = parseInt(searchParams.get("limit") || "10");
   const search = searchParams.get("search");
   const status = searchParams.get("status");
+  const pin = searchParams.get("pin");
 
   // Build filter object
   const where: {
     status?: string;
-    OR?: Array<{
+    pin?: boolean;
+      OR?: Array<{
       title?: { contains: string; mode: "insensitive" };
       titleEn?: { contains: string; mode: "insensitive" };
       description?: { contains: string; mode: "insensitive" };
@@ -68,6 +70,10 @@ export async function GET(request: Request) {
 
   if (status) {
     where.status = status;
+  }
+
+  if (pin) {
+    where.pin = pin === "true";
   }
 
   if (search) {

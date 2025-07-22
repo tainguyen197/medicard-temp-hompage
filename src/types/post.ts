@@ -113,3 +113,13 @@ export interface NewsResponse {
     totalPages: number;
   };
 }
+
+
+export interface DisplayNews {
+  title: string;
+  description: string;
+  shortDescription: string;
+  image: string;
+  slug: string;
+  id: string;
+}
