@@ -296,7 +296,7 @@ export function useNewsEditForm(newsId: string) {
         error instanceof Error ? error.message : "Failed to update news article"
       );
     } finally {
-      setIsSubmitting(false);
+      // setIsSubmitting(false);
     }
   };
 
