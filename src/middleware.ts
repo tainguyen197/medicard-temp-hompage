@@ -25,23 +25,6 @@ export async function middleware(request: NextRequest) {
     !nextUrl.pathname.startsWith("/dashboard/auth")
   ) {
     console.log("dashboard route");
-    // try {
-    //   const token = await getToken({
-    //     req: request,
-    //     secret: process.env.NEXTAUTH_SECRET,
-    //   });
-    //   if (!token) {
-    //     console.log("No valid token found, redirecting to login");
-    //     return NextResponse.redirect(
-    //       new URL("/dashboard/auth/login", request.url)
-    //     );
-    //   }
-    // } catch (error) {
-    //   console.error("Token validation error:", error);
-    //   return NextResponse.redirect(
-    //     new URL("/dashboard/auth/login", request.url)
-    //   );
-    // }
   }
 
   // Handle subdomain routing for dashboard
@@ -65,12 +48,17 @@ export async function middleware(request: NextRequest) {
 
   // Redirect dashboard access from main domain
   if (nextUrl.pathname.startsWith("/dashboard")) {
-    console.log("dashboard main domain");
-    return NextResponse.redirect(new URL("/not-found", request.url));
+    if (nextUrl.pathname.startsWith("/auth")) {
+      return NextResponse.next();
+    }
+    console.log("=>>>dashboard main domain");
+    return NextResponse.next();
+
+    // return NextResponse.redirect(new URL("/not-found", request.url));
   }
 
   // Handle internationalization for marketing pages
-  return intlMiddleware(request);
+  // return intlMiddleware(request);
 }
 
 export const config = {
