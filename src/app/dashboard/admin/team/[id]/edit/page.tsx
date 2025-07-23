@@ -14,7 +14,7 @@ export default async function EditTeamMemberPage({
   // Check authentication
   const session = await getServerSession(authOptions);
   if (!session?.user) {
-    redirect("/auth/login");
+    redirect("/auth/logout");
   }
 
   // Check if user has admin or editor role

@@ -277,6 +277,7 @@ export function useNewsEditForm(newsId: string) {
       });
 
       if (!response.ok) {
+        setIsSubmitting(false);
         const error = await response.json();
         // Check if error is array and get the first error
         if (Array.isArray(error?.error)) {
@@ -291,6 +292,7 @@ export function useNewsEditForm(newsId: string) {
       router.push(ROUTES.ADMIN_NEWS);
       router.refresh();
     } catch (error) {
+      setIsSubmitting(false);
       console.error("Error updating news:", error);
       toast.error(
         error instanceof Error ? error.message : "Failed to update news article"
