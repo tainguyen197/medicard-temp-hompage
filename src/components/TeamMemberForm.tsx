@@ -165,6 +165,7 @@ export default function TeamMemberForm({
       const response = await fetch(url, { method, body: submitData });
       const respData = await response.json();
       if (!response.ok) {
+        setIsSubmitting(false);
         setUploadError(respData.error || "Failed to save team member");
         toast.error(respData.error || "Failed to save team member");
         throw new Error(respData.error || "Failed to save team member");
@@ -172,6 +173,7 @@ export default function TeamMemberForm({
       toast.success("Team member saved successfully!");
       router.push(ROUTES.ADMIN_TEAM);
     } catch (error) {
+      setIsSubmitting(false);
       console.error("Error saving team member:", error);
     } finally {
     }

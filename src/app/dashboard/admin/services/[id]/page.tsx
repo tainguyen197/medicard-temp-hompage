@@ -164,6 +164,7 @@ export default function EditServicePage({
       });
 
       if (!response.ok) {
+        setIsSubmitting(false);
         const error = await response.json();
         const isArray = Array.isArray(error.error);
         if (isArray) {
@@ -177,6 +178,7 @@ export default function EditServicePage({
       toast.success("Service updated successfully!");
       router.push(ROUTES.ADMIN_SERVICES);
     } catch (error) {
+      setIsSubmitting(false);
       console.error("Error updating service:", error);
       toast.error(
         error instanceof Error ? error.message : "Failed to update service"

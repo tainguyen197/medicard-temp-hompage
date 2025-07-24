@@ -234,6 +234,7 @@ export function useNewsForm(initialData?: Partial<NewsFormValues>) {
       });
 
       if (!response.ok) {
+        setIsSubmitting(false);
         const error = await response.json();
         const isArray = Array.isArray(error.error);
         if (isArray) {
@@ -245,6 +246,7 @@ export function useNewsForm(initialData?: Partial<NewsFormValues>) {
       toast.success("News article created successfully!");
       router.push(ROUTES.ADMIN_NEWS);
     } catch (error) {
+      setIsSubmitting(false);
       console.error("Error creating news article:", error);
       toast.error(
         error instanceof Error ? error.message : "Failed to create news article"

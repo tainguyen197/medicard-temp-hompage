@@ -58,12 +58,14 @@ export default function EditEquipmentPage({ params }: EquipmentPageProps) {
       });
       
       if (!response.ok) {
+        setIsSubmitting(false);
         const errorData = await response.json();
         throw new Error(errorData.message || "Failed to update equipment");
       }
       toast.success("Equipment updated successfully!");
       router.push(ROUTES.ADMIN_EQUIPMENT);
     } catch (err: any) {
+      setIsSubmitting(false);
       console.error("Error updating equipment:", err);
       setError(err.message || "Failed to update equipment. Please try again.");
     } finally {

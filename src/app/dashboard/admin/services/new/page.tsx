@@ -139,12 +139,15 @@ export default function NewServicePage() {
         } else {
           toast.error(result.error || "Failed to create service");
         }
+
+        setIsSubmitting(false);
         throw new Error(result.error || "Failed to create service");
       }
 
       toast.success("Service created successfully!");
       router.push(ROUTES.ADMIN_SERVICES);
     } catch (error) {
+      setIsSubmitting(false);
       console.error("Error creating service:", error);
     } finally {
       setTimeout(() => {

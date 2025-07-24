@@ -179,13 +179,14 @@ export default function BannerForm({
         body: submitData,
       });
       if (!response.ok) {
+        setIsSubmitting(false);
         const error = await response.json();
         throw new Error(error.error || "Failed to save banner");
       }
       toast.success(`Banner ${isEditing ? "updated" : "created"} successfully`);
       router.push("/admin/banners");
-      router.refresh();
     } catch (error) {
+      setIsSubmitting(false);
       console.error("Submit error:", error);
       toast.error(
         error instanceof Error ? error.message : "Failed to save banner"

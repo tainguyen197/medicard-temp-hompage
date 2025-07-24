@@ -3,13 +3,13 @@ import React, { Suspense } from "react";
 import Link from "next/link";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getMessages } from "next-intl/server";
-import { NewsDataComponent } from "./NewsContent";
-import NewsLoading from "./NewsLoading";
+import NewsContentClient from "./NewsContent";
 import {
   getBannerDataByType,
   BANNER_TYPES,
   DEFAULT_HERO_IMAGE,
 } from "@/lib/banner-utils";
+import { getAppointmentLink } from "@/lib/contact";
 
 export const generateStaticParams = async () => {
   return [{ locale: "en" }, { locale: "vi" }];
@@ -25,6 +25,7 @@ export default async function BlogPage({
   const { locale } = await params;
   const messages = await getMessages();
   const t = messages.news;
+  const appointmentLink = await getAppointmentLink();
 
   // Fetch news banner data
   const newsBanner = await getBannerDataByType(BANNER_TYPES.NEWS, locale);
@@ -69,10 +70,8 @@ export default async function BlogPage({
         </section>
       </AnimatedSection>
 
-      {/* 3. Data-dependent content wrapped in Suspense */}
-      <Suspense fallback={<NewsLoading />}>
-        <NewsDataComponent searchParams={searchParams} params={params} />
-      </Suspense>
+      {/* 3. News List Client Component */}
+      <NewsContentClient locale={locale} t={t} appointmentLink={appointmentLink} />
     </div>
   );
 }

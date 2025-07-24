@@ -26,6 +26,7 @@ export default function NewEquipmentPage() {
       const data = await response.json();
       
       if (!response.ok) {
+        setIsSubmitting(false);
         // Check for specific error messages
         if (data.error && data.error.includes("Maximum limit of 30 equipment items")) {
           setError(data.error);
@@ -38,6 +39,7 @@ export default function NewEquipmentPage() {
 
       router.push(ROUTES.ADMIN_EQUIPMENT);
     } catch (err: any) {
+      setIsSubmitting(false);
       console.error("Error creating equipment:", err);
     } finally {
     }

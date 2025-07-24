@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getMessages } from "next-intl/server";
-import { ServicesDataComponent } from "./ServicesContent";
+import ServicesContentClient from "./ServicesContent";
 import {
   getBannerDataByType,
   BANNER_TYPES,
@@ -73,10 +73,8 @@ export default async function ServicesPage({
         </section>
       </AnimatedSection>
 
-      {/* Services Detail Section wrapped in Suspense */}
-      <Suspense fallback={<ServicesLoading />}>
-        <ServicesDataComponent params={params} />
-      </Suspense>
+      {/* Services Detail Section Client Component */}
+      <ServicesContentClient locale={locale} t={t} />
 
       {/* CTA Section */}
       <section className="bg-white py-16 md:py-20">

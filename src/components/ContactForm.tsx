@@ -70,12 +70,14 @@ export default function ContactForm({ contact }: ContactFormProps) {
       });
 
       if (!response.ok) {
+        setIsLoading(false);
         const error = await response.json();
         throw new Error(error.error || "Failed to save contact information");
       }
 
       toast.success("Contact information updated successfully");
     } catch (error) {
+      setIsLoading(false);
       console.error("Error saving contact:", error);
       toast.error(
         error instanceof Error
