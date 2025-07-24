@@ -1,5 +1,6 @@
 name = "my-worker"
+main = "dist/index.js"   # <-- Change this to your actual entry file
 type = "javascript"
 
 [build]
-command = "npm install --legacy-peer-deps && npm run build" 
+command = "npm install --legacy-peer-deps && npm run build"
