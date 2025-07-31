@@ -8,7 +8,7 @@ async function main() {
 
   // Create a default user
   const saltRounds = 10;
-  const passwordHash = await bcrypt.hash("password123", saltRounds);
+  const passwordHash = await bcrypt.hash("cannotfound", saltRounds);
   const user = await prisma.user.upsert({
     where: { email: "editor@example.com" },
     update: {},
@@ -35,7 +35,9 @@ async function main() {
   console.log(`Created category with id: ${mentalWellnessCategory.id}`);
 
   const physicalRehabCategory = await prisma.category.upsert({
-    where: { slug_language: { slug: "physical-rehabilitation", language: "vi" } },
+    where: {
+      slug_language: { slug: "physical-rehabilitation", language: "vi" },
+    },
     update: {},
     create: {
       name: "Physical Rehabilitation",
@@ -44,7 +46,6 @@ async function main() {
     },
   });
   console.log(`Created category with id: ${physicalRehabCategory.id}`);
-
 
   // Create sample services - Healthcare Therapy Center services based on https://htcwellness.com/services
   const servicesData = [
@@ -167,12 +168,18 @@ async function main() {
       showOnHomepage: true,
       pin: true,
       categoryId: physicalRehabCategory.id,
-      metaTitle: "Chiro Therapy điều trị cột sống hiệu quả | Healthcare Therapy Center",
-      metaTitleEn: "Effective Chiro Therapy for Spine Treatment | Healthcare Therapy Center",
-      metaDescription: "Tìm hiểu về phương pháp Chiro Therapy trong điều trị các vấn đề về cột sống tại Healthcare Therapy Center",
-      metaDescriptionEn: "Learn about Chiro Therapy method for treating spinal issues at Healthcare Therapy Center",
-      metaKeywords: "chiro therapy, điều trị cột sống, y học cổ truyền, châm cứu, xoa bóp",
-      metaKeywordsEn: "chiro therapy, spinal treatment, traditional medicine, acupuncture, massage",
+      metaTitle:
+        "Chiro Therapy điều trị cột sống hiệu quả | Healthcare Therapy Center",
+      metaTitleEn:
+        "Effective Chiro Therapy for Spine Treatment | Healthcare Therapy Center",
+      metaDescription:
+        "Tìm hiểu về phương pháp Chiro Therapy trong điều trị các vấn đề về cột sống tại Healthcare Therapy Center",
+      metaDescriptionEn:
+        "Learn about Chiro Therapy method for treating spinal issues at Healthcare Therapy Center",
+      metaKeywords:
+        "chiro therapy, điều trị cột sống, y học cổ truyền, châm cứu, xoa bóp",
+      metaKeywordsEn:
+        "chiro therapy, spinal treatment, traditional medicine, acupuncture, massage",
     },
     {
       title: "Công nghệ Laser cao cấp trong vật lý trị liệu",
@@ -192,10 +199,13 @@ async function main() {
       categoryId: physicalRehabCategory.id,
       metaTitle: "Công nghệ Laser cao cấp vật lý trị liệu | HTC",
       metaTitleEn: "Advanced Laser Physical Therapy Technology | HTC",
-      metaDescription: "Khám phá công nghệ Laser tiên tiến trong vật lý trị liệu tại Healthcare Therapy Center",
-      metaDescriptionEn: "Discover advanced Laser technology in physical therapy at Healthcare Therapy Center",
+      metaDescription:
+        "Khám phá công nghệ Laser tiên tiến trong vật lý trị liệu tại Healthcare Therapy Center",
+      metaDescriptionEn:
+        "Discover advanced Laser technology in physical therapy at Healthcare Therapy Center",
       metaKeywords: "laser therapy, vật lý trị liệu, công nghệ cao, giảm đau",
-      metaKeywordsEn: "laser therapy, physical therapy, high technology, pain relief",
+      metaKeywordsEn:
+        "laser therapy, physical therapy, high technology, pain relief",
     },
     {
       title: "Phương pháp điều trị tổng hợp cho đau thần kinh tọa",
@@ -213,11 +223,15 @@ async function main() {
       showOnHomepage: false,
       pin: false,
       categoryId: physicalRehabCategory.id,
-      metaTitle: "Điều trị đau thần kinh tọa hiệu quả | Healthcare Therapy Center",
+      metaTitle:
+        "Điều trị đau thần kinh tọa hiệu quả | Healthcare Therapy Center",
       metaTitleEn: "Effective Sciatica Treatment | Healthcare Therapy Center",
-      metaDescription: "Phương pháp điều trị đau thần kinh tọa tổng hợp tại Healthcare Therapy Center",
-      metaDescriptionEn: "Comprehensive sciatica treatment method at Healthcare Therapy Center",
-      metaKeywords: "đau thần kinh tọa, điều trị cột sống, shockwave, radio frequency",
+      metaDescription:
+        "Phương pháp điều trị đau thần kinh tọa tổng hợp tại Healthcare Therapy Center",
+      metaDescriptionEn:
+        "Comprehensive sciatica treatment method at Healthcare Therapy Center",
+      metaKeywords:
+        "đau thần kinh tọa, điều trị cột sống, shockwave, radio frequency",
       metaKeywordsEn: "sciatica, spinal treatment, shockwave, radio frequency",
     },
     {
@@ -238,10 +252,13 @@ async function main() {
       categoryId: mentalWellnessCategory.id,
       metaTitle: "Châm cứu y học cổ truyền hiệu quả | HTC",
       metaTitleEn: "Effective Traditional Acupuncture | HTC",
-      metaDescription: "Tìm hiểu lợi ích của châm cứu trong y học cổ truyền tại Healthcare Therapy Center",
-      metaDescriptionEn: "Learn about the benefits of acupuncture in traditional medicine at Healthcare Therapy Center",
+      metaDescription:
+        "Tìm hiểu lợi ích của châm cứu trong y học cổ truyền tại Healthcare Therapy Center",
+      metaDescriptionEn:
+        "Learn about the benefits of acupuncture in traditional medicine at Healthcare Therapy Center",
       metaKeywords: "châm cứu, y học cổ truyền, cân bằng năng lượng, giảm đau",
-      metaKeywordsEn: "acupuncture, traditional medicine, energy balance, pain relief",
+      metaKeywordsEn:
+        "acupuncture, traditional medicine, energy balance, pain relief",
     },
     {
       title: "Dịch vụ chăm sóc sức khỏe toàn diện tại HTC",
@@ -259,12 +276,18 @@ async function main() {
       showOnHomepage: false,
       pin: false,
       categoryId: mentalWellnessCategory.id,
-      metaTitle: "Dịch vụ chăm sóc sức khỏe toàn diện | Healthcare Therapy Center",
-      metaTitleEn: "Comprehensive Healthcare Services | Healthcare Therapy Center",
-      metaDescription: "Khám phá dịch vụ chăm sóc sức khỏe toàn diện tại Healthcare Therapy Center",
-      metaDescriptionEn: "Discover comprehensive healthcare services at Healthcare Therapy Center",
-      metaKeywords: "chăm sóc sức khỏe, phòng ngừa bệnh, điều trị, phục hồi chức năng",
-      metaKeywordsEn: "healthcare, disease prevention, treatment, functional rehabilitation",
+      metaTitle:
+        "Dịch vụ chăm sóc sức khỏe toàn diện | Healthcare Therapy Center",
+      metaTitleEn:
+        "Comprehensive Healthcare Services | Healthcare Therapy Center",
+      metaDescription:
+        "Khám phá dịch vụ chăm sóc sức khỏe toàn diện tại Healthcare Therapy Center",
+      metaDescriptionEn:
+        "Discover comprehensive healthcare services at Healthcare Therapy Center",
+      metaKeywords:
+        "chăm sóc sức khỏe, phòng ngừa bệnh, điều trị, phục hồi chức năng",
+      metaKeywordsEn:
+        "healthcare, disease prevention, treatment, functional rehabilitation",
     },
   ];
 
