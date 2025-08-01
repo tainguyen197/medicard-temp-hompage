@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server";
 // import { getToken } from "next-auth/jwt";
 import createMiddleware from "next-intl/middleware";
 import { routing } from "./routing";
+import { rateLimitMiddleware } from "./lib/rate-limit-middleware";
 
 const intlMiddleware = createMiddleware(routing);
 
@@ -13,9 +14,16 @@ export async function middleware(request: NextRequest) {
   console.log("nextUrl.pathname", nextUrl.pathname);
   console.log("subdomain", subdomain);
 
+  // Apply rate limiting to API routes
+  if (nextUrl.pathname.startsWith("/api")) {
+    const rateLimitResponse = await rateLimitMiddleware(request);
+    if (rateLimitResponse.status === 429) {
+      return rateLimitResponse;
+    }
+  }
+
   // Handle API routes
   if (nextUrl.pathname.startsWith("/api")) {
-    console.log("api route");
     return NextResponse.next();
   }
 
