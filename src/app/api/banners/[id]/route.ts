@@ -288,9 +288,22 @@ export async function PUT(
     console.log(`=== BANNER UPDATE API SUCCESS ===`);
     console.log(`Total execution time: ${Date.now() - startTime}ms`);
     
-    return NextResponse.json(banner);
+    // Try with explicit headers
+    const response = new Response(JSON.stringify(banner), {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+        'X-Response-Time': `${Date.now() - startTime}ms`
+      }
+    });
+    
+    console.log(`=== BANNER UPDATE API SUCCESS in ${Date.now() - startTime}ms ===`);
+    return response;
   } catch (error) {
-    console.error('=== BANNER UPDATE API ERROR ===');
+    console.error(`=== BANNER UPDATE API ERROR after ${Date.now() - startTime}ms ===`);
     console.error('Error occurred after:', Date.now() - startTime, 'ms');
     console.error('Error:', error);
     
