@@ -122,6 +122,12 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const startTime = Date.now();
+  console.log('=== BANNER UPDATE API CALLED ===');
+  console.log('Timestamp:', new Date().toISOString());
+  console.log('Content-Type:', request.headers.get('content-type'));
+  console.log('Content-Length:', request.headers.get('content-length'));
+  
   try {
     const { id } = await params;
 
@@ -130,10 +136,12 @@ export async function PUT(
       !session?.user ||
       !["ADMIN", "EDITOR", "SUPER_ADMIN"].includes(session.user.role)
     ) {
+      console.log('❌ Unauthorized access attempt');
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    console.log('✅ Authentication successful');
 
-    // Handle FormData instead of JSON to match the frontend
+    // Handle FormData instead of JSON
     const formData = await request.formData();
     const type = formData.get("type") as string;
     const link = (formData.get("link") as string) || null;
@@ -149,6 +157,7 @@ export async function PUT(
     });
 
     if (!existingBanner) {
+      console.log('❌ Banner not found');
       return NextResponse.json({ error: "Banner not found" }, { status: 404 });
     }
 
@@ -165,41 +174,52 @@ export async function PUT(
     }
 
     if (imageFile && imageFile.size > 0) {
+      console.log('Step 4: Uploading Vietnamese image...');
       try {
+        const uploadStartTime = Date.now();
         const { mediaId } = await uploadFileToR2(
           imageFile,
           session.user.id,
           "banner"
         );
         imageId = mediaId;
+        console.log(`✅ Vietnamese image uploaded in ${Date.now() - uploadStartTime}ms, mediaId:`, mediaId);
       } catch (error) {
-        console.error("Error uploading banner image:", error);
+        console.error("❌ Error uploading banner image:", error);
         return NextResponse.json(
           { error: "Failed to upload banner image" },
           { status: 500 }
         );
       }
+    } else {
+      console.log('⏭️ No Vietnamese image to upload');
     }
 
     if (imageEnFile && imageEnFile.size > 0) {
+      console.log('Step 5: Uploading English image...');
       try {
+        const uploadStartTime = Date.now();
         const { mediaId } = await uploadFileToR2(
           imageEnFile,
           session.user.id,
           "banner"
         );
         imageEnId = mediaId;
+        console.log(`✅ English image uploaded in ${Date.now() - uploadStartTime}ms, mediaId:`, mediaId);
       } catch (error) {
-        console.error("Error uploading banner English image:", error);
+        console.error("❌ Error uploading banner English image:", error);
         return NextResponse.json(
           { error: "Failed to upload banner English image" },
           { status: 500 }
         );
       }
+    } else {
+      console.log('⏭️ No English image to upload');
     }
 
     // Validate type if provided
     if (type && !["HOMEPAGE", "SERVICE", "NEWS", "ABOUT", "CONTACT"].includes(type)) {
+      console.log('❌ Invalid type:', type);
       return NextResponse.json(
         { error: "Type must be HOMEPAGE, SERVICE, NEWS, ABOUT, or CONTACT" },
         { status: 400 }
@@ -213,6 +233,7 @@ export async function PUT(
       });
 
       if (conflictingBanner) {
+        console.log('❌ Conflicting banner type:', type);
         return NextResponse.json(
           { error: `A banner with type ${type} already exists` },
           { status: 400 }
@@ -264,9 +285,15 @@ export async function PUT(
       changes: Object.keys(changes).length > 0 ? changes : undefined,
     });
 
+    console.log(`=== BANNER UPDATE API SUCCESS ===`);
+    console.log(`Total execution time: ${Date.now() - startTime}ms`);
+    
     return NextResponse.json(banner);
   } catch (error) {
-    console.error("Error updating banner:", error);
+    console.error('=== BANNER UPDATE API ERROR ===');
+    console.error('Error occurred after:', Date.now() - startTime, 'ms');
+    console.error('Error:', error);
+    
     return NextResponse.json(
       { error: "Failed to update banner" },
       { status: 500 }
