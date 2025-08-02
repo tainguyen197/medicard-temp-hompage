@@ -19,7 +19,11 @@ const nextConfig: NextConfig = {
         hostname: "source.unsplash.com",
       },
     ],
-    domains: ["localhost"],
+    domains: [
+      "localhost",
+      "dashboard.htcwellness.com",
+      "htcwellness.com",
+    ],
   },
 };
 
