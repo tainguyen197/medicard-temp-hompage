@@ -21,6 +21,7 @@ import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { bannerSchema } from "@/utils/banner";
+import { safeJsonResponse } from '@/lib/api-utils';
 
 type BannerFormValues = z.infer<typeof bannerSchema>;
 
@@ -178,9 +179,16 @@ export default function BannerForm({
         method,
         body: submitData,
       });
+
+      // Add this temporary logging
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
       if (!response.ok) {
         setIsSubmitting(false);
-        const error = await response.json();
+        
+
+        const error = await safeJsonResponse(response);
         throw new Error(error.error || "Failed to save banner");
       }
       toast.success(`Banner ${isEditing ? "updated" : "created"} successfully`);

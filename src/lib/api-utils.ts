@@ -20,3 +20,25 @@ export function buildApiUrl(endpoint: string): string {
   console.log('=====>>>baseUrl', baseUrl);
   return `${baseUrl}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
 } 
+
+export async function safeJsonResponse(response: Response) {
+  const contentType = response.headers.get('content-type');
+  
+  if (!contentType || !contentType.includes('application/json')) {
+    const text = await response.text();
+    console.error('Non-JSON response received:', {
+      status: response.status,
+      contentType,
+      text: text.substring(0, 500)
+    });
+    throw new Error(`Server returned non-JSON response: ${text.substring(0, 100)}...`);
+  }
+  
+  try {
+    return await response.json();
+  } catch (error) {
+    const text = await response.text();
+    console.error('JSON parse error:', error, 'Response text:', text);
+    throw new Error(`Invalid JSON response: ${text.substring(0, 100)}...`);
+  }
+} 
