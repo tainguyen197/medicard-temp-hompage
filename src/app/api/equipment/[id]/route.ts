@@ -78,18 +78,26 @@ export async function PUT(req: NextRequest, { params }: Params) {
     const imageEnFile = formData.get("imageEnFile") as File | null;
     const imageId = formData.get("imageId") as string || undefined;
     const imageEnId = formData.get("imageEnId") as string || undefined;
+      
+      console.log("Received form data:", { 
+        imageId, 
+        imageEnId, 
+        imageEnIdType: typeof imageEnId,
+        imageEnIdLength: imageEnId?.length,
+        imageEnIdEmpty: imageEnId === ""
+      });
     
     let updatedImageId = existingEquipment.imageId;
     let updatedImageEnId = existingEquipment.imageEnId;
     
     // Handle image removal (empty string means remove)
-    if (imageId === "") {
+    if (imageId === "" || imageId === undefined) {
       updatedImageId = null;
     } else if (imageId) {
       updatedImageId = imageId;
     }
     
-    if (imageEnId === "") {
+    if (imageEnId === "" || imageEnId === undefined) {
       updatedImageEnId = null;
     } else if (imageEnId) {
       updatedImageEnId = imageEnId;
@@ -102,7 +110,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
       }
       const bytes = await imageFile.arrayBuffer();
       const buffer = Buffer.from(bytes);
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3001";
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ;
       const uploadResponse = await fetch(`${baseUrl}/api/media/upload`, {
         method: "POST",
         headers: {
@@ -125,7 +133,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
       }
       const bytes = await imageEnFile.arrayBuffer();
       const buffer = Buffer.from(bytes);
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3001";
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
       const uploadResponse = await fetch(`${baseUrl}/api/media/upload`, {
         method: "POST",
         headers: {
@@ -140,6 +148,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
       const uploadResult = await uploadResponse.json();
       updatedImageEnId = uploadResult.id;
     }
+    
     
     // Update equipment record
     const updatedEquipment = await prisma.equipment.update({

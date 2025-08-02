@@ -58,7 +58,7 @@
     "@uploadthing/react": "^6.4.0",
     "@upstash/ratelimit": "^2.0.6",
     "@upstash/redis": "^1.35.2",
-    "aws-sdk": "^2.1692.0",
+    "@aws-sdk/client-s3": "^3.755.0",
     "bcrypt": "^6.0.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
