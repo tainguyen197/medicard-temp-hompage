@@ -11,7 +11,7 @@ export function getApiBaseUrl(): string {
   }
   
   // Fallback for other environments
-  return 'https://dashboard.nguyentrungtai.site';
+  return 'https://dashboard.htcwellness.com';
 }
 
 // Helper function to build API URLs
