@@ -132,15 +132,23 @@ export async function GET(request: NextRequest) {
 
 // POST /api/banners - Create or update banner (upsert by type)
 export async function POST(request: NextRequest) {
+  console.log('=== BANNER API CALLED ===');
+  console.log('Content-Type:', request.headers.get('content-type'));
+  console.log('Content-Length:', request.headers.get('content-length'));
+  
   try {
+    const formData = await request.formData();
+    console.log('FormData received successfully');
+    console.log('FormData entries:', Array.from(formData.entries()).map(([key, value]) => 
+      `${key}: ${value instanceof File ? `File(${value.size} bytes)` : value}`
+    ));
+    
     const session = await getServerSession(authOptions);
     if (!session?.user || !["ADMIN", "EDITOR", "SUPER_ADMIN"].includes(session.user.role)) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Handle FormData instead of JSON
-    const formData = await request.formData();
-
     const type = formData.get("type") as string;
     const link = (formData.get("link") as string) || null;
     const status = (formData.get("status") as string) || "ACTIVE";
@@ -237,10 +245,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(banner, { status: 201 });
   } catch (error) {
-    console.error("Error creating/updating banner:", error);
+    console.error('Error parsing FormData:', error);
     return NextResponse.json(
-      { error: "Failed to save banner" },
-      { status: 500 }
+      { error: "Failed to parse request data" },
+      { status: 400 }
     );
   }
 }
