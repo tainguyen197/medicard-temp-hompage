@@ -118,6 +118,8 @@ export default function EquipmentForm({
     // Always send imageEnId - empty string means remove, undefined/null means keep existing
     const imageEnIdValue = isEnImageRemoved ? "" : (data.imageEnId || "");
     formData.append("imageEnId", imageEnIdValue);
+    
+    
     onSubmit(formData);
   };
 
