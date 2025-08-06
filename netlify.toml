@@ -4,3 +4,13 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+[build.environment]
+  NODE_VERSION = "22.14.0"
+  PRISMA_GENERATE_DATAPROXY = "true"
+
+# Development configuration for netlify dev
+[dev]
+  command = "npm run dev"
+  port = 8888
+  publish = ".next"
