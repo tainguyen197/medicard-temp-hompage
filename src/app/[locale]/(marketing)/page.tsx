@@ -13,6 +13,7 @@ import {
   BlogSectionWithAnimation,
   ContactSectionWithAnimation,
 } from "@/components/sections";
+import HomeLoadingWrapper from "@/components/HomeLoadingWrapper";
 
 export const generateStaticParams = async () => {
   return [{ locale: "en" }, { locale: "vi" }];
@@ -34,21 +35,23 @@ export default async function Home({
   const appointmentLink = await getAppointmentLink();
 
   return (
-    <div className="min-h-screen pt-[72px] md:pt-[96px]">
-      <HeroSection
-        imageUrl={homepageBanner.imageUrl}
-        link={homepageBanner.link}
-        altText="Homepage Hero"
-      />
-      <AboutSectionWithAnimation t={t.about} />
-      <ServicesGallerySectionWithAnimation appointmentLink={appointmentLink} />
-      <TreatmentMethodsSectionWithAnimation t={t.treatmentMethods} />
-      <TeamSectionWithAnimation />
-      <FacilitySectionWithAnimation t={t.facility} />
-      <EquipmentSectionWithAnimation t={t.equipment} locale={locale} />
-      <ProcessSectionWithAnimation t={t.process} />
-      <BlogSectionWithAnimation locale={locale} />
-      <ContactSectionWithAnimation t={t.contact} appointmentLink={appointmentLink} />
-    </div>
+    <HomeLoadingWrapper>
+      <div className="min-h-screen pt-[72px] md:pt-[96px]">
+        <HeroSection
+          imageUrl={homepageBanner.imageUrl}
+          link={homepageBanner.link}
+          altText="Homepage Hero"
+        />
+        <AboutSectionWithAnimation t={t.about} />
+        <ServicesGallerySectionWithAnimation appointmentLink={appointmentLink} />
+        <TreatmentMethodsSectionWithAnimation t={t.treatmentMethods} />
+        <TeamSectionWithAnimation />
+        <FacilitySectionWithAnimation t={t.facility} />
+        <EquipmentSectionWithAnimation t={t.equipment} locale={locale} />
+        <ProcessSectionWithAnimation t={t.process} />
+        <BlogSectionWithAnimation locale={locale} />
+        <ContactSectionWithAnimation t={t.contact} appointmentLink={appointmentLink} />
+      </div>
+    </HomeLoadingWrapper>
   );
 }

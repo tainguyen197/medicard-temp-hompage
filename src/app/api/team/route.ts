@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { S3 } from "aws-sdk";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { extname } from "path";
 import { Logger } from "../../../lib/utils";
 
@@ -16,14 +16,14 @@ const isR2Available = !!(
 
 // Configure S3 client for Cloudflare R2 (only if environment variables are available)
 const s3Client = isR2Available
-  ? new S3({
+  ? new S3Client({
       region: "auto",
       endpoint: `https://${process.env.CF_R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
       credentials: {
         accessKeyId: process.env.CF_R2_ACCESS_KEY_ID!,
         secretAccessKey: process.env.CF_R2_SECRET_ACCESS_KEY!,
       },
-      s3ForcePathStyle: true, // Required for R2
+      forcePathStyle: true, // Required for R2
     })
   : null;
 
@@ -46,18 +46,18 @@ const uploadFileToR2 = async (
     const bucketName = process.env.CF_R2_BUCKET!;
     const destination = `images/htcwellness/${userId}/${prefix}/${fileName}`;
 
-    await s3Client
-      .putObject({
-        Bucket: bucketName,
-        Key: destination,
-        Body: buffer,
-        ContentType: file.type,
-        // Setting ACL for public access
-        ACL: "public-read",
-        // Adding Cache-Control to make browser cache the image
-        CacheControl: "max-age=31536000",
-      })
-      .promise();
+    const command = new PutObjectCommand({
+      Bucket: bucketName,
+      Key: destination,
+      Body: buffer,
+      ContentType: file.type,
+      // Setting ACL for public access
+      ACL: "public-read",
+      // Adding Cache-Control to make browser cache the image
+      CacheControl: "max-age=31536000",
+    });
+
+    await s3Client.send(command);
     publicUrl = `https://${process.env.CF_R2_PUBLIC_BUCKET}/${destination}`;
   } else {
     throw new Error("R2 configuration not available");

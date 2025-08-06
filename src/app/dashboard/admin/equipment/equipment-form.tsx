@@ -73,6 +73,7 @@ export default function EquipmentForm({
   // Watch image URLs for display
   const [imageUrl, setImageUrl] = useState(initialData?.image?.url || "");
   const [imageEnUrl, setImageEnUrl] = useState(initialData?.imageEn?.url || "");
+  const [isEnImageRemoved, setIsEnImageRemoved] = useState(false);
 
   // Update imageId when image changes
   const handleImageChange = (url: string) => {
@@ -86,10 +87,22 @@ export default function EquipmentForm({
   const handleImageEnChange = (url: string) => {
     setImageEnUrl(url);
     setValue("imageEnUrl", url);
+    // Track if image was removed (empty string means removed)
+    if (url === "") {
+      setIsEnImageRemoved(true);
+    } else {
+      setIsEnImageRemoved(false);
+    }
   };
   const handleImageEnIdChange = (id: string) => {
     setValue("imageEnId", id);
     setValue("imageEnUrl", id);
+    // Track if image was removed (empty string means removed)
+    if (id === "") {
+      setIsEnImageRemoved(true);
+    } else {
+      setIsEnImageRemoved(false);
+    }
   };
 
   const onFormSubmit: (data: EquipmentFormValues) => void = (data) => {
@@ -102,7 +115,11 @@ export default function EquipmentForm({
     formData.append("showOnHomepage", (data.showOnHomepage ?? true).toString());
     formData.append("order", data.order.toString());
     formData.append("imageId", data.imageId || "");
-    formData.append("imageEnId", data.imageEnId || "");
+    // Always send imageEnId - empty string means remove, undefined/null means keep existing
+    const imageEnIdValue = isEnImageRemoved ? "" : (data.imageEnId || "");
+    formData.append("imageEnId", imageEnIdValue);
+    
+    
     onSubmit(formData);
   };
 

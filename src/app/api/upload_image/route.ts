@@ -4,7 +4,7 @@ import { writeFile, mkdir } from "fs/promises";
 import prisma from "@/lib/prisma"; // Using @ alias based on tsconfig
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth"; // Using @ alias based on tsconfig
-import { S3 } from "aws-sdk"; // For Cloudflare R2
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 /**
  * Image Upload API
@@ -40,17 +40,14 @@ const isR2Available = !!(
 );
 
 // Configure S3 client for Cloudflare R2 (only if environment variables are available)
-const s3 = isR2Available
-  ? new S3({
-      region: "auto",
-      endpoint: `https://${process.env.CF_R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
-      credentials: {
-        accessKeyId: process.env.CF_R2_ACCESS_KEY_ID!,
-        secretAccessKey: process.env.CF_R2_SECRET_ACCESS_KEY!,
-      },
-      s3ForcePathStyle: true, // Required for R2
-    })
-  : null;
+const s3Client = new S3Client({
+  region: "auto",
+  endpoint: `https://${process.env.CF_R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: process.env.CF_R2_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.CF_R2_SECRET_ACCESS_KEY!,
+  },
+});
 
 // Maximum total storage limit (500MB)
 const TOTAL_STORAGE_LIMIT = 500 * 1024 * 1024; // 500MB in bytes
@@ -141,7 +138,7 @@ export async function POST(request: Request) {
     let publicUrl: string;
 
     // Use Cloudflare R2 if available, otherwise fall back to local file storage
-    if (isR2Available && s3) {
+    if (isR2Available && s3Client) {
       // Extract just the bucket name from the environment variable
       const bucketName = process.env.CF_R2_BUCKET!;
       const destination = `images/htcwellness/${session.user.id}/${fileName}`;
@@ -151,20 +148,20 @@ export async function POST(request: Request) {
 
       // Upload to Cloudflare R2
       try {
-        const uploadResult = await s3
-          .putObject({
-            Bucket: bucketName,
-            Key: destination,
-            Body: buffer,
-            ContentType: file.type,
-            // Setting ACL for public access
-            ACL: "public-read",
-            // Adding Cache-Control to make browser cache the image
-            CacheControl: "max-age=31536000",
-          })
-          .promise();
+        const command = new PutObjectCommand({
+          Bucket: bucketName,
+          Key: destination,
+          Body: buffer,
+          ContentType: file.type,
+          // Setting ACL for public access
+          ACL: "public-read",
+          // Adding Cache-Control to make browser cache the image
+          CacheControl: "max-age=31536000",
+        });
 
-        console.log("R2 Upload successful:", uploadResult);
+        await s3Client.send(command);
+
+        console.log("R2 Upload successful:");
 
         // Construct the public URL for R2
         publicUrl = `https://${process.env.CF_R2_PUBLIC_BUCKET}/${destination}`;

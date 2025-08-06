@@ -60,11 +60,15 @@ export async function POST(req: NextRequest) {
     // Handle image uploads
     const imageFile = formData.get("imageFile") as File | null;
     const imageEnFile = formData.get("imageEnFile") as File | null;
+    const imageId = formData.get("imageId") as string || undefined;
+    const imageEnId = formData.get("imageEnId") as string || undefined;
     
-    let imageId = null;
-    let imageEnId = null;
     
-    // Process Vietnamese image if provided
+    
+    let finalImageId = null;
+    let finalImageEnId = null;
+    
+    // Process Vietnamese image - either from file upload or imageId
     if (imageFile) {
       if (imageFile.size > 10 * 1024 * 1024) {
         return NextResponse.json({ error: "Vietnamese image must be smaller than 10MB." }, { status: 400 });
@@ -86,10 +90,13 @@ export async function POST(req: NextRequest) {
       }
       
       const uploadResult = await uploadResponse.json();
-      imageId = uploadResult.id;
+      finalImageId = uploadResult.id;
+    } else if (imageId && imageId !== "") {
+      // Use the provided imageId from ImageUpload component
+      finalImageId = imageId;
     }
     
-    // Process English image if provided
+    // Process English image - either from file upload or imageId
     if (imageEnFile) {
       if (imageEnFile.size > 10 * 1024 * 1024) {
         return NextResponse.json({ error: "English image must be smaller than 10MB." }, { status: 400 });
@@ -111,7 +118,10 @@ export async function POST(req: NextRequest) {
       }
       
       const uploadResult = await uploadResponse.json();
-      imageEnId = uploadResult.id;
+      finalImageEnId = uploadResult.id;
+    } else if (imageEnId && imageEnId !== "") {
+      // Use the provided imageEnId from ImageUpload component
+      finalImageEnId = imageEnId;
     }
     
     // Create equipment record
@@ -124,8 +134,8 @@ export async function POST(req: NextRequest) {
         status,
         showOnHomepage,
         order,
-        imageId,
-        imageEnId,
+        imageId: finalImageId,
+        imageEnId: finalImageEnId,
       },
       include: {
         image: true,

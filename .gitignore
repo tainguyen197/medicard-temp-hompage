@@ -47,4 +47,4 @@ cloudflare-env.d.ts
 #opennextjs
 .open-next
 # Local Netlify folder
-.netlify
+.open-next

@@ -11,5 +11,5 @@ export const equipmentSchema = z.object({
     imageId: z.string().optional(),
     imageEnId: z.string().optional(),
     imageUrl: z.string({message: "Image (Vietnamese) is required"}).min(1, "Image (Vietnamese) is required"),
-    imageEnUrl: z.string().optional(),
+    imageEnUrl: z.string().optional().or(z.literal("")),
   });
