@@ -7,3 +7,4 @@
 
 [build.environment]
   NODE_VERSION = "22.14.0"
+  PRISMA_GENERATE_DATAPROXY = "true"
