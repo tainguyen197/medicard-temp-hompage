@@ -45,3 +45,5 @@ cloudflare-env.d.ts
 
 #opennextjs
 .open-next
+
+.netlify
