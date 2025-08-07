@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { ROUTES } from "@/lib/router";
 import { getContactData } from "@/lib/contact";
 import { Link } from "@/navigation";
+import { buildApiUrl } from "@/lib/api-utils";
 
 interface Service {
   id: string;
@@ -20,7 +21,8 @@ interface FooterProps {
 // Fetch homepage services
 async function getHomepageServices() {
   try {
-    const response = await fetch(`/api/services/homepage`, {
+    const apiUrl = buildApiUrl(`/api/services/homepage`);
+    const response = await fetch(apiUrl, {
       next: { revalidate: 0 },
       cache: "no-store",
     });

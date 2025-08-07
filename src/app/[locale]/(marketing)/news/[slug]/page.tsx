@@ -12,6 +12,7 @@ import {
   DEFAULT_HERO_IMAGE,
 } from "@/lib/banner-utils";
 import { getLocalizedNews } from "@/utils";
+import { buildApiUrl } from "@/lib/api-utils";
 
 // Force dynamic rendering to avoid DYNAMIC_SERVER_USAGE error
 export const dynamic = "force-dynamic";
@@ -32,7 +33,8 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "newsDetail.metadata" });
 
   try {
-    const response = await fetch(`/api/news/by-slug/${slug}`, {
+    const apiUrl = buildApiUrl(`/api/news/by-slug/${slug}`);
+    const response = await fetch(apiUrl, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       cache: "no-store",
@@ -226,7 +228,8 @@ async function NewsDetailSkeletonContent({ locale }: { locale: string }) {
 // Generate static params for better performance (optional)
 export async function generateStaticParams() {
   try {
-    const response = await fetch(`/api/news?limit=100&status=PUBLISHED`, {
+    const apiUrl = buildApiUrl(`/api/news?limit=100&status=PUBLISHED`);
+    const response = await fetch(apiUrl, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       cache: "no-store",
