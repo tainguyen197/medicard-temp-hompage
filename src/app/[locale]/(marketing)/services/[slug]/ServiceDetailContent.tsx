@@ -1,8 +1,8 @@
 import React from "react";
-import Image from "next/image";
 import { Link } from "@/navigation";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { buildApiUrl } from "@/lib/api-utils";
 
 interface Service {
   id: string;
@@ -51,16 +51,14 @@ export default async function ServiceDetailContent({
   let service: Service;
 
   try {
-    // Fetch service by slug from API
-    const response = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/services/by-slug/${slug}`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        next: { revalidate: 0 },
-        cache: "no-store",
-      }
-    );
+    // Use the buildApiUrl utility to construct the proper absolute URL
+    const apiUrl = buildApiUrl(`/api/services/by-slug/${slug}`);
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 0 },
+      cache: "no-store",
+    });
 
     if (!response.ok) {
       console.log(`Service not found: ${slug}`);

@@ -40,8 +40,13 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+.open-next
 # cloudflare
 cloudflare-env.d.ts
 
 #opennextjs
 .open-next
+# Local Netlify folder
+.open-next
+
+.netlify

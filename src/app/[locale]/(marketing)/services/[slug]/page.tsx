@@ -11,13 +11,9 @@ import {
   BANNER_TYPES,
   DEFAULT_HERO_IMAGE,
 } from "@/lib/banner-utils";
+import { buildApiUrl } from "@/lib/api-utils";
 
-// Force dynamic rendering to avoid DYNAMIC_SERVER_USAGE error
 export const dynamic = "force-dynamic";
-
-interface ServiceDetailProps {
-  params: Promise<{ slug: string; locale: string }>;
-}
 
 interface Service {
   id: string;
@@ -59,15 +55,12 @@ export async function generateMetadata({
   const t = messages.services.notFound;
 
   try {
-    const response = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/services/by-slug/${slug}`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        next: { revalidate: 0 },
-        cache: "no-store",
-      }
-    );
+    // Use the buildApiUrl utility to construct the proper absolute URL
+    const apiUrl = buildApiUrl(`/api/services/by-slug/${slug}`);
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
 
     if (response.ok) {
       const service = await response.json();
@@ -122,16 +115,14 @@ export default async function ServiceDetailPage({
       notFound();
     }
 
-    // Fetch service by slug from API
-    const response = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/services/by-slug/${slug}`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        next: { revalidate: 0 },
-        cache: "no-store",
-      }
-    );
+    // Use the buildApiUrl utility to construct the proper absolute URL
+    const apiUrl = buildApiUrl(`/api/services/by-slug/${slug}`);
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 0 },
+      cache: "no-store",
+    });
 
     if (!response.ok) {
       console.error(`Service not found: ${slug}, status: ${response.status}`);
@@ -318,15 +309,12 @@ async function ServiceDetailLoading({
 // Generate static params for better performance (optional)
 export async function generateStaticParams() {
   try {
-    const response = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/services?limit=100&status=PUBLISHED`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        next: { revalidate: 0 },
-        cache: "no-store",
-      }
-    );
+    const response = await fetch(`/api/services?limit=100&status=PUBLISHED`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 0 },
+      cache: "no-store",
+    });
 
     if (response.ok) {
       const data = await response.json();

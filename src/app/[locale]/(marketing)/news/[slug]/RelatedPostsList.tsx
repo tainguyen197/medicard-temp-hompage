@@ -2,6 +2,9 @@ import Image from "next/image";
 import { Link } from "@/navigation";
 import { getTranslations } from "next-intl/server";
 import { getLocalizedNews } from "@/utils";
+import { buildApiUrl } from "@/lib/api-utils";
+
+export const dynamic = "force-dynamic";
 
 interface RelatedPostsListProps {
   categoryId: string;
@@ -21,14 +24,14 @@ export default async function RelatedPostsList({
 
   if (categoryId) {
     try {
-      const response = await fetch(
-        `${process.env.NEXTAUTH_URL}/api/news/related?categoryId=${categoryId}&currentNewsId=${currentNewsId}&limit=3&locale=${locale}`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-          cache: "no-store",
-        }
+      const apiUrl = buildApiUrl(
+        `/api/news/related?categoryId=${categoryId}&currentNewsId=${currentNewsId}&limit=3&locale=${locale}`
       );
+      const response = await fetch(apiUrl, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-store",
+      });
 
       if (!response.ok) {
         throw new Error("Failed to fetch related news");

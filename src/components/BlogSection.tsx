@@ -5,6 +5,7 @@ import { News } from "@/types/post";
 import { getLocalizedNews } from "@/utils";
 import { Link } from "@/navigation";
 import { htmlToTextAndTruncate } from "@/lib/utils";
+import { buildApiUrl } from "@/lib/api-utils";
 
 interface BlogPostProps {
   image: string;
@@ -33,7 +34,7 @@ const BlogPost = ({ image, title, description, slug, id }: BlogPostProps) => (
           {title}
         </h3>
         <p className="text-gray-600 text-sm md:text-md line-clamp-2">
-         {htmlToTextAndTruncate(description, 150)}
+          {htmlToTextAndTruncate(description, 150)}
         </p>
       </div>
     </div>
@@ -52,14 +53,12 @@ const BlogSection = async ({ locale = "vi" }: { locale?: string }) => {
 
   try {
     // Fetch news that are marked for homepage display
-    const response = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/news/homepage`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        cache: "no-store",
-      }
-    );
+    const apiUrl = buildApiUrl(`/api/news/homepage`);
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      cache: "no-store",
+    });
 
     if (response.ok) {
       const data = await response.json();
@@ -80,7 +79,10 @@ const BlogSection = async ({ locale = "vi" }: { locale?: string }) => {
         {homepageNews.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-16">
             {homepageNews.map((newsItem) => {
-              const { title, description, image, slug, id } = getLocalizedNews(newsItem, locale); 
+              const { title, description, image, slug, id } = getLocalizedNews(
+                newsItem,
+                locale
+              );
 
               return (
                 <BlogPost

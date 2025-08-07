@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { ROUTES } from "@/lib/router";
 import { getContactData } from "@/lib/contact";
 import { Link } from "@/navigation";
+import { buildApiUrl } from "@/lib/api-utils";
 
 interface Service {
   id: string;
@@ -20,13 +21,11 @@ interface FooterProps {
 // Fetch homepage services
 async function getHomepageServices() {
   try {
-    const response = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/services/homepage`,
-      {
-        next: { revalidate: 0 },
-        cache: "no-store",
-      }
-    );
+    const apiUrl = buildApiUrl(`/api/services/homepage`);
+    const response = await fetch(apiUrl, {
+      next: { revalidate: 0 },
+      cache: "no-store",
+    });
 
     if (!response.ok) {
       throw new Error("Failed to fetch homepage services");
@@ -56,27 +55,15 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
     phone: contactData?.phone || "_",
     address:
       locale === "en"
-        ? contactData?.addressEn ||
-          contactData?.address ||
-          "_"
-        : contactData?.address ||
-          "_",
+        ? contactData?.addressEn || contactData?.address || "_"
+        : contactData?.address || "_",
     businessHours:
       locale === "en"
-        ? contactData?.businessHoursEn ||
-          contactData?.businessHours ||
-          "_"
-        : contactData?.businessHours ||
-          "_",
-    facebookUrl:
-      contactData?.facebookUrl ||
-      "_",
-    zaloUrl:
-      contactData?.zaloUrl ||
-      "_",
-    instagramUrl:
-      contactData?.instagramUrl ||
-      "_",
+        ? contactData?.businessHoursEn || contactData?.businessHours || "_"
+        : contactData?.businessHours || "_",
+    facebookUrl: contactData?.facebookUrl || "_",
+    zaloUrl: contactData?.zaloUrl || "_",
+    instagramUrl: contactData?.instagramUrl || "_",
   };
 
   // Format business hours for display
@@ -94,7 +81,6 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
       </span>
     ));
   };
-
 
   // Use homepage services if available, otherwise fall back to hardcoded links
   const servicesToDisplay =
@@ -208,9 +194,7 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
             <h4 className="hidden md:block text-xl font-medium mb-4">
               {t("hotline")}
             </h4>
-            <div
-              className="md:mb-6 !mt-0"
-            >
+            <div className="md:mb-6 !mt-0">
               <Link
                 href={`tel:${contact.phone}`}
                 className="inline-flex items-center px-1 py-2 md:px-6 md:py-3 border border-[#B1873F] hover:bg-[#B1873F]/10 transition-colors rounded-xl md:rounded-full text-[#B1873F] font-bold text-xs md:text-md"
@@ -232,9 +216,7 @@ export default async function Footer({ locale = "vi" }: FooterProps) {
               </Link>
             </div>
 
-            <div
-              className="flex space-x-2 md:space-x-4 ml-8 md:ml-0 !mt-0"
-            >
+            <div className="flex space-x-2 md:space-x-4 ml-8 md:ml-0 !mt-0">
               {contact.facebookUrl && (
                 <a
                   href={contact.facebookUrl}

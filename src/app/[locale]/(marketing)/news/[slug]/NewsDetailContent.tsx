@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import RelatedPostsList from "./RelatedPostsList";
 import { getLocalizedNews } from "@/utils";
+import { buildApiUrl } from "@/lib/api-utils";
 
 export default async function NewsDetailContent({
   slug,
@@ -15,15 +16,13 @@ export default async function NewsDetailContent({
   const t = await getTranslations({ locale, namespace: "newsDetail" });
 
   try {
-    const response = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/news/by-slug/${slug}`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        next: { revalidate: 0 },
-        cache: "no-store",
-      }
-    );
+    const apiUrl = buildApiUrl(`/api/news/by-slug/${slug}`);
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 0 },
+      cache: "no-store",
+    });
 
     if (!response.ok) {
       console.log(`News not found: ${slug}`);
