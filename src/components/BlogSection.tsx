@@ -5,6 +5,7 @@ import { News } from "@/types/post";
 import { getLocalizedNews } from "@/utils";
 import { Link } from "@/navigation";
 import { htmlToTextAndTruncate } from "@/lib/utils";
+import { buildApiUrl } from "@/lib/api-utils";
 
 interface BlogPostProps {
   image: string;
@@ -52,7 +53,8 @@ const BlogSection = async ({ locale = "vi" }: { locale?: string }) => {
 
   try {
     // Fetch news that are marked for homepage display
-    const response = await fetch(`/api/news/homepage`, {
+    const apiUrl = buildApiUrl(`/api/news/homepage`);
+    const response = await fetch(apiUrl, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       cache: "no-store",
