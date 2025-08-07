@@ -13,6 +13,8 @@ import {
 } from "@/lib/banner-utils";
 import { buildApiUrl } from "@/lib/api-utils";
 
+export const dynamic = "force-dynamic";
+
 interface Service {
   id: string;
   slug: string;
