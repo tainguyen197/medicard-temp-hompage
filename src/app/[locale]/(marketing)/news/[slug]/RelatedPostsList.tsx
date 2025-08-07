@@ -22,7 +22,7 @@ export default async function RelatedPostsList({
   if (categoryId) {
     try {
       const response = await fetch(
-        `${process.env.NEXTAUTH_URL}/api/news/related?categoryId=${categoryId}&currentNewsId=${currentNewsId}&limit=3&locale=${locale}`,
+        `/api/news/related?categoryId=${categoryId}&currentNewsId=${currentNewsId}&limit=3&locale=${locale}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },

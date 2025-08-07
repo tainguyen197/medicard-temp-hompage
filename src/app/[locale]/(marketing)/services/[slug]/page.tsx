@@ -59,15 +59,12 @@ export async function generateMetadata({
   const t = messages.services.notFound;
 
   try {
-    const response = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/services/by-slug/${slug}`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        next: { revalidate: 0 },
-        cache: "no-store",
-      }
-    );
+    const response = await fetch(`/api/services/by-slug/${slug}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 0 },
+      cache: "no-store",
+    });
 
     if (response.ok) {
       const service = await response.json();
@@ -123,15 +120,12 @@ export default async function ServiceDetailPage({
     }
 
     // Fetch service by slug from API
-    const response = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/services/by-slug/${slug}`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        next: { revalidate: 0 },
-        cache: "no-store",
-      }
-    );
+    const response = await fetch(`/api/services/by-slug/${slug}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 0 },
+      cache: "no-store",
+    });
 
     if (!response.ok) {
       console.error(`Service not found: ${slug}, status: ${response.status}`);
@@ -318,15 +312,12 @@ async function ServiceDetailLoading({
 // Generate static params for better performance (optional)
 export async function generateStaticParams() {
   try {
-    const response = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/services?limit=100&status=PUBLISHED`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        next: { revalidate: 0 },
-        cache: "no-store",
-      }
-    );
+    const response = await fetch(`/api/services?limit=100&status=PUBLISHED`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 0 },
+      cache: "no-store",
+    });
 
     if (response.ok) {
       const data = await response.json();

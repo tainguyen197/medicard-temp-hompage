@@ -21,7 +21,6 @@ type Params = {
   locale: string;
 };
 
-
 // Generate metadata for the page
 export async function generateMetadata({
   params,
@@ -33,14 +32,11 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "newsDetail.metadata" });
 
   try {
-    const response = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/news/by-slug/${slug}`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        cache: "no-store",
-      }
-    );
+    const response = await fetch(`/api/news/by-slug/${slug}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      cache: "no-store",
+    });
 
     if (response.ok) {
       const news = await response.json();
@@ -230,14 +226,11 @@ async function NewsDetailSkeletonContent({ locale }: { locale: string }) {
 // Generate static params for better performance (optional)
 export async function generateStaticParams() {
   try {
-    const response = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/news?limit=100&status=PUBLISHED`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        cache: "no-store",
-      }
-    );
+    const response = await fetch(`/api/news?limit=100&status=PUBLISHED`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      cache: "no-store",
+    });
 
     if (response.ok) {
       const data = await response.json();

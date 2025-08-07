@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import { Link } from "@/navigation";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -52,15 +51,12 @@ export default async function ServiceDetailContent({
 
   try {
     // Fetch service by slug from API
-    const response = await fetch(
-      `${process.env.NEXTAUTH_URL}/api/services/by-slug/${slug}`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        next: { revalidate: 0 },
-        cache: "no-store",
-      }
-    );
+    const response = await fetch(`/api/services/by-slug/${slug}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 0 },
+      cache: "no-store",
+    });
 
     if (!response.ok) {
       console.log(`Service not found: ${slug}`);
