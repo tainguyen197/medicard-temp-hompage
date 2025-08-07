@@ -21,7 +21,6 @@ import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { bannerSchema } from "@/utils/banner";
-import { safeJsonResponse } from '@/lib/api-utils';
 
 type BannerFormValues = z.infer<typeof bannerSchema>;
 
@@ -60,8 +59,12 @@ export default function BannerForm({
   });
 
   // For image removal logic
-  const [existingImageUrl, setExistingImageUrl] = useState(initialData?.image?.url || "");
-  const [existingImageEnUrl, setExistingImageEnUrl] = useState(initialData?.imageEn?.url || "");
+  const [existingImageUrl, setExistingImageUrl] = useState(
+    initialData?.image?.url || ""
+  );
+  const [existingImageEnUrl, setExistingImageEnUrl] = useState(
+    initialData?.imageEn?.url || ""
+  );
 
   const createImagePreview = (file: File): Promise<string> => {
     return new Promise((resolve) => {
@@ -181,14 +184,17 @@ export default function BannerForm({
       });
 
       // Add this temporary logging
-      console.log('Response status:', response.status);
-      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+      console.log("Response status:", response.status);
+      console.log(
+        "Response headers:",
+        Object.fromEntries(response.headers.entries())
+      );
 
       if (!response.ok) {
         setIsSubmitting(false);
-        
 
-        const error = await safeJsonResponse(response);
+        const error = await response.json();
+
         throw new Error(error.error || "Failed to save banner");
       }
       toast.success(`Banner ${isEditing ? "updated" : "created"} successfully`);
@@ -241,7 +247,6 @@ export default function BannerForm({
   const currentImage = imagePreview || existingImageUrl;
   const currentEnImage = imageEnPreview || existingImageEnUrl;
 
-
   return (
     <div className="max-w-4xl mx-auto p-6">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -260,10 +265,7 @@ export default function BannerForm({
                   name="type"
                   control={control}
                   render={({ field }) => (
-                    <Select
-                      value={field.value}
-                      onValueChange={field.onChange}
-                    >
+                    <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select banner type" />
                       </SelectTrigger>
@@ -278,7 +280,9 @@ export default function BannerForm({
                   )}
                 />
                 {errors.type && (
-                  <p className="text-sm text-red-500 mt-1">{errors.type.message}</p>
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors.type.message}
+                  </p>
                 )}
                 {type && (
                   <p className="text-sm text-gray-500 mt-1">
@@ -299,10 +303,7 @@ export default function BannerForm({
                   name="status"
                   control={control}
                   render={({ field }) => (
-                    <Select
-                      value={field.value}
-                      onValueChange={field.onChange}
-                    >
+                    <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -314,7 +315,9 @@ export default function BannerForm({
                   )}
                 />
                 {errors.status && (
-                  <p className="text-sm text-red-500 mt-1">{errors.status.message}</p>
+                  <p className="text-sm text-red-500 mt-1">
+                    {errors.status.message}
+                  </p>
                 )}
               </div>
             </div>
@@ -327,7 +330,9 @@ export default function BannerForm({
                 placeholder="https://example.com"
               />
               {errors.link && (
-                <p className="text-sm text-red-500 mt-1">{errors.link.message}</p>
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.link.message}
+                </p>
               )}
             </div>
           </CardContent>
@@ -422,7 +427,9 @@ export default function BannerForm({
                 </div>
               )}
               {errors.imageUrl && (
-                <p className="text-sm text-red-500 mt-1">{errors.imageUrl.message as string}</p>
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.imageUrl.message as string}
+                </p>
               )}
             </div>
           </CardContent>
@@ -506,7 +513,9 @@ export default function BannerForm({
                 </div>
               )}
               {errors.imageEnFile && (
-                <p className="text-sm text-red-500 mt-1">{errors.imageEnFile.message as string}</p>
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.imageEnFile.message as string}
+                </p>
               )}
             </div>
           </CardContent>
@@ -521,7 +530,11 @@ export default function BannerForm({
           >
             Cancel
           </Button>
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white" type="submit" disabled={isSubmitting}>
+          <Button
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+            type="submit"
+            disabled={isSubmitting}
+          >
             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {isEditing ? "Update" : "Create"} Banner
           </Button>
