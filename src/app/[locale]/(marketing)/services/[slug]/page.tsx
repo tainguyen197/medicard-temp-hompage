@@ -11,13 +11,7 @@ import {
   BANNER_TYPES,
   DEFAULT_HERO_IMAGE,
 } from "@/lib/banner-utils";
-
-// Force dynamic rendering to avoid DYNAMIC_SERVER_USAGE error
-export const dynamic = "force-dynamic";
-
-interface ServiceDetailProps {
-  params: Promise<{ slug: string; locale: string }>;
-}
+import { buildApiUrl } from "@/lib/api-utils";
 
 interface Service {
   id: string;
@@ -59,11 +53,11 @@ export async function generateMetadata({
   const t = messages.services.notFound;
 
   try {
-    const response = await fetch(`/api/services/by-slug/${slug}`, {
+    // Use the buildApiUrl utility to construct the proper absolute URL
+    const apiUrl = buildApiUrl(`/api/services/by-slug/${slug}`);
+    const response = await fetch(apiUrl, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
-      next: { revalidate: 0 },
-      cache: "no-store",
     });
 
     if (response.ok) {
@@ -119,8 +113,9 @@ export default async function ServiceDetailPage({
       notFound();
     }
 
-    // Fetch service by slug from API
-    const response = await fetch(`/api/services/by-slug/${slug}`, {
+    // Use the buildApiUrl utility to construct the proper absolute URL
+    const apiUrl = buildApiUrl(`/api/services/by-slug/${slug}`);
+    const response = await fetch(apiUrl, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
       next: { revalidate: 0 },
