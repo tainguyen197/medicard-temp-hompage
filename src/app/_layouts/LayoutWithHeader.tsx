@@ -1,7 +1,7 @@
 import "@/app/globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { prisma } from "@/lib/prisma";
+// Removed direct DB access
 
 export default async function LayoutWithHeader({
   children,
@@ -10,11 +10,14 @@ export default async function LayoutWithHeader({
   children: React.ReactNode;
   locale?: string;
 }>) {
-  const contact = await prisma.contact.findFirst({
-    where: { status: "ACTIVE" },
-    orderBy: { createdAt: "desc" },
-  });
-  const phone = contact?.phone ?? "";
+  let phone = "";
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/contact`, { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      phone = data?.phone ?? "";
+    }
+  } catch {}
 
   return (
     <>

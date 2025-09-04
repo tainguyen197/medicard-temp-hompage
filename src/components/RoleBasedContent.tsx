@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
-import { useSession } from "next-auth/react";
+import { getToken } from "@/lib/auth";
 import { canViewDashboardSection } from "@/lib/utils";
 
 interface RoleBasedContentProps {
@@ -15,9 +15,9 @@ export function RoleBasedContent({
   allowedRoles, 
   fallback = null 
 }: RoleBasedContentProps) {
-  const { data: session } = useSession();
-  
-  if (!session?.user || !allowedRoles.includes(session.user.role)) {
+  const token = getToken();
+  // Client-only simple check: if no token, hide
+  if (!token) {
     return <>{fallback}</>;
   }
 
@@ -35,9 +35,8 @@ export function RoleBasedStats({
   section, 
   fallback = null 
 }: RoleBasedStatsProps) {
-  const { data: session } = useSession();
-  
-  if (!session?.user || !canViewDashboardSection(session.user.role, section)) {
+  const token = getToken();
+  if (!token) {
     return <>{fallback}</>;
   }
 

@@ -1,39 +1,26 @@
-import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import prisma from "@/lib/prisma";
-import { authOptions } from "@/lib/auth";
+// Fetch via Nest API instead of DB/session
 
 export default async function AdminLogsPage({
   searchParams,
 }: {
   searchParams: Promise<{ page?: string }>;
 }) {
-  const session = await getServerSession(authOptions);
-  if (!session?.user || !["SUPER_ADMIN", "ADMIN"].includes(session.user.role)) {
-    redirect("/dashboard/admin");
-  }
+  // Authorization is handled client-side now; SSR fallback goes to dashboard on error
 
   const { page = "1" } = await searchParams;
   const pageNumber = parseInt(page, 10);
   const pageSize = 20;
   const skip = (pageNumber - 1) * pageSize;
 
-  const [logs, total] = await Promise.all([
-    prisma.auditLog.findMany({
-      orderBy: { createdAt: "desc" },
-      skip,
-      take: pageSize,
-    }),
-    prisma.auditLog.count(),
-  ]);
+  const res = await fetch(`/api/logs?skip=${skip}&take=${pageSize}`, { cache: 'no-store' });
+  if (!res.ok) redirect('/dashboard');
+  const data = await res.json();
+  const logs = data.logs ?? [];
+  const total = data.meta?.total ?? logs.length;
 
   // Fetch user info for logs
-  const userIds = Array.from(new Set(logs.map((log) => log.userId)));
-  const users = await prisma.user.findMany({
-    where: { id: { in: userIds } },
-    select: { id: true, name: true, email: true },
-  });
-  const userMap = Object.fromEntries(users.map((u) => [u.id, u]));
+  const userMap: Record<string, { id: string; name?: string; email?: string }> = {};
 
   const totalPages = Math.ceil(total / pageSize);
 

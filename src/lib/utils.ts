@@ -137,20 +137,12 @@ export class Logger {
     userAgent?: string;
   }) {
     try {
-      const { PrismaClient } = await import("@prisma/client");
-      const prisma = new PrismaClient();
-      
-      await prisma.auditLog.create({
-        data: {
-          action: data.action,
-          entity: data.entity,
-          entityId: data.entityId || '',
-          userId: data.userId,
-          details: data.details,
-        },
+      // Send to Nest API (no-op if endpoint not available)
+      await fetch('/api/logs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
       });
-      
-      await prisma.$disconnect();
     } catch (error) {
       console.error('Failed to log action:', error);
     }

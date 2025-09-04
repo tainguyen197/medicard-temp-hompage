@@ -1,12 +1,11 @@
-import { prisma } from "@/lib/prisma";
+// Removed direct DB access
 import { ContactData } from "@/types/contact";
 
 export async function getContactData(): Promise<ContactData | null> {
   try {
-    const contact = await prisma.contact.findFirst({
-      orderBy: { createdAt: "desc" },
-    });
-    return contact;
+    const res = await fetch('/api/contact', { cache: 'no-store' });
+    if (!res.ok) return null;
+    return res.json();
   } catch (error) {
     console.error("Error fetching contact data:", error);
     return null;
@@ -19,8 +18,9 @@ export async function getContactData(): Promise<ContactData | null> {
  */
 export async function getAppointmentLink(): Promise<string> {
   try {
-    const contact = await prisma.contact.findFirst();
-    
+    const res = await fetch('/api/contact', { cache: 'no-store' });
+    if (!res.ok) return "";
+    const contact = await res.json();
     return (contact as any)?.appointmentLink || "";
   } catch (error) {
     console.error("Error fetching appointment link:", error);
@@ -34,9 +34,9 @@ export async function getAppointmentLink(): Promise<string> {
  */
 export async function getContactEmail(): Promise<string> {
   try {
-    const contact = await prisma.contact.findFirst({
-    });
-    
+    const res = await fetch('/api/contact', { cache: 'no-store' });
+    if (!res.ok) return "";
+    const contact = await res.json();
     return (contact as any)?.email || "";
   } catch (error) {
     console.error("Error fetching contact email:", error);
@@ -49,11 +49,9 @@ export async function getContactEmail(): Promise<string> {
  */
 export async function getContactInfo() {
   try {
-    const contact = await prisma.contact.findFirst({
-      orderBy: { createdAt: "desc" },
-    });
-    
-    return contact;
+    const res = await fetch('/api/contact', { cache: 'no-store' });
+    if (!res.ok) return null;
+    return res.json();
   } catch (error) {
     console.error("Error fetching contact information:", error);
     return null;

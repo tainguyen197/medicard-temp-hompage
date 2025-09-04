@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getMessages } from "next-intl/server";
-import { prisma } from "@/lib/prisma";
 import { getContactData, getContactEmail, getAppointmentLink } from "@/lib/contact";
 import {
   getBannerDataByType,

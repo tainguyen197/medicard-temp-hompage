@@ -1,7 +1,5 @@
 import { redirect, notFound } from "next/navigation";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import prisma from "@/lib/prisma";
+// Removed direct DB access
 import TeamMemberForm from "@/components/TeamMemberForm";
 
 interface EditTeamMemberPageProps {
@@ -11,27 +9,14 @@ interface EditTeamMemberPageProps {
 export default async function EditTeamMemberPage({
   params,
 }: EditTeamMemberPageProps) {
-  // Check authentication
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    redirect("/auth/logout");
-  }
-
-  // Check if user has admin or editor role
-  if (!["SUPER_ADMIN", "ADMIN"].includes(session.user.role)) {
-    redirect("/");
-  }
-
   const { id } = await params;
 
-  // Fetch team member
-  const teamMember = await prisma.teamMember.findUnique({
-    where: { id },
-    include: {
-      image: true,
-      imageEn: true,
-    },
-  });
+  // Fetch team member from Nest API
+  const res = await fetch(`/api/team/${id}`, { cache: 'no-store' });
+  if (!res.ok) {
+    notFound();
+  }
+  const teamMember = await res.json();
 
   if (!teamMember) {
     notFound();

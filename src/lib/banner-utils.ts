@@ -1,4 +1,4 @@
-import prisma from "@/lib/prisma";
+// Removed direct DB access; expose helpers to call Nest if needed
 
 interface BannerImage {
   id: string;
@@ -22,28 +22,14 @@ interface BannerData {
 
 export async function getBannerByType(type: string, locale?: string): Promise<string | null> {
   try {
-    const banner = await prisma.banner.findUnique({
-      where: {
-        type: type,
-      },
-      include: {
-        image: true,
-        imageEn: true,
-      },
-    });
-
-    if (banner && banner.status === "ACTIVE") {
-      // Return English image if locale is 'en' and English image exists
-      if (locale === "en" && banner.imageEn?.url) {
-        return banner.imageEn.url;
-      }
-      
-      // Fall back to Vietnamese image (main image)
-      if (banner.image?.url) {
-        return banner.image.url;
-      }
-    }
-
+    const res = await fetch('/api/banners/public', { cache: 'no-store' });
+    if (!res.ok) return null;
+    const data = await res.json();
+    const banners: Banner[] = Array.isArray(data) ? data : (data.banners ?? data.data ?? []);
+    const banner = banners.find((b) => b.type === type && b.status === 'ACTIVE');
+    if (!banner) return null;
+    if (locale === 'en' && banner.imageEn?.url) return banner.imageEn.url;
+    if (banner.image?.url) return banner.image.url;
     return null;
   } catch (error) {
     console.error(`Error fetching ${type} banner:`, error);
@@ -53,42 +39,24 @@ export async function getBannerByType(type: string, locale?: string): Promise<st
 
 export async function getBannerDataByType(type: string, locale?: string): Promise<BannerData> {
   try {
-    const banner = await prisma.banner.findUnique({
-      where: {
-        type: type,
-      },
-      include: {
-        image: true,
-        imageEn: true,
-      },
-    });
+    const res = await fetch('/api/banners/public', { cache: 'no-store' });
+    if (!res.ok) return { imageUrl: null, link: null };
+    const data = await res.json();
+    const banners: Banner[] = Array.isArray(data) ? data : (data.banners ?? data.data ?? []);
+    const banner = banners.find((b) => b.type === type && b.status === 'ACTIVE');
+    if (!banner) return { imageUrl: null, link: null };
 
-    if (banner && banner.status === "ACTIVE") {
-      // Determine which image to use based on locale
-      let imageUrl: string | null = null;
-      
-      if (locale === "en" && banner.imageEn?.url) {
-        imageUrl = banner.imageEn.url;
-      } else if (banner.image?.url) {
-        imageUrl = banner.image.url;
-      }
-
-      return {
-        imageUrl,
-        link: banner.link || null,
-      };
+    let imageUrl: string | null = null;
+    if (locale === 'en' && banner.imageEn?.url) {
+      imageUrl = banner.imageEn.url;
+    } else if (banner.image?.url) {
+      imageUrl = banner.image.url;
     }
 
-    return {
-      imageUrl: null,
-      link: null,
-    };
+    return { imageUrl, link: banner.link || null };
   } catch (error) {
     console.error(`Error fetching ${type} banner data:`, error);
-    return {
-      imageUrl: null,
-      link: null,
-    };
+    return { imageUrl: null, link: null };
   }
 }
 

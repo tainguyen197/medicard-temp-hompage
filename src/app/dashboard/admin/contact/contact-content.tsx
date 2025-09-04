@@ -1,32 +1,14 @@
-import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import { authOptions } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+// Fetch via Nest API instead of DB/session
 import ContactForm from "@/components/ContactForm";
 
 async function getContact() {
-  try {
-    const contact = await prisma.contact.findFirst({
-      orderBy: { createdAt: "desc" },
-    });
-    return contact;
-  } catch (error) {
-    console.error("Error fetching contact:", error);
-    return null;
-  }
+  const res = await fetch(`/api/contact`, { cache: 'no-store' });
+  if (!res.ok) return null;
+  return res.json();
 }
 
 export default async function ContactContent() {
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    redirect("/auth/logout");
-  }
-
-  // Check if user has permission (SUPER_ADMIN, ADMIN or EDITOR)
-  if (!["SUPER_ADMIN", "ADMIN"].includes(session.user.role)) {
-    redirect("/");
-  }
-
   const contact = await getContact();
 
   return (

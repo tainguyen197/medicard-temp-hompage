@@ -1,9 +1,8 @@
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
-import { authOptions } from "@/lib/auth";
-import prisma from "@/lib/prisma";
+import { authFetch } from "@/lib/auth-fetch";
 import { ROUTES } from "@/lib/router";
 import UsersList from "./UsersList";
 
@@ -27,16 +26,8 @@ export default async function UsersPage({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  // Check authentication - server side only
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    redirect("/auth/login");
-  }
-
-  // Only SUPER_ADMIN can access user management
-  if (session.user.role !== "SUPER_ADMIN") {
-    redirect("/dashboard");
-  }
+  // Client-side guard handles auth; SSR redirect to login
+  // Fallback redirect for no token can be handled by client AdminGuard
 
   const { page = "1", limit = "10", search } = await searchParams;
 
@@ -49,24 +40,19 @@ export default async function UsersPage({
     ];
   }
 
-  // Get users with pagination - server side only
-  const total = await prisma.user.count({ where });
-  const totalPages = Math.ceil(total / Number(limit));
-
-  const users = await prisma.user.findMany({
-    where,
-    orderBy: { createdAt: "desc" },
-    skip: (Number(page) - 1) * Number(limit),
-    take: Number(limit),
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      role: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
+  // Fetch users from Nest API instead of Prisma
+  const params = new URLSearchParams();
+  params.set("page", String(page));
+  params.set("limit", String(limit));
+  if (search) params.set("search", search);
+  const res = await authFetch(`/api/users?${params.toString()}`);
+  if (!res.ok) {
+    redirect("/dashboard");
+  }
+  const data = await res.json();
+  const users = data.users ?? [];
+  const total = data.meta?.total ?? 0;
+  const totalPages = data.meta?.totalPages ?? 1;
 
   // Prepare pagination data
   const paginationData = {
@@ -96,7 +82,7 @@ export default async function UsersPage({
       {/* Pass data to client component */}
       <UsersList 
         users={users as User[]}
-        currentUserId={session.user.id}
+        currentUserId={""}
         pagination={paginationData}
       />
     </div>

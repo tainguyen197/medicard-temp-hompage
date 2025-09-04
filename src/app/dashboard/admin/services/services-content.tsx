@@ -1,10 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
-import { authOptions } from "@/lib/auth";
-import prisma from "@/lib/prisma";
+// Fetch via Nest API instead of DB/session
 import ServicesTable from "@/components/ServicesTable";
 import { ROUTES } from "@/lib/router";
 
@@ -20,50 +18,18 @@ export default async function ServicesContent({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  // Check authentication
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    redirect("/auth/login");
-  }
-
   const { page = "1", limit = "10", search, status } = await searchParams;
-
-  // Build filter object
-  const where: any = {};
-
-  if (search) {
-    where.OR = [{ title: { contains: search, mode: "insensitive" } }];
+  const params = new URLSearchParams({ page, limit });
+  if (search) params.set('search', search);
+  if (status) params.set('status', status);
+  const res = await fetch(`/api/services?${params.toString()}`, { cache: 'no-store' });
+  if (!res.ok) {
+    redirect('/dashboard');
   }
-
-  if (status) {
-    where.status = status;
-  }
-
-  // Get services with pagination
-  const total = await prisma.service.count({ where });
-  const totalPages = Math.ceil(total / Number(limit));
-
-  const services = await prisma.service.findMany({
-    where,
-    orderBy: { createdAt: "desc" },
-    skip: (Number(page) - 1) * Number(limit),
-    take: Number(limit),
-    select: {
-      id: true,
-      title: true,
-      slug: true,
-      titleEn: true,
-      description: true,
-      descriptionEn: true,
-      status: true,
-      showOnHomepage: true,
-      createdAt: true,
-      shortDescription: true,
-      shortDescriptionEn: true,
-      featureImage: true,
-      featureImageEn: true,
-    },
-  });
+  const data = await res.json();
+  const services = data.services ?? [];
+  const total = data.meta?.total ?? 0;
+  const totalPages = data.meta?.totalPages ?? 1;
 
   return (
     <>

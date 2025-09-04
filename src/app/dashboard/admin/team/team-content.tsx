@@ -1,10 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
-import { authOptions } from "@/lib/auth";
-import prisma from "@/lib/prisma";
+// Fetch via Nest API instead of DB/session
 import TeamTable from "@/components/TeamTable";
 import { ROUTES } from "@/lib/router";
 
@@ -20,16 +18,6 @@ export default async function TeamContent({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  // Check authentication
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    redirect("/auth/login");
-  }
-
-  if (!["SUPER_ADMIN", "ADMIN"].includes(session.user.role)) {
-    redirect("/");
-  }
-
   const params = await searchParams;
   const page = Number(params.page) || 1;
   const limit = Number(params.limit) || 10;
@@ -38,38 +26,14 @@ export default async function TeamContent({
 
   const skip = (page - 1) * limit;
 
-  // Build where clause
-  const where: any = {};
-
-  if (search) {
-    where.OR = [
-      { name: { contains: search, mode: "insensitive" } },
-      { nameEn: { contains: search, mode: "insensitive" } },
-      { title: { contains: search, mode: "insensitive" } },
-      { titleEn: { contains: search, mode: "insensitive" } },
-      { description: { contains: search, mode: "insensitive" } },
-      { descriptionEn: { contains: search, mode: "insensitive" } },
-    ];
-  }
-
-  if (status) {
-    where.status = status;
-  }
-
-  // Get team members
-  const [teamMembers, totalCount] = await Promise.all([
-    prisma.teamMember.findMany({
-      where,
-      include: {
-        image: true,
-        imageEn: true,
-      },
-      orderBy: [{ order: "asc" }, { createdAt: "desc" }],
-      skip,
-      take: limit,
-    }),
-    prisma.teamMember.count({ where }),
-  ]);
+  const paramsApi = new URLSearchParams({ page: String(page), limit: String(limit) });
+  if (search) paramsApi.set('search', search);
+  if (status) paramsApi.set('status', status);
+  const res = await fetch(`/api/team?${paramsApi.toString()}`, { cache: 'no-store' });
+  if (!res.ok) redirect('/dashboard');
+  const data = await res.json();
+  const teamMembers = data.team ?? data.items ?? [];
+  const totalCount = data.meta?.total ?? 0;
 
   const totalPages = Math.ceil(totalCount / limit);
 

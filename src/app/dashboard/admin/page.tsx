@@ -18,7 +18,6 @@ import { useEffect, useState } from "react";
 import { authFetch } from "@/lib/auth-fetch";
 import Link from "next/link";
 import { ROUTES } from "@/lib/router";
-import { useSession } from "next-auth/react";
 
 interface DashboardStats {
   totalServices: number;
@@ -36,7 +35,6 @@ interface DashboardData {
 }
 
 export default function AdminDashboard() {
-  const { data: session } = useSession();
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(
     null
   );

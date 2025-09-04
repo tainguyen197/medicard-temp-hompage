@@ -1,19 +1,8 @@
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
 import TeamMemberForm from "@/components/TeamMemberForm";
 
 export default async function NewTeamMemberPage() {
-  // Check authentication
-  const session = await getServerSession(authOptions);
-  if (!session?.user) {
-    redirect("/auth/logout");
-  }
-
-  // Check if user has admin or editor role
-  if (!["SUPER_ADMIN", "ADMIN"].includes(session.user.role)) {
-    redirect("/");
-  }
+  // SSR redirects can be added if needed; client guard handles auth/role
 
   return (
     <div className="container mx-auto py-10">

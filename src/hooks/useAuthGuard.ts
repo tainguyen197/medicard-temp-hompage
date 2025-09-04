@@ -1,17 +1,15 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { getToken } from "@/lib/auth";
 
 export function useAuthGuard() {
-  const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (status === "loading") return; // Still loading
-
-    if (!session) {
+    const token = getToken();
+    if (!token) {
       console.log("No session found, redirecting to login");
       router.push("/auth/login");
       return;
@@ -20,8 +18,7 @@ export function useAuthGuard() {
     // Optional: Add session heartbeat
     const checkSession = setInterval(async () => {
       try {
-        const response = await fetch("/api/auth/session");
-        if (!response.ok) {
+        if (!getToken()) {
           console.log("Session expired, logging out");
           router.push("/auth/logout");
         }
@@ -31,7 +28,7 @@ export function useAuthGuard() {
     }, 60000); // Check every minute
 
     return () => clearInterval(checkSession);
-  }, [session, status, router]);
+  }, [router]);
 
-  return { session, status };
+  return {} as const;
 } 
