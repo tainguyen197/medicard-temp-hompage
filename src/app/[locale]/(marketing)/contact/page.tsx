@@ -10,6 +10,9 @@ import {
   DEFAULT_HERO_IMAGE,
 } from "@/lib/banner-utils";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const generateStaticParams = async () => {
   return [{ locale: "en" }, { locale: "vi" }];
 };
@@ -28,6 +31,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
   const contactBanner = await getBannerDataByType(BANNER_TYPES.CONTACT, locale); // Using CONTACT type for contact page
   const heroImage = contactBanner.imageUrl || DEFAULT_HERO_IMAGE;
 
+  console.log("contactData", contactData);
   // Use database data if available, otherwise fall back to hardcoded values
   const contact = {
     phone: contactData?.phone || "_",

@@ -1,16 +1,19 @@
 // Utility function to get the API base URL for server-side requests
 export function getApiBaseUrl(): string {
-  // In production, use the environment variable or the current host
+  // Prefer explicit Nest backend base for server-side requests
+  if (process.env.NEST_API_BASE) {
+    return process.env.NEST_API_BASE;
+  }
+
+  // Fall back to Next server base (will rely on rewrites)
   if (process.env.NEXTAUTH_URL) {
     return process.env.NEXTAUTH_URL;
   }
 
-  // In development, fallback to localhost
   if (process.env.NODE_ENV === "development") {
     return "http://localhost:3000";
   }
 
-  // Fallback for other environments
   return "";
 }
 
@@ -18,5 +21,8 @@ export function getApiBaseUrl(): string {
 export function buildApiUrl(endpoint: string): string {
   const baseUrl = getApiBaseUrl();
   console.log("=====>>>baseUrl", baseUrl);
-  return `${baseUrl}${endpoint.startsWith("/") ? endpoint : `/${endpoint}`}`;
+  const normalizedEndpoint = baseUrl && process.env.NEST_API_BASE
+    ? endpoint.replace(/^\/api/, "")
+    : (endpoint.startsWith("/") ? endpoint : `/${endpoint}`);
+  return `${baseUrl}${normalizedEndpoint}`;
 }

@@ -1,9 +1,13 @@
 // Removed direct DB access
 import { ContactData } from "@/types/contact";
+import { buildApiUrl } from "@/lib/api-utils";
 
 export async function getContactData(): Promise<ContactData | null> {
+  console.log("getContactData");
   try {
-    const res = await fetch('/api/contact', { cache: 'no-store' });
+    const url = buildApiUrl('/api/contact');
+    const res = await fetch(url, { cache: 'no-store', next: { revalidate: 0 } });
+    console.log("res.status", res.status);
     if (!res.ok) return null;
     return res.json();
   } catch (error) {
@@ -18,7 +22,8 @@ export async function getContactData(): Promise<ContactData | null> {
  */
 export async function getAppointmentLink(): Promise<string> {
   try {
-    const res = await fetch('/api/contact', { cache: 'no-store' });
+    const url = buildApiUrl('/api/contact');
+    const res = await fetch(url, { cache: 'no-store', next: { revalidate: 0 } });
     if (!res.ok) return "";
     const contact = await res.json();
     return (contact as any)?.appointmentLink || "";
@@ -34,7 +39,8 @@ export async function getAppointmentLink(): Promise<string> {
  */
 export async function getContactEmail(): Promise<string> {
   try {
-    const res = await fetch('/api/contact', { cache: 'no-store' });
+    const url = buildApiUrl('/api/contact');
+    const res = await fetch(url, { cache: 'no-store', next: { revalidate: 0 } });
     if (!res.ok) return "";
     const contact = await res.json();
     return (contact as any)?.email || "";
@@ -49,7 +55,8 @@ export async function getContactEmail(): Promise<string> {
  */
 export async function getContactInfo() {
   try {
-    const res = await fetch('/api/contact', { cache: 'no-store' });
+    const url = buildApiUrl('/api/contact');
+    const res = await fetch(url, { cache: 'no-store', next: { revalidate: 0 } });
     if (!res.ok) return null;
     return res.json();
   } catch (error) {
