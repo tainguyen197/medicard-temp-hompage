@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Plus, Loader2 } from "lucide-react";
 import { ROUTES } from "@/lib/router";
 import EquipmentTable from "./equipment-content";
+import { authFetch } from "@/lib/auth-fetch";
 
 export default function EquipmentPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -14,7 +15,7 @@ export default function EquipmentPage() {
   useEffect(() => {
     const fetchEquipment = async () => {
       try {
-        const response = await fetch("/api/equipment");
+        const response = await authFetch("/api/equipment");
         if (!response.ok) {
           throw new Error("Failed to fetch equipment data");
         }

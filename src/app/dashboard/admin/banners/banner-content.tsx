@@ -5,6 +5,7 @@ import Link from "next/link";
 import { PlusIcon } from "lucide-react";
 import BannerTable from "@/components/BannerTable";
 import { Banner } from "@/types/banner";
+import { authFetch } from "@/lib/auth-fetch";
 
 export default function BannerContent() {
   const [banners, setBanners] = useState<Banner[]>([]);
@@ -16,7 +17,7 @@ export default function BannerContent() {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("/api/banners");
+      const response = await authFetch("/api/banners");
 
       if (!response.ok) {
         throw new Error("Failed to fetch banners");

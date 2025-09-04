@@ -7,6 +7,7 @@ import { ROUTES } from "@/lib/router";
 import {  NewsFormValues, Category } from "./useNewsForm";
 import { cleanContentForSubmission } from "@/lib/content-utils";
 import { newsFormSchema } from "@/utils/news";
+import { authFetch } from "@/lib/auth-fetch";
 
 export function useNewsEditForm(newsId: string) {
   const router = useRouter();
@@ -60,14 +61,14 @@ export function useNewsEditForm(newsId: string) {
     const fetchCategories = async () => {
       try {
         // Fetch Vietnamese categories
-        const responseVi = await fetch("/api/categories?language=vi");
+        const responseVi = await authFetch("/api/categories?language=vi");
         if (responseVi.ok) {
           const dataVi = await responseVi.json();
           setCategoriesVi(dataVi.categories || []);
         }
 
         // Fetch English categories
-        const responseEn = await fetch("/api/categories?language=en");
+        const responseEn = await authFetch("/api/categories?language=en");
         if (responseEn.ok) {
           const dataEn = await responseEn.json();
           setCategoriesEn(dataEn.categories || []);
@@ -167,7 +168,7 @@ export function useNewsEditForm(newsId: string) {
 
     setIsCreatingCategory(true);
     try {
-      const response = await fetch("/api/categories", {
+      const response = await authFetch("/api/categories", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -209,7 +210,7 @@ export function useNewsEditForm(newsId: string) {
 
     setIsCreatingCategoryEn(true);
     try {
-      const response = await fetch("/api/categories", {
+      const response = await authFetch("/api/categories", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

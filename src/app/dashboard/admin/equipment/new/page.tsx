@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { ROUTES } from "@/lib/router";
+import { authFetch } from "@/lib/auth-fetch";
 import EquipmentForm from "../equipment-form";
 import { toast } from "sonner";
 
@@ -18,7 +19,7 @@ export default function NewEquipmentPage() {
     setError(null);
 
     try {
-      const response = await fetch("/api/equipment", {
+      const response = await authFetch("/api/equipment", {
         method: "POST",
         body: formData,
       });

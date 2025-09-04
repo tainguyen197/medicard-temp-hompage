@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Loader2, Upload, X, Crop as CropIcon } from "lucide-react";
 import ReactCrop, { type Crop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
+import { authFetch } from "@/lib/auth-fetch";
 
 interface ImageUploadProps {
   value: string;
@@ -136,7 +137,7 @@ export default function ImageUpload({
       formData.append("upload", croppedFile);
 
       // Send the request
-      const response = await fetch("/api/upload_image", {
+      const response = await authFetch("/api/upload_image", {
         method: "POST",
         body: formData,
       });

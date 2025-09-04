@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { ROUTES } from "@/lib/router";
 import UsersTable from "@/components/UsersTable";
+import { authFetch } from "@/lib/auth-fetch";
 
 type User = {
   id: string;
@@ -69,7 +70,7 @@ export default function UsersList({
     setIsCreating(true);
 
     try {
-      const response = await fetch("/api/users", {
+      const response = await authFetch("/api/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

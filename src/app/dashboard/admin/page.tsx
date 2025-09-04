@@ -15,6 +15,7 @@ import {
   Settings,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { authFetch } from "@/lib/auth-fetch";
 import Link from "next/link";
 import { ROUTES } from "@/lib/router";
 import { useSession } from "next-auth/react";
@@ -45,7 +46,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await fetch("/api/dashboard/stats");
+        const response = await authFetch("/api/dashboard/stats");
         if (!response.ok) {
           throw new Error("Failed to fetch dashboard data");
         }

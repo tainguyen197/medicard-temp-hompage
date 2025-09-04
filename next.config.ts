@@ -8,6 +8,13 @@ export const config = {
 };
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    const target = process.env.NEST_API_BASE || 'http://localhost:3001';
+    return [
+      { source: '/api/auth/:path*', destination: '/api/auth/:path*' },
+      { source: '/api/:path*', destination: `${target}/:path*` },
+    ];
+  },
   images: {
     remotePatterns: [
       {

@@ -61,7 +61,7 @@ export default function ContactForm({ contact }: ContactFormProps) {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/contact", {
+      const response = await authFetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

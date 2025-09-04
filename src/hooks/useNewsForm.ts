@@ -7,6 +7,7 @@ import { z } from "zod";
 import { ROUTES } from "@/lib/router";
 import { cleanContentForSubmission } from "@/lib/content-utils";
 import { newsFormSchema } from "@/utils/news";
+import { authFetch } from "@/lib/auth-fetch";
 
 // Define the Category interface
 export interface Category {
@@ -71,14 +72,14 @@ export function useNewsForm(initialData?: Partial<NewsFormValues>) {
     const fetchCategories = async () => {
       try {
         // Fetch Vietnamese categories
-        const responseVi = await fetch("/api/categories?language=vi");
+        const responseVi = await authFetch("/api/categories?language=vi");
         if (responseVi.ok) {
           const dataVi = await responseVi.json();
           setCategoriesVi(dataVi.categories || []);
         }
 
         // Fetch English categories
-        const responseEn = await fetch("/api/categories?language=en");
+        const responseEn = await authFetch("/api/categories?language=en");
         if (responseEn.ok) {
           const dataEn = await responseEn.json();
           setCategoriesEn(dataEn.categories || []);
@@ -129,7 +130,7 @@ export function useNewsForm(initialData?: Partial<NewsFormValues>) {
 
     setIsCreatingCategory(true);
     try {
-      const response = await fetch("/api/categories", {
+      const response = await authFetch("/api/categories", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -171,7 +172,7 @@ export function useNewsForm(initialData?: Partial<NewsFormValues>) {
 
     setIsCreatingCategoryEn(true);
     try {
-      const response = await fetch("/api/categories", {
+      const response = await authFetch("/api/categories", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -211,7 +212,7 @@ export function useNewsForm(initialData?: Partial<NewsFormValues>) {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/news", {
+      const response = await authFetch("/api/news", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

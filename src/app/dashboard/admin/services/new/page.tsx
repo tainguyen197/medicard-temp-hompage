@@ -22,6 +22,7 @@ import { ROUTES } from "@/lib/router";
 import { TextEditor } from "taitrung-super-editor";
 import { cleanContentForSubmission } from "@/lib/content-utils";
 import { serviceFormSchema } from "@/utils/services";
+import { authFetch } from "@/lib/auth-fetch";
 
 type ServiceFormValues = z.infer<typeof serviceFormSchema>;
 
@@ -107,7 +108,7 @@ export default function NewServicePage() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/services", {
+      const response = await authFetch("/api/services", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
