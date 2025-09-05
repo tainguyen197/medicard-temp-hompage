@@ -28,10 +28,7 @@ export default function AdminLogsPage({
         const skip = (pageNumber - 1) * pageSize;
 
         const res = await authFetch(`/api/logs?skip=${skip}&take=${pageSize}`);
-        if (!res.ok) {
-          router.push('/dashboard');
-          return;
-        }
+
         
         const data = await res.json();
         setLogs(data.logs ?? []);

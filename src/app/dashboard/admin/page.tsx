@@ -67,6 +67,9 @@ export default function AdminDashboard() {
           if (profileRes.ok) {
             const user = await profileRes.json();
             role = user?.role || role;
+          } else if (profileRes.status === 401) {
+            // 401 will be handled by authFetch redirect, just return early
+            return;
           }
         } catch (_) {
           // ignore role fetch errors; default role remains

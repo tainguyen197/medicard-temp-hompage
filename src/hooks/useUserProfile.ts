@@ -26,7 +26,12 @@ export function useUserProfile() {
         const response = await authFetch("/api/auth/profile");
         
         if (!response.ok) {
-          throw new Error("Failed to fetch user profile");
+          // If it's a 401, authFetch will handle the redirect to logout
+          // For other errors, throw an error
+          if (response.status !== 401) {
+            throw new Error("Failed to fetch user profile");
+          }
+          return; // Exit early for 401 responses
         }
         
         const userData = await response.json();
