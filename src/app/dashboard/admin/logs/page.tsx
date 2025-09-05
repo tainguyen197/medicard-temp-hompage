@@ -1,28 +1,77 @@
-import { redirect } from "next/navigation";
-// Fetch via Nest API instead of DB/session
+"use client";
 
-export default async function AdminLogsPage({
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { authFetch } from "@/lib/auth-fetch";
+
+export default function AdminLogsPage({
   searchParams,
 }: {
   searchParams: Promise<{ page?: string }>;
 }) {
-  // Authorization is handled client-side now; SSR fallback goes to dashboard on error
+  const router = useRouter();
+  const [logs, setLogs] = useState<any[]>([]);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const { page = "1" } = await searchParams;
-  const pageNumber = parseInt(page, 10);
+  useEffect(() => {
+    const fetchLogs = async () => {
+      try {
+        const resolvedParams = await searchParams;
+        const { page = "1" } = resolvedParams;
+        const pageNumber = parseInt(page, 10);
+        setCurrentPage(pageNumber);
+        
+        const pageSize = 20;
+        const skip = (pageNumber - 1) * pageSize;
+
+        const res = await authFetch(`/api/logs?skip=${skip}&take=${pageSize}`);
+        if (!res.ok) {
+          router.push('/dashboard');
+          return;
+        }
+        
+        const data = await res.json();
+        setLogs(data.logs ?? []);
+        setTotal(data.meta?.total ?? data.logs?.length ?? 0);
+      } catch (err) {
+        setError("Failed to load logs");
+        console.error("Error fetching logs:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchLogs();
+  }, [searchParams, router]);
+
   const pageSize = 20;
-  const skip = (pageNumber - 1) * pageSize;
-
-  const res = await fetch(`/api/logs?skip=${skip}&take=${pageSize}`, { cache: 'no-store' });
-  if (!res.ok) redirect('/dashboard');
-  const data = await res.json();
-  const logs = data.logs ?? [];
-  const total = data.meta?.total ?? logs.length;
-
-  // Fetch user info for logs
-  const userMap: Record<string, { id: string; name?: string; email?: string }> = {};
-
   const totalPages = Math.ceil(total / pageSize);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto py-10">
+        <h1 className="text-3xl font-bold mb-6">Audit Logs</h1>
+        <div className="text-center py-12">
+          <div className="text-slate-600">Loading logs...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto py-10">
+        <h1 className="text-3xl font-bold mb-6">Audit Logs</h1>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-8 text-center">
+          <div className="text-red-600 mb-2">Error</div>
+          <p className="text-red-700">{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto py-10">
@@ -48,9 +97,7 @@ export default async function AdminLogsPage({
                   })}
                 </td>
                 <td className="px-4 py-2 whitespace-nowrap">
-                  {userMap[log.userId]?.name ||
-                    userMap[log.userId]?.email ||
-                    log.userId}
+                  {log.userId}
                 </td>
                 <td className="px-4 py-2 whitespace-nowrap">{log.action}</td>
                 <td className="px-4 py-2 whitespace-nowrap">{log.entity}</td>
@@ -64,28 +111,28 @@ export default async function AdminLogsPage({
       {/* Pagination */}
       <div className="flex justify-between items-center mt-4">
         <span>
-          Page {pageNumber} of {totalPages}
+          Page {currentPage} of {totalPages}
         </span>
         <div className="space-x-2">
           <a
-            href={`?page=${pageNumber - 1}`}
+            href={`?page=${currentPage - 1}`}
             className={`px-3 py-1 rounded ${
-              pageNumber <= 1
+              currentPage <= 1
                 ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                 : "bg-blue-600 text-white hover:bg-blue-700"
             }`}
-            aria-disabled={pageNumber <= 1}
+            aria-disabled={currentPage <= 1}
           >
             Previous
           </a>
           <a
-            href={`?page=${pageNumber + 1}`}
+            href={`?page=${currentPage + 1}`}
             className={`px-3 py-1 rounded ${
-              pageNumber >= totalPages
+              currentPage >= totalPages
                 ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                 : "bg-blue-600 text-white hover:bg-blue-700"
             }`}
-            aria-disabled={pageNumber >= totalPages}
+            aria-disabled={currentPage >= totalPages}
           >
             Next
           </a>
