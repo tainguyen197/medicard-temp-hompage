@@ -5,13 +5,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Loader2,
@@ -20,6 +13,7 @@ import {
   Facebook,
 } from "lucide-react";
 import { toast } from "sonner";
+import { authFetch } from "@/lib/auth-fetch";
 
 interface Contact {
   id: string;
@@ -62,7 +56,7 @@ export default function ContactForm({ contact }: ContactFormProps) {
 
     try {
       const response = await authFetch("/api/contact", {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },

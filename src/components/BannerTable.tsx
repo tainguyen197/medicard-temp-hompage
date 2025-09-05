@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Edit, Trash2, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { Banner } from "@/types/banner";
+import { authFetch } from "@/lib/auth-fetch";
 
 
 interface BannerTableProps {
@@ -65,7 +66,7 @@ export default function BannerTable({ banners, onUpdate }: BannerTableProps) {
 
     try {
       setDeleteLoading(id);
-      const response = await fetch(`/api/banners/${id}`, {
+      const response = await authFetch(`/api/banners/${id}`, {
         method: "DELETE",
       });
 

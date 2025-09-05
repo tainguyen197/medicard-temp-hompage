@@ -14,6 +14,7 @@ import {
   HardDrive,
 } from "lucide-react";
 import { toast } from "sonner";
+import { authFetch } from "@/lib/auth-fetch";
 
 interface MediaFile {
   id: string;
@@ -120,7 +121,7 @@ export default function MediaContent({
 
     try {
       setDeletingId(id);
-      const response = await fetch(`/api/media/${id}`, {
+      const response = await authFetch(`/api/media/${id}`, {
         method: "DELETE",
       });
 

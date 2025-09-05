@@ -1,9 +1,9 @@
-import { redirect } from "next/navigation";
-import { redirect } from "next/navigation";
-import { Suspense } from "react";
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { authFetch } from "@/lib/auth-fetch";
-import { ROUTES } from "@/lib/router";
 import UsersList from "./UsersList";
 
 type SearchParams = {
@@ -21,47 +21,90 @@ type User = {
   updatedAt: Date;
 };
 
-export default async function UsersPage({
+export default function UsersPage({
   searchParams,
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  // Client-side guard handles auth; SSR redirect to login
-  // Fallback redirect for no token can be handled by client AdminGuard
+  const router = useRouter();
+  const [users, setUsers] = useState<User[]>([]);
+  const [paginationData, setPaginationData] = useState({
+    currentPage: 1,
+    limit: 10,
+    total: 0,
+    totalPages: 1,
+    search: "",
+  });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const { page = "1", limit = "10", search } = await searchParams;
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const resolvedParams = await searchParams;
+        const { page = "1", limit = "10", search } = resolvedParams;
 
-  // Build filter object
-  const where: any = {};
-  if (search) {
-    where.OR = [
-      { email: { contains: search, mode: "insensitive" } },
-      { name: { contains: search, mode: "insensitive" } },
-    ];
+        // Fetch users from Nest API
+        const params = new URLSearchParams();
+        params.set("page", String(page));
+        params.set("limit", String(limit));
+        if (search) params.set("search", search);
+        
+        const res = await authFetch(`/api/users?${params.toString()}`);
+        if (!res.ok) {
+          router.push("/dashboard");
+          return;
+        }
+        const data = await res.json();
+        setUsers(data.users ?? []);
+        
+        const total = data.meta?.total ?? 0;
+        const totalPages = data.meta?.totalPages ?? 1;
+        
+        setPaginationData({
+          currentPage: Number(page),
+          limit: Number(limit),
+          total,
+          totalPages,
+          search: search || "",
+        });
+      } catch (err) {
+        setError("Failed to load users");
+        console.error("Error fetching users:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, [searchParams, router]);
+
+  if (loading) {
+    return (
+      <div className="container mx-auto py-10">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold">User Management</h1>
+        </div>
+        <div className="text-center py-12">
+          <div className="text-slate-600">Loading users...</div>
+        </div>
+      </div>
+    );
   }
 
-  // Fetch users from Nest API instead of Prisma
-  const params = new URLSearchParams();
-  params.set("page", String(page));
-  params.set("limit", String(limit));
-  if (search) params.set("search", search);
-  const res = await authFetch(`/api/users?${params.toString()}`);
-  if (!res.ok) {
-    redirect("/dashboard");
+  if (error) {
+    return (
+      <div className="container mx-auto py-10">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold">User Management</h1>
+        </div>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-8 text-center">
+          <div className="text-red-600 mb-2">Error</div>
+          <p className="text-red-700">{error}</p>
+        </div>
+      </div>
+    );
   }
-  const data = await res.json();
-  const users = data.users ?? [];
-  const total = data.meta?.total ?? 0;
-  const totalPages = data.meta?.totalPages ?? 1;
-
-  // Prepare pagination data
-  const paginationData = {
-    currentPage: Number(page),
-    limit: Number(limit),
-    total,
-    totalPages,
-    search: search || "",
-  };
 
   return (
     <div className="container mx-auto py-10">
@@ -81,7 +124,7 @@ export default async function UsersPage({
 
       {/* Pass data to client component */}
       <UsersList 
-        users={users as User[]}
+        users={users}
         currentUserId={""}
         pagination={paginationData}
       />

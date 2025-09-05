@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { authFetch } from "@/lib/auth-fetch";
 import {
   teamMemberSchema,
   MAX_DESCRIPTION_LENGTH,
@@ -162,7 +163,7 @@ export default function TeamMemberForm({
       }
       const url = isEdit ? `/api/team/${teamMemberId}` : "/api/team";
       const method = isEdit ? "PUT" : "POST";
-      const response = await fetch(url, { method, body: submitData });
+      const response = await authFetch(url, { method, body: submitData });
       const respData = await response.json();
       if (!response.ok) {
         setIsSubmitting(false);

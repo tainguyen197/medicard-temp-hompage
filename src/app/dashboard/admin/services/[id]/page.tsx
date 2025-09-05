@@ -18,6 +18,7 @@ import ImageUpload from "@/components/ImageUpload";
 import { ROUTES } from "@/lib/router";
 import { TextEditor } from "taitrung-super-editor";
 import { cleanContentForSubmission } from "@/lib/content-utils";
+import { authFetch } from "@/lib/auth-fetch";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { serviceFormSchema } from "@/utils/services";
@@ -151,7 +152,7 @@ export default function EditServicePage({
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`/api/services/${id}`, {
+      const response = await authFetch(`/api/services/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

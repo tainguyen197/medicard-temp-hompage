@@ -10,7 +10,7 @@ export default function AdminGuard({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     const t = getToken();
     if (!t) {
-      router.replace('/login');
+      router.replace('/auth/login');
       return;
     }
     setReady(true);

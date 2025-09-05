@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { AlertTriangleIcon } from "lucide-react";
+import { authFetch } from "@/lib/auth-fetch";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -40,7 +41,7 @@ export default function DeleteServiceModal({
     setIsDeleting(true);
 
     try {
-      const response = await fetch(`/api/services/${service.id}`, {
+      const response = await authFetch(`/api/services/${service.id}`, {
         method: "DELETE",
       });
 

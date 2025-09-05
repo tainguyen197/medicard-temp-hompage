@@ -44,12 +44,49 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await authFetch("/api/dashboard/stats");
-        if (!response.ok) {
-          throw new Error("Failed to fetch dashboard data");
+        // 1) Fetch flat counts from Nest
+        const statsRes = await authFetch("/api/dashboard/stats");
+        if (!statsRes.ok) {
+          throw new Error("Failed to fetch dashboard stats");
         }
-        const data = await response.json();
-        setDashboardData(data);
+        const flat = await statsRes.json() as {
+          users: number;
+          news: number;
+          services: number;
+          equipment: number;
+          team: number;
+          banners: number;
+          media: number;
+          categories: number;
+        };
+
+        // 2) Fetch current user profile to determine role
+        let role = "EDITOR";
+        try {
+          const profileRes = await authFetch("/api/auth/profile");
+          if (profileRes.ok) {
+            const user = await profileRes.json();
+            role = user?.role || role;
+          }
+        } catch (_) {
+          // ignore role fetch errors; default role remains
+        }
+
+        // 3) Map flat stats to UI structure
+        const mapped: DashboardData = {
+          stats: {
+            totalServices: flat.services,
+            totalTeamMembers: flat.team,
+            totalMedia: flat.media,
+            totalBanners: flat.banners,
+            totalEquipment: flat.equipment,
+            totalUsers: flat.users,
+            totalLogs: 0,
+          },
+          userRole: role,
+        };
+
+        setDashboardData(mapped);
       } catch (err) {
         setError("Failed to load dashboard data");
         console.error("Error fetching dashboard data:", err);
@@ -131,6 +168,8 @@ export default function AdminDashboard() {
   }
 
   if (!dashboardData) return null;
+
+  console.log("dashboardData", dashboardData);
 
   const { stats, userRole } = dashboardData;
 

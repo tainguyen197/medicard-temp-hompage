@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { login } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -11,6 +11,10 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    console.log("LoginPage mounted");
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,19 +28,9 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const result = await signIn("credentials", {
-        redirect: false,
-        email,
-        password,
-      });
-
-      if (result?.error) {
-        setError("Invalid email or password");
-        setIsLoading(false);
-      } else {
-        router.push("/admin");
-        router.refresh();
-      }
+      await login({ email, password });
+      router.push("/dashboard/admin");
+      router.refresh();
     } catch (error) {
       setError("Something went wrong. Please try again.");
       setIsLoading(false);

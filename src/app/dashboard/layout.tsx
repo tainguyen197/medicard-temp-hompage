@@ -3,7 +3,6 @@ import "@/app/dashboard/globals.css";
 import { Inter } from "next/font/google";
 import { Metadata } from "next";
 import { Providers } from "@/app/dashboard/providers";
-import AdminGuard from "@/components/AdminGuard";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,9 +19,7 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body className={inter.className}>
-        <Providers>
-          <AdminGuard>{children}</AdminGuard>
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

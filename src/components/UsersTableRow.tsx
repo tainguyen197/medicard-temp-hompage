@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { PencilIcon, TrashIcon, X } from "lucide-react";
 import { toast } from "sonner";
+import { authFetch } from "@/lib/auth-fetch";
 
 interface User {
   id: string;
@@ -54,7 +55,7 @@ export default function UsersTableRow({
         updateData.password = editForm.password;
       }
 
-      const response = await fetch(`/api/users/${user.id}`, {
+      const response = await authFetch(`/api/users/${user.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -88,7 +89,7 @@ export default function UsersTableRow({
   const confirmDelete = async () => {
     setIsDeleting(true);
     try {
-      const response = await fetch(`/api/users/${user.id}`, {
+      const response = await authFetch(`/api/users/${user.id}`, {
         method: "DELETE",
       });
       if (!response.ok) {

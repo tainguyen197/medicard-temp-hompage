@@ -20,7 +20,7 @@ export default function EquipmentPage() {
           throw new Error("Failed to fetch equipment data");
         }
         const data = await response.json();
-        setEquipmentItems(data);
+        setEquipmentItems(data.equipment || []);
       } catch (err) {
         console.error("Error fetching equipment:", err);
         setError("Failed to load equipment data");

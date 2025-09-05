@@ -69,7 +69,11 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/not-found", request.url));
   }
 
-  // Handle internationalization for marketing pages
+  // Handle internationalization for marketing pages (but not dashboard subdomain)
+  if (subdomain === "dashboard") {
+    return NextResponse.next();
+  }
+  
   return intlMiddleware(request);
 }
 

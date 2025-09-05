@@ -7,6 +7,7 @@ import Link from "next/link";
 import { ROUTES } from "@/lib/router";
 import EquipmentForm from "../equipment-form";
 import { toast } from "sonner";
+import { authFetch } from "@/lib/auth-fetch";
 
 interface EquipmentPageProps {
   params: Promise<{
@@ -52,7 +53,7 @@ export default function EditEquipmentPage({ params }: EquipmentPageProps) {
     setError(null);
     const { id } = await params;
     try {
-      const response = await fetch(`/api/equipment/${id}`, {
+      const response = await authFetch(`/api/equipment/${id}`, {
         method: "PUT",
         body: formData,
       });

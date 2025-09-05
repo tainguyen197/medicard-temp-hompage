@@ -5,6 +5,7 @@ import { StarIcon } from "lucide-react";
 import { ROUTES } from "@/lib/router";
 import { useState } from "react";
 import { toast } from "sonner";
+import { authFetch } from "@/lib/auth-fetch";
 
 interface News {
   id: string;
@@ -53,7 +54,7 @@ export default function PostTableRow({
     setIsDeleting(true);
 
     try {
-      const response = await fetch(`/api/news/${news.id}`, {
+      const response = await authFetch(`/api/news/${news.id}`, {
         method: "DELETE",
       });
 

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { CheckCircle, XCircle } from "lucide-react";
 import { ROUTES } from "@/lib/router";
 import { Equipment } from "@/types/equiment";
+import { authFetch } from "@/lib/auth-fetch";
 
 interface EquipmentTableProps {
   equipment: Equipment[];
@@ -31,7 +32,7 @@ export default function EquipmentTable({ equipment }: EquipmentTableProps) {
     setDeleteError(null);
 
     try {
-      const response = await fetch(`/api/equipment/${equipmentToDelete}`, {
+      const response = await authFetch(`/api/equipment/${equipmentToDelete}`, {
         method: "DELETE",
       });
 

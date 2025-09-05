@@ -18,6 +18,7 @@ import { Loader2, Upload, X, Info } from "lucide-react";
 import { toast } from "sonner";
 import { Banner } from "@/types/banner";
 import { useForm, Controller } from "react-hook-form";
+import { authFetch } from "@/lib/auth-fetch";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { bannerSchema } from "@/utils/banner";
@@ -178,7 +179,7 @@ export default function BannerForm({
         ? `/api/banners/${initialData?.id}`
         : "/api/banners";
       const method = isEditing ? "PUT" : "POST";
-      const response = await fetch(url, {
+      const response = await authFetch(url, {
         method,
         body: submitData,
       });

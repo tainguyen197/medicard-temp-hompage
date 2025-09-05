@@ -8,7 +8,7 @@ export function LogoutButton() {
     <button
       onClick={() => {
         logout();
-        router.replace('/login');
+        router.replace('/auth/login');
       }}
     >
       Logout

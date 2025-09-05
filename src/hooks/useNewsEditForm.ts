@@ -255,7 +255,7 @@ export function useNewsEditForm(newsId: string) {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`/api/news/${newsId}`, {
+      const response = await authFetch(`/api/news/${newsId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
