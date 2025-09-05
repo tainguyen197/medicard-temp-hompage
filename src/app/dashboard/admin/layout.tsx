@@ -20,6 +20,7 @@ import { MessageHandler } from "@/components/MessageHandler";
 import { AdminNavigation } from "./components/AdminNavigation";
 import NextImage from "next/image";
 import { AdminLayoutClient } from "./AdminLayoutClient";
+import { UserProfile } from "@/components/UserProfile";
 
 export default function AdminLayout({
   children,
@@ -137,38 +138,7 @@ export default function AdminLayout({
               </div>
 
               {/* User Profile Section */}
-              <div className="p-6 border-t border-slate-700/50 flex-shrink-0">
-                <div className="flex items-center mb-4">
-                  <div className="w-10 h-10 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-full flex items-center justify-center">
-                    <span className="text-slate-900 font-semibold text-sm">
-                      U
-                    </span>
-                  </div>
-                  <div className="ml-3">
-                    <div className="font-medium text-white">User</div>
-                    <div className="text-sm text-slate-300">ADMIN</div>
-                  </div>
-                </div>
-                <Link
-                  href={ROUTES.AUTH_LOGOUT}
-                  className="flex items-center w-full px-4 py-2 text-red-300 hover:bg-red-900/20 hover:text-red-200 rounded-lg transition-colors duration-200"
-                >
-                  <svg
-                    className="h-4 w-4 mr-3"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                    />
-                  </svg>
-                  Sign Out
-                </Link>
-              </div>
+              <UserProfile />
             </aside>
 
             {/* Main content - only this should scroll */}
