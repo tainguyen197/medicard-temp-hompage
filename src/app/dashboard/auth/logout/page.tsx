@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { logout } from "@/lib/auth";
 import { ROUTES } from "@/lib/router";
 
 export default function LogoutPage() {
@@ -12,27 +12,24 @@ export default function LogoutPage() {
   useEffect(() => {
     const performLogout = async () => {
       try {
-        // First call your custom logout API to clear cookies and log the event
-        await fetch('/api/auth/logout', { 
-          method: 'POST',
-          credentials: 'include' 
-        });
-
-        // Then use NextAuth signOut with proper callback
-        await signOut({ 
-          redirect: true,
-          callbackUrl: ROUTES.AUTH_LOGIN 
-        });
+        // Clear the JWT token from localStorage
+        await logout();
+        
+        // Redirect to login page
+        router.push(ROUTES.AUTH_LOGIN);
+        router.refresh();
         
       } catch (error) {
         console.error('Logout error:', error);
         // Fallback: force redirect anyway
         window.location.href = ROUTES.AUTH_LOGIN;
+      } finally {
+        setIsLoggingOut(false);
       }
     };
 
     performLogout();
-  }, []);
+  }, [router]);
 
   return (
     <div className="flex items-center justify-center h-screen">

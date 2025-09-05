@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { hash } from "bcrypt";
+import { hash } from "bcryptjs";
 
 const prisma = new PrismaClient();
 
@@ -19,7 +19,7 @@ async function main() {
   });
 
   const superAdmin = await prisma.user.upsert({
-    where: { email: "ç" },
+    where: { email: "superadmin@medicare.com" },
     update: {},
     create: {
       email: "superadmin@medicare.com",
