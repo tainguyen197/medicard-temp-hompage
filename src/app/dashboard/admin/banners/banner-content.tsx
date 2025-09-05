@@ -24,7 +24,7 @@ export default function BannerContent() {
       }
 
       const data = await response.json();
-      setBanners(data.banners || []);
+      setBanners(data.data || []);
     } catch (error) {
       console.error("Error fetching banners:", error);
       setError(

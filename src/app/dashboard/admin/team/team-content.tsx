@@ -49,8 +49,8 @@ export default function TeamContent({
           return;
         }
         const data = await res.json();
-        setTeamMembers(data.team ?? data.items ?? []);
-        setTotalCount(data.meta?.total ?? 0);
+        setTeamMembers(data.data ?? []);
+        setTotalCount(data.pagination?.total ?? 0);
       } catch (err) {
         setError("Failed to load team members");
         console.error("Error fetching team:", err);
