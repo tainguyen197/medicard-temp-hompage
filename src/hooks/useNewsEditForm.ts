@@ -86,7 +86,7 @@ export function useNewsEditForm(newsId: string) {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await fetch(`/api/news/${newsId}`);
+        const response = await authFetch(`/api/news/${newsId}`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch news article");

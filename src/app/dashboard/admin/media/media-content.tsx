@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   Search,
@@ -70,7 +70,7 @@ export default function MediaContent({
     loadParams();
   }, [searchParams]);
 
-  const fetchMediaFiles = async () => {
+  const fetchMediaFiles = useCallback(async () => {
     try {
       setLoading(true);
       const searchParams = new URLSearchParams();
@@ -79,28 +79,38 @@ export default function MediaContent({
       if (params.limit) searchParams.set("limit", params.limit);
       if (params.search) searchParams.set("search", params.search);
 
-      const response = await fetch(`/api/media?${searchParams}`);
+      const response = await authFetch(`/api/media?${searchParams}`);
 
       if (!response.ok) {
         throw new Error("Failed to fetch media files");
       }
 
       const data = await response.json();
-      setMediaFiles(data.mediaFiles);
-      setMeta(data.meta);
+      console.log('Media API response:', data); // Debug log
+      setMediaFiles(data.data || data.mediaFiles || []);
+      
+      // Handle different meta response structures
+      const metaData = data.meta || data.pagination || data;
+      setMeta(metaData ? {
+        total: metaData.total || metaData.count || 0,
+        page: metaData.page || metaData.currentPage || 1,
+        limit: metaData.limit || metaData.pageSize || 10,
+        totalPages: metaData.totalPages || metaData.totalPage || 1,
+        totalSizeMB: metaData.totalSizeMB || metaData.totalSize || "0"
+      } : null);
     } catch (error) {
       console.error("Error fetching media files:", error);
       toast.error("Failed to load media files");
     } finally {
       setLoading(false);
     }
-  };
+  }, [params]);
 
   useEffect(() => {
     if (Object.keys(params).length > 0) {
       fetchMediaFiles();
     }
-  }, [params]);
+  }, [params, fetchMediaFiles]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -214,7 +224,7 @@ export default function MediaContent({
       </form>
 
       {/* Media Grid */}
-      {mediaFiles.length > 0 ? (
+      {mediaFiles && mediaFiles.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {mediaFiles.map((file) => (
             <div

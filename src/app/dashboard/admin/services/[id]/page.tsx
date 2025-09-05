@@ -75,7 +75,7 @@ export default function EditServicePage({
   useEffect(() => {
     const fetchService = async () => {
       try {
-        const response = await fetch(`/api/services/${id}`);
+        const response = await authFetch(`/api/services/${id}`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch service");

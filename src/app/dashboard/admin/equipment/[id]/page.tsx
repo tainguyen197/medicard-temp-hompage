@@ -27,7 +27,7 @@ export default function EditEquipmentPage({ params }: EquipmentPageProps) {
     const fetchEquipment = async () => {
       const { id } = await params;
       try {
-        const response = await fetch(`/api/equipment/${id}`, {
+        const response = await authFetch(`/api/equipment/${id}`, {
           cache: "no-store",
         });
         
