@@ -1,9 +1,17 @@
 // Removed direct DB access; expose helpers to call Nest if needed
 
+// NestJS backend URL - update this if your backend runs on a different port
+const BACKEND_URL = process.env.NEST_API_BASE;
+
 interface BannerImage {
   id: string;
   url: string;
-  filename: string;
+  fileName: string;
+  fileSize: number;
+  fileType: string;
+  originalName: string;
+  uploadedById?: string;
+  createdAt: string;
 }
 
 interface Banner {
@@ -22,7 +30,8 @@ interface BannerData {
 
 export async function getBannerByType(type: string, locale?: string): Promise<string | null> {
   try {
-    const res = await fetch('/api/banners/public', { cache: 'no-store' });
+    // Use regular fetch for server-side rendering since this is a public endpoint
+    const res = await fetch(`${BACKEND_URL}/banners/public`);
     if (!res.ok) return null;
     const data = await res.json();
     const banners: Banner[] = Array.isArray(data) ? data : (data.banners ?? data.data ?? []);
@@ -39,7 +48,9 @@ export async function getBannerByType(type: string, locale?: string): Promise<st
 
 export async function getBannerDataByType(type: string, locale?: string): Promise<BannerData> {
   try {
-    const res = await fetch('/api/banners/public', { cache: 'no-store' });
+    // Use regular fetch for server-side rendering since this is a public endpoint
+    const res = await fetch(`${BACKEND_URL}/banners/public`);
+
     if (!res.ok) return { imageUrl: null, link: null };
     const data = await res.json();
     const banners: Banner[] = Array.isArray(data) ? data : (data.banners ?? data.data ?? []);
