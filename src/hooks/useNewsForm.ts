@@ -17,7 +17,6 @@ export interface Category {
   language: string;
 }
 
-
 export type NewsFormValues = z.infer<typeof newsFormSchema>;
 
 export function useNewsForm(initialData?: Partial<NewsFormValues>) {
@@ -239,7 +238,9 @@ export function useNewsForm(initialData?: Partial<NewsFormValues>) {
         const error = await response.json();
         const isArray = Array.isArray(error.error);
         if (isArray) {
-          throw new Error(error.error[0].message || "Failed to create news article");
+          throw new Error(
+            error.error[0].message || "Failed to create news article"
+          );
         }
         throw new Error(error.error || "Failed to create news article");
       }
@@ -253,9 +254,9 @@ export function useNewsForm(initialData?: Partial<NewsFormValues>) {
         error instanceof Error ? error.message : "Failed to create news article"
       );
     } finally {
-     setTimeout(() => {
-      setIsSubmitting(false);
-     }, 1000);
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 1000);
     }
   };
 

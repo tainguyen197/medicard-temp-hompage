@@ -134,7 +134,7 @@ export default function ImageUpload({
 
       // Create FormData and append the file
       const formData = new FormData();
-      formData.append("upload", croppedFile);
+      formData.append("file", croppedFile);
 
       // Send the request
       const response = await authFetch("/api/upload_image", {
@@ -143,7 +143,7 @@ export default function ImageUpload({
       });
 
       const data = await response.json();
-      
+
       if (!response.ok) {
         // Check if this is a storage limit error
         if (data.currentUsage && data.limit) {

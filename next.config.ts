@@ -9,24 +9,24 @@ export const config = {
 
 const nextConfig: NextConfig = {
   async rewrites() {
-    const target = process.env.NEST_API_BASE || 'http://localhost:4000';
-    return [{ source: '/api/:path*', destination: `${target}/:path*` }];
+    const target = process.env.NEST_API_BASE;
+    return [{ source: "/api/:path*", destination: `${target}/:path*` }];
   },
   images: {
     remotePatterns: [
       {
         protocol: "https",
         hostname: process.env.CF_R2_PUBLIC_BUCKET || "",
+        pathname: "/**", // allow all paths
       },
       {
         protocol: "https",
         hostname: "source.unsplash.com",
       },
-    ],
-    domains: [
-      "localhost",
-      "dashboard.htcwellness.com",
-      "htcwellness.com",
+      {
+        protocol: "https",
+        hostname: process.env.S3_API || "",
+      },
     ],
   },
 };
