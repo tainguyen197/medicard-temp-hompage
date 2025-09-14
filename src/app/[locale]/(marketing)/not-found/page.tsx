@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { buildApiUrl } from "@/lib/api-utils";
 
 export default async function NotFound({
   params
@@ -13,8 +14,8 @@ export default async function NotFound({
   // Fetch contact data from API
   let phone = "_";
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/contact`);
-    
+    const url = buildApiUrl(`/api/contact`);
+    const response = await fetch(url);
     if (response.ok) {
       const contactData = await response.json();
       phone = contactData?.phone || "_";
