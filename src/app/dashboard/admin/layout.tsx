@@ -21,6 +21,8 @@ import { AdminNavigation } from "./components/AdminNavigation";
 import NextImage from "next/image";
 import { AdminLayoutClient } from "./AdminLayoutClient";
 import { UserProfile } from "@/components/UserProfile";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import { hasRequiredRole } from "@/lib/utils";
 
 export default function AdminLayout({
   children,
@@ -91,6 +93,14 @@ export default function AdminLayout({
     },
   ];
 
+  // Get current user and filter navigation items based on role
+  const { user } = useUserProfile();
+  
+  const filteredNavItems = navItems.filter((item) => {
+    if (!user) return false;
+    return item.roles.some((role) => hasRequiredRole(user.role, role));
+  });
+
   return (
     <AdminGuard>
       <AdminLayoutClient>
@@ -134,7 +144,7 @@ export default function AdminLayout({
 
               {/* Navigation with active state */}
               <div className="flex-1 overflow-y-auto">
-                <AdminNavigation navItems={navItems} />
+                <AdminNavigation navItems={filteredNavItems} />
               </div>
 
               {/* User Profile Section */}

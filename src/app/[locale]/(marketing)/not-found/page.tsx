@@ -10,13 +10,20 @@ export default async function NotFound({
   const { locale } = await params;
   const t = await getTranslations("notFound");
   
-  // Fetch contact data
-  const contact = await prisma.contact.findFirst({
-    orderBy: { createdAt: "desc" },
-  });
-  
-  // Use contact phone or fallback
-  const phone = contact?.phone || "_";
+  // Fetch contact data from API
+  let phone = "_";
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/contact`);
+    
+    if (response.ok) {
+      const contactData = await response.json();
+      phone = contactData?.phone || "_";
+    }
+  } catch (error) {
+    console.error('Failed to fetch contact data:', error);
+    // Use fallback phone if API fails
+    phone = "_";
+  }
   
   // Replace placeholder in translation
   const description = t("description", { phone });

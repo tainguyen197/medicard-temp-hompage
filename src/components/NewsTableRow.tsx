@@ -13,6 +13,8 @@ import { ROUTES } from "@/lib/router";
 import Image from "next/image";
 import { News } from "@/types/post";
 import { getLocalizedNews } from "@/utils/news";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import { hasRequiredRole } from "@/lib/utils";
 
 interface NewsTableRowProps {
   loading: boolean;
@@ -34,6 +36,7 @@ export default function NewsTableRow({
   const [isStatusMenuOpen, setIsStatusMenuOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const statusMenuRef = useRef<HTMLDivElement>(null);
+  const { user } = useUserProfile();
 
   // Handle click outside to close status dropdown
   useEffect(() => {
@@ -152,6 +155,10 @@ export default function NewsTableRow({
 
   const localizedNews = getLocalizedNews(news, selectedLanguage);
 
+  // Permission checks
+  const canEdit = user && hasRequiredRole(user.role, "EDITOR");
+  const canDelete = user && hasRequiredRole(user.role, "ADMIN");
+
   return (
     <tr key={news.id} className={`hover:bg-gray-50 ${loading ? "opacity-50" : ""}`}>
       <td className="px-6 py-4 whitespace-nowrap align-middle">
@@ -210,23 +217,32 @@ export default function NewsTableRow({
         {formatDate(news.createdAt)}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium align-middle">
-        <Link
-          href={ROUTES.ADMIN_NEWS + `/${news.id}`}
-          className="text-blue-600 hover:text-blue-900 mr-4"
-        >
-          Edit
-        </Link>
-        <DeleteNewsModal
-          news={{
-            id: news.id,
-            title: localizedNews.title || "",
-          }}
-          onNewsDeleted={onNewsDeleted}
-        >
-          <button className="text-red-600 hover:text-red-900 cursor-pointer">
-            Delete
-          </button>
-        </DeleteNewsModal>
+        <div className="flex items-center justify-end space-x-4">
+          {canEdit && (
+            <Link
+              href={ROUTES.ADMIN_NEWS + `/${news.id}`}
+              className="text-blue-600 hover:text-blue-900"
+            >
+              Edit
+            </Link>
+          )}
+          {canDelete && (
+            <DeleteNewsModal
+              news={{
+                id: news.id,
+                title: localizedNews.title || "",
+              }}
+              onNewsDeleted={onNewsDeleted}
+            >
+              <button className="text-red-600 hover:text-red-900 cursor-pointer">
+                Delete
+              </button>
+            </DeleteNewsModal>
+          )}
+          {!canEdit && !canDelete && (
+            <span className="text-gray-400 text-sm">No actions available</span>
+          )}
+        </div>
       </td>
     </tr>
   );

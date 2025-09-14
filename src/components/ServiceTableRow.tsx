@@ -14,6 +14,8 @@ import { ROUTES } from "@/lib/router";
 import Image from "next/image";
 import { Service } from "@/types/service";
 import { getLocalizedServiceContent, DEFAULT_SERVICE_IMAGE } from "@/utils/services";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import { hasRequiredRole } from "@/lib/utils";
 
 
 interface ServiceTableRowProps {
@@ -36,6 +38,7 @@ export default function ServiceTableRow({
   const [isStatusMenuOpen, setIsStatusMenuOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const statusMenuRef = useRef<HTMLDivElement>(null);
+  const { user } = useUserProfile();
 
   // Handle click outside to close status dropdown
   useEffect(() => {
@@ -154,6 +157,10 @@ export default function ServiceTableRow({
 
   const localizedService = getLocalizedServiceContent(service, selectedLanguage);
 
+  // Permission checks - Services require ADMIN+ to edit/delete
+  const canEdit = user && hasRequiredRole(user.role, "ADMIN");
+  const canDelete = user && hasRequiredRole(user.role, "ADMIN");
+
   return (
     <tr key={service.id} className={`hover:bg-gray-50 ${loading ? "opacity-50" : ""}`}>
       <td className="px-6 py-4 whitespace-nowrap align-middle">
@@ -199,23 +206,32 @@ export default function ServiceTableRow({
         {formatDate(service.createdAt)}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium align-middle">
-        <Link
-          href={ROUTES.ADMIN_SERVICES + `/${service.id}`}
-          className="text-blue-600 hover:text-blue-900 mr-4"
-        >
-          Edit
-        </Link>
-        <DeleteServiceModal
-          service={{
-            id: service.id,
-            title: service.title,
-          }}
-          onServiceDeleted={onServiceDeleted}
-        >
-          <button className="text-red-600 hover:text-red-900 cursor-pointer">
-            Delete
-          </button>
-        </DeleteServiceModal>
+        <div className="flex items-center justify-end space-x-4">
+          {canEdit && (
+            <Link
+              href={ROUTES.ADMIN_SERVICES + `/${service.id}`}
+              className="text-blue-600 hover:text-blue-900"
+            >
+              Edit
+            </Link>
+          )}
+          {canDelete && (
+            <DeleteServiceModal
+              service={{
+                id: service.id,
+                title: service.title,
+              }}
+              onServiceDeleted={onServiceDeleted}
+            >
+              <button className="text-red-600 hover:text-red-900 cursor-pointer">
+                Delete
+              </button>
+            </DeleteServiceModal>
+          )}
+          {!canEdit && !canDelete && (
+            <span className="text-gray-400 text-sm">No actions available</span>
+          )}
+        </div>
       </td>
     </tr>
   );

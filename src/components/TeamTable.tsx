@@ -6,6 +6,8 @@ import Image from "next/image";
 import { EditIcon, TrashIcon } from "lucide-react";
 import { ROUTES } from "@/lib/router";
 import DeleteTeamMemberModal from "@/components/DeleteTeamMemberModal";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import { hasRequiredRole } from "@/lib/utils";
 
 type TeamMember = {
   id: string;
@@ -36,6 +38,7 @@ interface TeamTableProps {
 
 export default function TeamTable({ teamMembers }: TeamTableProps) {
   const router = useRouter();
+  const { user } = useUserProfile();
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -52,6 +55,10 @@ export default function TeamTable({ teamMembers }: TeamTableProps) {
     if (text.length <= maxLength) return text;
     return text.substring(0, maxLength) + "...";
   };
+
+  // Permission checks - Team management requires ADMIN+ role
+  const canEdit = user && hasRequiredRole(user.role, "ADMIN");
+  const canDelete = user && hasRequiredRole(user.role, "ADMIN");
 
   return (
     <div className="bg-white rounded-md shadow overflow-x-auto">
@@ -86,12 +93,14 @@ export default function TeamTable({ teamMembers }: TeamTableProps) {
             <tr>
               <td colSpan={7} className="px-6 py-8 text-center text-gray-500">
                 No doctors found.{" "}
-                <Link
-                  href={`${ROUTES.ADMIN_TEAM}/new`}
-                  className="text-blue-600 hover:text-blue-800"
-                >
-                  Create your first doctor
-                </Link>
+                {canEdit && (
+                  <Link
+                    href={`${ROUTES.ADMIN_TEAM}/new`}
+                    className="text-blue-600 hover:text-blue-800"
+                  >
+                    Create your first doctor
+                  </Link>
+                )}
               </td>
             </tr>
           ) : (
@@ -161,21 +170,28 @@ export default function TeamTable({ teamMembers }: TeamTableProps) {
                   {member.order}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                  <Link
-                    href={`${ROUTES.ADMIN_TEAM}/${member.id}/edit`}
-                    className="text-blue-600 hover:text-blue-900 inline-flex items-center px-2 py-1 rounded"
-                  >
-                    <EditIcon size={16} className="mr-1" />
-                    Edit
-                  </Link>
-                  <DeleteTeamMemberModal
-                    teamMember={{ id: member.id, name: member.name }}
-                  >
-                    <button className="text-red-600 hover:text-red-900 inline-flex items-center px-2 py-1 rounded">
-                      <TrashIcon size={16} className="mr-1" />
-                      Delete
-                    </button>
-                  </DeleteTeamMemberModal>
+                  {canEdit && (
+                    <Link
+                      href={`${ROUTES.ADMIN_TEAM}/${member.id}/edit`}
+                      className="text-blue-600 hover:text-blue-900 inline-flex items-center px-2 py-1 rounded"
+                    >
+                      <EditIcon size={16} className="mr-1" />
+                      Edit
+                    </Link>
+                  )}
+                  {canDelete && (
+                    <DeleteTeamMemberModal
+                      teamMember={{ id: member.id, name: member.name }}
+                    >
+                      <button className="text-red-600 hover:text-red-900 inline-flex items-center px-2 py-1 rounded">
+                        <TrashIcon size={16} className="mr-1" />
+                        Delete
+                      </button>
+                    </DeleteTeamMemberModal>
+                  )}
+                  {!canEdit && !canDelete && (
+                    <span className="text-gray-400 text-sm">No actions available</span>
+                  )}
                 </td>
               </tr>
             ))

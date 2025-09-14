@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { authFetch } from "@/lib/auth-fetch";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import { hasRequiredRole } from "@/lib/utils";
 
 interface MediaFile {
   id: string;
@@ -60,6 +62,7 @@ export default function MediaContent({
     limit: "10",
     search: "",
   });
+  const { user } = useUserProfile();
 
   useEffect(() => {
     const loadParams = async () => {
@@ -159,6 +162,9 @@ export default function MediaContent({
     return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`;
   };
 
+  // Permission checks - Media delete requires ADMIN+ role
+  const canDelete = user && hasRequiredRole(user.role, "ADMIN");
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
@@ -231,15 +237,17 @@ export default function MediaContent({
               key={file.id}
               className="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow duration-200 group relative overflow-hidden"
             >
-              {/* Delete Button - Shows on Hover */}
-              <button
-                onClick={() => handleDelete(file.id, file.originalName)}
-                disabled={deletingId === file.id}
-                className="absolute top-2 right-2 z-10 bg-red-500 hover:bg-red-600 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 disabled:opacity-50"
-                title="Delete file"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
+              {/* Delete Button - Shows on Hover and only for ADMIN+ */}
+              {canDelete && (
+                <button
+                  onClick={() => handleDelete(file.id, file.originalName)}
+                  disabled={deletingId === file.id}
+                  className="absolute top-2 right-2 z-10 bg-red-500 hover:bg-red-600 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 disabled:opacity-50"
+                  title="Delete file"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              )}
 
               {/* File Preview */}
               <div className="aspect-square bg-gray-100 rounded-t-lg flex items-center justify-center overflow-hidden">

@@ -1,214 +1,150 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { CheckCircle, XCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+
+// Fetch via Nest API instead of DB/session
+import EquipmentTable from "@/components/EquipmentTable";
 import { ROUTES } from "@/lib/router";
-import { Equipment } from "@/types/equiment";
 import { authFetch } from "@/lib/auth-fetch";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import { hasRequiredRole } from "@/lib/utils";
 
-interface EquipmentTableProps {
-  equipment: Equipment[];
-}
+type SearchParams = {
+  page?: string;
+  limit?: string;
+  search?: string;
+  status?: string;
+};
 
-export default function EquipmentTable({ equipment }: EquipmentTableProps) {
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [equipmentToDelete, setEquipmentToDelete] = useState<string | null>(
-    null
-  );
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
+export default function EquipmentContent({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParams>;
+}) {
+  const router = useRouter();
+  const [equipment, setEquipment] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentParams, setCurrentParams] = useState<SearchParams>({});
+  const { user } = useUserProfile();
 
-  const handleDeleteClick = (id: string) => {
-    setEquipmentToDelete(id);
-    setDeleteModalOpen(true);
-  };
+  useEffect(() => {
+    const fetchEquipment = async () => {
+      try {
+        const params = await searchParams;
+        setCurrentParams(params);
+        const page = Number(params.page) || 1;
+        const limit = Number(params.limit) || 10;
+        const search = params.search || "";
+        const status = params.status || "";
 
-  const handleDeleteConfirm = async () => {
-    if (!equipmentToDelete) return;
-
-    setIsDeleting(true);
-    setDeleteError(null);
-
-    try {
-      const response = await authFetch(`/api/equipment/${equipmentToDelete}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to delete equipment");
+        const paramsApi = new URLSearchParams({ page: String(page), limit: String(limit) });
+        if (search) paramsApi.set('search', search);
+        if (status) paramsApi.set('status', status);
+        
+        const res = await authFetch(`/api/equipment?${paramsApi.toString()}`);
+        if (!res.ok) {
+          router.push('/dashboard');
+          return;
+        }
+        const data = await res.json();
+        setEquipment(data.equipment ?? []);
+        setTotalCount(data.meta?.total ?? 0);
+      } catch (err) {
+        console.error("Error fetching equipment:", err);
+        setError("Failed to load equipment");
+      } finally {
+        setLoading(false);
       }
+    };
 
-      // Refresh the page to show updated list
-      window.location.reload();
-    } catch (err) {
-      console.error("Error deleting equipment:", err);
-      setDeleteError("Failed to delete equipment. Please try again.");
-    } finally {
-      setIsDeleting(false);
-    }
+    fetchEquipment();
+  }, [searchParams, router]);
+
+  const totalPages = Math.ceil(totalCount / (Number(currentParams.limit) || 10));
+  const currentPage = Number(currentParams.page) || 1;
+
+  const buildUrl = (newParams: Partial<SearchParams>) => {
+    const params = new URLSearchParams();
+    Object.entries({ ...currentParams, ...newParams }).forEach(([key, value]) => {
+      if (value) params.set(key, value);
+    });
+    return `/dashboard/admin/equipment?${params.toString()}`;
   };
 
-  if (equipment.length === 0) {
+  // Permission checks - Equipment management requires ADMIN+ role
+  const canCreate = user && hasRequiredRole(user.role, "ADMIN");
+
+  if (loading) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 text-center">
-        <p className="text-slate-600 mb-4">No equipment items found.</p>
-        <Link
-          href={ROUTES.ADMIN_EQUIPMENT + "/new"}
-          className="inline-flex items-center text-blue-600 hover:text-blue-800"
-        >
-          Add your first equipment item
-        </Link>
+      <div className="flex items-center justify-center h-64">
+        <div className="text-gray-500">Loading equipment...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-md p-4">
+        <div className="text-red-800">{error}</div>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-slate-50 border-b border-slate-200">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                Image
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">
-                Display Order
-              </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-200">
-            {equipment.map((item) => (
-              <tr key={item.id} className="hover:bg-slate-50">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="h-12 w-12 relative rounded-md overflow-hidden">
-                    {item.image ? (
-                      <Image
-                        src={item.image.url}
-                        alt={item.name}
-                        fill
-                        className="object-cover"
-                      />
-                    ) : (
-                      <div className="h-full w-full bg-slate-200 flex items-center justify-center">
-                        <span className="text-xs text-slate-500">No image</span>
-                      </div>
-                    )}
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="text-sm font-medium text-slate-900">
-                    {item.name}
-                  </div>
-                  <div className="text-sm text-slate-500">
-                    {item.nameEn || "No English name"}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <button
-                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      item.status === "ACTIVE"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-red-100 text-red-800"
-                    }`}
-                  >
-                    {item.status === "ACTIVE" ? (
-                      <CheckCircle className="w-3 h-3 mr-1" />
-                    ) : (
-                      <XCircle className="w-3 h-3 mr-1" />
-                    )}
-                    {item.status}
-                  </button>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                  {item.order}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <div className="flex items-center justify-end space-x-3">
-                    <Link
-                      href={`${ROUTES.ADMIN_EQUIPMENT}/${item.id}`}
-                      className="text-blue-600 hover:text-blue-900"
-                    >
-                      Edit
-                    </Link>
-                    <button
-                      onClick={() => handleDeleteClick(item.id)}
-                      className="text-red-600 hover:text-red-900"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Equipment</h1>
+          <p className="text-gray-600">
+            Manage medical equipment and devices
+          </p>
+        </div>
+        {canCreate && (
+          <Link
+            href={`${ROUTES.ADMIN_EQUIPMENT}/new`}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+          >
+            Add Equipment
+          </Link>
+        )}
       </div>
 
-      {/* Delete Confirmation Modal */}
-      {deleteModalOpen && (
-        <div className="fixed inset-0 bg-black/70 bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full">
-            <h3 className="text-lg font-medium text-slate-900 mb-4">
-              Delete Equipment
-            </h3>
-            <p className="text-slate-500 mb-6">
-              Are you sure you want to delete this equipment? This action cannot
-              be undone.
-            </p>
-            {deleteError && (
-              <div className="bg-red-50 text-red-700 p-3 rounded mb-4">
-                {deleteError}
-              </div>
+      {/* Equipment Table */}
+      <EquipmentTable equipment={equipment} />
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-gray-700">
+            Showing {((currentPage - 1) * (Number(currentParams.limit) || 10)) + 1} to{" "}
+            {Math.min(currentPage * (Number(currentParams.limit) || 10), totalCount)} of{" "}
+            {totalCount} results
+          </div>
+          <div className="flex items-center space-x-2">
+            {currentPage > 1 && (
+              <Link
+                href={buildUrl({ page: String(currentPage - 1) })}
+                className="flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                <ChevronLeftIcon className="h-4 w-4 mr-1" />
+                Previous
+              </Link>
             )}
-            <div className="flex justify-end space-x-3">
-              <button
-                onClick={() => setDeleteModalOpen(false)}
-                className="px-4 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50"
-                disabled={isDeleting}
+            {currentPage < totalPages && (
+              <Link
+                href={buildUrl({ page: String(currentPage + 1) })}
+                className="flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
               >
-                Cancel
-              </button>
-              <button
-                onClick={handleDeleteConfirm}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center"
-                disabled={isDeleting}
-              >
-                {isDeleting && (
-                  <svg
-                    className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                )}
-                {isDeleting ? "Deleting..." : "Delete"}
-              </button>
-            </div>
+                Next
+                <ChevronRightIcon className="h-4 w-4 ml-1" />
+              </Link>
+            )}
           </div>
         </div>
       )}
