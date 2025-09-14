@@ -1,6 +1,7 @@
 import "@/app/globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { buildApiUrl } from "@/lib/api-utils";
 // Removed direct DB access
 
 export default async function LayoutWithHeader({
@@ -12,7 +13,8 @@ export default async function LayoutWithHeader({
 }>) {
   let phone = "";
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || ''}/api/contact`, { cache: 'no-store' });
+    const url = buildApiUrl(`/api/contact`);
+    const res = await fetch(url);
     if (res.ok) {
       const data = await res.json();
       phone = data?.phone ?? "";

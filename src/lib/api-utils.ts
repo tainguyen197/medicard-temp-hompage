@@ -1,8 +1,8 @@
 // Utility function to get the API base URL for server-side requests
 export function getApiBaseUrl(): string {
   // Prefer explicit Nest backend base for server-side requests
-  if (process.env.NEST_API_BASE) {
-    return process.env.NEST_API_BASE;
+  if (process.env.BACKEND_API_BASE) {
+    return process.env.BACKEND_API_BASE;
   }
 
   // Fall back to Next server base (will rely on rewrites)
@@ -21,7 +21,7 @@ export function getApiBaseUrl(): string {
 export function buildApiUrl(endpoint: string): string {
   const baseUrl = getApiBaseUrl();
   console.log("=====>>>baseUrl", baseUrl);
-  const normalizedEndpoint = baseUrl && process.env.NEST_API_BASE
+  const normalizedEndpoint = baseUrl && process.env.BACKEND_API_BASE
     ? endpoint.replace(/^\/api/, "")
     : (endpoint.startsWith("/") ? endpoint : `/${endpoint}`);
   return `${baseUrl}${normalizedEndpoint}`;

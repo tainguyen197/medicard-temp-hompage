@@ -9,7 +9,7 @@ export const config = {
 
 const nextConfig: NextConfig = {
   async rewrites() {
-    const target = process.env.NEST_API_BASE;
+    const target = process.env.BACKEND_API_BASE;
     return [{ source: "/api/:path*", destination: `${target}/:path*` }];
   },
   images: {

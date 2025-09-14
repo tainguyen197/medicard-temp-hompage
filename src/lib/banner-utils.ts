@@ -1,7 +1,7 @@
 // Removed direct DB access; expose helpers to call Nest if needed
 
 // NestJS backend URL - update this if your backend runs on a different port
-const BACKEND_URL = process.env.NEST_API_BASE;
+const BACKEND_URL = process.env.BACKEND_API_BASE;
 
 interface BannerImage {
   id: string;
