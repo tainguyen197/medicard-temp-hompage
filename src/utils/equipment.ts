@@ -8,8 +8,8 @@ export const equipmentSchema = z.object({
     status: z.enum(["ACTIVE", "INACTIVE"]),
     showOnHomepage: z.boolean().optional(),
     order: z.coerce.number().min(0, "Order must be 0 or greater"),
-    imageId: z.string().optional(),
+    imageId: z.string().optional(), // Make it optional
     imageEnId: z.string().optional(),
-    imageUrl: z.string({message: "Image (Vietnamese) is required"}).min(1, "Image (Vietnamese) is required"),
+    imageUrl: z.string().optional(),
     imageEnUrl: z.string().optional().or(z.literal("")),
   });

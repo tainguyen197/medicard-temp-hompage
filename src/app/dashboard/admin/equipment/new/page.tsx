@@ -14,14 +14,17 @@ export default function NewEquipmentPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (formData: FormData) => {
+  const handleSubmit = async (formData: any) => {
     setIsSubmitting(true);
     setError(null);
 
     try {
       const response = await authFetch("/api/equipment", {
         method: "POST",
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
       
       const data = await response.json();

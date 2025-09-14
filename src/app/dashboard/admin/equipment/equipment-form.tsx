@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { equipmentSchema } from "@/utils";
 
 interface EquipmentFormProps {
-  onSubmit: (formData: FormData) => void;
+  onSubmit: (formData: any) => void;
   isSubmitting: boolean;
   submitButtonText: string;
   initialData?: {
@@ -82,7 +82,6 @@ export default function EquipmentForm({
   };
   const handleImageIdChange = (id: string) => {
     setValue("imageId", id);
-    setValue("imageUrl", id);
   };
   const handleImageEnChange = (url: string) => {
     setImageEnUrl(url);
@@ -96,7 +95,7 @@ export default function EquipmentForm({
   };
   const handleImageEnIdChange = (id: string) => {
     setValue("imageEnId", id);
-    setValue("imageEnUrl", id);
+    // Don't set imageEnUrl here - it should be set by handleImageEnChange
     // Track if image was removed (empty string means removed)
     if (id === "") {
       setIsEnImageRemoved(true);
@@ -106,21 +105,23 @@ export default function EquipmentForm({
   };
 
   const onFormSubmit: (data: EquipmentFormValues) => void = (data) => {
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("nameEn", data.nameEn || "");
-    formData.append("description", data.description);
-    formData.append("descriptionEn", data.descriptionEn || "");
-    formData.append("status", data.status);
-    formData.append("showOnHomepage", (data.showOnHomepage ?? true).toString());
-    formData.append("order", data.order.toString());
-    formData.append("imageId", data.imageId || "");
-    // Always send imageEnId - empty string means remove, undefined/null means keep existing
-    const imageEnIdValue = isEnImageRemoved ? "" : (data.imageEnId || "");
-    formData.append("imageEnId", imageEnIdValue);
+    // Transform data for API - send JSON instead of FormData
+    const submitData = {
+      name: data.name,
+      nameEn: data.nameEn || undefined,
+      description: data.description,
+      descriptionEn: data.descriptionEn || undefined,
+      status: data.status,
+      showOnHomepage: data.showOnHomepage ?? true,
+      order: data.order,
+      imageId: data.imageId || undefined,
+      imageEnId: isEnImageRemoved ? undefined : (data.imageEnId || undefined),
+    };
     
+    console.log("=== EQUIPMENT FORM SUBMISSION ===");
+    console.log("Data being sent:", submitData);
     
-    onSubmit(formData);
+    onSubmit(submitData);
   };
 
   return (
@@ -198,8 +199,8 @@ export default function EquipmentForm({
                     />
                   )}
                 />
-                {errors.imageUrl && (
-                <p className="text-red-500 text-xs mt-1">{errors.imageUrl.message}</p>
+                {errors.imageId && (
+                <p className="text-red-500 text-xs mt-1">{errors.imageId.message}</p>
               )}
               </div>
             </div>

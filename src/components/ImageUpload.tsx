@@ -156,7 +156,7 @@ export default function ImageUpload({
       }
 
       onChange(data.url);
-      onMediaIdChange?.(data.mediaId);
+      onMediaIdChange?.(data.id);
       setShowCropper(false);
       toast.success("Image uploaded successfully");
     } catch (error) {

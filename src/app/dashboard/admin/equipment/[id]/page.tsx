@@ -48,14 +48,17 @@ export default function EditEquipmentPage({ params }: EquipmentPageProps) {
     fetchEquipment();
   }, [params]);
 
-  const handleSubmit = async (formData: FormData) => {
+  const handleSubmit = async (formData: any) => {
     setIsSubmitting(true);
     setError(null);
     const { id } = await params;
     try {
       const response = await authFetch(`/api/equipment/${id}`, {
         method: "PUT",
-        body: formData,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
       
       if (!response.ok) {
