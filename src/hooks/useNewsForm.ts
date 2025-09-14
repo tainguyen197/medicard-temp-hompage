@@ -224,6 +224,8 @@ export function useNewsForm(initialData?: Partial<NewsFormValues>) {
           shortDescriptionEn: data.shortDescriptionEn || undefined,
           categoryId: data.categoryId || undefined,
           categoryEnId: data.categoryEnId || undefined,
+          featureImageId: data.featureImageId || undefined,
+          featureImageEnId: data.featureImageEnId || undefined,
           metaTitle: data.metaTitle || undefined,
           metaTitleEn: data.metaTitleEn || undefined,
           metaDescription: data.metaDescription || undefined,

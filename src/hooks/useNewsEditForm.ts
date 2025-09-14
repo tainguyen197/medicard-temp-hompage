@@ -268,6 +268,8 @@ export function useNewsEditForm(newsId: string) {
           shortDescriptionEn: data.shortDescriptionEn || undefined,
           categoryId: data.categoryId || undefined,
           categoryEnId: data.categoryEnId || undefined,
+          featureImageId: data.featureImageId || undefined,
+          featureImageEnId: data.featureImageEnId || undefined,
           metaTitle: data.metaTitle || undefined,
           metaTitleEn: data.metaTitleEn || undefined,
           metaDescription: data.metaDescription || undefined,
