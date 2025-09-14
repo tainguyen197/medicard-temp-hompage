@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { toast } from "sonner";
 import BannerForm from "@/components/BannerForm";
 import { Banner } from "@/types/banner";
+import { authFetch } from "@/lib/auth-fetch";
 
 
 export default function EditBannerPage() {
@@ -17,7 +18,7 @@ export default function EditBannerPage() {
   useEffect(() => {
     const fetchBanner = async () => {
       try {
-        const response = await fetch(`/api/banners/${bannerId}`);
+        const response = await authFetch(`/api/banners/${bannerId}`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch banner");

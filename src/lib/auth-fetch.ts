@@ -5,7 +5,7 @@ export async function authFetch(input: string, init: RequestInit = {}) {
   const headers = new Headers(init.headers || {});
   if (token) headers.set('Authorization', `Bearer ${token}`);
   
-  const response = await fetch(input, { ...init, headers, cache: 'no-store' });
+  const response = await fetch(input, { ...init, headers });
   
   // Handle 401 Unauthorized responses by redirecting to logout
   if (response.status === 401) {

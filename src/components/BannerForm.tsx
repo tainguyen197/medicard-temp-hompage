@@ -23,7 +23,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { bannerSchema } from "@/utils/banner";
 
-type BannerFormValues = z.infer<typeof bannerSchema>;
+type BannerFormValues = any;
 
 interface BannerFormProps {
   initialData?: Banner;
@@ -38,6 +38,10 @@ export default function BannerForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageEnPreview, setImageEnPreview] = useState<string | null>(null);
+  
+  // Track image IDs for backend
+  const [imageId, setImageId] = useState<string | null>(initialData?.image?.id || null);
+  const [imageEnId, setImageEnId] = useState<string | null>(initialData?.imageEn?.id || null);
 
   const {
     register,
@@ -56,6 +60,8 @@ export default function BannerForm({
       status: (initialData?.status as "ACTIVE" | "INACTIVE") || "ACTIVE",
       imageUrl: initialData?.image?.url || "",
       imageEnUrl: initialData?.imageEn?.url || "",
+      imageId: initialData?.image?.id || null,
+      imageEnId: initialData?.imageEn?.id || null,
     },
   });
 
@@ -79,6 +85,7 @@ export default function BannerForm({
     if (!file) {
       setValue("imageFile", "");
       setValue("imageUrl", "");
+      setValue("imageId", null);
       setImagePreview(null);
       return;
     }
@@ -99,22 +106,48 @@ export default function BannerForm({
       return;
     }
     try {
+      // Upload the image first to get mediaId
+      const formData = new FormData();
+      formData.append("file", file);
+      
+      const uploadResponse = await authFetch("/api/upload_image", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!uploadResponse.ok) {
+        const error = await uploadResponse.json();
+        throw new Error(error.error || "Failed to upload image");
+      }
+
+      const uploadData = await uploadResponse.json();
+      
+      // Create preview for display
       const preview = await createImagePreview(file);
+      
+      // Update form values
       setValue("imageFile", file);
-      setValue("imageUrl", preview);
+      setValue("imageUrl", uploadData.url);
+      setValue("imageId", uploadData.id);
       setImagePreview(preview);
+      
+      toast.success("Image uploaded successfully");
     } catch (error) {
-      toast.error("Failed to process image");
+      console.error("Upload error:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to upload image"
+      );
     }
   };
 
   const handleEnFileChange = async (file: File | null) => {
-    if (!file) {
-      setValue("imageEnFile", undefined);
-      setImageEnPreview(null);
-      setValue("imageEnUrl", "");
-      return;
-    }
+      if (!file) {
+        setValue("imageEnFile", undefined);
+        setValue("imageEnUrl", "");
+        setValue("imageEnId", null);
+        setImageEnPreview(null);
+        return;
+      }
     const maxFileSize = 10 * 1024 * 1024;
     if (file.size > maxFileSize) {
       toast.error("File size must be less than 10MB");
@@ -132,18 +165,44 @@ export default function BannerForm({
       return;
     }
     try {
+      // Upload the image first to get mediaId
+      const formData = new FormData();
+      formData.append("file", file);
+      
+      const uploadResponse = await authFetch("/api/upload_image", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!uploadResponse.ok) {
+        const error = await uploadResponse.json();
+        throw new Error(error.error || "Failed to upload image");
+      }
+
+      const uploadData = await uploadResponse.json();
+      
+      // Create preview for display
       const preview = await createImagePreview(file);
+      
+      // Update form values
       setValue("imageEnFile", file);
-      setValue("imageEnUrl", preview);
+      setValue("imageEnUrl", uploadData.url);
+      setValue("imageEnId", uploadData.id);
       setImageEnPreview(preview);
+      
+      toast.success("English image uploaded successfully");
     } catch (error) {
-      toast.error("Failed to process English image");
+      console.error("Upload error:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to upload English image"
+      );
     }
   };
 
   const handleRemoveImage = () => {
     setValue("imageFile", "");
     setValue("imageUrl", "");
+    setValue("imageId", null);
     setExistingImageUrl("");
     setImagePreview(null);
   };
@@ -151,63 +210,77 @@ export default function BannerForm({
   const handleRemoveEnImage = () => {
     setValue("imageEnFile", "");
     setValue("imageEnUrl", "");
+    setValue("imageEnId", null);
     setExistingImageEnUrl("");
     setImageEnPreview(null);
+  };
+
+  const transformBannerDataForAPI = (data: BannerFormValues, isEditing: boolean) => {
+    // Return JSON object that matches UpdateBannerSchema
+    return {
+      type: data.type,
+      link: data.link || undefined,
+      status: data.status,
+      imageId: data.imageId || null,
+      imageEnId: data.imageEnId || null,
+    };
+  };
+
+  const validateBannerData = (data: BannerFormValues): string[] => {
+    const errors: string[] = [];
+    
+    if (!data.type) {
+      errors.push("Banner type is required");
+    }
+    
+    if (!data.status) {
+      errors.push("Status is required");
+    }
+    
+    // Add more validation as needed
+    
+    return errors;
   };
 
   const onSubmit = async (data: BannerFormValues) => {
     setIsSubmitting(true);
     try {
-      const submitData = new FormData();
-      submitData.append("type", data.type);
-      submitData.append("link", data.link || "");
-      submitData.append("status", data.status);
-      if (data.imageFile) {
-        submitData.append("imageFile", data.imageFile);
+      // Validate data first
+      const validationErrors = validateBannerData(data);
+      if (validationErrors.length > 0) {
+        throw new Error(validationErrors.join(", "));
       }
-      if (data.imageEnFile) {
-        submitData.append("imageEnFile", data.imageEnFile);
-      }
-      // Send explicit removal signals
-      if (existingImageUrl === "" && !data.imageFile) {
-        submitData.append("removeImage", "true");
-      }
-      if (existingImageEnUrl === "" && !data.imageEnFile) {
-        submitData.append("removeImageEn", "true");
-      }
-      const url = isEditing
-        ? `/api/banners/${initialData?.id}`
-        : "/api/banners";
-      const method = isEditing ? "PUT" : "POST";
-      const response = await authFetch(url, {
-        method,
-        body: submitData,
-      });
-
-      // Add this temporary logging
-      console.log("Response status:", response.status);
-      console.log(
-        "Response headers:",
-        Object.fromEntries(response.headers.entries())
-      );
+      
+        // Transform data for API
+        const submitData = transformBannerDataForAPI(data, isEditing);
+        
+        const url = isEditing
+          ? `/api/banners/${initialData?.id}`
+          : "/api/banners";
+        const method = isEditing ? "PUT" : "POST";
+        
+        const response = await authFetch(url, {
+          method,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(submitData),
+        });
 
       if (!response.ok) {
-        setIsSubmitting(false);
-
         const error = await response.json();
-
         throw new Error(error.error || "Failed to save banner");
       }
+      
       toast.success(`Banner ${isEditing ? "updated" : "created"} successfully`);
       router.push("/admin/banners");
     } catch (error) {
-      setIsSubmitting(false);
       console.error("Submit error:", error);
       toast.error(
         error instanceof Error ? error.message : "Failed to save banner"
       );
     } finally {
-      // setIsSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -282,7 +355,7 @@ export default function BannerForm({
                 />
                 {errors.type && (
                   <p className="text-sm text-red-500 mt-1">
-                    {errors.type.message}
+                    {errors.type.message as string}
                   </p>
                 )}
                 {type && (
@@ -317,7 +390,7 @@ export default function BannerForm({
                 />
                 {errors.status && (
                   <p className="text-sm text-red-500 mt-1">
-                    {errors.status.message}
+                    {errors.status.message as string}
                   </p>
                 )}
               </div>
@@ -332,7 +405,7 @@ export default function BannerForm({
               />
               {errors.link && (
                 <p className="text-sm text-red-500 mt-1">
-                  {errors.link.message}
+                  {errors.link.message as string}
                 </p>
               )}
             </div>
