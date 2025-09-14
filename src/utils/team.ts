@@ -15,5 +15,7 @@ export const teamMemberSchema = z.object({
     imageEnFile: z.any().optional(),
     existingImageUrl: z.string().min(1, {message: "Image is required"}),
     existingImageEnUrl: z.string().optional(),
+    imageId: z.string().nullable().optional(),
+    imageEnId: z.string().nullable().optional(),
   });
 

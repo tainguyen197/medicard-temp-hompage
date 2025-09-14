@@ -1,24 +1,47 @@
-import { redirect, notFound } from "next/navigation";
-// Removed direct DB access
+
+'use client';
+
+import { notFound } from "next/navigation";
+import { useEffect, useState } from "react";
 import TeamMemberForm from "@/components/TeamMemberForm";
+import { authFetch } from "@/lib/auth-fetch";
 
 interface EditTeamMemberPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default async function EditTeamMemberPage({
+export default function EditTeamMemberPage({
   params,
 }: EditTeamMemberPageProps) {
-  const { id } = await params;
+  const [teamMember, setTeamMember] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  // Fetch team member from Nest API
-  const res = await fetch(`/api/team/${id}`, { cache: 'no-store' });
-  if (!res.ok) {
-    notFound();
+  useEffect(() => {
+    async function fetchTeamMember() {
+      try {
+        const { id } = await params;
+        const res = await authFetch(`/api/team/${id}`);
+        if (!res.ok) {
+          setError(true);
+          return;
+        }
+        const data = await res.json();
+        setTeamMember(data);
+      } catch (err) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchTeamMember();
+  }, [params]);
+
+  if (loading) {
+    return <div>Loading...</div>;
   }
-  const teamMember = await res.json();
 
-  if (!teamMember) {
+  if (error || !teamMember) {
     notFound();
   }
 

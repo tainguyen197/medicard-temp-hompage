@@ -28,6 +28,8 @@ interface TeamMemberFormData {
   imageEnFile?: File;
   existingImageUrl?: string;
   existingImageEnUrl?: string;
+  imageId?: string | null;
+  imageEnId?: string | null;
 }
 
 interface TeamMemberFormProps {
@@ -46,6 +48,10 @@ export default function TeamMemberForm({
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageEnPreview, setImageEnPreview] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string>("");
+  
+  // Track image IDs for backend
+  const [imageId, setImageId] = useState<string | null>(initialData?.imageId || null);
+  const [imageEnId, setImageEnId] = useState<string | null>(initialData?.imageEnId || null);
 
   const {
     register,
@@ -67,6 +73,8 @@ export default function TeamMemberForm({
       status: initialData?.status || "ACTIVE",
       existingImageUrl: initialData?.existingImageUrl || "",
       existingImageEnUrl: initialData?.existingImageEnUrl || "",
+      imageId: initialData?.imageId || null,
+      imageEnId: initialData?.imageEnId || null,
     },
   });
 
@@ -102,9 +110,11 @@ export default function TeamMemberForm({
       if (field === "imageFile") {
         setImagePreview(null);
         setValue("existingImageUrl", "");
+        setValue("imageId", null);
       } else {
         setImageEnPreview(null);
         setValue("existingImageEnUrl", "");
+        setValue("imageEnId", null);
       }
       return;
     }
@@ -114,18 +124,44 @@ export default function TeamMemberForm({
       return;
     }
     try {
+      // Upload the image first to get mediaId
+      const formData = new FormData();
+      formData.append("file", file);
+      
+      const uploadResponse = await authFetch("/api/upload_image", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!uploadResponse.ok) {
+        const error = await uploadResponse.json();
+        throw new Error(error.error || "Failed to upload image");
+      }
+
+      const uploadData = await uploadResponse.json();
+      
+      // Create preview for display
       const preview = await createImagePreview(file);
       setValue(field, file);
 
       if (field === "imageFile") {
         setImagePreview(preview);
-        setValue("existingImageUrl", preview);
+        setValue("existingImageUrl", uploadData.url);
+        setValue("imageId", uploadData.id);
+        setImageId(uploadData.id);
       } else {
         setImageEnPreview(preview);
-        setValue("existingImageEnUrl", preview);
+        setValue("existingImageEnUrl", uploadData.url);
+        setValue("imageEnId", uploadData.id);
+        setImageEnId(uploadData.id);
       }
+      
+      toast.success("Image uploaded successfully");
     } catch (error) {
-      setUploadError("Failed to process image");
+      console.error("Upload error:", error);
+      setUploadError(
+        error instanceof Error ? error.message : "Failed to upload image"
+      );
     }
   };
 
@@ -133,37 +169,63 @@ export default function TeamMemberForm({
     setValue(field, undefined);
     if (field === "imageFile") {
       setValue("existingImageUrl", "");
+      setValue("imageId", null);
       setImagePreview(null);
+      setImageId(null);
     } else {
       setValue("existingImageEnUrl", "");
+      setValue("imageEnId", null);
       setImageEnPreview(null);
+      setImageEnId(null);
     }
+  };
+
+  const transformTeamMemberDataForAPI = (data: TeamMemberFormData, isEdit: boolean) => {
+    // Return JSON object that matches UpdateTeamMemberSchema
+    return {
+      name: data.name,
+      nameEn: data.nameEn || undefined,
+      title: data.title,
+      titleEn: data.titleEn || undefined,
+      description: data.description,
+      descriptionEn: data.descriptionEn || undefined,
+      order: data.order,
+      status: data.status,
+      imageId: data.imageId || undefined,
+      imageEnId: data.imageEnId || undefined,
+    };
   };
 
   const onSubmit = async (data: TeamMemberFormData) => {
     setIsSubmitting(true);
     try {
-      const submitData = new FormData();
-      Object.entries(data).forEach(([key, value]) => {
-        if (key !== "imageFile" && key !== "imageEnFile") {
-          submitData.append(key, value?.toString() ?? "");
-        }
-      });
-      if (data.imageFile && data.imageFile.size > 0) {
-        submitData.append("imageFile", data.imageFile);
-      }
-      if (data.imageEnFile && data.imageEnFile.size > 0) {
-        submitData.append("imageEnFile", data.imageEnFile);
-      }
-      if (data.existingImageUrl === "" && !data.imageFile) {
-        submitData.append("removeImage", "true");
-      }
-      if (data.existingImageEnUrl === "" && !data.imageEnFile) {
-        submitData.append("removeImageEn", "true");
-      }
+      // Debug: Log the raw form data
+      console.log("=== RAW FORM DATA ===");
+      console.log("Form data:", data);
+      console.log("imageId from form:", data.imageId);
+      console.log("imageEnId from form:", data.imageEnId);
+      console.log("imageId state:", imageId);
+      console.log("imageEnId state:", imageEnId);
+      
+      // Transform data for API
+      const submitData = transformTeamMemberDataForAPI(data, isEdit);
+      
       const url = isEdit ? `/api/team/${teamMemberId}` : "/api/team";
       const method = isEdit ? "PUT" : "POST";
-      const response = await authFetch(url, { method, body: submitData });
+      
+      console.log("=== TEAM MEMBER FORM SUBMISSION ===");
+      console.log("URL:", url);
+      console.log("Method:", method);
+      console.log("Data being sent:", submitData);
+      
+      const response = await authFetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submitData),
+      });
+      
       const respData = await response.json();
       if (!response.ok) {
         setIsSubmitting(false);
