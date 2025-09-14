@@ -227,21 +227,8 @@ async function NewsDetailSkeletonContent({ locale }: { locale: string }) {
 
 // Generate static params for better performance (optional)
 export async function generateStaticParams() {
-  try {
-    const apiUrl = buildApiUrl(`/api/news?limit=100&status=PUBLISHED`);
-    const response = await fetch(apiUrl, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      cache: "no-store",
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      return data.news?.map((n: any) => ({ slug: n.slug })) || [];
-    }
-  } catch (error) {
-    console.error("Error fetching news for static params:", error);
-  }
-
+  // Skip static generation during build time to avoid connection timeouts
+  // The pages will be generated on-demand instead
+  console.log("Skipping static generation during build");
   return [];
 }

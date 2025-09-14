@@ -308,23 +308,8 @@ async function ServiceDetailLoading({
 
 // Generate static params for better performance (optional)
 export async function generateStaticParams() {
-  try {
-    const response = await fetch(`/api/services?limit=100&status=PUBLISHED`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      next: { revalidate: 0 },
-      cache: "no-store",
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      return (
-        data.services?.map((service: any) => ({ slug: service.slug })) || []
-      );
-    }
-  } catch (error) {
-    console.error("Failed to generate static params:", error);
-  }
-
+  // Skip static generation during build time to avoid connection timeouts
+  // The pages will be generated on-demand instead
+  console.log("Skipping static generation during build");
   return [];
 }

@@ -21,6 +21,12 @@ export function getApiBaseUrl(): string {
 export function buildApiUrl(endpoint: string): string {
   const baseUrl = getApiBaseUrl();
   console.log("=====>>>baseUrl", baseUrl);
+  
+  // If no base URL is available, return the endpoint as-is (relative URL)
+  if (!baseUrl) {
+    return endpoint;
+  }
+  
   const normalizedEndpoint = baseUrl && process.env.BACKEND_API_BASE
     ? endpoint.replace(/^\/api/, "")
     : (endpoint.startsWith("/") ? endpoint : `/${endpoint}`);

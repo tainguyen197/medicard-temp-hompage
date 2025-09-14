@@ -10,23 +10,27 @@ export const config = {
 const nextConfig: NextConfig = {
   async rewrites() {
     const target = process.env.BACKEND_API_BASE;
+    if (!target) {
+      return [];
+    }
     return [{ source: "/api/:path*", destination: `${target}/:path*` }];
   },
   images: {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: process.env.CF_R2_PUBLIC_BUCKET || "",
-        pathname: "/**", // allow all paths
-      },
-      {
-        protocol: "https",
         hostname: "source.unsplash.com",
       },
-      {
-        protocol: "https",
-        hostname: process.env.S3_API || "",
-      },
+      ...(process.env.CF_R2_PUBLIC_BUCKET ? [{
+        protocol: "https" as const,
+        hostname: process.env.CF_R2_PUBLIC_BUCKET,
+        pathname: "/**",
+      }] : []),
+      ...(process.env.S3_API ? [{
+        protocol: "https" as const,
+        hostname: process.env.S3_API,
+        pathname: "/**",
+      }] : []),
     ],
   },
 };
