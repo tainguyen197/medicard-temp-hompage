@@ -249,9 +249,9 @@ export default function UsersList({
                   value={formData.password}
                   onChange={handleInputChange}
                   required
-                  minLength={6}
+                  minLength={8}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Minimum 6 characters"
+                  placeholder="Minimum 8 characters"
                 />
               </div>
 

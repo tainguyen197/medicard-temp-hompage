@@ -120,6 +120,8 @@ export default function NewServicePage() {
           descriptionEn: cleanContentForSubmission(data.descriptionEn),
           shortDescriptionEn: data.shortDescriptionEn || undefined,
           enKeywords: data.enKeywords || undefined,
+          featureImageId: data.featureImageId || undefined,
+          featureImageEnId: data.featureImageEnId || undefined,
           metaTitle: data.metaTitle || undefined,
           metaTitleEn: data.metaTitleEn || undefined,
           metaDescription: data.metaDescription || undefined,

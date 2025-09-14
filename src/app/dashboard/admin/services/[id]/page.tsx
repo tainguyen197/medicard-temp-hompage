@@ -161,6 +161,8 @@ export default function EditServicePage({
           ...data,
           description: cleanContentForSubmission(data.description),
           descriptionEn: cleanContentForSubmission(data.descriptionEn),
+          featureImageId: data.featureImageId || undefined,
+          featureImageEnId: data.featureImageEnId || undefined,
         }),
       });
 
