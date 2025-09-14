@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import NewsTableRow from "@/components/NewsTableRow";
 import { News } from "@/types/post";
 import { formatDate, LANGUAGE_OPTIONS } from "@/utils/common";
+import { authFetch } from "@/lib/auth-fetch";
 
 
 
@@ -32,14 +33,12 @@ export default function NewsTable({ news }: NewsTableProps) {
     setUpdatingStatus(newsId);
 
     try {
-      const response = await fetch(`/api/news/${newsId}/status`, {
-        method: "POST",
+      const response = await authFetch(`/api/news/${newsId}/status`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          "Cache-Control": "no-cache",
         },
         body: JSON.stringify({ status: newStatus }),
-        cache: "no-store",
       });
 
       const data = await response.json();

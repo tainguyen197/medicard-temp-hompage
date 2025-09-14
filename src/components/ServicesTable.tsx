@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import ServiceTableRow from "@/components/ServiceTableRow";
 import { LANGUAGE_OPTIONS } from "@/utils/common";
 import { getLocalizedServiceContent } from "@/utils/services";
+import { authFetch } from "@/lib/auth-fetch";
 
 interface Service {
   id: string;
@@ -50,13 +51,12 @@ export default function ServicesTable({ services }: ServicesTableProps) {
       console.log(`Updating service ${serviceId} to status ${newStatus}`);
 
       // Call actual service status update API
-      const response = await fetch(`/api/services/${serviceId}/status`, {
+      const response = await authFetch(`/api/services/${serviceId}/status`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ status: newStatus }),
-        cache: "no-store",
       });
 
       console.log("Response status:", response.status);
