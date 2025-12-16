@@ -2,7 +2,6 @@ import Image from "next/image";
 import { Link } from "@/navigation";
 import { Metadata } from "next";
 import { Suspense } from "react";
-// import prisma from "@/lib/prisma";
 import NewsDetailContent from "./NewsDetailContent";
 import { getTranslations } from "next-intl/server";
 import { getAppointmentLink, getContactData } from "@/lib/contact";
