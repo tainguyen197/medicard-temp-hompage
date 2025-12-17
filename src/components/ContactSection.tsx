@@ -5,7 +5,7 @@ import { getMessages } from "next-intl/server";
 
 const ContactSection = async () => {
   const messages = await getMessages();
-  const t = messages?.contact;
+  const t = messages?.home.contact;
   const appointmentLink = await getAppointmentLink();
 
   return (
