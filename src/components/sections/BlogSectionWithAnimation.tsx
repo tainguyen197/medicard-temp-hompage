@@ -2,14 +2,10 @@ import React from "react";
 import BlogSection from "@/components/BlogSection";
 import AnimatedSection from "@/components/AnimatedSection";
 
-const BlogSectionWithAnimation = async ({
-  locale = "vi",
-}: {
-  locale?: string;
-}) => {
+const BlogSectionWithAnimation = async () => {
   return (
     <AnimatedSection animation="slideUp" delay={0.1} duration={0.6}>
-      <BlogSection locale={locale} />
+      <BlogSection />
     </AnimatedSection>
   );
 };

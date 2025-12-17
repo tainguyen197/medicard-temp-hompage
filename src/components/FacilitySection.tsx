@@ -3,6 +3,7 @@
 import React, { useState, useRef } from "react";
 import Image from "next/image";
 import Slider from "react-slick";
+import { useMessages } from "next-intl";
 
 interface FacilitySectionProps {
   t: {
@@ -46,7 +47,9 @@ interface ArrowProps {
   className?: string;
 }
 
-const FacilitySection = ({ t }: FacilitySectionProps) => {
+const FacilitySection = () => {
+  const messages = useMessages();
+  const t = messages?.home.facility;
   const [currentSlide, setCurrentSlide] = useState(0);
   const sliderRef = useRef<Slider | null>(null);
 
@@ -60,7 +63,7 @@ const FacilitySection = ({ t }: FacilitySectionProps) => {
     "/images/spacing/7.png",
   ];
 
-  const facilities = t.features.map((feature, index) => ({
+  const facilities = t.features.map((feature: any, index: number) => ({
     image: facilityImages[index] || "/images/spacing/1.png",
     title: feature.split(": ")[0] || feature,
     description: feature.split(": ")[1] || "",
@@ -150,7 +153,7 @@ const FacilitySection = ({ t }: FacilitySectionProps) => {
           <div className="w-full md:w-2/3 relative overflow-hidden">
             <div className="facility-slider -mx-3 sm:-mx-0">
               <Slider ref={sliderRef} {...settings}>
-                {facilities.map((facility, index) => (
+                {facilities.map((facility: any, index: number) => (
                   <FacilityItem
                     key={index}
                     image={facility.image}

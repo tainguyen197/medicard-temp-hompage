@@ -1,7 +1,4 @@
-import { getMessages } from "next-intl/server";
 import HeroSection from "@/components/HeroSection";
-import { getBannerDataByType, BANNER_TYPES } from "@/lib/banner-utils";
-import { getAppointmentLink } from "@/lib/contact";
 import {
   AboutSectionWithAnimation,
   ServicesGallerySectionWithAnimation,
@@ -13,44 +10,34 @@ import {
   BlogSectionWithAnimation,
   ContactSectionWithAnimation,
 } from "@/components/sections";
+import { Suspense } from "react";
+import { HeroSectionSkeleton } from "@/components/HeroSection";
+import { ServicesGallerySectionSkeleton } from "@/components/ServicesGallerySection";
 import HomeLoadingWrapper from "@/components/HomeLoadingWrapper";
 
 export const generateStaticParams = async () => {
   return [{ locale: "en" }, { locale: "vi" }];
 };
 
-export default async function Home({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-  const messages = await getMessages();
-  const t = messages.home;
-
-  // Fetch homepage banner data
-  const homepageBanner = await getBannerDataByType(BANNER_TYPES.HOMEPAGE, locale);
-  
-  // Fetch appointment link
-  const appointmentLink = await getAppointmentLink();
-
+export default async function Home() {
   return (
     <HomeLoadingWrapper>
       <div className="min-h-screen pt-[72px] md:pt-[96px]">
-        <HeroSection
-          imageUrl={homepageBanner.imageUrl}
-          link={homepageBanner.link}
-          altText="Homepage Hero"
-        />
-        <AboutSectionWithAnimation t={t.about} />
-        <ServicesGallerySectionWithAnimation appointmentLink={appointmentLink} />
-        <TreatmentMethodsSectionWithAnimation t={t.treatmentMethods} />
+        <Suspense fallback={<HeroSectionSkeleton />}>
+          <HeroSection />
+        </Suspense>
+        <AboutSectionWithAnimation />
+
+        <Suspense fallback={<ServicesGallerySectionSkeleton />}>
+          <ServicesGallerySectionWithAnimation />
+        </Suspense>
+        <TreatmentMethodsSectionWithAnimation />
         <TeamSectionWithAnimation />
-        <FacilitySectionWithAnimation t={t.facility} />
-        <EquipmentSectionWithAnimation t={t.equipment} locale={locale} />
-        <ProcessSectionWithAnimation t={t.process} />
-        <BlogSectionWithAnimation locale={locale} />
-        <ContactSectionWithAnimation t={t.contact} appointmentLink={appointmentLink} />
+        <FacilitySectionWithAnimation />
+        <EquipmentSectionWithAnimation />
+        <ProcessSectionWithAnimation />
+        <BlogSectionWithAnimation />
+        <ContactSectionWithAnimation />
       </div>
     </HomeLoadingWrapper>
   );

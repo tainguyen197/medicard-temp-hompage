@@ -3,20 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import StarburstIcon from "./StarburstIcon";
-
-interface AboutSectionProps {
-  t: {
-    title: string;
-    heading: string;
-    quote: string;
-    doctor: string;
-    designation: string;
-    features: Array<{
-      title: string;
-      description: string;
-    }>;
-  };
-}
+import { useMessages, useTranslations } from "next-intl";
 
 const FeatureItem = ({
   title,
@@ -92,7 +79,9 @@ const FeatureItem = ({
   );
 };
 
-const AboutSection = ({ t }: AboutSectionProps) => {
+const AboutSection = () => {
+  const messages = useMessages();
+  const tAbout = messages.home.about;
   const [openIndex, setOpenIndex] = useState<number | null>(0); // First open by default
 
   // Helper to check if desktop (for SSR safety, fallback to true)
@@ -177,13 +166,13 @@ const AboutSection = ({ t }: AboutSectionProps) => {
                   />
                 </span>
                 <h3 className="uppercase font-cormorant font-bold text-[#2B3D96] tracking-wider text-sm md:text-md">
-                  {t.title}
+                  {tAbout.title}
                 </h3>
               </div>
             </div>
 
             <h2 className="font-cormorant uppercase font-bold text-2xl md:text-[46px] text-navy-800 mb-10 md:mb-10 leading-[140%] text-[#002447]">
-              {t.heading}
+              {tAbout.heading}
             </h2>
 
             <div className="relative flex rounded-lg overflow-hidden border border-gray-200 mb-8">
@@ -197,14 +186,14 @@ const AboutSection = ({ t }: AboutSectionProps) => {
               </div>
               <div className="bg-white p-2 md:p-12 flex flex-col justify-between relative leading-[140%]">
                 <blockquote className="mb-3 font-bold text-sm md:text-lg text-gray-800">
-                  &ldquo;{t.quote}&rdquo;
+                  &ldquo;{tAbout.quote}&rdquo;
                 </blockquote>
                 <div>
                   <p className="md:font-bold text-gray-800 text-xs md:text-md md:text-[16px]">
-                    {t.doctor}
+                    {tAbout.doctor}
                   </p>
                   <p className="text-gray-600 text-xs md:text-md">
-                    {t.designation}
+                    {tAbout.designation}
                   </p>
                 </div>
               </div>
@@ -214,7 +203,7 @@ const AboutSection = ({ t }: AboutSectionProps) => {
           {/* Right column with features */}
           <div className="col-span-2">
             <div className="md:mt-16">
-              {t.features.map((feature, index) => (
+              {tAbout.features.map((feature: any, index: number) => (
                 <FeatureItem
                   key={index}
                   title={feature.title}

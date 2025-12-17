@@ -1,17 +1,6 @@
 import React from "react";
 import Image from "next/image";
-
-interface TreatmentMethodsSectionProps {
-  t: {
-    title: string;
-    subtitle: string;
-    items: Array<{
-      icon: string;
-      title: string;
-      description: string;
-    }>;
-  };
-}
+import { getMessages, getTranslations } from "next-intl/server";
 
 type TreatmentMethodProps = {
   icon: React.ReactNode;
@@ -46,7 +35,10 @@ const TreatmentMethod = ({
   );
 };
 
-const TreatmentMethodsSection = ({ t }: TreatmentMethodsSectionProps) => {
+const TreatmentMethodsSection = async () => {
+  const messages = await getMessages();
+  const t = messages?.home.treatmentMethods;
+
   const iconColors = ["#c7d6e7", "#6C98C5", "#99D3E4", "#235E93"];
 
   const icons = [
@@ -123,7 +115,7 @@ const TreatmentMethodsSection = ({ t }: TreatmentMethodsSectionProps) => {
             </h2>
 
             <div className="space-y-4 md:space-y-4">
-              {t.items.map((item, index) => (
+              {t.items.map((item: any, index: number) => (
                 <React.Fragment key={index}>
                   <TreatmentMethod
                     iconColor={iconColors[index]}

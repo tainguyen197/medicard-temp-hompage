@@ -1,18 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import StarburstIcon from "./StarburstIcon";
-
-interface ProcessSectionProps {
-  t: {
-    title: string;
-    subtitle: string;
-    steps: Array<{
-      step: string;
-      title: string;
-      description: string;
-    }>;
-  };
-}
+import { getMessages } from "next-intl/server";
 
 interface ProcessStepProps {
   number: number;
@@ -64,7 +52,9 @@ const Arrow = () => (
   </div>
 );
 
-const ProcessSection = ({ t }: ProcessSectionProps) => {
+const ProcessSection = async () => {
+  const messages = await getMessages();
+  const t = messages?.home.process;
   const colors = [
     "bg-[#BDD0E5]",
     "bg-[#6C98C5]",
@@ -165,7 +155,7 @@ const ProcessSection = ({ t }: ProcessSectionProps) => {
             </div>
             <div className="bg-white md:p-8 rounded-xl">
               <div className="grid grid-cols-2 md:grid-cols-11 gap-y-6 gap-x-4 md:gap-2 items-start">
-                {t.steps.map((step, index) => (
+                {t.steps.map((step: any, index: number) => (
                   <React.Fragment key={index}>
                     <div className="md:col-span-2">
                       <ProcessStep

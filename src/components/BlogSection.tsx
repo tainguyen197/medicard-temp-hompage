@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { News } from "@/types/post";
 import { getLocalizedNews } from "@/utils";
 import { Link } from "@/navigation";
@@ -41,9 +41,13 @@ const BlogPost = ({ image, title, description, slug, id }: BlogPostProps) => (
   </Link>
 );
 
-const BlogSection = async ({ locale = "vi" }: { locale?: string }) => {
+const BlogSection = async () => {
   // Get translations
-  const t = await getTranslations({ locale, namespace: "home.news" });
+  const locale = await getLocale();
+  const t = await getTranslations({
+    locale,
+    namespace: "home.news",
+  });
   const tEmpty = await getTranslations({
     locale,
     namespace: "news.emptyState",

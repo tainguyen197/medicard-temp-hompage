@@ -20,7 +20,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
   const locale = useLocale();
   const t = useTranslations("services.gallery");
   const [services, setServices] = useState<DisplayService[]>([]);
-  const [activeService, setActiveService] = useState<DisplayService>({ 
+  const [activeService, setActiveService] = useState<DisplayService>({
     id: "",
     title: "",
     description: "",
@@ -182,7 +182,6 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
     return <></>;
   }
 
-
   return (
     <section id="services" className="py-10 md:py-16   bg-[#182134] text-white">
       <div className="container mx-auto px-4 max-w-7xl">
@@ -210,13 +209,13 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
               }`}
             >
               {activeService.image && (
-              <Image
-                src={activeService?.image}
-                alt={activeService?.title}
-                fill
-                className="object-cover"
-                priority
-              />
+                <Image
+                  src={activeService?.image}
+                  alt={activeService?.title}
+                  fill
+                  className="object-cover"
+                  priority
+                />
               )}
             </div>
           </div>
@@ -227,9 +226,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
               <h3 className="font-cormorant text-md md:text-[30px] font-bold mb-2 md:mb-5 text-white line-clamp-1 md:line-clamp-none">
                 {activeService?.title}
               </h3>
-              <p
-                className="text-gray-300 mb-4 md:mb-10 text-sm md:text-md leading-relaxed line-clamp-5 md:line-clamp-none  min-h-[7.25rem]"
-              >
+              <p className="text-gray-300 mb-4 md:mb-10 text-sm md:text-md leading-relaxed line-clamp-5 md:line-clamp-none  min-h-[7.25rem]">
                 {htmlToTextAndTruncate(activeService?.description, 350)}
               </p>
             </div>
@@ -285,7 +282,7 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
                   </svg>
                 </a>
               </div>
-            </div>  
+            </div>
           </div>
         </div>
 
@@ -332,5 +329,25 @@ const ServicesGallerySection: React.FC<ServicesGallerySectionProps> = ({
     </section>
   );
 };
+
+const ServicesGallerySectionSkeleton = () => {
+  const tServices = useTranslations("services.gallery");
+  return (
+    <section id="services" className="py-10 md:py-16 bg-[#182134] text-white">
+      <div className="container mx-auto px-4 max-w-7xl">
+        <div className="flex justify-center mb-8 md:mb-16">
+          <h2 className="text-2xl md:text-[46px] xl:text-[51px] font-cormorant font-semibold text-[#FFF7EB] uppercase relative">
+            {tServices("title")}
+          </h2>
+        </div>
+        <div className="flex justify-center items-center h-[450px]">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export { ServicesGallerySectionSkeleton };
 
 export default ServicesGallerySection;

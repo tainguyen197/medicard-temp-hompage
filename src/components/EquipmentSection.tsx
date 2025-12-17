@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
+import { useMessages } from "next-intl";
+import { useLocale } from "next-intl";
 // Import Slick components
 import Slider, { Settings } from "react-slick";
 // Assuming slick-carousel CSS is imported globally as per TeamSection.tsx
@@ -125,7 +127,11 @@ const EquipmentItem: React.FC<EquipmentItemProps> = ({
   );
 };
 
-const EquipmentSection = ({ t, locale = "vi" }: EquipmentSectionProps) => {
+const EquipmentSection = () => {
+  const messages = useMessages();
+  const t = messages?.home.equipment;
+  const locale = useLocale();
+
   const [apiEquipment, setApiEquipment] = useState<ApiEquipment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -135,11 +141,11 @@ const EquipmentSection = ({ t, locale = "vi" }: EquipmentSectionProps) => {
       try {
         setIsLoading(true);
         const response = await fetch("/api/equipment/homepage");
-        
+
         if (!response.ok) {
           throw new Error("Failed to fetch equipment data");
         }
-        
+
         const data = await response.json();
         setApiEquipment(data);
       } catch (err) {
@@ -149,26 +155,33 @@ const EquipmentSection = ({ t, locale = "vi" }: EquipmentSectionProps) => {
         setIsLoading(false);
       }
     };
-    
+
     fetchEquipment();
   }, []);
 
   // Map API data to component format or use fallback data
-  const equipmentsData: EquipmentItemType[] = apiEquipment.length > 0
-    ? apiEquipment.map((item) => ({
-        id: item.id,
-        image: (locale === "en" && item.imageEn?.url) ? item.imageEn.url : (item.image?.url || "/images/equipment_1.png"),
-        title: "EQUIPMENT",
-        subtitle: (locale === "en" && item.nameEn) ? item.nameEn : item.name,
-        description: (locale === "en" && item.descriptionEn) ? item.descriptionEn : item.description,
-      }))
-    : t.items.map((item, index) => ({
-        id: `equip${index + 1}`,
-        image: item.image,
-        title: "EQUIPMENT",
-        subtitle: item.name,
-        description: item.description,
-      }));
+  const equipmentsData: EquipmentItemType[] =
+    apiEquipment.length > 0
+      ? apiEquipment.map((item) => ({
+          id: item.id,
+          image:
+            locale === "en" && item.imageEn?.url
+              ? item.imageEn.url
+              : item.image?.url || "/images/equipment_1.png",
+          title: "EQUIPMENT",
+          subtitle: locale === "en" && item.nameEn ? item.nameEn : item.name,
+          description:
+            locale === "en" && item.descriptionEn
+              ? item.descriptionEn
+              : item.description,
+        }))
+      : t.items.map((item: any, index: number) => ({
+          id: `equip${index + 1}`,
+          image: item.image,
+          title: "EQUIPMENT",
+          subtitle: item.name,
+          description: item.description,
+        }));
 
   const [infoVisibility, setInfoVisibility] = useState<{
     [key: string]: boolean;
@@ -358,9 +371,7 @@ const EquipmentSection = ({ t, locale = "vi" }: EquipmentSectionProps) => {
             {t.title}
           </h2>
           <p className="text-xs md:text-xl text-gray-700 mb-8">{t.subtitle}</p>
-          <div className="py-8 text-gray-500">
-            {error}
-          </div>
+          <div className="py-8 text-gray-500">{error}</div>
         </div>
       </section>
     );

@@ -1,17 +1,13 @@
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { getAppointmentLink } from "@/lib/contact";
+import { getMessages } from "next-intl/server";
 
-interface ContactSectionProps {
-  t: {
-    title: string;
-    subtitle: string;
-    button: string;
-  };
-  appointmentLink?: string;
-}
+const ContactSection = async () => {
+  const messages = await getMessages();
+  const t = messages?.contact;
+  const appointmentLink = await getAppointmentLink();
 
-const ContactSection = ({ t, appointmentLink }: ContactSectionProps) => {
   return (
     <section id="contact" className="relative">
       <div className="relative h-40 md:h-[500px]">

@@ -1,19 +1,23 @@
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { DEFAULT_HERO_IMAGE } from "@/lib/banner-utils";
+import {
+  BANNER_TYPES,
+  DEFAULT_HERO_IMAGE,
+  getBannerDataByType,
+} from "@/lib/banner-utils";
+import { getLocale } from "next-intl/server";
 
 interface HeroSectionProps {
-  imageUrl?: string | null;
-  link?: string | null;
   altText?: string;
 }
 
-const HeroSection = ({
-  imageUrl,
-  link,
-  altText = "Hero Banner",
-}: HeroSectionProps) => {
+const HeroSection = async ({ altText = "Hero Banner" }: HeroSectionProps) => {
+  const locale = await getLocale();
+  const homepageBanner = await getBannerDataByType(
+    BANNER_TYPES.HOMEPAGE,
+    locale
+  );
+  const { imageUrl, link } = homepageBanner;
   const heroImage = imageUrl || DEFAULT_HERO_IMAGE;
 
   const imageElement = (
@@ -42,6 +46,14 @@ const HeroSection = ({
           imageElement
         )}
       </div>
+    </section>
+  );
+};
+
+export const HeroSectionSkeleton = () => {
+  return (
+    <section className="relative w-full h-full aspect-[21/9]">
+      <div className="absolute inset-0 bg-gray-200 animate-pulse"></div>
     </section>
   );
 };
